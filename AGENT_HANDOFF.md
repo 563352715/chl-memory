@@ -127,7 +127,7 @@ These are all done. Don't re-propose them.
 |---|---|---|
 | FMCSA broker authority grant | Pending — protest period ends 2026-05-13 | 9 days |
 | A2P 10DLC campaign | Resubmitted to TCR 2026-05-03 with updated Privacy + Terms URLs | 24-72h vetting |
-| TFV (Toll-Free Verification) | **Iter 139.3-139.4**: full SMS-consent compliance fix on /#quote → reply sent to reviewer Isa Bell → production redeployed → TFV currently in "verification in progress" status as of Iter 139.5 | Awaiting auto-recheck |
+| TFV (Toll-Free Verification) | **Iter 139.3-139.4**: full SMS-consent compliance fix on /#quote → reply sent to reviewer <REDACTED-THIRD-PARTY-REVIEWER> → production redeployed → TFV currently in "verification in progress" status as of Iter 139.5 | Awaiting auto-recheck |
 | HaulPay factoring | Application submitted; awaiting carrier ID + API token | TBD |
 | 123Loadboard API | Application emailed to partner-integrations@ on 2026-05-04 | 2-6 weeks to prod creds |
 | 123Loadboard Business Profile | ✅ Logo uploaded (Iter 139.1, chl-logo-400.jpg) — DUNS to be added when verified | Manual edit anytime |
@@ -274,7 +274,7 @@ The single source of truth: `GET /api/ops/state` → `day1_gates.checks`
 1. ~~Verify MC# 1817555 on 123Loadboard~~ — **BLOCKED until 2026-05-13** (FMCSA authority grant)
 2. ~~Upload CHL logo on 123Loadboard~~ — ✅ **DONE Iter 139.1** (chl-logo-400.jpg uploaded)
 3. ~~Get free DUNS number~~ — ✅ **DONE 2026-05-04 (Iter 139.2)** — DUNS = **145008621** (24h fast-track turnaround)
-4. ~~Twilio TFV reply to Isa Bell~~ — ✅ **DONE Iter 139.3-139.4** (SMS consent block built + production redeployed)
+4. ~~Twilio TFV reply to <REDACTED-THIRD-PARTY-REVIEWER>~~ — ✅ **DONE Iter 139.3-139.4** (SMS consent block built + production redeployed)
 5. ~~SOPPlaybookView Cards 5–14 narrative~~ — ✅ **DONE Iter 139.7** (20 cards across 2 models)
 6. ~~OPERATING_MANUAL.md RACI gap-fill + GAP-marker resync~~ — ✅ **DONE Iter 139.7**
 7. ~~Codebase audit vs OPERATING_MANUAL.md~~ — ✅ **DONE Iter 139.7** (`/app/memory/CODEBASE_AUDIT_2026_05_04.md`)
@@ -349,8 +349,8 @@ A productive day, 5 real wins, 2 blockers exposed.
 |---|---|---|
 | **139.1** | Enhanced CHL logo, generated 7 sizes, force-download endpoint `/api/logo/download/{filename}` | Logo live on 123Loadboard Business Profile |
 | **139.2** | DUNS application granted same-day (D&B fast-track) | DUNS **145008621** issued, vaulted, FACTS.md updated |
-| **139.3** | Twilio TFV reviewer Isa Bell flagged opt-in non-compliance → built proper SMS consent block on `/#quote`, server-side audit trail at `db.sms_opt_ins`, broker-only `/api/sms-opt-ins` endpoint | Compliance gap closed |
-| **139.4** | Reply email to Isa Bell sent with exact opt-in URL + 6-point checklist | Twilio re-evaluation triggered |
+| **139.3** | Twilio TFV reviewer <REDACTED-THIRD-PARTY-REVIEWER> flagged opt-in non-compliance → built proper SMS consent block on `/#quote`, server-side audit trail at `db.sms_opt_ins`, broker-only `/api/sms-opt-ins` endpoint | Compliance gap closed |
+| **139.4** | Reply email to <REDACTED-THIRD-PARTY-REVIEWER> sent with exact opt-in URL + 6-point checklist | Twilio re-evaluation triggered |
 | **139.5** | Production redeploy verified (`main.0a15fb7a.js` carries the new bundle), Truckstop password rotated + vaulted | TFV recheck unblocked + Truckstop credentials safe |
 | **139.6** | TFV deleted + recreated via Twilio API with corrected fields (contact phone +14172193856 fix; volume 1000→100/mo fix) | New SID `<REDACTED-TWILIO-TFV-SID>` PENDING_REVIEW |
 | **139.7** | SOPPlaybookView Cards 5-14 narrative added (20 cards across 2 models). OPERATING_MANUAL.md re-synced (Chapter 3 RACI +8 rows, Chapter 5 cron table corrected, Chapter 7 summary corrected, Chapter 8 row 8.12 corrected, GAP totals 22→18.5 sessions). Full codebase audit produced at `/app/memory/CODEBASE_AUDIT_2026_05_04.md`. | Doctrine in sync with reality |
@@ -369,7 +369,7 @@ A productive day, 5 real wins, 2 blockers exposed.
 
 ### 🟡 Twilio TFV final state at end of day
 - Status: **"Toll-free verification in progress"** (auto-recheck queue)
-- Reviewer (Isa Bell) explicit blessing: *"opt-in flow now looks aligned with the main TFV requirements... if it comes back rejected again, send me the exact rejection reason"*
+- Reviewer (<REDACTED-THIRD-PARTY-REVIEWER>) explicit blessing: *"opt-in flow now looks aligned with the main TFV requirements... if it comes back rejected again, send me the exact rejection reason"*
 - Production verified by agent: bundle hash `main.0a15fb7a.js`, all 4 testids present (`widget-sms-consent-block`, `widget-sms-consent-checkbox`, `widget-sms-terms-link`, `widget-tos-line`), all public pages 200
 - One residual risk Isa called out: domain `continentalhaul.com` was previously flagged "high risk" — content/compliance is now strong but domain-level reputation may still cause a final rejection. Plan if rejected: paste exact rejection reason back to her for narrowing.
 
