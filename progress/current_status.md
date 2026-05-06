@@ -2,11 +2,11 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 141.1 stage 1b complete; awaiting authorization for stage 1c)
+**Last updated:** 2026-05-06 (iter 141.1 stage 1c complete; awaiting authorization for stage 1e)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 141.1 — IN PROGRESS — Phase 2 (Load Discovery & Evaluation) foundation
-**Active stage:** 1b COMPLETE; 1c queued (lane scoring background loop)
-**State:** STAGES 1a + 1b COMPLETE (1a smoke 7/7 commit `c368f73`; 1b smoke 6/6 commit `2a4d167`); FractalEvaluator + LoadEvaluator (shadow-mode) + LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint live; module count 13 at /api/health/system; `db.lane_scores` upsert collection seeded; `business_settings.lane_thresholds` initialized with FRACTAL_DECISION_FRAMEWORK hypothesis defaults. Awaiting operator authorization for stage 1c (background loop). Stage 1d deferred to iter 141.2 post-FMCSA-authority May 13+.
+**Active stage:** 1c COMPLETE; 1e queued (operator dashboard /api/lanes/top/{N})
+**State:** STAGES 1a + 1b + 1c COMPLETE (1a smoke 7/7 commit `c368f73`; 1b smoke 6/6 commit `2a4d167`; 1c smoke 6/6 commit `e9fe864`); FractalEvaluator + LoadEvaluator (shadow-mode) + LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint + 6h lane scoring background cron live; module count 14 at /api/health/system (lane_scoring_cron healthy, loop_running=True); `lane_eval` SLA target registered (target_ms=60_000); `db.lane_scores` populated by both endpoint calls and cron ticks; throttle integration verified (skip on not-GREEN). Awaiting operator authorization for stage 1e (top-N lanes dashboard endpoint). Stage 1d deferred to iter 141.2 post-FMCSA-authority May 13+.
 
 ## Phase
 
