@@ -2,11 +2,11 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 141.1 stage 1a complete; PAUSED for operator agentdm appointment 3 PM CT)
+**Last updated:** 2026-05-06 (iter 141.1 stage 1b complete; awaiting authorization for stage 1c)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 141.1 — IN PROGRESS — Phase 2 (Load Discovery & Evaluation) foundation
-**Active stage:** 1a COMPLETE; 1b queued (LaneEvaluator)
-**State:** STAGE 1a COMPLETE (smoke 7/7, commit `c368f73`); FractalEvaluator base + LoadEvaluator shadow-mode in auto_dispatch live; PAUSED until after operator's 3 PM agentdm appointment, then resume 1b/1c/1e (1d deferred to iter 141.2 post-FMCSA-authority May 13+)
+**Active stage:** 1b COMPLETE; 1c queued (lane scoring background loop)
+**State:** STAGES 1a + 1b COMPLETE (1a smoke 7/7 commit `c368f73`; 1b smoke 6/6 commit `2a4d167`); FractalEvaluator + LoadEvaluator (shadow-mode) + LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint live; module count 13 at /api/health/system; `db.lane_scores` upsert collection seeded; `business_settings.lane_thresholds` initialized with FRACTAL_DECISION_FRAMEWORK hypothesis defaults. Awaiting operator authorization for stage 1c (background loop). Stage 1d deferred to iter 141.2 post-FMCSA-authority May 13+.
 
 ## Phase
 
