@@ -2,11 +2,11 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 139.46 close)
+**Last updated:** 2026-05-06 (iter 140.1 stage 1a complete)
 **Updated by:** Claude Code (Windows VS Code session)
-**Active iter:** 139.46 — **COMPLETE — EMERGENT_EXIT_PLAN MILESTONE CLOSED**
-**Active stage:** none — iter close handoff being written
-**State:** ITER COMPLETE — 4/4 stages green, EMERGENT_LLM_KEY fully removed from active code
+**Active iter:** 140.1 — IN PROGRESS — Phase 7 Foundation (Autonomous Throttle System)
+**Active stage:** 1b (throttle_system.py — GREEN/YELLOW/ORANGE/RED state machine) — pending
+**State:** STAGE 1a COMPLETE (smoke 5/5, commit `a646681`); 8 modules registered at /api/health/system, baseline overall_status='degraded' (automations + bmc84 missing optional credentials, accurate reporting); proceeding to 1b autonomously per Path A
 
 ## Phase
 
