@@ -2,11 +2,11 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 139.46 stage 6a complete)
+**Last updated:** 2026-05-06 (iter 139.46 stage 6b complete)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 139.46 — IN PROGRESS
-**Active stage:** 6b (load_completion_workflow.py migration) — pending
-**State:** STAGE 6a COMPLETE (smoke 4/4, commit `bad9648`); proceeding to 6b autonomously per Path A delegation
+**Active stage:** 6c (autopilot_phase1.py + rfq_inbound.py:147 cleanup) — pending
+**State:** STAGE 6b COMPLETE (smoke 3/3, commit `0d81187`, OCR backing model swapped gemini-2.0-flash → gpt-4o per operator Option A); proceeding to 6c autonomously per Path A delegation
 
 ## Phase
 
