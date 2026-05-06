@@ -2,11 +2,11 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 140.1 stage 1a complete)
+**Last updated:** 2026-05-06 (iter 140.1 stage 1b complete)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 140.1 — IN PROGRESS — Phase 7 Foundation (Autonomous Throttle System)
-**Active stage:** 1b (throttle_system.py — GREEN/YELLOW/ORANGE/RED state machine) — pending
-**State:** STAGE 1a COMPLETE (smoke 5/5, commit `a646681`); 8 modules registered at /api/health/system, baseline overall_status='degraded' (automations + bmc84 missing optional credentials, accurate reporting); proceeding to 1b autonomously per Path A
+**Active stage:** 1c (sla_monitor.py — performance target tracking) — pending
+**State:** STAGE 1b COMPLETE (smoke 7/7, commit `2ab45ab`); throttle state machine live at /api/throttle/{status,history,override}, transitions persist to db.throttle_state_log, self-health reports throttle_system as healthy; proceeding to 1c autonomously per Path A
 
 ## Phase
 
