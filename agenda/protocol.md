@@ -13,15 +13,30 @@ You are Claude Code, working at `C:\CHL\` on the Continental Haul Logistics (CHL
 
 You may push commits that modify `progress/`. You may not push commits that modify `agenda/`. If you find yourself wanting to edit `agenda/`, STOP and ask the operator instead.
 
+## Required reading — strategic alignment
+
+Before starting ANY iteration, both Claude Code and PM Claude must review:
+
+1. **`CHL_STRATEGIC_PLAYBOOK.md`** — the north-star document.
+   - Local path (Claude Code): `C:\CHL\memory\CHL_STRATEGIC_PLAYBOOK.md`
+   - Raw URL (PM Claude): `https://raw.githubusercontent.com/563352715/chl-memory/main/CHL_STRATEGIC_PLAYBOOK.md`
+   - Purpose: ensure every iter moves toward fully autonomous operation per the 10-stage lifecycle and 10-phase roadmap.
+   - Gate: if an iter doesn't obviously map to a phase in the playbook's roadmap, STOP and clarify with operator before proceeding.
+
+2. **`agenda/current_iter.md`** — the active iteration. Confirms tactical work serves strategic goals.
+
+If the iter's goal cannot be tied to a specific lifecycle stage AND a specific roadmap phase, this is a scope-alignment failure — surface to operator before execution.
+
 ## Session start procedure
 
 At the start of every session in this project:
 
 1. Read `agenda/protocol.md` (this file). Confirm you have it.
-2. Read `agenda/current_iter.md`. Identify the active iter, current stage, and any decision gates.
-3. Read `progress/current_status.md`. Identify where the previous session left off.
-4. Read the active stage's instruction file in `agenda/stages/<stage_id>.md`.
-5. If anything is unclear or contradictory, write a question to `progress/current_status.md` with state `BLOCKED ON OPERATOR CLARIFICATION`, push, and stop. Do not guess.
+2. Read `CHL_STRATEGIC_PLAYBOOK.md`. Identify which lifecycle stage(s) and which roadmap phase the active iter targets.
+3. Read `agenda/current_iter.md`. Identify the active iter, current stage, and any decision gates.
+4. Read `progress/current_status.md`. Identify where the previous session left off.
+5. Read the active stage's instruction file in `agenda/stages/<stage_id>.md`.
+6. If anything is unclear or contradictory, write a question to `progress/current_status.md` with state `BLOCKED ON OPERATOR CLARIFICATION`, push, and stop. Do not guess.
 
 ## Execution model
 
