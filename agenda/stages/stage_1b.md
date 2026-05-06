@@ -1,100 +1,132 @@
-# Stage 1b: Throttle State Machine
+# Stage 1b: LaneEvaluator + Lane Scoring Endpoint
 
 ## Stage objective
 
-Implement the autonomous throttle system - a GREEN/YELLOW/ORANGE/RED state machine that monitors system health and automatically adjusts load intake speed. Consumes health data from stage 1a's `/api/health/system` endpoint. When problems detected (elevated error rates, API latency spikes, unhealthy modules), system transitions to degraded states and reduces load acceptance. Auto-recovers when metrics stabilize for 15+ minutes. Success = state machine operational, transitions trigger correctly on simulated failures, intake throttling prevents operator overload.
+Build LaneEvaluator subclass inheriting from FractalEvaluator. Implement 90-day origin-destination aggregation for four parameters (lane profitability, carrier density, failure rate, volume capacity). Create /api/lanes/{origin_city}/{origin_state}/{dest_city}/{dest_state}/score endpoint returning lane evaluation with breakdown. Persist scores to db.lane_scores collection. Success = lane scoring endpoint returns 200 with valid four-parameter scores, scores update on repeat calls with new load data.
 
 ## Pre-flight checks
 
-```powershell
-# Check 1: stage 1a complete, health system working
-$health = Invoke-RestMethod -Uri "http://localhost:8000/api/health/system" -Method Get
-if ($health.overall_status -ne "healthy") {
-    Write-Host "ERROR: Health system not healthy - stage 1a incomplete"
-    exit 1
-}
-Write-Host "✓ Health system operational"
-
-# Check 2: verify throttle_system.py does NOT exist yet
-Test-Path C:\CHL\backend\throttle_system.py
-# Expected: False
-
-# Check 3: identify load acceptance entry points to throttle
-# From discovery: auto_dispatch.try_auto_accept, auto_load_pipeline
-Select-String -Path C:\CHL\backend\auto_dispatch.py -Pattern "def try_auto_accept"
-Select-String -Path C:\CHL\backend\auto_load_pipeline.py -Pattern "def.*accept|def.*book"
-# Document locations for integration
-
-# Check 4: verify Twilio SMS credentials for alerts
-$env:TWILIO_ACCOUNT_SID -and $env:TWILIO_AUTH_TOKEN
-# Expected: True (SMS alerts on RED state)
-```
+Verify stage 1a complete, FractalEvaluator working, LoadEvaluator proven equivalent. Check db.loads has sufficient history (ideally 50+ loads across multiple lanes for meaningful aggregation).
 
 ## Action steps
 
-### Step 1: Create throttle_system.py module
+### Step 1: Create lane_evaluator.py module
 
-Key components:
-- `ThrottleState` enum (GREEN, YELLOW, ORANGE, RED)
-- `ThrottleManager` class with state transitions
-- Metrics tracking (error rates, latencies, health check results)
-- Auto-transition logic (degrade on problems, recover on stability)
-- SMS/email alerts on state changes
-- Intake percentage per state (GREEN=100%, YELLOW=50%, ORANGE=10%, RED=0%)
+Implement LaneEvaluator(FractalEvaluator) with async methods:
+- get_profitability_data: Query db.loads for {origin_city, origin_state, destination_city, destination_state} match, last 90 days, calculate mean(margin). Handle empty list → return 0.0.
+- get_reliability_data: Count carriers on lane with vetted_trusted=True AND mc_verified=True, divide by total carriers. Empty → return 0.0.
+- get_risk_data: Count failed loads (status IN cancelled/disputed/cargo_claim OR has failure_alert) divide by total. Empty → return 0.0.
+- get_capacity_data: Calculate daily_avg volume, return daily_avg < 20 (threshold from FRACTAL_DECISION_FRAMEWORK).
 
-### Step 2: Wire throttle into auto_dispatch
+Helper functions: _get_lane_loads(origin_city, origin_state, dest_city, dest_state, days=90) returns Motor cursor.
 
-Modify `auto_dispatch.py:try_auto_accept()`:
-- Check throttle state before hard gates
-- If RED: auto-reject with reason "system in RED state"
-- If ORANGE/YELLOW: apply random sampling to reduce intake percentage
-- Log throttle-based rejections to `auto_accept_log`
+Register health check with health_monitor.
 
-### Step 3: Add throttle state endpoint
+### Step 2: Create /api/lanes/score endpoint
 
-Create `/api/throttle/status` endpoint returning:
-```json
-{
-  "current_state": "GREEN",
-  "intake_percentage": 100,
-  "state_since": "ISO timestamp",
-  "recent_transitions": [...],
-  "metrics": {
-    "error_rate": 0.02,
-    "avg_latency_ms": 450,
-    "unhealthy_module_count": 0
-  }
-}
+In lane_evaluator.py, add FastAPI router:
+
+```python
+from fastapi import APIRouter
+router = APIRouter()
+
+@router.get("/api/lanes/{origin_city}/{origin_state}/{dest_city}/{dest_state}/score")
+async def lane_score_endpoint(origin_city: str, origin_state: str, dest_city: str, dest_state: str):
+    """Return lane evaluation score with four-parameter breakdown."""
+    evaluator = LaneEvaluator()
+    lane = {'origin_city': origin_city, 'origin_state': origin_state, 
+            'destination_city': dest_city, 'destination_state': dest_state}
+    
+    # Thresholds from business_settings.lane_thresholds (default to hypothesis values)
+    settings = await db.business_settings.find_one({})
+    thresholds = settings.get('lane_thresholds', {
+        'margin': 0.18,
+        'reliability': 0.85,
+        'risk': 0.08,
+        'capacity': 20
+    })
+    
+    evaluation = await evaluator.evaluate(lane, thresholds)
+    decision = await evaluator.decide(lane, thresholds)
+    
+    # Get raw values for breakdown
+    profitability = await evaluator.get_profitability_data(lane)
+    reliability = await evaluator.get_reliability_data(lane)
+    risk = await evaluator.get_risk_data(lane)
+    capacity_ok = await evaluator.get_capacity_data(lane)
+    
+    # Persist to db.lane_scores
+    from datetime import datetime, timezone
+    await db.lane_scores.update_one(
+        {'origin_city': origin_city, 'origin_state': origin_state,
+         'destination_city': dest_city, 'destination_state': dest_state},
+        {'$set': {
+            'score': decision,
+            'profitability': profitability,
+            'reliability': reliability,
+            'risk': risk,
+            'capacity': capacity_ok,
+            'thresholds': thresholds,
+            'updated_at': datetime.now(timezone.utc)
+        }},
+        upsert=True
+    )
+    
+    return {
+        'lane': lane,
+        'score': decision,
+        'evaluation': evaluation,
+        'metrics': {
+            'profitability': profitability,
+            'reliability': reliability,
+            'risk': risk,
+            'capacity': capacity_ok
+        },
+        'thresholds': thresholds
+    }
 ```
 
-### Step 4: Background monitoring loop
+### Step 3: Register router in server.py
 
-Start async task that:
-- Polls `/api/health/system` every 60s
-- Tracks error rates from recent failures
-- Triggers state transitions when thresholds crossed
-- Sends SMS alert on ORANGE→RED, email on YELLOW
+Add to server.py:
+```python
+from lane_evaluator import router as lane_router
+app.include_router(lane_router)
+```
 
-## Restart and smoke
+### Step 4: Initialize lane_thresholds in business_settings
 
-Smoke tests:
-1. Normal operation: throttle stays GREEN
-2. Simulate high error rate: throttle transitions YELLOW→ORANGE
-3. Simulate API key missing: throttle transitions RED
-4. Recovery: restore health, verify throttle steps back up GREEN
-5. Intake throttling: verify auto_dispatch respects state percentages
-6. Adjacent regression: boot_briefing still works
+If not present, insert hypothesis defaults:
+```python
+await db.business_settings.update_one(
+    {},
+    {'$setOnInsert': {
+        'lane_thresholds': {
+            'margin': 0.18,
+            'reliability': 0.85,
+            'risk': 0.08,
+            'capacity': 20
+        }
+    }},
+    upsert=True
+)
+```
 
-## Commit protocol
+## Smoke battery
+
+1. Lane scoring endpoint exists: GET /api/lanes/Chicago/IL/Dallas/TX/score → HTTP 200
+2. Response has score, evaluation, metrics, thresholds keys
+3. db.lane_scores collection has entry after call
+4. Repeat call updates updated_at timestamp
+5. Empty-history lane (no loads) returns score=False with 0.0 metrics
+6. Adjacent regression: /api/ops/briefing still works
+
+## Commit
 
 ```powershell
-git add backend/throttle_system.py backend/auto_dispatch.py backend/server.py
-git commit -m "iter 140.1 stage 1b: throttle state machine - GREEN/YELLOW/ORANGE/RED with auto-transitions"
+git add backend/lane_evaluator.py backend/server.py
+git commit -m "iter 141.1 stage 1b: LaneEvaluator + /api/lanes/{o}/{s}/{d}/{s}/score endpoint"
 git push origin main
 ```
-
-## Completion doc
-
-Document: state transition logic, intake percentages, SMS alert triggers, recovery timing.
 
 DONE

@@ -1,96 +1,150 @@
-# Stage 1d: Integration + Failure Simulation
+# Stage 1d: DAT Load Board Integration
 
 ## Stage objective
 
-End-to-end integration testing and failure simulation. Verify throttle system responds correctly to real-world failure scenarios. Simulate: API outages, database slowdowns, elevated error rates, module crashes. Confirm system transitions states, reduces intake, sends alerts, and auto-recovers. Document recovery patterns for operator playbook. Success = 5+ failure scenarios handled gracefully, throttle proven to prevent operator overload, completion doc provides operator guidance.
+Wire DAT load board adapter live. Poll DAT API every 15 minutes for new loads, filter by lane scores (only loads on lanes with score=True), persist to db.dat_opportunities collection. Integrate throttle (pause polling if RED/ORANGE) and SLA (track poll duration). Requires operator to provide DAT credentials (API key, endpoint URL) via environment variables. Success = DAT poller runs every 15min, fetches loads, filters by lane scores, throttle-gated.
 
 ## Pre-flight checks
 
-```powershell
-# Check 1: all prior stages complete
-$health = Invoke-RestMethod "http://localhost:8000/api/health/system"
-$throttle = Invoke-RestMethod "http://localhost:8000/api/throttle/status"  
-$sla = Invoke-RestMethod "http://localhost:8000/api/sla/summary"
-
-if ($health.overall_status -ne "healthy") { exit 1 }
-if ($throttle.current_state -ne "GREEN") { exit 1 }
-# Verify SLA endpoint exists and returns data
-
-# Check 2: create failure simulation harness
-# Verify we can safely inject failures without breaking production
-```
+Verify stages 1a-1c complete, lane_scores populated. Confirm operator has provided:
+- DAT_API_KEY env var
+- DAT_API_ENDPOINT env var (default https://api.dat.com/v1/loads)
+- DAT_ACCOUNT_ID env var
 
 ## Action steps
 
-### Step 1: Create failure simulation harness
+### Step 1: Create dat_adapter.py module
 
-`tests/throttle_failure_sim.py`:
-- Scenario 1: OpenAI API timeout (mock slow responses)
-- Scenario 2: Database connection drop
-- Scenario 3: Elevated 422 error rate (bad RFQ inputs)
-- Scenario 4: Module crash (failure_detector loop fails)
-- Scenario 5: Sustained high latency (p95 >10s)
+Implement DAT API client using httpx:
+```python
+import httpx
+import logging
+from typing import List, Dict
+from datetime import datetime, timezone
 
-### Step 2: Run all failure scenarios
+logger = logging.getLogger("dat_adapter")
 
-For each scenario:
-1. Inject failure
-2. Observe throttle state transition (GREEN→YELLOW→ORANGE→RED as appropriate)
-3. Verify intake reduces (check auto_dispatch rejection rate)
-4. Verify alerts sent (SMS on RED, email on YELLOW)
-5. Clear failure
-6. Observe auto-recovery (wait 15+ min, verify step-up to GREEN)
+class DATAdapter:
+    def __init__(self, api_key: str, endpoint: str, account_id: str):
+        self.api_key = api_key
+        self.endpoint = endpoint
+        self.account_id = account_id
+    
+    async def fetch_loads(self, origin_city: str = None, dest_city: str = None) -> List[Dict]:
+        """Fetch loads from DAT API."""
+        headers = {'Authorization': f'Bearer {self.api_key}'}
+        params = {'accountId': self.account_id}
+        
+        if origin_city:
+            params['originCity'] = origin_city
+        if dest_city:
+            params['destinationCity'] = dest_city
+        
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(f"{self.endpoint}/search", headers=headers, params=params)
+            response.raise_for_status()
+            return response.json().get('loads', [])
+```
 
-### Step 3: Document recovery patterns
+### Step 2: Create dat_poller.py background loop
 
-Write `C:\CHL\memory\THROTTLE_PLAYBOOK.md`:
-- What each throttle state means for operator
-- Expected SMS/email alerts
-- How to manually override throttle (emergency bypass)
-- How to diagnose which module triggered degradation
-- Recovery SOP (wait for auto-recovery vs manual intervention)
+```python
+import asyncio
+import os
+from dat_adapter import DATAdapter
+from throttle_integration import check_throttle_before_accept
+from sla_monitor import track_sla
+from server import db
+from datetime import datetime, timezone
 
-### Step 4: Wire into failure_detectors
+async def poll_dat_loads():
+    """Poll DAT for new loads, filter by lane scores."""
+    # Throttle check
+    throttle_ok, reason = await check_throttle_before_accept("dat_polling")
+    if not throttle_ok:
+        logger.warning(f"DAT polling paused: {reason}")
+        return
+    
+    # Initialize DAT adapter
+    adapter = DATAdapter(
+        api_key=os.environ['DAT_API_KEY'],
+        endpoint=os.environ.get('DAT_API_ENDPOINT', 'https://api.dat.com/v1/loads'),
+        account_id=os.environ['DAT_ACCOUNT_ID']
+    )
+    
+    # Fetch loads (unfiltered first pass)
+    loads = await adapter.fetch_loads()
+    logger.info(f"Fetched {len(loads)} loads from DAT")
+    
+    # Filter by lane scores
+    scored_count = 0
+    for load in loads:
+        origin_city = load.get('originCity')
+        origin_state = load.get('originState')
+        dest_city = load.get('destinationCity')
+        dest_state = load.get('destinationState')
+        
+        # Look up lane score
+        lane_score = await db.lane_scores.find_one({
+            'origin_city': origin_city,
+            'origin_state': origin_state,
+            'destination_city': dest_city,
+            'destination_state': dest_state
+        })
+        
+        if lane_score and lane_score.get('score') == True:
+            # Persist opportunity
+            await db.dat_opportunities.insert_one({
+                'dat_load_id': load.get('loadId'),
+                'origin_city': origin_city,
+                'origin_state': origin_state,
+                'destination_city': dest_city,
+                'destination_state': dest_state,
+                'rate_usd': load.get('rate'),
+                'equipment_type': load.get('equipmentType'),
+                'lane_score': lane_score.get('profitability'),
+                'fetched_at': datetime.now(timezone.utc)
+            })
+            scored_count += 1
+    
+    logger.info(f"Persisted {scored_count}/{len(loads)} opportunities (lane score filter)")
 
-Modify existing failure detectors to feed throttle:
-- `failure_detectors.py` → report elevated failure count to throttle
-- `circuit_breaker.py` → when tripped, trigger throttle RED
-- `bmc84_watcher.py` → authority loss → throttle ORANGE
+poll_dat_loads = track_sla("dat_poll", 15000)(poll_dat_loads)  # 15s target
+```
 
-## Smoke tests
+### Step 3: Register polling loop in server.py
 
-1. All 5 failure scenarios pass (state transitions correct)
-2. Intake throttling verified (auto_dispatch logs show rejections)
-3. Alerts delivered (SMS/email received)
-4. Auto-recovery proven (GREEN after 15min stability)
-5. Manual override works (operator can force GREEN if needed)
-6. Adjacent regression: all prior features still work
+```python
+from dat_poller import poll_dat_loads
+
+@app.on_event("startup")
+async def start_dat_poller():
+    async def dat_polling_loop():
+        while True:
+            await asyncio.sleep(15 * 60)  # 15 minutes
+            try:
+                await poll_dat_loads()
+            except Exception as e:
+                logger.error(f"DAT polling failed: {e}")
+    
+    asyncio.create_task(dat_polling_loop())
+```
+
+## Smoke battery
+
+1. DAT adapter credentials present: echo $env:DAT_API_KEY (not empty)
+2. Manual poll test: run poll_dat_loads() once, verify db.dat_opportunities has entries
+3. Lane score filter works: count(dat_opportunities) ≤ count(dat raw loads)
+4. Throttle respect: set RED, verify polling skips
+5. SLA tracking: db.sla_metrics has "dat_poll" entries
+6. Adjacent regression: /api/ops/briefing works
 
 ## Commit
 
 ```powershell
-git add backend/throttle_system.py backend/failure_detectors.py backend/circuit_breaker.py tests/throttle_failure_sim.py memory/THROTTLE_PLAYBOOK.md
-git commit -m "iter 140.1 stage 1d: throttle integration + failure simulation - 5 scenarios proven, auto-recovery confirmed"
+git add backend/dat_adapter.py backend/dat_poller.py backend/server.py
+git commit -m "iter 141.1 stage 1d: DAT load board integration (15min polling, lane-score filtered)"
 git push origin main
 ```
-
-## Completion doc
-
-Document:
-- All 5 failure scenarios (setup, expected behavior, actual results)
-- Alert delivery logs (SMS screenshots, email samples)
-- Recovery timing (how long GREEN→YELLOW→ORANGE→RED, how long back to GREEN)
-- Operator guidance (when to intervene, when to trust auto-recovery)
-- Performance impact (throttle overhead on auto_dispatch latency)
-
-## On completion
-
-Iter 140.1 complete. Throttle system proven. Phase 7 foundation established.
-
-Next iter candidates:
-- 141.1: Phase 2 (load board integration) - NOW SAFE to build autonomous intake
-- 140.2: Phase 1 cleanup batch (Stripe, comments, R2) - deferred hygiene
-
-Operator decides. Recommend 141.1 (autonomous intake on safe foundation).
 
 DONE
