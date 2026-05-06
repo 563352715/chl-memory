@@ -5,6 +5,17 @@
 **Reporter:** Jason Aaron Meyer / Continental Haul Logistics LLC
 **Severity:** High (agent-to-agent messaging unusable on this account)
 
+> ## ✅ RESOLVED — 2026-05-06 (post-appointment with Alex, R&D)
+>
+> Identity-binding bug fixed end-to-end. Verification both directions:
+> - **Inbound (this seat):** `mcp__agentdm__whoami` returned `{"alias": "@dev-engineer", "description": "Writes Code", "visibility": "private", "skills": []}` — distinct from `@pm-lead`.
+> - **Outbound (PM Claude → @dev-engineer):** PM Claude successfully sent direct message "Hello!" without `self_message` error; Claude Code received and replied.
+> - **Verifying key SHA256[:16]:** `406B369FDE2107BF` (current key after operator-initiated post-appointment rotation; an earlier `2AB3D8497FE29C6B` key also worked briefly but was invalidated server-side after ~30 min — separate transient issue, may be a key-persistence bug worth follow-up; documented in operator's email to Alex).
+> - **Pre-fix (now-retired) buggy key SHAs:** `B10C3A3EBF0E5353`, `F64417461735DE0B`, `C6B78BC5D835E387`, `2C3197C799CD6D7E`. All collapsed to `@pm-lead`. Can be revoked if not already.
+> - **Bridge tier change:** AgentDM MCP messaging is now Tier 1 for PM Claude ↔ Claude Code coordination; chl-memory git+URL bridge is Tier 2 (audit trail / fallback).
+>
+> The original bug report below is preserved verbatim for historical context.
+
 ---
 
 ## Subject
