@@ -2,10 +2,11 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 141.1 stage 1e shipped — HTTP smoke pending operator admin Restart-Service)
+**Last updated:** 2026-05-06 (iter 141.1 close handoff doc drafted; HTTP smoke + D backup pending operator admin Restart-Service; PM Claude parallel work shipping DAT research + iter 141.2 agenda draft)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 141.1 — NEAR-COMPLETE — Phase 2 (Load Discovery & Evaluation) foundation
-**Active stage:** 1e SHIPPED (commit `808e373`); HTTP 200 verification pending; iter 141.1 closes after that.
+**Active stage:** 1e SHIPPED (commit `808e373`); close handoff doc drafted (CHL `69cea53`); HTTP 200 verification + D backup ceremony pending; iter 141.1 closes after that.
+**PM Claude parallel work:** Priority 1 DAT API research COMPLETE (msg `6e3fb636`); Priority 2 iter 141.2 agenda draft in flight; will land before FMCSA-authority May 13+ so 141.2 opens execute-not-research.
 **State:** STAGES 1a + 1b + 1c + 1e COMPLETE (1a smoke 7/7 commit `c368f73`; 1b smoke 6/6 commit `2a4d167`; 1c smoke 6/6 commit `e9fe864`; 1e in-process smoke 5/6 PASS + 1 SKIP commit `808e373`); FractalEvaluator + LoadEvaluator (shadow-mode) + LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint + `/api/lanes/top/{N}` operator dashboard endpoint + 6h lane scoring background cron all live; module count 14 at /api/health/system (lane_scoring_cron healthy, loop_running=True); `lane_eval` SLA target registered (target_ms=60_000); `db.lane_scores` populated by both endpoint calls and cron ticks; throttle integration verified (skip on not-GREEN); composite ranking formula `(profitability × reliability) / max(risk, 0.01)` validated in-process (seed_a=6.0 ranks above seed_b=1.0). Stage 1d deferred to iter 141.2 post-FMCSA-authority May 13+. AgentDM bridge restored + verified end-to-end 2026-05-06; MCP Tier 1, chl-memory Tier 2 fallback. Iter 141.1 closes after operator runs `Restart-Service CHL-Backend` (admin shell) and HTTP 200 confirms route registration.
 
 ## Phase
