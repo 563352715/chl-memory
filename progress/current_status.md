@@ -5,8 +5,8 @@
 **Last updated:** 2026-05-06 (during iter 139.43, post Stage 3b)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 139.43
-**Active stage:** 3c — server.py top-level cleanup (next)
-**State:** STAGE 3b COMPLETE — transitioning to Stage 3c
+**Active stage:** 3d — live_wire_diary TTS migration (next)
+**State:** STAGE 3c COMPLETE — transitioning to Stage 3d (commit d074efc on CHL main)
 
 ## Phase
 
