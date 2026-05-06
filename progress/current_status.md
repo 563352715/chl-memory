@@ -2,11 +2,11 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 140.1 stage 1b complete)
+**Last updated:** 2026-05-06 (iter 140.1 stage 1c complete)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 140.1 — IN PROGRESS — Phase 7 Foundation (Autonomous Throttle System)
-**Active stage:** 1c (sla_monitor.py — performance target tracking) — pending
-**State:** STAGE 1b COMPLETE (smoke 7/7, commit `2ab45ab`); throttle state machine live at /api/throttle/{status,history,override}, transitions persist to db.throttle_state_log, self-health reports throttle_system as healthy; proceeding to 1c autonomously per Path A
+**Active stage:** 1d (auto_dispatch integration + failure simulation harness) — pending
+**State:** STAGE 1c COMPLETE (smoke 7/7, commit `f8c36b6`); SLA monitor live at /api/sla/{summary,violations,operation/{name}}, 6 targets defined, 2 operations instrumented (rfq_parse, pod_ocr), throttle now reads SLA feed via get_sla callable; proceeding to 1d autonomously per Path A
 
 ## Phase
 
