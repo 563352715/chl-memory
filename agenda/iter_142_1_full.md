@@ -32,7 +32,7 @@
 - **NEW Q5 (Load-board posting integration):** DAT or Truckstop or both at v1? Default: DAT only (industry-largest reach, pre-existing CHL integration in iter 141.2 stage 1d). Operator overrides if Truckstop relationships exist.
 - **NEW Q6 (BCA template):** Operator-authored or attorney-drafted or industry-standard template? Default: industry-standard (e.g., TIA-published template at ~$0). Attorney review optional but not blocking. Operator confirms pre-stage-1b.
 
-The original agenda below remains the spec for stages 1a, 1c, 1e, 1f. Stages 1b and 1d are AMENDED per this section — the in-place text below is the original CSV-batch model; the amendment changes operator workflow + dev approach while keeping smoke-test counts and FMCSA-blocking matrix unchanged.
+**STATUS UPDATE 2026-05-07 EOD:** Stages 1b and 1d body text below has been **PROPAGATED IN-PLACE** to reflect this amendment (commit pending). Stage 1b now shows on-demand vetting workflow + state machine; stage 1d now shows load-board-posting fallback path with smoke #8 added. This top-of-doc amendment block kept as the canonical context-and-rationale; stage bodies are the executable spec. Stages 1a, 1c, 1e, 1f unchanged. Aggregate smoke-test count: **34** (was 33 — stage 1d gained +1 for load-board fallback). Operator hands-on: **~40 min** core + per-carrier vetting (~15 min hands-on per carrier, async wait for BCA/COI per `iter_142_1_carrier_vetting_checklist.md`).
 
 ---
 
@@ -97,46 +97,50 @@ These four sketch-level open questions block 1a kickoff. Stages assume the noted
 
 ---
 
-## Stage 1b: FMCSA SAFER Ingestion + CSV Import
+## Stage 1b: FMCSA SAFER On-Demand Ingestion + Vetting Workflow
 
-**Goal:** Pull carrier records from FMCSA SAFER API (authority + insurance) and import operator-curated CSV batches.
+> **AMENDED 2026-05-07 (Load-Board-First Pivot):** Original CSV-seed-batch model REPLACED with on-demand single-MC ingestion. Operator types MC number (from a load-board responder, referral, or hand-research) → system auto-pulls authority + insurance + SMS scores → presents vetting summary → operator signs off → carrier moves to "vetted, awaiting BCA + COI" → on receipt of signed BCA + valid COI → roster-active. Roster grows organically with load flow per `iter_142_1_carrier_vetting_checklist.md` operator playbook.
 
-**What operator does (~30 min):**
-1. Provision FMCSA SAFER API key (free; sign up at safer.fmcsa.dot.gov developer portal).
-2. Vault entry: "FMCSA SAFER — API Key" (~5 min).
-3. Hand-curate first batch CSV (~20 carriers operator already trusts) — `data/carriers_seed_batch1.csv` with `mc_number, legal_name, contact_phone, contact_email, lanes_served, sms_opt_in` (~20 min).
-4. Run import: `& "C:\CHL\.venv-local\Scripts\python.exe" -m backend.carrier_ingestion --csv data/carriers_seed_batch1.csv` (~3 min wall, 2 min wait).
-5. Review log + spot-check 3 carriers in db (~2 min).
+**Goal:** Stand up FMCSA SAFER on-demand ingestion + per-carrier vetting workflow. Roster grows one carrier at a time as load flow generates contacts (no upfront batch curation).
+
+**What operator does (per carrier, ~15 min hands-on + 30min–2h async wait for BCA/COI receipt):**
+1. (One-time, ~5 min) Provision FMCSA SAFER API key (free; sign up at safer.fmcsa.dot.gov developer portal). Vault entry: "FMCSA SAFER — API Key".
+2. (One-time, ~5 min) Decide BCA template source per Q6: **Default: industry-standard (e.g., TIA-published template ~$0); attorney review optional, not blocking.**
+3. (Per carrier) Receive MC number from load-board responder OR hand-research. Type into vetting CLI / endpoint: `python -m backend.carrier_ingestion --mc <number>`.
+4. (Per carrier) Review system-generated vetting summary (authority status, insurance expiry, SMS safety score, red flags) per `iter_142_1_carrier_vetting_checklist.md` 10-step playbook + 27 red-flag list.
+5. (Per carrier) Decide: VETTED / DECLINE / NEEDS-MORE-INFO. If DECLINE, send template decline reply (in checklist). If VETTED, send BCA + COI request.
+6. (Per carrier, async) Track BCA + COI receipt in `iter_142_1_carrier_vetting_tracker_TEMPLATE.csv` (33-col spreadsheet). On receipt: flip carrier `vetting_status: "vetted_awaiting_docs"` → `"roster_active"`.
 
 **What Dev Engineer does (~4h):**
-1. `backend/carrier_ingestion.py`: `ingest_from_safer(mc_number)` — pulls authority + insurance, writes to `db.carriers` (upsert).
-2. CSV importer: `ingest_from_csv(path)` — parses, validates, calls `ingest_from_safer` per row to enrich, then upserts.
-3. Dedup logic on `mc_number` (upsert with merge — CSV operator-supplied fields override SAFER for `contact_phone`/`contact_email`/`sms_opt_in`/`lanes_served`).
+1. `backend/carrier_ingestion.py`: `ingest_from_safer(mc_number)` — pulls authority + insurance, writes to `db.carriers` with `vetting_status: "pending_review"`.
+2. `vetting_summary(mc_number)` — composes the operator-facing review packet: authority + insurance + SMS scores + red flags from `iter_142_1_carrier_vetting_checklist.md` rule set. Returns JSON for CLI display + frontend dashboard.
+3. Carrier vetting state machine: `pending_review` → `vetted_awaiting_docs` (operator signs off) → `roster_active` (BCA + COI on file) → `blacklisted` (any future violation). State transitions via PATCH endpoint.
 4. Insurance-expiry date parser (SAFER returns YYYYMMDD strings).
-5. Endpoint: `POST /api/carriers/import` (admin-only; takes CSV path or single mc_number).
-6. CLI: `python -m backend.carrier_ingestion --csv <path>` and `--mc <number>`.
+5. CLI: `python -m backend.carrier_ingestion --mc <number>` (single-MC ingestion + vetting summary) and `--mc-status <number>` (state-transition flag for vetted/declined/active).
+6. Endpoint: `POST /api/carriers/vet` (admin-only; takes mc_number, returns vetting summary JSON), `PATCH /api/carriers/{mc_number}/vetting_status`.
 
 **Code dependencies:**
-- Stage 1a (schema)
+- Stage 1a (schema — note: `vetting_status` field added to schema; if not in 1a's original spec, append to 1a list)
 - New: FMCSA SAFER API client (raw `requests` calls — minimal SDK exists; ~50 LOC client)
 - Existing: `backend/throttle_system.py` integration (rate-limit FMCSA calls — they're free but rate-capped)
+- Cross-doc: `chl-memory/research/iter_142_1_carrier_vetting_checklist.md` for the 10-step + 27-red-flag rule set
 
 **Smoke battery (6 tests):**
 1. SAFER API client initializes with valid key (401 on bad key)
-2. Single-mc import end-to-end (`ingest_from_safer("1817555")` → record in `db.carriers`)
-3. CSV parser handles 20-row batch without crash
-4. Dedup correctness (re-import same CSV → no duplicate inserts, fields merged correctly)
+2. Single-mc import end-to-end (`ingest_from_safer("1817555")` → record in `db.carriers` with `vetting_status: "pending_review"`)
+3. **Vetting summary correctness:** known-MC test cases trigger expected red flags (e.g., expired insurance MC → red flag fires; ACTIVE-authority MC → no red flag)
+4. State machine transitions: PATCH valid transitions succeed, invalid transitions (e.g., `pending_review` → `roster_active` skipping `vetted_awaiting_docs`) reject 422
 5. Insurance-expiry parsed correctly across edge dates (leap year, month boundaries)
 6. Throttle integration (rapid-fire 50 calls → no FMCSA 429s, calls space at throttle cadence)
 
 **Success criteria:**
 - ✅ All 6 smoke tests PASS
-- ✅ Operator's seed batch (20 carriers) in `db.carriers`
-- ✅ Each ingested carrier has SAFER-enriched authority + insurance fields populated
+- ✅ Operator-vetted seed batch in `db.carriers`: **1–2 carriers if any pre-existing relationships, OR zero (system stands ready for first load-board response)**
+- ✅ Vetting CLI returns operator-readable summary in <30s per MC (FMCSA SAFER + L&I lookup combined)
 
-**Estimated time:** 4.5h (4h dev + 0.5h operator)
+**Estimated time:** 4.5h (4h dev + 0.5h operator setup; per-carrier vetting tracked separately at ~15 min hands-on + async wait per carrier)
 **Handoff doc:** `memory/handoff_iter_142_1_stage_1b.md`
-**FMCSA-blocked?** **Yes for go-live; No for development.** Dev can build + smoke against test mc_numbers (e.g., MC-1817555 itself once authority lands, OR public broker MCs for read-only enrichment) before May 13+. Operator-batch-seeded production carriers are the go-live trigger.
+**FMCSA-blocked?** **Yes for go-live; No for development.** Dev can build + smoke against test mc_numbers (e.g., MC-1817555 itself once authority lands, OR public broker MCs for read-only enrichment) before May 13+. Operator's first vetted carrier (could be hand-research or load-board responder) is the go-live trigger.
 
 ---
 
@@ -182,51 +186,61 @@ These four sketch-level open questions block 1a kickoff. Stages assume the noted
 
 ---
 
-## Stage 1d: Multi-Carrier Outreach Orchestration
+## Stage 1d: Multi-Carrier Outreach Orchestration + Load-Board-Posting Fallback
 
-**Goal:** Send rate offers to top-3 carriers per lane in parallel (SMS + email, with voice fallback if no response in 30 min); track responses; first-accept wins.
+> **AMENDED 2026-05-07 (Load-Board-First Pivot):** Original outreach-only model AUGMENTED with load-board-posting fallback. When `select_top_n_for_lane(load.lane, n=3)` returns empty (roster has no qualifying carrier for the load's lane — common at v1 with thin roster), system auto-posts to load board (DAT default per Q5; Truckstop optional), captures responder MCs, routes them through stage 1b on-demand vetting flow before booking. Roster grows asymmetrically with load flow.
+
+**Goal:** Send rate offers to top-N carriers per lane in parallel (SMS + email, with voice fallback if no response in 30 min); track responses; first-accept wins. **Plus** auto-post to load board when roster has no qualifying carrier for the load's lane → capture responders → route through stage 1b vetting before booking.
 
 **What operator does (~10 min):**
 1. Review outreach copy templates (`memory/handoff_iter_142_1_stage_1d.md`):
    - SMS (GSM-7-safe, per `chl-memory/research/plivo_white_glove_packet_FINAL.md` §4 conventions): "CHL: Load Opportunity {load_id}, {origin} to {dest}, ${rate}, {equip}. Reply ACCEPT or DECLINE. MC-1817555. HELP for help, STOP to opt out."
    - Email subject + body
    - Voice TTS script
+   - **Load-board posting copy:** title + description + rate + equipment + pickup/delivery dates (DAT post format default per Q5)
 2. Compliance check: opt-in language matches signed broker-carrier agreements + GSM-7 encoding-safe (no em-dash, arrow, smart quotes) per FINAL packet (~5 min).
 3. Sign-off.
 
 **What Dev Engineer does (~6h):**
 1. `backend/carrier_outreach.py`: `select_and_send(load_id)`:
    - Calls `CarrierEvaluator.select_top_n_for_lane(load.lane, n=3)`
-   - For each carrier: enqueues SMS (if `sms_opt_in`) + email in parallel
-   - Records `db.carrier_offers` doc per carrier: `{load_id, mc_number, offered_rate, sent_at, response_at: null, status: "pending", channels_used: [...]}`
-2. Voice fallback scheduler: if no `db.carrier_offers.response_at` set within 30 min → enqueue voice call via current SMS provider's voice API (Twilio or Plivo, whichever active).
-3. Response handler: webhook on incoming SMS/email reply → parse "ACCEPT" / "DECLINE" / "STOP" → update `db.carrier_offers`, fire callback.
-4. First-accept-wins: when one offer hits `status: "accepted"`, others auto-cancel (status: `"superseded"`), no further notifications.
-5. Endpoint: `POST /api/loads/{load_id}/outreach` (manual trigger for testing + ops override).
+   - **If non-empty:** for each carrier, enqueues SMS (if `sms_opt_in`) + email in parallel; records `db.carrier_offers` doc per carrier: `{load_id, mc_number, offered_rate, sent_at, response_at: null, status: "pending", channels_used: [...]}`.
+   - **If empty (load-board fallback):** call `post_to_load_board(load_id)` instead → load enters `dispatch_status: "posted_awaiting_responders"`, no carrier offers created until first responder is vetted.
+2. **NEW — `post_to_load_board(load_id)`:** posts load to DAT (reusing iter 141.2 stage 1d DAT integration; Truckstop optional per Q5). Captures inbound responders via webhook. Each responder MC routed to stage 1b vetting CLI/endpoint with `source: "load_board_responder"` flag.
+3. **NEW — Vetted-responder booking flow:** when a load-board responder completes stage 1b vetting → `roster_active`, system auto-fires `select_and_send(load_id)` for that load (now has at least 1 qualifying carrier in lane) → outreach proceeds normally.
+4. Voice fallback scheduler: if no `db.carrier_offers.response_at` set within 30 min → enqueue voice call via current SMS provider's voice API (Twilio or Plivo, whichever active).
+5. Response handler: webhook on incoming SMS/email reply → parse "ACCEPT" / "DECLINE" / "STOP" → update `db.carrier_offers`, fire callback.
+6. First-accept-wins: when one offer hits `status: "accepted"`, others auto-cancel (status: `"superseded"`), no further notifications.
+7. Endpoint: `POST /api/loads/{load_id}/outreach` (manual trigger for testing + ops override). `POST /api/loads/{load_id}/post_to_board` (manual fallback trigger).
 
 **Code dependencies:**
 - Stage 1c (CarrierEvaluator)
+- Stage 1b (vetting flow — load-board responders routed through it before booking)
 - Existing: `backend/notification_service.py` (SMS — Twilio OR Plivo depending on iter 141.3 status)
 - Existing: Resend client for email (assume already exists; if not, +30 min to add)
+- **Existing (iter 141.2 stage 1d):** DAT integration (read-only currently; outbound posting needs additional ~50 LOC + DAT post-API auth)
 - New: `db.carrier_offers` collection + indexes
+- New: `db.loads.dispatch_status: "posted_awaiting_responders"` state added to existing dispatch_status enum
 
-**Smoke battery (7 tests):**
-1. `select_and_send(load_id)` against mocked load → 3 `db.carrier_offers` rows created
+**Smoke battery (7 tests, originally; **+1 for load-board fallback = 8 total**):**
+1. `select_and_send(load_id)` against mocked load with non-empty roster → 3 `db.carrier_offers` rows created
 2. Channel selection: carrier with `sms_opt_in: false` → email only, no SMS attempted
 3. Parallel send timing: 3 carriers × 2 channels = 6 sends complete within 5s wall-clock (parallelism works)
 4. Response webhook: "ACCEPT" reply → offer status flips to "accepted", correct mc_number resolved
 5. First-accept-wins: 2nd accept arrives after 1st → 2nd marked "superseded", no booking conflict
 6. Voice fallback: simulate no-response 30-min window elapsed → voice call enqueued exactly once per carrier
 7. STOP handling: "STOP" reply → carrier `sms_opt_in: false`, no future SMS attempts
+8. **NEW — Load-board fallback:** mocked load with empty-roster lane → `select_and_send` triggers `post_to_load_board`, load `dispatch_status` flips to `"posted_awaiting_responders"`, no carrier offers created. Mocked DAT-responder webhook → responder MC routed to vetting endpoint with `source: "load_board_responder"`. After mocked vet-pass, `select_and_send` re-fires and creates 1 offer.
 
 **Success criteria:**
-- ✅ All 7 smoke tests PASS
-- ✅ End-to-end: synthetic load → 3 offers sent → 1 accepts → status reflects in db
-- ✅ Operator-approved copy templates in production
+- ✅ All 8 smoke tests PASS
+- ✅ End-to-end (with roster): synthetic load → 3 offers sent → 1 accepts → status reflects in db
+- ✅ End-to-end (empty roster): synthetic load → load-board post → mocked responder → vetting pass → outreach → accept
+- ✅ Operator-approved copy templates (outreach + load-board post) in production
 
-**Estimated time:** 6.5h (6h dev + 0.5h operator)
+**Estimated time:** 7.0h (6.5h dev + 0.5h operator) — adds ~30 min for load-board-fallback wiring + smoke #8
 **Handoff doc:** `memory/handoff_iter_142_1_stage_1d.md`
-**FMCSA-blocked?** No (works against test/seed carriers; SMS provider already live from 141.2/141.3).
+**FMCSA-blocked?** No for outreach side; load-board posting may be FMCSA-gated if DAT requires authority verification on post (operator confirms with DAT account during stage 1d kickoff).
 
 ---
 
@@ -360,13 +374,13 @@ These four sketch-level open questions block 1a kickoff. Stages assume the noted
 - **Cause:** Missing optional fields (e.g., carrier-specific notes), template encoding issues.
 - **Fix:** Defensive defaults in template fill; render errors logged + operator-alerted, packet generation retries once before flagging load `dispatch_status: "packet_failed"` for manual handling.
 
-### "Operator's seed batch carriers don't accept any offers"
-- **Cause:** Stale phone/email; carrier no longer brokering CHL's lanes.
-- **Fix:** Stage 1b CSV import is incremental — operator can refresh batch CSV and re-import. Reliability score auto-decays for non-responsive carriers (stage 1c parameter), pushing them down the ranking.
+### "Vetted carriers don't accept any offers"
+- **Cause:** Stale phone/email; carrier no longer brokering CHL's lanes; rate offer below market.
+- **Fix:** Reliability score auto-decays for non-responsive carriers (stage 1c parameter), pushing them down the ranking. Stage 1d load-board fallback fires when no qualifying carrier accepts → captures fresh responder pool. Operator can manually re-vet existing carriers via stage 1b vetting CLI to refresh their contact info.
 
-### "Auto-bid books load before carriers exist for that lane"
-- **Cause:** Iter 141.2 auto-bid runs before stage 1b ingestion populates carriers for the lane.
-- **Fix:** Stage 1d `select_and_send` returns empty list → fallback path: load enters `dispatch_status: "no_carriers_available"`, operator alerted to manual handle. Future iter (142.2+) can extend FMCSA SAFER ingestion to dynamically find new carriers per-lane on demand.
+### "Auto-bid books load before carriers exist for that lane (empty roster)"
+- **Cause:** Iter 141.2 auto-bid runs before stage 1b on-demand vetting populates carriers for the lane. Common at v1 (thin roster).
+- **Fix:** Stage 1d `select_and_send` returns empty list → triggers load-board-posting fallback (DAT default per Q5; Truckstop optional) → load enters `dispatch_status: "posted_awaiting_responders"`. Inbound responders auto-routed to stage 1b vetting; on first vet-pass, `select_and_send` re-fires and outreach proceeds. Operator-alert fires only if no responders within configurable timeout (default ~4h on the load-board post).
 
 ---
 
@@ -384,11 +398,11 @@ These four sketch-level open questions block 1a kickoff. Stages assume the noted
 
 **Status:** ✅ AGENDA COMPLETE. Ready for operator/dev-engineer review before iter 142.1 kickoff.
 
-**Aggregate stats:**
-- 6 stages (1a–1f), ~800 LOC dev, **33 smoke tests** total
-- Operator hands-on: ~70 min across iter
-- Dev hours: ~28h (~3.5 wks at 8h/wk solo cadence)
-- Wall-clock to milestone: 3 wks dev + FMCSA wait window for go-live
+**Aggregate stats (post-Load-Board-First Pivot amendment):**
+- 6 stages (1a–1f), ~850 LOC dev (was ~800; +50 for load-board-fallback wiring + vetting state machine), **34 smoke tests** total (was 33; +1 in stage 1d for load-board fallback)
+- Operator hands-on: **~40 min core + per-carrier vetting (~15 min hands-on per carrier, async wait for BCA/COI)** — was ~70 min upfront in CSV-batch model
+- Dev hours: ~28.5h (~3.5 wks at 8h/wk solo cadence)
+- Wall-clock to milestone: 3 wks dev + FMCSA wait window for go-live + roster-grows-with-load-flow (asymmetric)
 
 **Cross-reference:**
 - `chl-memory/research/iter_142_1_phase_3_sketch.md` (**SUPERSEDED** by this agenda — kept for history) — preliminary 4-stage sketch (this agenda expands to 6)
@@ -396,5 +410,7 @@ These four sketch-level open questions block 1a kickoff. Stages assume the noted
 - `chl-memory/research/iter_141_2_agenda_draft.md` — auto-bid module (1f integration target)
 - `chl-memory/research/iter_141_3_agenda_draft.md` — SMS provider migration (1d outreach module dependency)
 - `chl-memory/research/iter_142_1_pre_flight_brief.md` — operator gotchas pre-kickoff (companion doc, dev-authored)
+- `chl-memory/research/iter_142_1_carrier_vetting_checklist.md` — operator vetting playbook (10 steps + 27 red flags + decline template + time budgets) — **load-bearing for stage 1b on-demand vetting**
+- `chl-memory/research/iter_142_1_carrier_vetting_tracker_TEMPLATE.csv` — 33-column tracking spreadsheet operator can use immediately pre-iter-142.1-stage-1b ship
 
 **Source:** Drafted by @pm-lead 2026-05-07 from sketch `iter_142_1_phase_3_sketch.md` + CHL_STRATEGIC_PLAYBOOK.md Phase 3 boundary + iter_141_3_agenda_draft.md pattern.
