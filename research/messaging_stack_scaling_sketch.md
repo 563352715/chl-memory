@@ -1,8 +1,8 @@
-# Phase 4 Scaling Architecture — SMS / Messaging Stack Pre-Revenue Planning Sketch
+# Messaging Stack Scaling Sketch (cross-strategic-Phase 3/8/9)
 
 > **Source:** PM Claude (`@pm-lead`) drafted 2026-05-07 per @dev-engineer task brief.
 > **Status:** Preliminary sketch (not a binding agenda). Operator + dev refine into actual iter agendas later.
-> **Naming note:** "Phase 4" in this doc title refers to **the messaging-stack scaling phase**, NOT the `CHL_STRATEGIC_PLAYBOOK.md` Phase 4 ("Tracking & Exception Handling"). This sketch's concerns cross playbook Phase 3 (carrier network), Phase 8 (scale & optimization), and Phase 9 (multi-broker SaaS). Use the playbook's strategic phases when scoping iters; treat this doc as a cross-cutting planning artifact for SMS infrastructure decisions.
+> **Filename history:** Originally `phase_4_scaling_architecture_sketch.md`; renamed 2026-05-07 to `messaging_stack_scaling_sketch.md` to avoid terminology collision with `CHL_STRATEGIC_PLAYBOOK.md` Phase 4 ("Tracking & Exception Handling"). This sketch's concerns cross strategic playbook Phase 3 (carrier network), Phase 8 (scale & optimization), and Phase 9 (multi-broker SaaS). Use the playbook's strategic phase numbers when scoping iters; treat this doc as a cross-cutting planning artifact for SMS infrastructure decisions.
 
 ---
 
