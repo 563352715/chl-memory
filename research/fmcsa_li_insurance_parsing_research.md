@@ -23,6 +23,33 @@ https://mobile.fmcsa.dot.gov/qc/services/carriers/{USDOT}?webKey={KEY}
 
 ---
 
+## Tier 1.5 (COMPLEMENTARY): SAFER Company Snapshot for cargo classifications + authority status
+
+> **Added 2026-05-07 by @pm-lead** during PM-TASK-C parallel research. SAFER is NOT an insurance source (page links out to L&I for that), but it IS the canonical source for the **27-category cargo-carried checkbox list** that the operator requested as the equipment-type axis. Pair with QCMobile (Tier 1) for full carrier enrichment.
+
+**URL pattern (verified 2026-05-07 via WebFetch):**
+- By USDOT: `https://safer.fmcsa.dot.gov/query.asp?query_type=queryCarrierSnapshot&query_param=USDOT&query_string={USDOT}`
+- By MC: `query_param=MC_MX&query_string={MC}`
+
+**Auth:** None (public, no WebKey required).
+
+**Cargo Carried checkbox list (verbatim from SAFER):**
+General Freight · Household Goods · Metal sheets/coils · Motor Vehicles · Logs/Lumber · Building Materials · Mobile Homes · Machinery · Produce · Liquids/Gases · Intermodal Containers · Passengers · Oilfield Equipment · Livestock · Grain · Coal · Meat · Garbage · US Mail · Chemicals · Dry Bulk · Refrigerated Food · Beverages · Paper · Utilities · Agricultural Supplies · Construction · Water Well
+
+Each rendered as `<td>X</td>` if selected, `<td></td>` if not. Maps neatly to the operator's "all equipment types" directive: tankers (Liquids/Gases + Dry Bulk + Chemicals), reefers (Refrigerated Food + Meat + Beverages + Produce), heavy haul / wide loads (Machinery + Oilfield Equipment + Mobile Homes), flatbed/step-deck (Metal sheets/coils + Building Materials + Logs/Lumber + Motor Vehicles), dry van (General Freight + Household Goods + Paper + Construction + Agricultural Supplies).
+
+**Other useful SAFER fields (NOT in QCMobile or L&I):**
+- Operating Authority Status one-liner ("AUTHORIZED FOR Property/Passenger/HHG")
+- 24-month inspection summary
+- Crash counts (US + Canada)
+- Power units, drivers (also in Census but useful as cross-check)
+
+**HTML structure:** table-based "SAFER Layout" containers, label-value pairs separated by `Images/SAFER_hr.jpg` horizontal-line markers. Cargo-carried section is checkbox-style table.
+
+**Recommendation:** **Use SAFER snapshot as a third leg of per-carrier enrichment** alongside QCMobile (insurance + safety rating) and Census file (registration data). Single SAFER fetch enriches `db.carriers.equipment.cargo_classes[]` array at zero auth cost. Phase 2/3 can call it in parallel with QCMobile per carrier.
+
+---
+
 ## Tier 2 (FALLBACK): L&I portal HTML scraping
 
 **The L&I portal uses Oracle PL/SQL Web Toolkit** (the `PKG_*.prc_*` URL pattern). It is **NOT a simple URL-by-DOT lookup**. Multi-step required:
