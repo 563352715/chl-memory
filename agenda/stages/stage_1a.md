@@ -1,5 +1,7 @@
 # Stage 1a: FractalEvaluator Base Class + LoadEvaluator Refactor
 
+> **Note (added 2026-05-07 post-iter-141.1-close):** PowerShell smoke recipes below reference `localhost:8000`. **Post-iter-141.1 verification confirmed backend on port 8001, not 8000.** When re-running these smokes against current backend, substitute `:8001`. Pattern matches the close-ceremony runbook correction (commit `9d6c5f5`); historical record preserved here for iter 141.1 audit-trail integrity.
+
 ## Stage objective
 
 Build the fractal decision framework foundation by creating the `FractalEvaluator` abstract base class implementing the four-parameter evaluation pattern (profitability, reliability, risk, capacity). Refactor existing `auto_dispatch.try_auto_accept()` hard-coded rules into a `LoadEvaluator` subclass that inherits from this base. Behavior must be identical to prior implementation - this is a pure refactor for architectural cleanliness, not a functional change. Success = smoke tests prove LoadEvaluator.decide() produces same accept/reject decisions as prior try_auto_accept(), FractalEvaluator pattern ready for lane-level (stage 1b) and market-level (future) extensions.
