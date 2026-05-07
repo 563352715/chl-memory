@@ -1,135 +1,119 @@
-# Plivo White-Glove Submission Packet — Completeness Review
+# Plivo White-Glove Submission Packet — Review (Packet vs Spec)
 
-> **Reviewed:** `chl-memory/research/emergent_plivo_white_glove_packet_task.md` (the Emergent task spec for generating `plivo_white_glove_packet.md`).
-> **Cross-referenced:** `chl-memory/research/plivo_migration_research.md` for Plivo's white-glove process + TCR submission requirements.
+> **Reviewed:** Emergent-built `frontend/public/plivo_white_glove_packet.md` on CHL branch `conflict_060526_1955` (read-only via `git show`; conflict branch NOT merged — touches 50+ files including .gitignore + memory/* that would revert overnight work).
+> **Compared against:** `chl-memory/research/emergent_plivo_white_glove_packet_task.md` (spec).
 > **Reviewer:** @pm-lead, 2026-05-07.
-> **Conclusion:** **6 critical gaps, 10 recommended additions, 4 optional polish items.** Spec is solid foundationally — covers business identity, opt-in flow framing, sample messages, volume tiers — but has gaps in the exact areas that historically trigger TCR rejection (CTA verification, suppression-list mechanics, HELP-keyword exact text). Closing the 6 critical items materially improves first-pass acceptance odds with Plivo's white-glove team.
+> **Verdict:** **High quality. Ready for operator pre-flight + paste with 3 minor additions and 2 spec-mismatches worth resolving.** All 8 spec sections delivered. All 5 operator-fillable fields cleanly placeholder-marked. Emergent went beyond spec in several places (3-path opt-in framing, explicit TCR brand-reuse ask, audit-ledger JSON example, dedicated operator-fillable checklist) which materially improves first-pass acceptance odds.
 
 ---
 
-## Methodology
+## Spec Coverage (8/8 sections delivered)
 
-Compared the spec section-by-section against:
-1. Plivo white-glove process steps (Profile → Brand → Campaign → Numbers per `plivo_migration_research.md`)
-2. TCR (The Campaign Registry) standard submission elements
-3. Twilio rejection error 30909 (CTA verification failed) — the failure mode being explicitly mitigated
-4. CHL's actual data model (`db.carriers.sms_opt_in`, planned `/sms-opt-in` page, planned `db.consent_records` if needed)
+| Spec § | Packet § | Delivered? | Notes |
+|---|---|---|---|
+| 1. Brand Information | §1 | ✅ | Table format, includes spec fields + extras (DBA, Russell 3000 N/A, gov-entity flag, tax-exempt flag — all TCR-standard rows). |
+| 2. Use Case Description | §2 | ✅ | Adds explicit TCR taxonomy ("Mixed Low Volume", sub-use-cases, embedded-links/phone/age-gate/loan flags) — these are exact TCR submission form fields. |
+| 3. Recipients & Opt-In Flow | §3 | ✅+ | Packet expands spec's 1-path framing into **3 documented paths** (signed agreement, public web, keyword) — better than spec asked for. |
+| 4. Sample Messages (5) | §4 | ✅ | All 5 examples, MC-cited, STOP/HELP keywords present. |
+| 5. Volume Estimate | §5 | ✅ | Adds daily peak per phase to monthly volume. |
+| 6. Phone Numbers to Link | §6 | ✅ | Adds TFV-rejection date + temp-number row. |
+| 7. Compliance & Privacy | §7 | ✅ | All 5 sub-items present (privacy notice, data retention, HELP/STOP/START templates). |
+| 8. Migration-Specific Notes | §8 | ✅+ | Adds explicit 5-item "Specific request to Plivo white-glove team" — rare and high-leverage. |
 
-Reviewed for: completeness (is each TCR-required element addressed?), specificity (will the white-glove team have to ask follow-up questions?), and risk-mapping (does the spec pre-empt the failure mode that killed Twilio?).
-
----
-
-## CRITICAL gaps (likely rejection-blockers if unaddressed)
-
-### C1. CTA URL live-state at submission time
-**Where:** Section 3 (Recipients & Opt-In Flow), public CTA URL line.
-**Gap:** Spec acknowledges `continentalhaul.com/sms-opt-in` is "page to be built" but doesn't address that **TCR/Plivo white-glove typically requires the URL be functional at submission time**. Twilio's 30909 rejection on CHL was specifically a CTA verification failure. White-glove team will check the URL.
-**Recommended addition:** Explicit status line — one of:
-- (a) "Page LIVE at submission time" (tracked dependency: `emergent_sms_opt_in_page_task.md` ships before Stage 1c kickoff), OR
-- (b) "Paper-agreement-only consent at v1; public CTA deferred to post-launch" (frame as primary opt-in, list URL as future).
-Operator must pick (a) or (b) before submission. Mixed framing risks the same 30909 outcome.
-
-### C2. Suppression list mechanics + data location
-**Where:** Section 3 (Opt-Out) + Section 7 (Compliance).
-**Gap:** Spec says "STOP → removed within 24 hours" but doesn't tell white-glove team **where the suppression state lives** or how it's enforced. TCR submissions ask this directly. Per iter 142.1 stage 1d, opt-out flips `db.carriers.sms_opt_in: bool` and the outreach module reads it pre-send.
-**Recommended addition:** One sentence: "Opt-out enforced via `db.carriers.sms_opt_in: false` flag; outreach module checks pre-send; manual audit query available for audit response within 24h."
-
-### C3. HELP autoresponder exact text
-**Where:** Section 7 (Compliance — marked as Emergent-fill-in).
-**Gap:** "Emergent will look up Plivo's standard language" is not enough. TCR rejects for missing/non-standard HELP responses regardless of who fills it in. Standard pattern is required AND specific to CHL identity.
-**Recommended addition:** Pre-draft the exact text in the spec rather than deferring:
-- HELP: "CHL (MC-1817555) operational SMS for carriers/shippers under signed agreements. Reply STOP to opt out, START to opt in. Support: dispatch@continentalhaul.com or call (XXX) XXX-XXXX."
-- STOP confirm: "You have opted out of CHL operational SMS. No further messages will be sent. Reply START to re-enable. MC-1817555."
-- START confirm: "You have re-enabled CHL operational SMS. Reply STOP at any time to opt out. MC-1817555."
-Operator fills in support phone; everything else fixed.
-
-### C4. Marketing-vs-operational explicit declaration
-**Where:** Section 2 (Use Case) + Section 4 (Sample Messages).
-**Gap:** Spec implies operational throughout but never says the magic line that TCR vetting flags on. Twilio's 30909 path sometimes triggered when sample messages had any tone interpretable as promotional.
-**Recommended addition:** One sentence at top of Section 2: "**No marketing or promotional content. All messages are operational notifications tied to specific load events with carriers/shippers under signed agreements.**" Plus a parallel one-liner at top of Section 4 sample messages.
-
-### C5. Reuse existing TCR brand registration (B6384Q7)
-**Where:** Section 8 (Migration-Specific Notes).
-**Gap:** Spec mentions brand SID and TCR brand ID but doesn't explicitly **request** that Plivo white-glove team reuse the existing TCR-approved brand rather than re-vet. Re-vetting adds 1-2 weeks + $4 + risk.
-**Recommended addition:** Explicit ask line at top of Section 8: "**Request: reuse existing TCR-approved brand registration (TCR ID B6384Q7) — only campaign needs new submission, not the brand.**"
-
-### C6. Operator-fillable fields completeness audit
-**Where:** Section 1 (Brand Information).
-**Gap:** Spec marks EIN, primary contact phone, business address as operator-fillable. Implicit assumption that operator has these ready. Realistic risk: operator's EIN may be in a different system from MC#/USDOT, business address may be PO box vs registered address. White-glove team rejects on address mismatch with FMCSA registry.
-**Recommended addition:** Pre-flight checklist for operator: "Before pasting packet to white-glove chat, verify each operator-fillable field matches CHL's FMCSA registry exactly: EIN (from IRS letter), business address (must match SAFER record for MC-1817555), authorized contact phone (can differ from sender numbers, but must be reachable)." Catch mismatches before submission, not during.
+**Bonus section** (not in spec): "Operator-fillable checklist (before pasting)" at end — pre-flight catches the 5 placeholder fields before paste. Excellent addition.
 
 ---
 
-## RECOMMENDED additions (improve acceptance odds)
+## Operator-Fillable Fields Audit (5/5 placeholder-marked)
 
-### R1. Per-recipient message frequency
-Section 5 covers total monthly volume but TCR asks `msgs/recipient/month`. Add: "Expected per-recipient frequency: 5-20 msgs/month (event-driven; carriers receive on assigned loads only)."
+| # | Field | Marker in packet | Status |
+|---|---|---|---|
+| 1 | EIN | `<EIN>` *(operator fills in — see W-9 on file)* | ✅ |
+| 2 | State of formation | `<state>` *(operator fills in)* | ✅ |
+| 3 | Year formed | `<year>` *(operator fills in)* | ✅ |
+| 4 | Authorized contact phone | `<contact phone>` *(operator fills in — may differ from SMS sender)* | ✅ |
+| 5 | Registered business address | `<street, city, state, zip>` *(operator fills in — must match SOS filing)* | ✅ |
+| (+1) | Plivo temp number | `<temp>` | ✅ (added by Emergent — appropriate) |
 
-### R2. TCPA quiet-hours compliance posture
-Section 7 should declare: "Messages restricted to TCPA-compliant hours (8am-9pm recipient local time) for non-time-critical content; load opportunities and dispatch updates exempt as carrier-business-relationship operational." White-glove team will ask.
-
-### R3. TFV (Toll-Free Verification) is separate from 10DLC
-Section 6 mentions toll-free `+18664906433` "ported separately if cited" but doesn't clarify TFV is its own submission path, NOT part of the 10DLC white-glove packet. Add a one-liner: "Note: Toll-free TFV submission is a separate path from this 10DLC packet; operator will handle TFV via Plivo's TFV-specific submission process if/when toll-free port completes."
-
-### R4. Number recycling policy
-TCR cares about preventing messages to recycled numbers (e.g., a former carrier's phone reassigned to an unrelated consumer). Add to Section 7: "Carriers inactive >12 months get phone-number-validity check via FMCSA SAFER re-pull before next outreach; suppressed if changed."
-
-### R5. Record retention period
-Section 7 marks data retention as Emergent-fill-in. Specify: "Consent records (signed agreements + opt-in/out timestamps) retained ≥4 years per FCRA + TCR best practice."
-
-### R6. Double opt-in declaration for digital CTA
-Section 3 doesn't say whether the planned `/sms-opt-in` page implements double opt-in (web form → confirm SMS → reply YES). Specify: "Digital CTA flow at /sms-opt-in implements double opt-in: web submission → confirmation SMS sent → recipient replies YES to confirm enrollment."
-
-### R7. Twilio cancellation/rollback timing
-Section 8 should add: "Twilio account remains active for 30 days post-FOC-date (port completion) to enable reverse-port if Plivo migration encounters issues. Cancellation triggered only after 30-day stable Plivo operation confirmed."
-
-### R8. Plivo's template doc URL for Emergent
-Section 7 says "look up Plivo docs" — give the exact URL: `https://www.plivo.com/docs/sms/concepts/use-cases/operational-notifications/` (already noted in spec line 99 but only inline; promote to Section 7 header so Emergent uses it explicitly).
-
-### R9. Length target unrealistic
-Spec says "600-800 words". With critical + recommended gaps closed, realistic target is **1100-1300 words**. Update target band; or split into a "core packet (700 words)" + "appendix with operator-fillable details" if Plivo chat has length limits.
-
-### R10. Sample message #5 (payment notification) — ACH timing claim
-Sample 5 says "ACH should post within 24-48 hrs" — this is a vendor-dependent claim. If factoring company is slower, recipient sees broken promise. Soften to "ACH typically posts within 1-3 business days (timing per your factoring company)."
+All 5 spec-required fields are present, marked with angle-bracket placeholder syntax, AND echoed in the standalone bottom checklist. Operator can't miss them.
 
 ---
 
-## OPTIONAL polish items
+## Where Emergent Exceeded Spec (Improvements)
 
-### O1. DUNS number field
-Some TCR submissions ask for DUNS. CHL likely doesn't have one at v1. Add to Section 1: "DUNS: not registered (small-business exemption at v1; will register if required for shipper integrations Phase 5+)."
-
-### O2. Cross-state consent variation
-Spec doesn't address CA/IL/NY stricter state-level consent. For B2B operational, federal TCPA + signed agreements typically sufficient. Add a one-liner to Section 7 confirming: "All recipients are commercial entities (carriers, shippers) under signed B2B agreements; consumer-protection statutes (CA/IL state-level CPRA, etc.) inapplicable."
-
-### O3. Alphanumeric sender ID
-Plivo supports alphanumeric sender IDs in some markets; US 10DLC disallows. Add to Section 6 one-liner: "Alphanumeric sender ID: not applicable (US 10DLC requires numeric sender)."
-
-### O4. Acceptance criteria in spec
-Spec's "Acceptance Criteria" lists 5 items. Add a 6th: "Spec passes pre-submission review against `plivo_white_glove_review.md` critical-gap checklist before operator pastes to white-glove chat."
+1. **3-path opt-in framing (§3)** — spec implied 2 paths (signed agreement + planned web CTA); packet adds keyword opt-in (Path C) with full double-opt-in flow + audit-ledger JSON example. Significantly stronger TCR posture.
+2. **TCR brand-reuse explicit ask (§8 #1)** — spec mentioned brand SID; packet promotes "re-use TCR Brand ID `B6384Q7`" to the #1 line of "Specific request to Plivo white-glove team". This was C5 of my prior spec-vs-requirements review — Emergent pre-handled it.
+3. **CTA-build-status graceful punt (§3 Path B)** — explicit ⚠ note: "the `/sms-opt-in` landing page is in active build... If submission requires a live URL today, please flag and we will accelerate that build to T-0." This was C1 of my prior review — Emergent pre-handled it without committing to a path operator hadn't decided.
+4. **Marketing exclusion declaration (§2 closing line)** — "CHL does not send marketing, promotional, or third-party content." Direct mitigation of the failure mode that killed Twilio's 30909. C4 of my prior review — pre-handled.
+5. **HELP/STOP/START exact text (§7)** — fully drafted, brand-cited, MC-cited. C3 of my prior review — pre-handled.
+6. **Keyword opt-out coverage (§3)** — spec said "STOP"; packet covers STOPALL/OPTOUT/CANCEL/END/QUIT/UNSUBSCRIBE/REVOKE/REMOVE. Comprehensive keyword surface.
+7. **Twilio account closure timing (§8)** — explicitly states "Not yet — keep active until port + new campaign are live." Mitigates accidental-cancellation-during-port risk.
 
 ---
 
-## Recommended next steps
+## Gaps / Mismatches vs Spec
 
-1. **Operator decisions** (block submission until resolved):
-   - C1: pick path (a) live CTA at submission OR (b) paper-only at v1 with deferred CTA
-   - C6: pre-flight verify EIN + business address + authorized contact phone match FMCSA registry
-2. **Spec author updates** (revise `emergent_plivo_white_glove_packet_task.md`):
-   - Close C2 (suppression mechanics), C3 (HELP exact text), C4 (operational declaration), C5 (TCR brand reuse) directly in spec rather than deferring to Emergent.
-   - Update length target to 1100-1300 words (R9).
-3. **Emergent execution** (after spec updated):
-   - Generate `plivo_white_glove_packet.md` per revised spec.
-   - Operator runs final pre-submission audit against this review's critical-gap list.
-4. **Re-review** this doc against the generated packet (when it lands) to validate all 6 critical gaps closed before operator pastes to Plivo chat.
+### M1. Sample message length exceeds spec's "~140 chars" target
+Spec §4 said "Each ~140 chars". Packet message #1 is ~178 chars (UTF-8; counts em-dash + arrow as multi-byte → forces UCS-2 encoding, max 70 chars/segment vs GSM-7's 160). Most messages run 1.5–2 segments at GSM-7 (~160 char boundary), or 2.5–3 segments at UCS-2.
+**Impact:** Cost (each segment billed) — at v1 50–200 msg/mo this is ~$1–4/mo extra. Not a TCR-rejection risk, but the spec's spec-target is breached.
+**Recommended action:** Either (a) accept the higher segment count (operator decision, marginal cost) or (b) ask Emergent to revise messages to ≤140 chars GSM-7 (replace `→` with "to", `—` with `-`, drop "Continental Haul:" prefix in favor of "CHL:"). Path (b) preserves spec intent.
+
+### M2. New-number fallback path absent
+Packet §6 hardcodes `+1 (417) 219-3856` as primary port-in target. iter_141_3_kickoff_checklist.md item 2 explicitly allows the **new-number path** (skip port if no paperwork cites the existing number). If operator's paperwork audit during stage 1a goes that way, the packet's §6 + §8 narrative becomes inaccurate — packet must be regenerated with new-number primary, no port narrative.
+**Recommended action:** Operator confirms port-vs-new path **before** pasting packet to white-glove chat. If new-number path: regenerate packet (or hand-edit §6 + §8) before paste. Worth adding a one-line operator pre-flight check above §1 in the packet.
 
 ---
 
-**Source:** Drafted by @pm-lead 2026-05-07. Reviews `emergent_plivo_white_glove_packet_task.md` against TCR/Plivo white-glove submission requirements. No edits to source spec — gaps logged here for spec author to action.
+## Spec-Compliance Items Worth Pre-Flight Checking (not gaps in packet, but in operator hand-off)
+
+These are completeness items the packet correctly defers to operator/runtime, not Emergent gaps — flagged so they're caught before paste:
+
+- **PF1 — Operator FMCSA-registry cross-check:** EIN + registered business address in §1 must match CHL's FMCSA SAFER record exactly (mismatch is a known TCR rejection cause). Packet says "must match SOS filing" — extend to "and must match FMCSA SAFER record for MC-1817555".
+- **PF2 — Plivo temp number filled in §6:** packet correctly leaves `<temp>` as placeholder; operator must fill after stage 1a step 10 (provision temp number) BEFORE pasting.
+- **PF3 — `/sms-opt-in` page status decision:** Path B note asks Plivo to "flag and we will accelerate that build to T-0" — fine for first paste, but operator should be ready to follow through if Plivo requires URL live. Verify `emergent_sms_opt_in_page_task.md` has a fast-track switch ready.
+- **PF4 — `/api/admin/sms-consent` audit endpoint actually exists at submission time:** §3 Path C references this endpoint with a sample row. If TCR (via Plivo) requests live audit access, the endpoint must be reachable — currently the consent ledger isn't in iter 141.3 scope (would need a quick stage 1d add or post-iter follow-up). Promise-vs-actual mismatch risk.
+
+---
+
+## Items NOT in Packet (residual TCR-level gaps from prior spec-vs-requirements review)
+
+The packet handles 4 of the 6 critical gaps I flagged in the prior review (C1, C3, C4, C5). The remaining items below were not in the spec and so didn't make it to the packet — operator/spec-author can decide whether to add via §8 "Specific request" line items or address via separate ops note:
+
+| Prior tag | Item | Severity | Worth adding to packet? |
+|---|---|---|---|
+| C2 | Suppression-list data location (`db.carriers.sms_opt_in`) | Critical | **Yes** — one-line addition to §3 opt-out box. |
+| C6 | Operator-fillable FMCSA registry pre-flight | Critical | Yes — covered by PF1 above; operator-side check, not packet content. |
+| R1 | Per-recipient frequency (msgs/recipient/month) | Recommended | Yes — single line in §5. Suggested: "Expected per-recipient frequency: 5–20 msgs/month (event-driven)." |
+| R2 | TCPA quiet-hours posture | Recommended | Yes — one line in §7. |
+| R4 | Number recycling policy | Recommended | Optional — TCR rarely asks; defer unless Plivo follow-ups. |
+| O1 | DUNS number field | Optional | No — small-business exempt at v1. |
+| O2 | Cross-state consent (CA/IL/NY) | Optional | No — B2B operational, federal TCPA + signed agreements sufficient. |
+
+---
+
+## Recommended Actions (in order)
+
+1. **Operator decision (gates paste):** Confirm port path vs new-number path (M2). If new-number → regenerate packet or hand-edit §6 + §8.
+2. **Operator pre-flight (~5 min):** PF1 (FMCSA registry cross-check on EIN + address), PF2 (fill `<temp>` after stage 1a step 10), PF4 (verify `/api/admin/sms-consent` endpoint reachable OR remove the JSON example from §3 Path C if not building consent-ledger this iter).
+3. **Optional spec/packet additions before paste (3 minor edits, ~5 min):** Add C2 suppression-data-location line to §3, R1 per-recipient frequency line to §5, R2 TCPA quiet-hours line to §7. These materially improve TCR posture without lengthening paste much.
+4. **Optional cost cleanup (~10 min):** M1 — ask Emergent (or hand-edit) to compress §4 sample messages to ≤140 chars GSM-7 to honor spec target and shave segment cost.
+5. **Paste:** Operator pastes finalized packet to Plivo console chat per iter_141_3_kickoff_checklist.md step 8.
+
+---
+
+## Bottom Line
+
+Emergent produced a **noticeably better artifact than the spec strictly required**. Of my 6 spec-vs-requirements critical gaps, 4 were pre-handled by Emergent's interpretation; only C2 (suppression-data-location) and C6/PF1 (operator FMCSA cross-check) remain — both quick fixes. The 2 packet-vs-spec mismatches (M1 length, M2 new-number fallback) are operator-decision-gated, not packet-quality issues.
+
+**Net: ~10 min of operator pre-flight + 3 optional spec additions = packet ready for white-glove paste.**
+
+---
+
+**Source:** Drafted by @pm-lead 2026-05-07 reviewing Emergent-built packet on CHL branch `conflict_060526_1955`. Conflict branch NOT merged. Read-only inspection via `git show`.
 
 **Cross-reference:**
-- `chl-memory/research/emergent_plivo_white_glove_packet_task.md` — source spec under review
-- `chl-memory/research/plivo_migration_research.md` — Plivo white-glove process detail
-- `chl-memory/research/iter_141_3_agenda_draft.md` — iter context (stage 1a operator action)
-- `chl-memory/research/iter_141_3_kickoff_checklist.md` — operator pre-flight (white-glove kickoff at item 8)
-- `chl-memory/research/emergent_sms_opt_in_page_task.md` — CTA URL build (gates C1 path-a)
+- Source packet: `frontend/public/plivo_white_glove_packet.md` on CHL branch `conflict_060526_1955`
+- Source spec: `chl-memory/research/emergent_plivo_white_glove_packet_task.md`
+- Plivo process: `chl-memory/research/plivo_migration_research.md`
+- Iter context: `chl-memory/research/iter_141_3_agenda_draft.md`, `iter_141_3_kickoff_checklist.md`
+- Path B dependency: `chl-memory/research/emergent_sms_opt_in_page_task.md`
