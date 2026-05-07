@@ -263,10 +263,11 @@ If automation partially fails or enters an uncertain state, the system could:
 - Remove all legacy LlmChat dependencies
 - **Milestone:** No emergentintegrations code except Stripe Checkout
 
-### Phase 2: Load Discovery & Evaluation (iters 140.x, PLANNED)
+### Phase 2: Load Discovery & Evaluation (iters 141.x, IN PROGRESS)
 - Load board API integrations (DAT, Truckstop, etc.)
 - Margin calculation engine (lane rates, fuel costs, risk scoring)
 - Auto-accept logic (rules engine for instant booking)
+- **Status:** FractalEvaluator architecture (4-parameter framework at three scales — load/lane/market) shipped iter 141.1 stage 1a. LoadEvaluator (shadow-mode in `auto_dispatch.try_auto_accept`) shipped 1a. LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint + `db.lane_scores` collection shipped 1b. 6h `lane_scoring_cron` (throttle-respecting, SLA-instrumented) shipped 1c. `/api/lanes/top/{N}` operator dashboard endpoint with composite-score ranking shipped 1e. DAT live integration + auto-bid on top-tier lanes queued for iter 141.2 (post-FMCSA-authority May 13+).
 - **Milestone:** System can find and evaluate loads autonomously
 
 ### Phase 3: Carrier Network & Dispatch (iters 141.x, PLANNED)
@@ -293,12 +294,13 @@ If automation partially fails or enters an uncertain state, the system could:
 - Margin reconciliation and reporting
 - **Milestone:** Cash flow happens autonomously
 
-### Phase 7: Monitoring & Self-Healing (iters 145.x, PLANNED)
-- Health check framework (all modules report status)
-- Error detection and categorization
-- Auto-remediation (retry, fallback, circuit breakers)
-- Autonomous throttle implementation (GREEN/YELLOW/ORANGE/RED states)
-- **Milestone:** System monitors itself and auto-heals common failures
+### Phase 7: Monitoring & Self-Healing (iter 140.1, FOUNDATION COMPLETE)
+- Health check framework (all modules report status) — **DONE** (`/api/health/system`, 14 modules registered)
+- Error detection and categorization — **DONE** (`failure_detectors.py`, throttle integration)
+- Auto-remediation (retry, fallback, circuit breakers) — partial (circuit breakers + fail-open posture in throttle)
+- Autonomous throttle implementation (GREEN/YELLOW/ORANGE/RED states) — **DONE** (`throttle_system.py` + `throttle_models.py`, gating `auto_dispatch.try_auto_accept` at 100%/50%/10%/0% intake)
+- SLA monitor (per-operation latency + miss-rate tracking, `/api/sla/{summary,violations,operation/{name}}`) — **DONE**
+- **Milestone:** ✅ Achieved — system monitors itself and gates intake on degraded health. Iter 140.3 (queued, optional) will harden via 5-scenario failure-sim adoption + remaining @track_sla decorators on uninstrumented hot paths.
 
 ### Phase 8: Scale & Optimization (iters 146.x+, PLANNED)
 - Performance tuning (reduce latency, increase throughput)
