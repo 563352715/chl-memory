@@ -14,10 +14,15 @@ Two rejection events during today's signup:
 - Cause: standard role-based-email frontend filter (`dispatch@`, `info@`, `admin@`, `noreply@`, `support@`, `sales@`, etc. all blocked at the acquisition layer).
 - **Important:** This is a Plivo signup-form filter, NOT a TCR-level requirement. The packet's §1 authorized-contact field can still use `dispatch@` (TCR's role-based policy is more lenient — see white-glove packet §1).
 
-**Rejection B — `jason.meyer@continentalhaul.com` (initial submit; resolved via Zoho alias creation + re-submit):**
-- After Rejection A, operator tried `jason.meyer@continentalhaul.com` — also rejected on first submit.
-- Working theory: rejection was caused by the alias not yet existing on the Zoho mailbox (Plivo's MX/deliverability check failed) rather than the address pattern itself. After creating the alias in Zoho admin (see §2) and re-submitting, the address was accepted.
-- Less likely but worth ruling out: domain-age penalty (continentalhaul.com newly registered) or vendor-reputation flag (DMARC/SPF/DKIM gaps). If still rejected after alias is confirmed live, those become the next diagnostic fork.
+**Rejection B — `jason.meyer@continentalhaul.com` (vendor-side domain-level block, confirmed):**
+- After Rejection A, operator created the `jason.meyer@continentalhaul.com` alias on Zoho (confirmed live, deliverable, MX records valid via `mx.zoho.com`) and re-submitted Plivo signup with the new email.
+- **STILL rejected** with the same "Please use your work email" error.
+- Operator opened **incognito window** (Ctrl+Shift+N) for clean session — STILL rejected.
+- **Empirical disambiguation:**
+  - Incognito test → rules out stale UI / cached form state.
+  - Alias verification (live + deliverable on Zoho) → rules out missing-mailbox / MX-failure deliverability check.
+  - Therefore: Plivo's email validator (likely backed by Kickbox / ZeroBounce / equivalent third-party) is **blocking `continentalhaul.com` at the domain level**, not at the address-prefix level. Domain reputation theory (domain-age penalty + DMARC reputation gap) confirmed as the load-bearing cause.
+- **Note for future-Claude:** the alias-not-existing-yet hypothesis was an early working theory; ruled out by the diagnostic above. Domain-level vendor-side block is the actual cause for any "personal-format email on custom domain still rejected" pattern at signup.
 
 ---
 
@@ -50,16 +55,17 @@ If the validator rejects an address you believe should pass, run this 3-step dia
 2. **Incognito-window test** — open the signup URL in an incognito/private window. Bypasses session cookies + cached form state. If incognito accepts where regular browser rejected, the rejection was UI-state, not real.
 3. **MX-record sanity check** — `dig MX continentalhaul.com` (or use https://mxtoolbox.com); confirms the domain's mail records are actually live + correctly pointing to Zoho. If MX is broken, no email validator anywhere will accept addresses on that domain.
 
-**Decision tree:**
-- Refresh → accepted: stale-display rejection. Proceed.
-- Incognito → accepted: session/cookie issue. Proceed in incognito or clear cache + retry.
-- All three reject + MX is healthy: real validator gate. Escalate per §4.
+**Decision tree (4 outcomes):**
+- Refresh → accepted: **stale-display rejection.** Proceed.
+- Incognito → accepted: **session/cookie issue.** Proceed in incognito or clear cache + retry.
+- All three reject + MX is healthy + the rejection happens with multiple address prefixes (e.g., both `dispatch@` AND `jason.meyer@`): **vendor-side domain-level block.** Validator (Kickbox / ZeroBounce / equivalent) doesn't recognize the domain as established business. Pivot to alternative-email fallback per §5; queue domain-whitelist request via §4 in parallel (low priority, doesn't gate progress).
+- All three reject + MX is healthy + only one specific prefix rejects (others on same domain accepted): **real validator prefix gate.** Pattern is role-based or pattern-blocked. Try a different prefix; if all reasonable prefixes fail, escalate per §4.
 
 ---
 
-## 4. Escalation path — domain-level block
+## 4. Escalation path — domain-whitelist request (parallel, low-priority)
 
-If diagnostic in §3 confirms the rejection is real and not session-state, the cause is likely domain-age, deliverability reputation, or a Plivo-specific blocklist.
+If §3 confirms vendor-side domain-level block, queue a domain-whitelist request to Plivo. **This is a parallel low-priority action** — not blocking, since §5 fallback unblocks today. The whitelist request is for medium-term cleanup so the operator (or future business onboarding) doesn't hit the same block again.
 
 **Contact:** sales@plivo.com (NOT the regular support queue — sales handles signup-blocker resolution).
 
@@ -81,12 +87,12 @@ If diagnostic in §3 confirms the rejection is real and not session-state, the c
 
 ## 5. Alternative-email fallback options
 
-If the Plivo signup-form gate is blocking critical-path progress and §4 escalation is too slow, these alternatives unblock today:
+If §3 diagnostic confirms vendor-side domain-level block, the personal-email-then-swap path is the **recommended primary fallback** — operator executed this 2026-05-07 and unblocked Plivo signup immediately.
 
-- **Google Workspace alias:** if operator has a Google Workspace tenant on continentalhaul.com, add `jason.meyer@` alias via admin.google.com → Users → user → Add alternate email. Same propagation behavior as Zoho.
-- **Microsoft 365 alias:** Microsoft 365 admin center → Users → Active users → user → Manage username and email → Add alias.
-- **Personal Gmail signup, then custom-domain swap:** sign up at Plivo with `jason.aaron.meyer@gmail.com` (or operator's existing personal Gmail), complete onboarding + Brand registration, THEN add `jason.meyer@continentalhaul.com` as a secondary contact email in Plivo console after activation. Less clean but unblocks if domain is fully blocked.
-- **Last resort — fresh business email at a different domain:** operator owns `continentalhaul.com`; if domain is permanently flagged, register a backup domain (e.g., `chl-dispatch.com`, ~$12/yr) for vendor-signup-only use.
+- **🟢 RECOMMENDED — Personal Gmail/Outlook signup, then custom-domain swap (PRIMARY):** sign up at Plivo with `jason.aaron.meyer@gmail.com` (or operator's existing personal Gmail) or a personal Outlook/Hotmail. Complete onboarding + Brand registration. THEN add `jason.meyer@continentalhaul.com` as a secondary / authorized contact email in Plivo console after activation. **Empirically the fastest unblock when domain block is confirmed.** Operator validated this path 2026-05-07 during stage 1a.
+- **Google Workspace alias** (only if Google Workspace tenant exists on a different domain that Plivo's validator accepts): admin.google.com → Users → user → Add alternate email. Same propagation behavior as Zoho.
+- **Microsoft 365 alias** (only if M365 tenant exists on a different domain): Microsoft 365 admin center → Users → Active users → user → Manage username and email → Add alias.
+- **Last resort — fresh business email at a different domain:** if operator wants to keep all CHL-related signups on a CHL-owned domain, register a backup domain (e.g., `chl-dispatch.com`, ~$12/yr) for vendor-signup-only use. Avoid using as primary brand identity; just a vendor-signup workaround.
 
 ---
 
