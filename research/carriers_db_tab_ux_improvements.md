@@ -187,7 +187,7 @@ Show in tile breakdown: "Acquisition this month: 8 from load board, 3 cold, 1 re
 
 Helps operator see which channels yield best carriers (highest VETTED_COMPLETE %).
 
-### Layer 9 — Census-Powered Carrier Discovery
+### Layer 9 — Census-Powered Carrier Discovery (Nationwide Default)
 
 (Goes BEYOND "what we have" — addresses the cold-search question from earlier conversation.)
 
@@ -197,16 +197,29 @@ Add a new sub-button alongside Pre-Vet Pipeline + Carrier Hub:
 [ Pre-Vet Pipeline ]  [ Carrier Hub ]  [ + Find Carriers ]
 ```
 
+**Operator directive 2026-05-07: NATIONWIDE DEFAULT.** Carrier discovery searches the entire United States by default. State / region filters are OPTIONAL narrowing tools, never the starting point. The FMCSA Census database covers all ~700K registered US motor carriers — there is no operational reason to constrain CHL's vetting reach to a single region.
+
 **Find Carriers flow:**
 1. Click → modal "Find New Carriers"
-2. Operator selects: equipment type(s) + base states + fleet size range + max safety percentile
+2. Operator selects (all optional, default = nationwide):
+   - Equipment type(s) — multi-select
+   - Fleet size range
+   - Max safety percentile (e.g., "exclude top-quartile risk carriers")
+   - Insurance threshold (e.g., "BIPD ≥ $1M")
+   - Optional state(s) narrowing — left blank = all US states
 3. System queries FMCSA Census file (cached, refreshed monthly)
-4. Returns 50-200 candidate carriers matching criteria
+4. Returns ranked candidate list (no artificial cap; pagination if >500 results)
 5. Auto-runs SAFER + SMS lookup on top 20 (~10 min wall-clock)
 6. Shows ranked list with vetting summary preview
 7. Operator selects which to add (checkboxes), bulk adds to roster as `acquisition_channel: cold_outreach`
 
-This is the proactive lane-targeted carrier discovery operator asked about ("search for carriers... Without using load board").
+**Why nationwide-default matters for CHL:**
+- Carriers may be HQ'd in one state but run lanes nationally. Constraining to "carriers in MO" misses good operators based in TN/OK/AR/etc. who run MO regularly.
+- CHL's loads can originate ANYWHERE in the US (shippers are nationwide). Pre-revenue solo brokerage shouldn't presume regional focus until revenue data justifies one.
+- Phase 8 / 9 (multi-broker SaaS) will onboard brokers operating in any region. The carrier discovery tool needs to support that from day 1, not retrofit later.
+
+**Lane-targeted discovery (additive, not exclusive):**
+A separate flow "+ Find Carriers for Lane X→Y" can ask Census which carriers have `lanes_served` matching the input lane. This is a NARROWING tool used WHEN operator has a specific lane to fill. Default discovery remains nationwide.
 
 ### Layer 10 — Per-Carrier Health Monitoring
 
