@@ -1,9 +1,10 @@
 # Operator Decisions Pending — Triage Sheet (as of 2026-05-07 EOD)
 
-> **Purpose:** Single-pane decision surface for solo operator with multi-iter-in-flight cognitive load. Replaces the read-6+-docs cognitive load (PM Claude memory + dev memory + iter 142.1 1c-1f refresh + Phase 6 roadmap + email-ingestion spec + Phase 4 tracking sketch + messaging-stack scaling sketch + white-glove packet/checklists) with one ordered table. Every minute spent searching for "what was that decision about" is a minute not spent shipping.
+> **Purpose:** Single-pane decision surface for solo operator with multi-iter-in-flight cognitive load. Replaces the read-6+-docs cognitive load (PM Claude memory + dev memory + iter 142.1 1c-1f refresh + Phase 6 roadmap + email-ingestion spec + Phase 4 tracking sketch + messaging-stack scaling sketch + Phase 6 Factoring sketch + white-glove packet/checklists) with one ordered table. Every minute spent searching for "what was that decision about" is a minute not spent shipping.
 > **Drafted by:** @pm-lead 2026-05-07 EOD-3 per @dev-engineer task brief.
+> **Last refresh:** 2026-05-07 EOD-3 (added 7 iter 144.x Phase 6 Factoring decisions per `bfd918d`).
 
-**Counts:** **22 open decisions** + **2 closed today** (resolved or default-applied with operator's tacit approval per autonomous-continue scope). Of the 22 open: **7 BLOCKING** (gate a specific iter/stage), **11 SHIP-AFFECTING** (defaults applied; operator can override), **4 OPTIONAL** (informs prioritization but no immediate ship gate).
+**Counts:** **29 open decisions** + **2 closed today** (resolved or default-applied with operator's tacit approval per autonomous-continue scope). Of the 29 open: **7 BLOCKING** (gate a specific iter/stage), **18 SHIP-AFFECTING** (defaults applied; operator can override), **4 OPTIONAL** (informs prioritization but no immediate ship gate).
 
 **Recommended operator triage flow:** read §1 BLOCKING first (resolve before any new iter starts) → §2 SHIP-AFFECTING (skim defaults; flag any to override) → §3 OPTIONAL (read once, file for later). Quick-decide batches in §4 group decisions that share context.
 
@@ -38,6 +39,13 @@
 | 16 | **iter 142.2 Phase 4 — Exception severity thresholds** | `iter_142_2_phase_4_tracking_sketch.md` open question 2 | iter 142.2 stage 1b rule engine | late >30min = warn / >2h = critical; stopped >2h = warn / >4h = critical; off-route >25mi = warn | ~5 min pre-iter-142.2: confirm or tune | Take defaults; iter 145.1 outcome-feedback re-tunes from operator-override patterns over time. |
 | 17 | **iter 142.2 Phase 4 — Self-healing automation scope** | `iter_142_2_phase_4_tracking_sketch.md` open question 3 | iter 142.2 stage 1c shipper-notification + ETA-recalc behavior | Auto-notify shipper for ETA delays >2h; operator-in-loop for shorter delays | ~5 min pre-iter-142.2: confirm or tighten | Take default; loosen later if false-positive rate is acceptable. |
 | 18 | **iter 1f packet storage — local-disk vs S3** | `iter_142_1_full.md` Q3 + `iter_142_1_stages_1c_1f_refresh.md` stage 1f | iter 142.1 stage 1f packet delivery | Local disk at v1 (~50 packets/day expected); S3 deferred | ~30 sec: confirm local-disk OR pre-decide S3 (only if multi-broker scale lands pre-iter-145) | Take local-disk default. S3 is +0.5 day dev for marginal v1 benefit. |
+| 19 | **iter 144.x — Which 2-3 additional factor providers beyond RTS/OTR** | `iter_144_x_phase_6_factoring_sketch.md` Open Question #1 | iter 144.x stage 1a stub-factor completion | None — stage 1a needs operator to pick 2-3 from {TBS, HaulPay, Compass, Single Point, Riviera, Porter} | ~10 min pre-iter-144.x: audit top 20 carriers in db.carriers post-Phase-1-ingest for `factor_provider` distribution; pick the 2-3 most common | Audit-driven; cluster-by-carrier-segment heuristic (small owner-ops favor HaulPay/Compass; mid-size fleets favor TBS/Single Point) |
+| 20 | **iter 144.x — Auto-submission trust-gate posture** | `iter_144_x_phase_6_factoring_sketch.md` Open Question #2 | iter 144.x stage 1b auto-submission pipeline | First-10-operator-approve, then auto-fire if no operator-rejections | ~30 sec: confirm or override to all-auto-fire (more aggressive) OR always-operator-approve (more conservative) | Take default first-10-mode. Pre-revenue-solo posture; promote to all-auto-fire after 30-day clean track record. |
+| 21 | **iter 144.x — Dispute auto-respond boundary** | `iter_144_x_phase_6_factoring_sketch.md` Open Question #3 | iter 144.x stage 1d dispute classifier | Auto-respond ONLY for `pod_missing` + `duplicate_submission` Tier 1 cases; all others operator-queue | ~30 sec: confirm conservative default OR expand auto-respond set | Take default. Sleeper concern: getting this wrong = losing factor relationships. Conservative posture is correct for v1; expand post-30-day track record. |
+| 22 | **iter 144.x — Multi-factor scenarios (carrier changes mid-haul)** | `iter_144_x_phase_6_factoring_sketch.md` Open Question #4 | iter 144.x stage 1b auto-submission routing | Queue-as-exception (operator decides per-load) | ~30 sec: confirm queue-as-exception OR override to detect-and-redirect (more aggressive) | Take queue-as-exception at v1 (low frequency, high stakes). Detect-and-redirect post-30-day-track-record. |
+| 23 | **iter 144.x — Factor haircut visibility in dispatch packet pricing** | `iter_144_x_phase_6_factoring_sketch.md` Open Question #5 | iter 144.x stage 1f operator-internal margin reports | Hidden in dispatch packet (operator's net-net is what matters); visible in operator-internal margin reports | ~30 sec: confirm hidden OR override to surface-in-packet | Take default hidden. Surfacing creates noise; net-net is operator's signal. |
+| 24 | **iter 144.x — Quick-pay opt-in default** | `iter_144_x_phase_6_factoring_sketch.md` Open Question #6 | iter 144.x stage 1b per-load submission flow | Opt-in for factors that support quick-pay (Apex, Triumph, RTS) — faster cash, ~1% extra haircut | ~30 sec: confirm opt-in OR override to opt-out per-carrier or globally | Take opt-in default at v1. Cash-flow > marginal cost at pre-revenue scale. Operator can override per-load or per-carrier. |
+| 25 | **iter 144.x — Factor-portal poll cadence** | `iter_144_x_phase_6_factoring_sketch.md` Open Question #7 | iter 144.x stage 1c reconciliation polling cost | 6h cadence | ~30 sec: confirm or tighten/loosen | Take 6h default. Tighter (1h) adds API call cost; looser (24h) delays cash-confirmation. Revisit if specific factors charge per-API-call. |
 
 ---
 
@@ -45,10 +53,10 @@
 
 | # | Decision | Source doc | Why optional | Operator action | Recommended |
 |---|---|---|---|---|---|
-| 19 | **5 strategic-context calibration questions** (specific shippers / runway / no-list / Phase 6+ roadmap fuzzy / narrative) | dev posted to operator earlier today | Informs prioritization across all iters; no near-term ship gate | Operator answers when convenient; influences whether iter 145.x or iter 143.x or iter 144.x gets prioritized | Answer at next 10-min reflection window. |
-| 20 | **BOL/POD email-reply header preservation pre-validation** | `email_ingestion_architecture_spec.md` Sleeper #4 | iter 143.1 hook §4 "customer_load_reply with BOL/POD" depends on `References:` header surviving carrier reply; doesn't gate ship but determines hook reliability | ~5 min: forward 1-2 sample carrier replies to dev for header inspection | Pre-validate with 1-2 actual carriers; if headers strip, fall-back to subject-line load-id parsing. Doesn't gate iter 143.1 ship. |
-| 21 | **Outcome-data privacy at multi-broker scale** | `phase_6_self_healing_roadmap.md` Sleeper #3 | iter 145.1 v1 acceptable at single-broker (operator owns data + carrier consent via signed BCA); needed at multi-broker SaaS scale | Pre-iter-145.1 v2: add "carrier behavioral data sharing" clause to BCA template (Q6 default = TIA-published industry-standard) | PM-side can draft the clause as follow-up task when multi-broker roadmap activates. No action at v1. |
-| 22 | **Classifier-drift monitoring guardrail** | `email_ingestion_architecture_spec.md` Sleeper #5 | iter 145.1 dispatcher should monitor `unclassified-rate` as Detection-Layer signal; without this, classifier-drift could go silently for weeks | Wire up post-iter-143.1 ship; no-op until iter 145.1 ships | Defer until iter 145.1 stage 1a (anomaly dispatcher) is built. |
+| 26 | **5 strategic-context calibration questions** (specific shippers / runway / no-list / Phase 6+ roadmap fuzzy / narrative) | dev posted to operator earlier today | Informs prioritization across all iters; no near-term ship gate | Operator answers when convenient; influences whether iter 145.x or iter 143.x or iter 144.x gets prioritized | Answer at next 10-min reflection window. |
+| 27 | **BOL/POD email-reply header preservation pre-validation** | `email_ingestion_architecture_spec.md` Sleeper #4 | iter 143.1 hook §4 "customer_load_reply with BOL/POD" depends on `References:` header surviving carrier reply; doesn't gate ship but determines hook reliability | ~5 min: forward 1-2 sample carrier replies to dev for header inspection | Pre-validate with 1-2 actual carriers; if headers strip, fall-back to subject-line load-id parsing. Doesn't gate iter 143.1 ship. |
+| 28 | **Outcome-data privacy at multi-broker scale** | `phase_6_self_healing_roadmap.md` Sleeper #3 | iter 145.1 v1 acceptable at single-broker (operator owns data + carrier consent via signed BCA); needed at multi-broker SaaS scale | Pre-iter-145.1 v2: add "carrier behavioral data sharing" clause to BCA template (Q6 default = TIA-published industry-standard) | PM-side can draft the clause as follow-up task when multi-broker roadmap activates. No action at v1. |
+| 29 | **Classifier-drift monitoring guardrail** | `email_ingestion_architecture_spec.md` Sleeper #5 | iter 145.1 dispatcher should monitor `unclassified-rate` as Detection-Layer signal; without this, classifier-drift could go silently for weeks | Wire up post-iter-143.1 ship; no-op until iter 145.1 ships | Defer until iter 145.1 stage 1a (anomaly dispatcher) is built. |
 
 ---
 
@@ -64,7 +72,9 @@
 
 **Batch E — iter 142.2 Phase 4 tracking kickoff (decisions #15, #16, #17):** GPS provider + exception thresholds + self-healing automation scope. Probably a Q3-2026 conversation given iter 141.3/141.2/142.1/143.1/145.1 stack ahead. **Estimated time: ~20 min batched** when activated.
 
-**Forward-looking only (no batch — read once, file):** decisions #19-22 are informational / pre-validation / multi-broker future. Worth one read; no action required for any near-term iter.
+**Batch F — iter 144.x Phase 6 Factoring kickoff (decisions #19-25):** factor-provider selection + auto-submission posture + dispute-respond boundary + multi-factor handling + haircut visibility + quick-pay default + portal poll cadence. Most are default-confirms; #19 (which factors) is the one that needs operator-audit pre-decision. **Estimated time: ~15-20 min batched** (longest review on #19 audit; rest are ~30-sec defaults).
+
+**Forward-looking only (no batch — read once, file):** decisions #26-29 are informational / pre-validation / multi-broker future. Worth one read; no action required for any near-term iter.
 
 ---
 
@@ -89,6 +99,6 @@ This doc gets refreshed when:
 
 ---
 
-**Status:** ✅ TRIAGE COMPLETE. **22 open** (7 BLOCKING + 11 SHIP-AFFECTING + 4 OPTIONAL); 2 closed today (`521e55c` + `925410a`). Operator-recommended triage flow: §1 first → §2 skim → §3 file. §4 batches help knock out groups of related decisions in one read.
+**Status:** ✅ TRIAGE COMPLETE. **29 open** (7 BLOCKING + 18 SHIP-AFFECTING + 4 OPTIONAL); 2 closed today (`521e55c` + `925410a`). Operator-recommended triage flow: §1 first → §2 skim → §3 file. §4 batches help knock out groups of related decisions in one read.
 
 **Source:** Drafted by @pm-lead 2026-05-07 EOD-3 per @dev-engineer task brief. Cross-references: every row in the table cites its source doc + section explicitly so operator can drill into full context if a one-line summary isn't enough.
