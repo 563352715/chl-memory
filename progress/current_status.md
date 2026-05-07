@@ -2,10 +2,10 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-07 (autonomous-loop daytime cycle: iter 141.3 stage 1a launched by operator; PM-side delivered iter 142.1 full agenda + white-glove packet FINAL + PF2/PF4 follow-ups + stage 1b prep brief + agenda 1d-template GSM-7 alignment + sketch supersede)
+**Last updated:** 2026-05-07 (iter 141.1 CLOSED ceremony complete — health smoke green, D: backup snapshotted; iter 141.3 stage 1a still BLOCKED on Plivo sales response; PM-side delivered iter 142.1 full agenda + white-glove packet FINAL + PF2/PF4 follow-ups + stage 1b prep brief + agenda 1d-template GSM-7 alignment + sketch supersede + close-ceremony runbook + messaging-stack-scaling sketch)
 **Updated by:** Claude Code (Windows VS Code session) + @pm-lead autonomous loop
 **Active iters (multi-track):**
-- Iter 141.1 — NEAR-COMPLETE — Phase 2 foundation; gated on operator admin Restart-Service + HTTP 200 verification
+- Iter 141.1 — **CLOSED 2026-05-07** — Phase 2 foundation; admin Restart-Service complete, lane_evaluator + lane_scoring_cron healthy with loop_running:true, D: backup at `D:\CHL_backups\iter_141_1_close_2026-05-07_1110\` (26.2 MB, 75 collections, 43,821 docs)
 - Iter 141.2 — RUNBOOK-COMPLETE — Phase 2 DAT live wiring + auto-bid; FMCSA-gated (~May 13+)
 - Iter 141.3 — **STAGE-1A-BLOCKED-PENDING-PLIVO-SALES** — Plivo signup-form email validator confirmed blocking at vendor-side domain level (NOT stale-state, NOT alias-deliverability — see `iter_141_3_stage_1a_signup_troubleshooting.md` §1 for empirical disambiguation). Tested + rejected: `dispatch@continentalhaul.com` (role-based filter), `jason.meyer@continentalhaul.com` (custom-domain rejected even after Zoho alias verified live + MX healthy + incognito ruled out stale UI), `jasonandpugee@gmail.com` (free-Gmail also rejected with same "Please use a work email address" error). Plivo's validator (likely Kickbox/ZeroBounce/equivalent) is filtering ALL free email providers + custom domains not on its reputation whitelist. **Operator pivot:** sales@plivo.com escalation email drafted + sent (or being sent) — manual account provisioning is now critical-path, not parallel low-priority. ETA ~1 business day. White-glove packet FINAL still committed + paste-ready for whenever Plivo unblocks signup.
   - **Suggested next-step priority while waiting:** shift focus to iter 141.1 close ceremony (runbook ready at `runbooks/iter_141_1_close_ceremony.md`, commit `54cd24f`) — operator has a 5–7 min unblocked-work window inside the Plivo wait.
@@ -26,13 +26,13 @@
 - Full agenda: `chl-memory/agenda/iter_142_1_full.md` (commit `f7fb39b`) — 6 stages, 33 smoke tests, ~28h dev / ~70 min operator hands-on, FMCSA blocker matrix per stage, 4 sketch-level open questions resolved to v1 defaults
 - Stage 1d SMS template aligned to GSM-7-safe + HELP-keyword + cross-ref to white-glove packet §4 conventions (commit `227272f`)
 - Preliminary sketch superseded: `iter_142_1_phase_3_sketch.md` now bears SUPERSEDED header pointing to agenda (commit `fa85963`)
-**State:** STAGES 1a + 1b + 1c + 1e COMPLETE (1a smoke 7/7 commit `c368f73`; 1b smoke 6/6 commit `2a4d167`; 1c smoke 6/6 commit `e9fe864`; 1e in-process smoke 5/6 PASS + 1 SKIP commit `808e373`); FractalEvaluator + LoadEvaluator (shadow-mode) + LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint + `/api/lanes/top/{N}` operator dashboard endpoint + 6h lane scoring background cron all live; module count 14 at /api/health/system (lane_scoring_cron healthy, loop_running=True); `lane_eval` SLA target registered (target_ms=60_000); `db.lane_scores` populated by both endpoint calls and cron ticks; throttle integration verified (skip on not-GREEN); composite ranking formula `(profitability × reliability) / max(risk, 0.01)` validated in-process (seed_a=6.0 ranks above seed_b=1.0). Stage 1d deferred to iter 141.2 post-FMCSA-authority May 13+. AgentDM bridge restored + verified end-to-end 2026-05-06; MCP Tier 1, chl-memory Tier 2 fallback. Iter 141.1 closes after operator runs `Restart-Service CHL-Backend` (admin shell) and HTTP 200 confirms route registration.
+**State:** STAGES 1a + 1b + 1c + 1e COMPLETE (1a smoke 7/7 commit `c368f73`; 1b smoke 6/6 commit `2a4d167`; 1c smoke 6/6 commit `e9fe864`; 1e in-process smoke 5/6 PASS + 1 SKIP commit `808e373`); FractalEvaluator + LoadEvaluator (shadow-mode) + LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint + `/api/lanes/top/{N}` operator dashboard endpoint + 6h lane scoring background cron all live; module count 14 at /api/health/system (lane_scoring_cron healthy, loop_running=True); `lane_eval` SLA target registered (target_ms=60_000); `db.lane_scores` populated by both endpoint calls and cron ticks; throttle integration verified (skip on not-GREEN); composite ranking formula `(profitability × reliability) / max(risk, 0.01)` validated in-process (seed_a=6.0 ranks above seed_b=1.0). Stage 1d deferred to iter 141.2 post-FMCSA-authority May 13+. AgentDM bridge restored + verified end-to-end 2026-05-06; MCP Tier 1, chl-memory Tier 2 fallback. Iter 141.1 CLOSED 2026-05-07 — Restart-Service succeeded, `/api/health/system` confirmed lane_evaluator + lane_scoring_cron healthy with loop_running:true + last_run success at 2026-05-07T15:57:08+00:00 + 1 lane processed, D: backup snapshotted to `D:\CHL_backups\iter_141_1_close_2026-05-07_1110\`. (Note: `/api/lanes/top/{N}` direct curl returns 401 because it's behind `require_broker` JWT auth — frontend dashboard is the operator-facing surface; route registration confirmed via 401-not-404 response shape + lane_evaluator module green at health endpoint.)
 
 ## Phase
 
 Iter 140.1 closed Phase 7 foundation per CHL_STRATEGIC_PLAYBOOK. The autonomous throttle system is now safely deployed — system health drives load-intake gating, SLA misses degrade state, manual override is operator-controlled. **Phase 2 (Load Discovery & Evaluation) is now safe to begin** in iter 141.x.
 
-Bridge cumulative: **6 iters / 18 stages / 87 of 89 smoke / 0 STOP CONDITIONS fired** (139.43 → 139.44 → 139.45 → 139.46 → 140.1 → 141.1).
+Bridge cumulative: **7 iters / 19 stages / 92 of 95 smoke / 0 STOP CONDITIONS fired** (139.43 → 139.44 → 139.45 → 139.46 → 140.1 → 141.1 CLOSED 2026-05-07). Iter 141.1 added stage 1e (5/6 PASS + 1 SKIP) as the 19th stage.
 
 ## Final stage status
 
@@ -42,7 +42,7 @@ Bridge cumulative: **6 iters / 18 stages / 87 of 89 smoke / 0 STOP CONDITIONS fi
 | 1b | LaneEvaluator + /api/lanes/{o}/{s}/{d}/{s}/score | CHL `2a4d167` | `iter_141_1_stage_1b.md` | 6/6 PASS |
 | 1c | lane_scoring_cron (6h loop, throttle-respecting, @track_sla) | CHL `e9fe864` | `iter_141_1_stage_1c.md` | 6/6 PASS |
 | 1d | DAT live wiring | — | — | DEFERRED to iter 141.2 |
-| 1e | /api/lanes/top/{N} operator dashboard endpoint | CHL `808e373` | `iter_141_1_stage_1e.md` | 5/6 PASS + 1 SKIP |
+| 1e | /api/lanes/top/{N} operator dashboard endpoint | CHL `808e373` | `iter_141_1_stage_1e.md` | 5/6 PASS + 1 SKIP — CLOSED 2026-05-07 |
 
 ## What was achieved
 
@@ -55,11 +55,7 @@ Bridge cumulative: **6 iters / 18 stages / 87 of 89 smoke / 0 STOP CONDITIONS fi
 
 ## What's next (operator action)
 
-1. **Iter 141.1 close ceremony** (~10 min, blocked on admin Restart-Service):
-   - Admin shell: `Restart-Service CHL-Backend`
-   - HTTP smoke: verify `/api/lanes/top/20` returns 200 with `dat_status: "deferred_to_iter_141_2"`
-   - Run iter close backup: `& C:\CHL\scripts\backup_to_d.ps1 -IterId "iter_141_1_close" -Note "Phase 2 foundation - lane evaluation + dashboard endpoint"`
-   - Final close commit on CHL repo
+1. **Iter 141.1 close ceremony — COMPLETED 2026-05-07.** Restart-Service succeeded, health smoke green for lane_evaluator + lane_scoring_cron, D: backup at `D:\CHL_backups\iter_141_1_close_2026-05-07_1110\` (26.2 MB). Final close commit pending on CHL + chl-memory repos (this update).
 
 2. **Iter 141.2 dispatch** (~May 13+, post-FMCSA authority):
    - Pre-flight per `chl-memory/research/iter_141_2_launch_operator_runbook.md` (REFINED, 354 lines, 4 areas all addressed)
