@@ -13,24 +13,26 @@
 
 Iter 140.1 closed Phase 7 foundation per CHL_STRATEGIC_PLAYBOOK. The autonomous throttle system is now safely deployed — system health drives load-intake gating, SLA misses degrade state, manual override is operator-controlled. **Phase 2 (Load Discovery & Evaluation) is now safe to begin** in iter 141.x.
 
-Bridge cumulative: **5 iters / 14 stages / 70 of 72 smoke / 0 STOP CONDITIONS fired** (139.43 → 139.44 → 139.45 → 139.46 → 140.1).
+Bridge cumulative: **6 iters / 18 stages / 87 of 89 smoke / 0 STOP CONDITIONS fired** (139.43 → 139.44 → 139.45 → 139.46 → 140.1 → 141.1).
 
 ## Final stage status
 
 | Stage | Goal | Code commit | Completion doc | Smoke |
 |---|---|---|---|---|
-| 1a | Health check framework + 8 modules instrumented | CHL `a646681` | `iter_140_1_stage_1a.md` | 5/5 PASS |
-| 1b | Throttle state machine (GREEN/YELLOW/ORANGE/RED) | CHL `2ab45ab` | `iter_140_1_stage_1b.md` | 7/7 PASS |
-| 1c | SLA monitor (6 targets, 2 instrumented) | CHL `f8c36b6` | `iter_140_1_stage_1c.md` | 7/7 PASS |
-| 1d | Integration + auto_dispatch gating + operator playbook | CHL `09a6ba2` | `iter_140_1_stage_1d.md` | 9/9 PASS |
+| 1a | FractalEvaluator base + LoadEvaluator (shadow mode) | CHL `c368f73` | `iter_141_1_stage_1a.md` | 7/7 PASS |
+| 1b | LaneEvaluator + /api/lanes/{o}/{s}/{d}/{s}/score | CHL `2a4d167` | `iter_141_1_stage_1b.md` | 6/6 PASS |
+| 1c | lane_scoring_cron (6h loop, throttle-respecting, @track_sla) | CHL `e9fe864` | `iter_141_1_stage_1c.md` | 6/6 PASS |
+| 1d | DAT live wiring | — | — | DEFERRED to iter 141.2 |
+| 1e | /api/lanes/top/{N} operator dashboard endpoint | CHL `808e373` | `iter_141_1_stage_1e.md` | 5/6 PASS + 1 SKIP |
 
 ## What was achieved
 
-- **`/api/health/system`** — machine-facing real-time health check, 10 modules registered (8 critical + throttle_system + sla_monitor), 5s per-check timeout, exception isolation
-- **`/api/throttle/{status,history,override}`** — GREEN/YELLOW/ORANGE/RED state machine with auto-transitions, intake percentages (100/50/10/0%), persistence to `db.throttle_state_log`, owner-only manual override
-- **`/api/sla/{summary,violations,operation/{name}}`** — performance target tracking, `@track_sla` decorator on `_parse_with_ai` and `run_pod_ocr_via_gemini`, p50/p95/p99 + miss_rate per operation, `db.sla_metrics` collection
-- **`auto_dispatch.try_auto_accept`** — phase7 throttle gate inserted after existing volume_throttle (complementary), fail-open posture, rejection logged to `auto_accept_log`
-- **`memory/THROTTLE_PLAYBOOK.md`** — operator playbook for diagnosis, manual override, recovery SOPs
+- **FractalEvaluator base class** — abstract pattern for Load/Lane/Market decision-making at three scales, same four parameters (profitability, reliability, risk, capacity) applied recursively
+- **LoadEvaluator (shadow mode)** — integrated into `auto_dispatch.try_auto_accept` for telemetry without behavior change, validates fractal pattern at micro scale
+- **LaneEvaluator** — meso-scale evaluator aggregating 90-day load history per origin-destination pair, implements profitability (avg margin), reliability (carrier density), risk (failure rate), capacity (daily volume) metrics
+- **`/api/lanes/{origin_state}/{dest_state}/score`** — GET endpoint returns lane evaluation + gate outcomes + composite score, seeded `db.lane_scores` collection, business_settings.lane_thresholds initialized
+- **lane_scoring_cron** — 6h background loop, throttle-gated, @track_sla("lane_eval", 60_000), self-registered health check, async Motor cursors, module count 13→14
+- **`/api/lanes/top/{N}`** — operator dashboard endpoint, composite ranking via `(profitability × reliability) / max(risk, 0.01)`, enriched with `opportunities_24h` (0 until 141.2) + `historical_loads_90d`, dat_status response field
 
 ## What's next (operator action)
 
