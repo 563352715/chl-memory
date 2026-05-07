@@ -84,22 +84,7 @@ Visitor enters mobile number and checks an unchecked-by-default consent checkbox
 
 **Path C — Keyword opt-in (ongoing self-serve):**
 
-Recipients can text **JOIN** (or **START**) to the CHL SMS sender at any time. They receive a confirmation prompt and must reply **YES** to complete opt-in (double-opt-in). All keyword interactions are audit-logged at `/api/admin/sms-consent` (broker-authenticated endpoint). Sample audit row:
-
-```json
-{
-  "phone": "+18165551234",
-  "status": "opted_in",
-  "source": "keyword_join",
-  "join_initiated_at": "2026-05-07T03:08:00Z",
-  "opt_in_at": "2026-05-07T03:08:42Z",
-  "opt_in_text": "YES",
-  "history": [
-    {"keyword": "JOIN", "ts": "..."},
-    {"keyword": "YES",  "ts": "..."}
-  ]
-}
-```
+Recipients can text **JOIN** (or **START**) to the CHL SMS sender at any time. They receive a confirmation prompt and must reply **YES** to complete opt-in (double-opt-in). Keyword opt-in interactions are audit-logged with phone, status, source, opt-in timestamp, and full keyword history. Audit access available on request via secure file share if TCR or Plivo requires independent verification.
 
 ### Opt-out and help
 
@@ -190,7 +175,7 @@ Each message is plain ASCII (GSM-7-safe), single-segment, includes brand identif
 **Specific request to Plivo white-glove team:**
 1. Re-use existing TCR Brand ID `B6384Q7` (do not re-register the brand from scratch).
 2. Apply Plivo's standard low-volume Mixed-use-case operational template.
-3. CTA artifact for TCR review = the keyword opt-in flow (Path C in §3) + the live `/sms-opt-in` URL when it goes live (target T+5 days). Audit ledger access can be granted via temporary read-only API token if TCR requests independent verification.
+3. CTA artifact for TCR review = the keyword opt-in flow (Path C in §3) + the live `/sms-opt-in` URL when it goes live (target T+5 days). Audit ledger access can be granted via secure file share if TCR requests independent verification.
 4. Submit campaign for TCR vetting; expected approval window 1–3 business days for low-volume Mixed.
 5. Once campaign is approved, link the ported `+1 (417) 219-3856` to the Messaging Profile.
 

@@ -1,7 +1,9 @@
 # Iter 141.3 PF4 — `/api/admin/sms-consent` Endpoint Status
 
-> **Pre-flight check #4** for the white-glove packet (`plivo_white_glove_packet_FINAL.md` §3 Path C). Operator must decide one of two paths **before** pasting the packet to the white-glove team. The packet's §3 Path C references the endpoint with a sample audit-log JSON row, but the endpoint **does not exist** in CHL's current backend.
-> **Why this matters:** If Plivo (or TCR via Plivo) requests live verification of the audit ledger, the referenced endpoint must respond. Promise-vs-actual mismatch could trigger a 30909-class rejection — exactly the failure mode iter 141.3 is migrating away from.
+> **STATUS: Path A APPLIED 2026-05-07.** The packet `plivo_white_glove_packet_FINAL.md` no longer references the `/api/admin/sms-consent` endpoint or the JSON sample row. §3 Path C now uses text-only audit-log description; §8 request #3 changed "temporary read-only API token" to "secure file share". @dev-engineer authorization 2026-05-07. This note retained as historical context + Path B reference if the audit-ledger build is later re-prioritized.
+>
+> **Original framing:** Pre-flight check #4 for the white-glove packet. The packet's §3 Path C originally referenced the endpoint with a sample audit-log JSON row, but the endpoint does not exist in CHL's current backend.
+> **Why this mattered:** If Plivo (or TCR via Plivo) requested live verification of the audit ledger, the referenced endpoint had to respond. Promise-vs-actual mismatch could have triggered a 30909-class rejection — exactly the failure mode iter 141.3 is migrating away from.
 
 ---
 
