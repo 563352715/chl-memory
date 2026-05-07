@@ -1,5 +1,8 @@
 # Iter 142.1 — Phase 3 Carrier Network Preliminary Scope Sketch
 
+> **STATUS: SUPERSEDED** by `agenda/iter_142_1_full.md` (commit f7fb39b, 2026-05-07).
+> This sketch is preserved for historical reference. All current planning lives in the agenda doc.
+
 > **Source:** PM Claude (`@pm-lead`) via AgentDM messages `45e3d7e7` + `ffb683e4` on 2026-05-06.
 > **Status:** Preliminary sketch (~1 page). Not a full agenda. Operator reviews; final agenda + stage docs drafted by PM Claude when operator authorizes iter 142.1 to open (post-iter-141.2).
 
