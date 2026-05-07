@@ -137,6 +137,8 @@
 7. `.env` Plivo vars populated + Twilio vars archived
 8. Backend restart successful (health check green)
 
+**Pre-written code (head start for stage 1b):** `backend/plivo_client.py` already exists in repo (committed `35cb698` 2026-05-07 overnight). Mirrors `text_operator.py` public API exactly. Mocked-SDK smoke harness `.smoke_141_3_1b.py` (gitignored) validates 6/6 tests covering: empty body, dry_run, missing AUTH_ID, missing PHONE_NUMBER, successful send (verifies dst/src/text param names), graceful ImportError. Stage 1b execution becomes mostly: install Plivo SDK, populate `.env`, run pre-written smoke, then run agenda's 8-test integration battery against real Plivo account.
+
 **Success criteria:**
 - ✅ SMS delivers to +18165609180 from Plivo temp number
 - ✅ notification_service.py rewrite complete
