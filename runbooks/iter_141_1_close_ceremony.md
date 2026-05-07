@@ -31,18 +31,33 @@ Get-Service CHL-Backend  # confirm Status: Running
 
 If `Restart-Service` errors with "service not found", check service name: `Get-Service *CHL*`. The service name may be `CHL-Backend` or `chl-backend` depending on install path.
 
-### Step 2 — HTTP smoke for stage 1e endpoint (~30 sec)
+### Step 2 — HTTP smoke (~30 sec)
+
+> **CORRECTED 2026-05-07 (post-iter-141.1-close):** Original draft of this runbook prescribed `Invoke-WebRequest http://localhost:8000/api/lanes/top/20` expecting HTTP 200 + JSON body. Two surprises during actual close: (a) backend runs on **port 8001**, not 8000; (b) `/api/lanes/top/{N}` is behind `require_broker` JWT auth and returns 401 to unauthenticated curl (operator-facing surface is the frontend dashboard, NOT direct curl). **Use the health-endpoint smoke below as the canonical iter-close validation.**
 
 ```powershell
-$resp = Invoke-WebRequest -Uri "http://localhost:8000/api/lanes/top/20" -UseBasicParsing
+# Primary smoke: health endpoint (no auth required)
+$resp = Invoke-WebRequest -Uri "http://localhost:8001/api/health/system" -UseBasicParsing
 $resp.StatusCode  # expect: 200
-$resp.Content | ConvertFrom-Json | Select-Object -First 1
+$health = $resp.Content | ConvertFrom-Json
+$health | Select-Object total, healthy, degraded, unhealthy
+$health.modules | Where-Object { $_.name -in @("lane_evaluator", "lane_scoring_cron") }
 ```
 
-**PASS criteria** (all required):
-- StatusCode = `200`
-- Response is valid JSON (no parse error)
-- Each lane object has the expected fields: `origin_state`, `dest_state`, composite score, `dat_status: "deferred_to_iter_141_2"`, `opportunities_24h: 0`, `historical_loads_90d` populated
+**PASS criteria for stage 1e close:**
+- StatusCode = `200` on `/api/health/system`
+- `lane_evaluator` module present + status `healthy`
+- `lane_scoring_cron` module present + status `healthy` + `loop_running: true` + non-null `last_run_success_at` within last 6h
+- `total` ≥ 14 modules; `unhealthy` = 0 (degraded modules acceptable IF unrelated to stage 1e — e.g., `bmc84_watcher` may report degraded due to FMCSA web key not configured; pre-existing, unrelated to lane work)
+
+**Secondary smoke (route-registration confirmation):**
+```powershell
+# Confirm the endpoint route is registered (expect 401, NOT 404)
+$ep = Invoke-WebRequest -Uri "http://localhost:8001/api/lanes/top/20" -UseBasicParsing -ErrorAction SilentlyContinue
+$ep.StatusCode  # expect: 401 (route registered, JWT auth gating works) — NOT 404 (route missing)
+```
+
+A 401 response confirms the route is registered + auth-protected. A 404 means the backend didn't load the lanes module — halt close.
 
 **FAIL → halt close ceremony.** See "Rollback / blocker" section below.
 
@@ -91,13 +106,11 @@ Stage 1e is considered CLOSED when:
 
 | Check | Expected |
 |---|---|
-| HTTP `/api/lanes/top/20` | 200 OK |
-| Response JSON parse | Valid |
-| `dat_status` field | `"deferred_to_iter_141_2"` |
-| `opportunities_24h` field | Present (value `0` is valid pre-iter-141.2) |
-| `historical_loads_90d` field | Populated with non-null integer |
-| Health endpoint `/api/health/system` | All 14 modules green; `lane_scoring_cron.loop_running: true` |
+| Health endpoint `/api/health/system` (PRIMARY) | 200 OK; `lane_evaluator` healthy; `lane_scoring_cron` healthy + `loop_running: true` + recent `last_run_success_at` |
+| Module count + status | `total` ≥ 14; `unhealthy` = 0 (degraded acceptable if unrelated to stage 1e, e.g., `bmc84_watcher` pre-existing) |
+| `/api/lanes/top/20` route registration | **401** (route registered + auth-protected) — NOT 404 |
 | Backup to D: | Exit 0, checksums match |
+| ~~Direct curl to `/api/lanes/top/20`~~ | ~~Not applicable~~ — endpoint behind broker JWT auth; operator-facing surface is the frontend dashboard, not curl |
 
 If any row fails: halt + see Rollback.
 
@@ -125,10 +138,13 @@ If any row fails: halt + see Rollback.
 3. **Defer the close.** Update `current_status.md` "Active stage" line to reflect new blocker (e.g., "1e SHIPPED but HTTP smoke FAIL — see blocker note"). Do NOT mark iter 141.1 closed.
 4. **Commit the blocker note + status update** so @dev-engineer can pick it up next session.
 5. **Common failure modes + first-pass fixes:**
-   - `404 on /api/lanes/top/20` → backend didn't restart cleanly OR route wasn't registered. Check backend logs for import errors. Restart-Service again.
-   - `500 on endpoint` → MongoDB connection issue or unhandled exception. Check both backend log + Mongo log.
+   - `404 on /api/lanes/top/20` → backend didn't restart cleanly OR lanes route wasn't registered. Check backend logs for import errors. Restart-Service again. (A `401` is GOOD — route registered + auth-protected.)
+   - `Connection refused on port 8001` → backend service started but isn't listening. Check `Get-NetTCPConnection -LocalPort 8001`. If empty, backend failed startup mid-init; tail backend log for the trace.
+   - `Connection succeeded on port 8000 (or other)` → port mismatch. The runbook assumes 8001 (post-iter-141.1 verified). If your install uses a different port, capture it in the operator's local `.env` reference + update the runbook for next iter close.
+   - `500 on health endpoint` → MongoDB connection issue or unhandled exception. Check both backend log + Mongo log.
    - `D:\` backup fails with permission error → BitLocker locked OR disk full. Unlock + check free space.
    - `Get-Service CHL-Backend → not found` → service uninstalled or renamed. Re-register via install script if available.
+   - `Restart-Service: insufficient privilege` → PowerShell window is non-elevated. Right-click PowerShell → "Run as Administrator", accept UAC, retry. (Confirmed-real failure mode encountered during iter 141.1 close.)
 
 ---
 
