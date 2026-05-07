@@ -1,0 +1,9 @@
+mc_number,usdot_number,legal_name,vetting_status,first_contact_date,operating_status,oos_date,bipd_amount,bipd_filing_date,cargo_amount,cargo_filing_date,insurer_name,insurer_am_best_rating,sms_alert_categories,crash_count_24mo,vehicle_oos_pct,driver_oos_pct,equipment,lanes_served,contact_dispatcher,contact_phone,contact_email,coi_received_date,coi_expiry,coi_names_chl_as_holder,coi_names_chl_as_additional_insured,bca_sent_date,bca_signed_date,w9_received_date,payment_terms,first_load_dispatched,red_flags_triggered,operator_decision,decline_reason,notes
+1817555,4569843,CONTINENTAL HAUL LOGISTICS LLC,SELF_REFERENCE,2026-05-07,USDOT-ACTIVE / OperatingAuthority-PENDING,,,,,,,,,,,,,Springfield-MO-radius,Jason Aaron Meyer,(417) 219-3856,dispatch@continentalhaul.com,,,,,,,,,,,Self-reference / FMCSA gating example only — not a vetted carrier
+,,,PROSPECT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,SAFER_VETTED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,CONTACTED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,COI_PENDING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,BCA_PENDING,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,VETTED_COMPLETE,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,DECLINED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

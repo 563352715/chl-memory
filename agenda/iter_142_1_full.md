@@ -7,6 +7,35 @@
 
 ---
 
+## ⚡ AMENDMENT 2026-05-07 — Load-Board-First Pivot (Option A)
+
+**Operator decision 2026-05-07:** CHL has zero pre-vetted carriers. Original stage 1b assumed operator already had ~20 trusted carriers ready for CSV seed batch. That assumption is incorrect. Pivot to **load-board-first acquisition model** (operator-confirmed Option A from pre-flight diagnostic conversation):
+
+**What changes:**
+- **Stage 1b:** REPLACED CSV seed batch with FMCSA SAFER **on-demand ingestion**. Operator types MC number (from a load-board responder), system auto-pulls authority + insurance + SMS scores, presents vetting summary to operator. Operator signs off → carrier added to roster after BCA + COI received. Roster grows organically as load flow generates contacts.
+- **Stage 1d:** ADDED load-board posting fallback. When `select_top_n_for_lane` returns empty (roster has no qualifying carrier for the load's lane), system auto-posts to DAT/Truckstop, captures carrier responders, routes responders into the on-demand vetting flow before booking. Roster size grows asymmetrically with load flow.
+- **Stage 1c, 1e, 1f:** unchanged conceptually; just operate on smaller initial roster (1-5 carriers vs 20).
+- **Pre-flight prerequisites:** REMOVED "20-carrier seed batch CSV" (~30 min operator time). REPLACED with "1-2 hand-vetted carriers if any exist; otherwise system seeds from first load-board responses." Operator hands-on across iter compresses from 70 min → ~40 min.
+
+**Vetting workflow** (operator-facing step-by-step) is captured in `chl-memory/research/iter_142_1_carrier_vetting_checklist.md` (~30 min - 2 hours per carrier depending on responsiveness; required before legal dispatch per FMCSA regs).
+
+**Cross-references:**
+- `iter_142_1_pre_flight_brief.md` — pre-kickoff gotchas (commit `d567596`)
+- `iter_142_1_carrier_vetting_checklist.md` — operator vetting playbook (this amendment)
+- Operator decision context: chat 2026-05-07 — "I have not vetted a single carrier... Perform A and put together a vetting checklist"
+
+**Open Questions Resolved (updated):**
+- Q1 (Paid carrier data sources) — UNCHANGED: FMCSA SAFER only at v1; defer paid services until post-revenue
+- Q2 (Self-serve carrier registration) — UNCHANGED: broker-controlled vetting only
+- Q3 (Rate negotiation) — UNCHANGED: fixed offer at v1
+- Q4 (Carrier blacklist scope) — UNCHANGED: global blacklist only
+- **NEW Q5 (Load-board posting integration):** DAT or Truckstop or both at v1? Default: DAT only (industry-largest reach, pre-existing CHL integration in iter 141.2 stage 1d). Operator overrides if Truckstop relationships exist.
+- **NEW Q6 (BCA template):** Operator-authored or attorney-drafted or industry-standard template? Default: industry-standard (e.g., TIA-published template at ~$0). Attorney review optional but not blocking. Operator confirms pre-stage-1b.
+
+The original agenda below remains the spec for stages 1a, 1c, 1e, 1f. Stages 1b and 1d are AMENDED per this section — the in-place text below is the original CSV-batch model; the amendment changes operator workflow + dev approach while keeping smoke-test counts and FMCSA-blocking matrix unchanged.
+
+---
+
 ## Pre-Flight (Operator, before stage 1a)
 
 **Prerequisites:**
