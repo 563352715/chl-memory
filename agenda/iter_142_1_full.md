@@ -36,6 +36,48 @@
 
 ---
 
+## ⚡ AMENDMENT 2026-05-07 EOD-2 — Nationwide-DB Scope Expansion (5-phase plan, partial ship)
+
+**Operator directive 2026-05-07 EOD:** "Build a nationwide carrier database with all US carriers vetted to the extent automation allows. All equipment types (tankers, dry vans, reefers, wide loads/heavy haul, flatbed, step deck, etc.). Operator-facing vetting checklist exposed in the UI per carrier so they can check off the manual steps. Stage delivery over multiple phases — operator OK with that."
+
+**5-phase plan** (dev-authored, autonomous-continue):
+1. **Bulk Census import** ✅ SHIPPED — 480,912 active for-hire carriers ingested via Socrata SoQL endpoint (CHL `e8cd460`, wall-clock 5m37s). Replaces stage 1b's "operator hand-curates 20-carrier CSV" with full nationwide universe.
+2. **SMS BASIC scores ingestion** ✅ MODULE SHIPPED — `backend/fmcsa_sms_scores.py` (CHL `dd93a6a`, smoke-tested DOT 282191). Batch run DEFERRED — 75-day per-carrier scrape too slow at 480K scale; bulk monthly CSV path preferred.
+3. **L&I (Licensing & Insurance) ingestion** ⏸ GATED — module-ready when operator provides FMCSA QCMobile WebKey (Login.gov signup ~5 min one-time gate). `bmc84_watcher.fmcsa_webkey: false` per dev sub-agent audit. Path: Tier 1 QCMobile JSON API + Tier 1.5 SAFER Company Snapshot for cargo classifications + Tier 2 L&I HTML scrape with CAPTCHA fallback (per `fmcsa_li_insurance_parsing_research.md`).
+4. **Vetting workflow schema extension** ✅ SHIPPED — `carrier_vetting_workflow.py` module with 9-step state machine matching `iter_142_1_carrier_vetting_checklist.md` + 4 endpoints (GET workflow, PATCH step, GET red_flags, GET schema) (CHL `2cfe64e`).
+5. **Frontend Carrier Detail side panel with vetting checklist UI** ✅ SHIPPED — App.js `CarrierDetailModal` extended with workflow checklist (Mark Done / Undo / Skip per step), red flags banner, status promotion. New filters: fleet size dropdown (1-500+ trucks), years in business dropdown. State filter promoted to dropdown of 50+DC. Pagination (25/50/100 per page) (CHL `df45476`).
+
+**Mapping to original 1a-1f stages (audit, 2026-05-07 EOD-2):**
+
+| Original stage | Original spec | Ship status vs nationwide-DB pivot |
+|---|---|---|
+| 1a — Carrier DB schema + CRUD endpoints | Mongo collection + indexes + 4 CRUD endpoints | **PARTIAL** — schema exists with full Census-derived fields + `vetting_status` field. CRUD endpoints partially shipped via Phase 4 vetting-workflow endpoints (PATCH carrier vetting-step). Original generic `POST /api/carriers` not separately built (Census import bypassed it). |
+| 1b — FMCSA SAFER on-demand ingestion + vetting workflow | Per-carrier MC lookup → vetting summary → state machine | **SUPERSEDED + PARTIAL** — Phase 1 bulk Census import covers the 480K universe; on-demand SAFER lookup not yet wired (will use Phase 3 QCMobile when WebKey lands, OR Tier 1.5 SAFER snapshot for cargo classifications). Vetting workflow + state machine ✅ shipped (Phase 4). |
+| 1c — CarrierEvaluator (Fractal meso-scale scoring) | `select_top_n_for_lane`, composite scoring | **NOT STARTED** — load-board responder routing in stage 1d depends on this; deferred until basic dispatch flow is needed. With Phase 1's 480K-carrier roster, the cold-start problem is solved AND the scoring problem is now load-bearing — operator/dev should prioritize this when first real dispatch happens. |
+| 1d — Multi-carrier outreach + load-board-posting fallback | `select_and_send` + DAT fallback + 8 smoke tests | **NOT STARTED** — gates on stage 1c (CarrierEvaluator) + iter 141.3 SMS provider live. With Plivo blocked and 1c not started, this stage is downstream of two blockers. |
+| 1e — Carrier assignment + booking confirmation + failure detector | `auto_assign_carrier`, 2h failure detector, re-outreach | **NOT STARTED** — gates on 1d. |
+| 1f — Dispatch packet auto-generation + auto-bid integration | PDF rate-con + BCA + insurance-cert + 141.2 auto-bid handoff | **NOT STARTED** — gates on 1e + iter 141.2 auto-bid live (FMCSA-gated ~May 13+). |
+
+**Gap analysis — what's NOT YET in flight that the original Phase-3-milestone definition requires:**
+- ❌ Stage 1c CarrierEvaluator (composite scoring + lane-based selection)
+- ❌ Stage 1d outreach orchestration (`backend/carrier_outreach.py`)
+- ❌ Stage 1e assignment + booking confirmation + failure detector
+- ❌ Stage 1f dispatch packet PDF generation + auto-bid handoff
+- ⏸ Stage 1b on-demand SAFER lookup (will likely be QCMobile when WebKey lands; SAFER cargo-classifications building next per dev autonomous-continue)
+
+**Phase 3 milestone status (`CHL_STRATEGIC_PLAYBOOK.md`):** "System can book carrier and dispatch without operator." Currently NOT MET. Achievable when stages 1c→1d→1e→1f land sequentially. Pre-revenue solo cadence: ~3-4 weeks dev for the outreach/assignment/dispatch sequence after iter 141.3 unblocks SMS path.
+
+**Operator-time delta vs original spec:**
+- Original (CSV-batch model): ~70 min upfront operator hands-on
+- Post-amendment (load-board-first + on-demand vetting): ~40 min core + per-carrier ongoing
+- Actual post-Phase-1: **~5 min** (mostly UI checklist clicking per carrier, no FMCSA API key signup needed for Census-only ingestion). Phase 3 QCMobile path adds the ~5 min WebKey signup gate.
+
+**Recommended iter 142.1 close-ceremony scope:** when stages 1c-1f land, run the 34-smoke-test battery from amended stage bodies + cumulative smoke from Phases 1+2+4+5 (Census import verification, vetting workflow round-trip, UI filter/pagination, SMS scores fetch). Iter close not yet ready — Phases 1+2+4+5 are infrastructure; Phases 1c-1f (per the original agenda) are the dispatch milestone.
+
+**Nationwide-DB scope vs Phase 3 milestone reconciliation:** the operator's "build nationwide DB across all equipment types" directive is **broader** than the original `CHL_STRATEGIC_PLAYBOOK.md` Phase 3 milestone (which scoped to "book carrier and dispatch without operator"). Phases 1+2+4+5 deliver the carrier-DB foundation that benefits ALL future iters (142.x tracking, 143.x POD, 144.x factoring) — high-leverage infrastructure investment. Stages 1c-1f remain the dispatch milestone. Both work streams converge: when first real load lands, the 480K carrier roster + vetting UI are ready, but outreach/assign/dispatch automation still needs stages 1c-1f.
+
+---
+
 ## Pre-Flight (Operator, before stage 1a)
 
 **Prerequisites:**
