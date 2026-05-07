@@ -26,6 +26,8 @@
 
 ## Documents to pre-stage (anticipate Plivo requests)
 
+> Best-estimate document set based on standard 10DLC + carrier port flows; actual Plivo white-glove requests may add/subtract — operator updates this list when Plivo's portal asks for something not listed.
+
 Have these ready in the vault BEFORE the SE asks. Reduces back-and-forth latency.
 
 1. **W-9** — IRS Form W-9 with EIN matching `<EIN>` in packet §1. Typically requested for billing setup beyond free tier.
