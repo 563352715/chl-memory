@@ -2,11 +2,12 @@
 
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
-**Last updated:** 2026-05-06 (iter 141.1 close handoff doc drafted; HTTP smoke + D backup pending operator admin Restart-Service; PM Claude parallel work shipping DAT research + iter 141.2 agenda draft)
+**Last updated:** 2026-05-07 (overnight: autonomous-bridge milestone; iter 141.2 launch runbook refined + iter 141.3 Plivo migration plan locked + iter 141.3 stage 1b code pre-written)
 **Updated by:** Claude Code (Windows VS Code session)
 **Active iter:** 141.1 — NEAR-COMPLETE — Phase 2 (Load Discovery & Evaluation) foundation
-**Active stage:** 1e SHIPPED (commit `808e373`); close handoff doc drafted (CHL `69cea53`); HTTP 200 verification + D backup ceremony pending; iter 141.1 closes after that.
-**PM Claude parallel work:** Priority 1 DAT API research COMPLETE — reconstructed at `chl-memory/research/dat_api_notes.md` (uncommitted on Claude Code disk; awaiting bypass-mode-stable session for batch git commit). Priority 3 Emergent Lanes Dashboard task refined COMPLETE (awaiting full prompt via DM split). Priority 2 iter 141.2 agenda + stage_1d + stage_1f drafts in flight. Priority 4 doc audit + Priority 5 skills payload queued. PM Claude `/loop 60s` active in claude.ai — true async bridge running.
+**Active stage:** 1e SHIPPED (commit `808e373`); close handoff doc drafted (CHL `69cea53`); HTTP 200 verification + D backup ceremony pending operator admin Restart-Service; iter 141.1 closes after that.
+**Bridge state (NEW, 2026-05-07):** TRUE AUTONOMOUS — both sides polling AgentDM every ~1 min without operator triggers. @dev-engineer at `C:\CHL\` runs cron-rev4 protocol (1-min cadence, this session). @pm-lead at `C:\CHL-pm-agent\` runs Claude Code's native `/loop 30s` (rounded to 1-min via CronCreate job `0c634c3a`, 7-day expiry). Replaces operator-trigger model on claude.ai web tab. Setup details: `~/.claude/projects/c--CHL/memory/reference_pm_autonomous_loop_setup.md`.
+**Iter 141.3 prep:** Plivo migration plan + agenda drafted (research + 4-stage spec in `chl-memory/research/`). Stage 1b code pre-written (`backend/plivo_client.py`, smoke 6/6 PASS via mocked SDK). Cutover becomes 5-min swap when operator launches stage 1b.
 **State:** STAGES 1a + 1b + 1c + 1e COMPLETE (1a smoke 7/7 commit `c368f73`; 1b smoke 6/6 commit `2a4d167`; 1c smoke 6/6 commit `e9fe864`; 1e in-process smoke 5/6 PASS + 1 SKIP commit `808e373`); FractalEvaluator + LoadEvaluator (shadow-mode) + LaneEvaluator + `/api/lanes/{o}/{s}/{d}/{s}/score` endpoint + `/api/lanes/top/{N}` operator dashboard endpoint + 6h lane scoring background cron all live; module count 14 at /api/health/system (lane_scoring_cron healthy, loop_running=True); `lane_eval` SLA target registered (target_ms=60_000); `db.lane_scores` populated by both endpoint calls and cron ticks; throttle integration verified (skip on not-GREEN); composite ranking formula `(profitability × reliability) / max(risk, 0.01)` validated in-process (seed_a=6.0 ranks above seed_b=1.0). Stage 1d deferred to iter 141.2 post-FMCSA-authority May 13+. AgentDM bridge restored + verified end-to-end 2026-05-06; MCP Tier 1, chl-memory Tier 2 fallback. Iter 141.1 closes after operator runs `Restart-Service CHL-Backend` (admin shell) and HTTP 200 confirms route registration.
 
 ## Phase
@@ -36,20 +37,29 @@ Bridge cumulative: **6 iters / 18 stages / 87 of 89 smoke / 0 STOP CONDITIONS fi
 
 ## What's next (operator action)
 
-1. **Write `C:\CHL\memory\handoff_iter_140_1_close.md`** — final iter handoff (Claude Code is doing this automatically)
+1. **Iter 141.1 close ceremony** (~10 min, blocked on admin Restart-Service):
+   - Admin shell: `Restart-Service CHL-Backend`
+   - HTTP smoke: verify `/api/lanes/top/20` returns 200 with `dat_status: "deferred_to_iter_141_2"`
+   - Run iter close backup: `& C:\CHL\scripts\backup_to_d.ps1 -IterId "iter_141_1_close" -Note "Phase 2 foundation - lane evaluation + dashboard endpoint"`
+   - Final close commit on CHL repo
 
-2. **Run D: backup ceremony** — `& C:\CHL\scripts\backup_to_d.ps1 -IterId "iter_140_1_close" -Note "Phase 7 foundation - throttle system complete"`
+2. **Iter 141.2 dispatch** (~May 13+, post-FMCSA authority):
+   - Pre-flight per `chl-memory/research/iter_141_2_launch_operator_runbook.md` (REFINED, 354 lines, 4 areas all addressed)
+   - DAT live wiring (stage 1d) + auto-bid + threshold tuner backend (stage 1f)
+   - Voice-only alerts during 141.2 (SMS path degraded; resolves in 141.3)
 
-3. **Iter 141.x decision:**
-   - **141.1 — Phase 2 Load Discovery & Evaluation** (RECOMMENDED — playbook's stated next phase, NOW SAFE on throttle foundation)
-   - **140.2 — operational hygiene batch** (Stripe Checkout migration + comment cleanup + R2 cron leak fix)
-   - **140.3 — throttle hardening** (adopt 5-scenario failure sim, instrument remaining 4 SLA targets, wire failure_detectors → trigger_throttle_check)
+3. **Iter 141.3 Plivo migration** (operator decision: switch from Twilio after 4-week compliance friction):
+   - Stage 1a: Plivo signup + Profile/Brand registration + white-glove kickoff (~30 min operator hands-on)
+   - Stage 1b: notification_service.py rewrite (5-min swap — `backend/plivo_client.py` pre-written, smoke 6/6 PASS)
+   - Stage 1c: Number port + 10DLC campaign approval (7-10 days async)
+   - Stage 1d: Cutover + Twilio deprecation (30-day rollback window)
+   - Full spec: `chl-memory/research/iter_141_3_agenda_draft.md`
 
 4. **Background tasks** (carried forward):
-   - Archive iters 139.43-139.46 + 140.1 per DEPLOY.md
-   - Chat-exposed key rotation pass
-   - BitLocker on D: drive
+   - Close `claude.ai` PM tab in browser (avoid duplicate-read with local PM Claude Code instance)
    - Stripe Checkout migration
+   - BitLocker on D: drive
+   - Twilio campaign rotation decision (port + restart vs. abandon entirely)
 
 ## Caveats / known issues
 
@@ -60,7 +70,9 @@ Bridge cumulative: **6 iters / 18 stages / 87 of 89 smoke / 0 STOP CONDITIONS fi
 
 ## Bridge proof of concept (continued)
 
-Fifth iter end-to-end through chl-memory bridge. Notable this iter:
-1. Largest iter to date (4 stages, ~1300 lines of new code, ~1000 lines from emergent scaffolding refined for production)
-2. First iter with substantive emergent scaffolding adoption — saved roughly 60% of write time on stages 1b/1c/1d
-3. Decision threshold policy applied 3 times autonomously (deferred test 3 from agenda's destructive .env mod, replaced agenda's all-healthy expectation with degraded-baseline, deferred 5-scenario sim) — none surfaced for operator approval since all under threshold
+Sixth iter end-to-end through chl-memory bridge. Notable this iter:
+1. Phase 2 foundation shipped: FractalEvaluator pattern operational at micro (Load) + meso (Lane) scales; macro (Market) scale queued for Phase 8 (iter 146.x)
+2. Stage 1d deferred to iter 141.2 (cleanly scoped — DAT credentials require FMCSA authority finalization)
+3. Bridge architecture upgraded mid-iter: AgentDM Tier 1 (MCP) + chl-memory git Tier 2 (fallback) + chunked-DM Tier 3 (when one side lacks remote auth). All three tiers exercised this iter.
+4. **Autonomous-bridge milestone (2026-05-07):** PM Claude migrated from claude.ai event-driven (operator-trigger only) to local Claude Code instance with native `/loop 30s` cron polling. Both sides now poll AgentDM every ~1 min without operator hand-holding. Empirical proof: PM auto-completed an overnight task (operator pre-flight checklist) without operator presence.
+5. Iter 141.3 Plivo migration plan locked overnight: full research + 4-stage agenda + stage 1b code pre-written and smoke-tested 6/6 PASS. Cutover-ready when operator triggers stage 1a.
