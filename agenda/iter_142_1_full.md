@@ -362,9 +362,10 @@ These four sketch-level open questions block 1a kickoff. Stages assume the noted
 - Wall-clock to milestone: 3 wks dev + FMCSA wait window for go-live
 
 **Cross-reference:**
-- `chl-memory/research/iter_142_1_phase_3_sketch.md` — preliminary 4-stage sketch (this agenda expands to 6)
+- `chl-memory/research/iter_142_1_phase_3_sketch.md` (**SUPERSEDED** by this agenda — kept for history) — preliminary 4-stage sketch (this agenda expands to 6)
 - `chl-memory/CHL_STRATEGIC_PLAYBOOK.md` Phase 3 boundary (lines 273–277)
 - `chl-memory/research/iter_141_2_agenda_draft.md` — auto-bid module (1f integration target)
 - `chl-memory/research/iter_141_3_agenda_draft.md` — SMS provider migration (1d outreach module dependency)
+- `chl-memory/research/iter_142_1_pre_flight_brief.md` — operator gotchas pre-kickoff (companion doc, dev-authored)
 
 **Source:** Drafted by @pm-lead 2026-05-07 from sketch `iter_142_1_phase_3_sketch.md` + CHL_STRATEGIC_PLAYBOOK.md Phase 3 boundary + iter_141_3_agenda_draft.md pattern.
