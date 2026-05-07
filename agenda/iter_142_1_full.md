@@ -159,10 +159,10 @@ These four sketch-level open questions block 1a kickoff. Stages assume the noted
 
 **What operator does (~10 min):**
 1. Review outreach copy templates (`memory/handoff_iter_142_1_stage_1d.md`):
-   - SMS: "CHL Load Opportunity: {origin} → {dest}, ${rate}, {equip}. Reply ACCEPT or DECLINE. MC-1817555. Reply STOP to opt-out."
+   - SMS (GSM-7-safe, per `chl-memory/research/plivo_white_glove_packet_FINAL.md` §4 conventions): "CHL: Load Opportunity {load_id}, {origin} to {dest}, ${rate}, {equip}. Reply ACCEPT or DECLINE. MC-1817555. HELP for help, STOP to opt out."
    - Email subject + body
    - Voice TTS script
-2. Compliance check: opt-in language matches signed broker-carrier agreements (~5 min).
+2. Compliance check: opt-in language matches signed broker-carrier agreements + GSM-7 encoding-safe (no em-dash, arrow, smart quotes) per FINAL packet (~5 min).
 3. Sign-off.
 
 **What Dev Engineer does (~6h):**
