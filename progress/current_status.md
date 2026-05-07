@@ -7,7 +7,8 @@
 **Active iters (multi-track):**
 - Iter 141.1 — NEAR-COMPLETE — Phase 2 foundation; gated on operator admin Restart-Service + HTTP 200 verification
 - Iter 141.2 — RUNBOOK-COMPLETE — Phase 2 DAT live wiring + auto-bid; FMCSA-gated (~May 13+)
-- Iter 141.3 — **STAGE-1A-IN-FLIGHT** — operator at Plivo signup; blocked on Plivo email verification (Plivo rejects role-based addresses; operator created `jason.meyer@continentalhaul.com` Zoho alias as workaround). White-glove packet FINAL committed and ready to paste post-Brand-registration.
+- Iter 141.3 — **STAGE-1A-BLOCKED-PENDING-PLIVO-SALES** — Plivo signup-form email validator confirmed blocking at vendor-side domain level (NOT stale-state, NOT alias-deliverability — see `iter_141_3_stage_1a_signup_troubleshooting.md` §1 for empirical disambiguation). Tested + rejected: `dispatch@continentalhaul.com` (role-based filter), `jason.meyer@continentalhaul.com` (custom-domain rejected even after Zoho alias verified live + MX healthy + incognito ruled out stale UI), `jasonandpugee@gmail.com` (free-Gmail also rejected with same "Please use a work email address" error). Plivo's validator (likely Kickbox/ZeroBounce/equivalent) is filtering ALL free email providers + custom domains not on its reputation whitelist. **Operator pivot:** sales@plivo.com escalation email drafted + sent (or being sent) — manual account provisioning is now critical-path, not parallel low-priority. ETA ~1 business day. White-glove packet FINAL still committed + paste-ready for whenever Plivo unblocks signup.
+  - **Suggested next-step priority while waiting:** shift focus to iter 141.1 close ceremony (runbook ready at `runbooks/iter_141_1_close_ceremony.md`, commit `54cd24f`) — operator has a 5–7 min unblocked-work window inside the Plivo wait.
 - Iter 142.1 — **AGENDA-COMPLETE** — Phase 3 carrier network agenda shipped (6 stages 1a-1f, 33 smoke tests, FMCSA blocker matrix); ready for operator review pre-kickoff.
 **Bridge state (NEW, 2026-05-07):** TRUE AUTONOMOUS — both sides polling AgentDM every ~1 min without operator triggers. @dev-engineer at `C:\CHL\` runs cron-rev4 protocol (1-min cadence, this session). @pm-lead at `C:\CHL-pm-agent\` runs Claude Code's native `/loop 30s` (rounded to 1-min via CronCreate job `0c634c3a`, 7-day expiry). Replaces operator-trigger model on claude.ai web tab. Setup details: `~/.claude/projects/c--CHL/memory/reference_pm_autonomous_loop_setup.md`.
 **Iter 141.3 prep (full state, 2026-05-07 EOD-cycle):**
@@ -19,6 +20,8 @@
 - PF2 (temp number capture): `iter_141_3_pf2_temp_number_capture.md` (commit `569d116`)
 - PF4 (consent-endpoint status): `iter_141_3_pf4_consent_endpoint_status.md` (commit `569d116` + Path-A applied `8b8894f`)
 - Stage 1b prep brief (operator playbook for white-glove wait period, 7–21 day timeline): `iter_141_3_stage_1b_prep_brief.md` (commit `7ba4ab4`)
+- Stage 1a signup-troubleshooting playbook (`iter_141_3_stage_1a_signup_troubleshooting.md`, commit `7b186e3` + corrections in `925410a`) — captures vendor-side domain-block finding, 4-outcome diagnostic decision tree, sales@plivo.com escalation template, recommended fallback paths, password handling
+- Iter 141.1 close ceremony runbook (`runbooks/iter_141_1_close_ceremony.md`, commit `54cd24f`) — 5-step operator playbook ready for operator's wait-window during Plivo sales response
 **Iter 142.1 prep (2026-05-07):**
 - Full agenda: `chl-memory/agenda/iter_142_1_full.md` (commit `f7fb39b`) — 6 stages, 33 smoke tests, ~28h dev / ~70 min operator hands-on, FMCSA blocker matrix per stage, 4 sketch-level open questions resolved to v1 defaults
 - Stage 1d SMS template aligned to GSM-7-safe + HELP-keyword + cross-ref to white-glove packet §4 conventions (commit `227272f`)
