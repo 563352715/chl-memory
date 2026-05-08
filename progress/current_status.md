@@ -3,7 +3,7 @@
 ## Build Tree (operator-mandated visual; refresh on phase/iter status changes)
 
 ```
-CHL Platform Build Tree (as of 2026-05-08 EOD-5)
+CHL Platform Build Tree (as of 2026-05-08 EOD-6 commit a7c59a6)
 │
 ├─ Phase 1: Foundation [✅ COMPLETE]
 │
@@ -31,11 +31,11 @@ CHL Platform Build Tree (as of 2026-05-08 EOD-5)
 │     └─ Stage 1f dispatch packet renderer + auto-bid handoff [✅]
 │
 ├─ Phase 4: Tracking & Exception Handling [🔄 IN PROGRESS]
-│  └─ Iter 142.2 [🔄 stage 1a SHIPPED 2026-05-08]
+│  └─ Iter 142.2 [🔄 stages 1a + 1b SHIPPED 2026-05-08; 1c IN-FLIGHT EOD-7]
 │     ├─ Stage 1a GPS event-store + tracking endpoints [✅]
-│     ├─ Stage 1b exception detection rule engine [📋 REMAINING]
-│     ├─ Stage 1c automated SMS check-ins (reuses 142.1 1d outreach) [📋 REMAINING]
-│     └─ Stage 1d operator dashboard + manual override [📋 REMAINING]
+│     ├─ Stage 1b exception detection rule engine [✅ EOD-6 a7c59a6]
+│     ├─ Stage 1c automated SMS check-ins (reuses 142.1 1d outreach) [🔄 EOD-7 sub-agent F in flight]
+│     └─ Stage 1d operator dashboard + manual override [📋 REMAINING — App.js dev-side]
 │
 ├─ Phase 5: Completion & Invoicing [🟡 PARTIAL]
 │  ├─ delivered_load_autofire (auto invoice on delivered) [✅]
@@ -45,11 +45,11 @@ CHL Platform Build Tree (as of 2026-05-08 EOD-5)
 │
 ├─ Phase 6: Factoring & Settlement [🔄 IN PROGRESS — closes cash-flow loop]
 │  ├─ Apex + Triumph factor SFTP [✅ pre-existing]
-│  └─ Iter 144.x [🔄 stages 1a + 1b SHIPPED 2026-05-08]
+│  └─ Iter 144.x [🔄 stages 1a + 1b + 1c SHIPPED 2026-05-08; 1d IN-FLIGHT EOD-7]
 │     ├─ Stage 1a RTS + OTR factor clients [✅]
 │     ├─ Stage 1b auto-submission pipeline + trust-gate [✅]
-│     ├─ Stage 1c reconciliation (email + Mercury + portal poll) [📋 REMAINING]
-│     └─ Stage 1d dispute / chargeback handler [📋 REMAINING]
+│     ├─ Stage 1c reconciliation (email + Mercury + portal poll) [✅ EOD-6 a7c59a6]
+│     └─ Stage 1d dispute / chargeback handler [🔄 EOD-7 sub-agent G in flight]
 │
 ├─ Phase 7: Throttle & SLA Foundation [✅ COMPLETE]
 │  └─ Iter 140.1 [✅ CLOSED]
@@ -60,21 +60,21 @@ CHL Platform Build Tree (as of 2026-05-08 EOD-5)
 ├─ Phase 8: Scale & Optimization [⏳ QUEUED]
 │  └─ MarketEvaluator (macro fractal) + Redis caching [📋 sketched]
 │
-├─ Phase 9 (Vision): Self-Healing Infrastructure [🔄 IN PROGRESS]
-│  └─ Iter 145.1 [🔄 stages 1a + 1b SHIPPED 2026-05-08]
+├─ Phase 9 (Vision): Self-Healing Infrastructure [🔄 IN PROGRESS — magic step LIVE]
+│  └─ Iter 145.1 [🔄 stages 1a + 1b + 1c SHIPPED 2026-05-08; 1d IN-FLIGHT EOD-7]
 │     ├─ Detection layer (existing observability triad) [✅]
 │     ├─ Stage 1a anomaly-routing dispatcher [✅]
 │     ├─ Stage 1b context bundler [✅]
-│     ├─ Stage 1c sub-agent dispatch + patch-proposal [📋 REMAINING]
-│     ├─ Stage 1d outcome-feedback schema [📋 REMAINING]
-│     └─ Trust-gate matrix LOW/MED/HIGH [📋 design-only, build phased]
+│     ├─ Stage 1c sub-agent dispatch + patch-proposal [✅ EOD-6 a7c59a6 — THE magic step. v1=PROPOSE only.]
+│     ├─ Stage 1d outcome-feedback schema [🔄 EOD-7 sub-agent H in flight]
+│     └─ Trust-gate matrix LOW/MED/HIGH [✅ classify_patch_risk; deterministic; LLM can ESCALATE only]
 │
 ├─ Cross-cutting: Email Ingestion (4th observation surface) [🔄 IN PROGRESS]
-│  └─ Iter 143.1 [🔄 stages 1a + 1b SHIPPED 2026-05-08]
+│  └─ Iter 143.1 [🔄 stages 1a + 1b + 1c SHIPPED 2026-05-08]
 │     ├─ Stage 1a IMAP poll cron + Message-ID dedup [✅ — 61 msgs ingested live]
 │     ├─ Stage 1b Tier-1 rule classifier (5 lanes) [✅]
-│     ├─ Stage 1c Tier-2 LLM classifier + budget cap [📋 REMAINING]
-│     └─ Stage 1d action-surface wiring + 3 v1 hooks [📋 REMAINING]
+│     ├─ Stage 1c Tier-2 LLM classifier + budget cap [✅ EOD-6 a7c59a6]
+│     └─ Stage 1d action-surface wiring + 3 v1 hooks [📋 REMAINING — operator-prioritize next]
 │
 ├─ Cross-cutting: Observability Triad [✅ COMPLETE]
 │  ├─ client_error_analyzer (browser errors) [✅]
@@ -90,7 +90,8 @@ CHL Platform Build Tree (as of 2026-05-08 EOD-5)
 │  ├─ Frontend equipment_types multi-select filter [✅]
 │  ├─ CLAUDE.md boot protocol [✅]
 │  ├─ ORCHESTRATION_PLAYBOOK.md [✅ this file's sibling]
-│  └─ set_env_var.ps1 helper [📋 REMAINING - next session priority]
+│  ├─ BUILD_STATUS_REPORT.md (C-drive only; mirrored cloud) [✅]
+│  └─ set_env_var.ps1 helper [✅ EOD-6 a7c59a6]
 │
 └─ Cross-cutting: SMS / Voice Comms [⛔ BLOCKED on Plivo vendor]
    └─ Iter 141.3 [⛔ STAGE-1A-BLOCKED-PENDING-PLIVO-SALES]
