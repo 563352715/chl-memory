@@ -5,9 +5,9 @@
 > NO ack-wait gate (autonomous mode preserved per operator 2026-05-08).
 > Sent to PM Claude via AgentDM at each update so future PM-replacement agents have the same record.
 
-**Last updated:** 2026-05-08 EOD-6 SHIPPED (commit a7c59a6 — 5-stream parallel batch: A Tier-2 LLM classifier, B factor reconciler, C anomaly sub-agent dispatcher [the magic step], D tracking exception detector, E set_env_var.ps1. Two verifier passes ran in parallel; 6 HIGH/MED fixes applied dev-side. 43/43 pytest green. Pushed to GitHub. Operator action pending: Restart-Service CHL-Backend.)
+**Last updated:** 2026-05-08 EOD-7 SHIPPED (commit 77efe1e — 3-stream parallel batch: F carrier check-in scheduler, G factor dispute/chargeback handler [Phase 6 cycle now COMPLETE], H patch outcome-feedback schema. Verifier flagged 1 HIGH + 2 MED, all fixed dev-side. 67/67 pytest green. Operator restarted post-EOD-6 successfully — both degradeds confirmed false-positive [context_bundler + sub_agent_dispatcher both module-level "never_run" pre-first-anomaly state; corresponding crons healthy]. EOD-7 restart pending.)
 **Updated by:** dev-engineer Claude (this session)
-**Backup status:** C ✅ | D ✅ (snapshot_to_d.ps1 ran) | Cloud ✅ (a7c59a6 pushed)
+**Backup status:** C ✅ | D ✅ (snapshot ran 04:08 UTC) | Cloud ✅ (77efe1e pushed)
 
 ---
 
