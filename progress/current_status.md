@@ -1,5 +1,17 @@
 # Current status
 
+**Last updated:** 2026-05-08 EOD-16 cap-cycle 5 close. Latest commit on main: `512700f` (3rd close handoff doc). Latest code commit: `3899bb3` (II1 -- Stripe security trio). Backend at started_at=22:08:47 UTC, 54/58 modules healthy + 4 known idle-cron-degraded. 7 batches shipped autonomously this session over ~4h (CC+DD+EE+FF+GG+HH+II = 22 streams, ~440 new tests, 0 STOP CONDITIONS). Bridge cumulative: ~10 iters / ~80+ stages / ~570+ smoke tests.
+
+**Pending operator actions (top of mind):**
+1. CRITICAL: provision STRIPE_WEBHOOK_SECRET via `scripts/set_env_var.ps1` (until then webhook returns 503).
+2. Hard-refresh browser (Ctrl+Shift+R) -- DD batch rotated JWT_SECRET, browser tokens invalidated.
+3. 8 operator-surface decisions queued in `memory/handoff_session_2026_05_08_eod16_close_v3.md`.
+4. Telnyx signup (in flight 2026-05-08 evening per operator).
+
+**Cap-cycle 5 features shipped:** Multi-folder IMAP polling + auto-folder | Auth hardening (JWT hard-fail, failover gates, XFF, 2FA scaffold, login rate limit) | DPAPI secrets store foundation | Pipeline Walkthrough + Aggregates UI | 21-stage synthetic walkthrough test framework | Detention service (per-shipper, multi-stop) | Phase 10.1 RSS scraper (parser + fetcher + rate-limit + HTML scaffold) | carrier_redispatch_workflow orchestrator | Stripe webhook signature verification (CRITICAL: bundled shim did NO verification; explicit construct_event added) | audit_trail completeness across 7 collections.
+
+---
+
 ## Build Tree (operator-mandated visual; refresh on phase/iter status changes)
 
 ```
