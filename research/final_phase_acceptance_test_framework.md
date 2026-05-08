@@ -44,7 +44,8 @@ python -m pytest backend/tests/synthetic_load_walkthrough.py -v
 | 18 | Outcome record (delivered well / disputed / lost) | self_healing/outcome_tracker (for patch outcomes) + db.evaluator_outcomes (for FractalEvaluator weight tuning) |
 | 19 | Cancel / TONU path | state_lock + TONU calculator |
 | 20 | Self-healing trip (synthetic anomaly) | observability triad + anomaly_dispatcher + context_bundler + sub_agent_dispatcher (propose-only) |
-| 21 | Carrier doc upload + auto-extract (OCR via gpt-4o-vision; expiry tracker; cross-reference FMCSA) | carrier_docs/document_store + (TBD) doc_extractor + expiry_tracker |
+| 21 | Carrier doc upload + auto-extract (OCR via gpt-4o-vision; expiry tracker; cross-reference FMCSA) | carrier_docs/document_store + doc_extractor + extraction_store + expiry_tracker + expiry_cron + extraction_router (EOD-10 sub-agent N) |
+| 22 | **Autonomous compliance loop:** doc lands → OCR extracts expiry+fields → 30d/14d/7d/expired tier scheduler → auto-DM carrier asking for replacement → carrier replies via email → email classifier auto-attaches → loop restarts | EOD-10 carrier-doc-automation batch closes this; operator-mandated 2026-05-08 EOD-9 |
 
 ### 2. Per-feature acceptance checklist
 
