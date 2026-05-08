@@ -351,10 +351,10 @@ Exposes `loadboard_scraper.health()` output for the standing health-monitor surf
    - Pre-seed one row; call `_upsert_listings` with same dedup hash but later timestamp.
    - Assert: row count still 1; `last_seen_at` advanced; `first_seen_at` UNCHANGED.
 
-### 10.2 Tests deferred to Phase 10.1.1 (per-source parser ship)
+### 10.2 Tests deferred to Phase 10.1.1 (per-source parser ship) -- IMPLEMENTED 2026-05-08 EOD-16 (Stream EE3)
 
-- Fixture-based parser tests: capture a SAMPLE HTML page from each registered source; assert the parser produces N listings with the expected fields.
-- Never hit the live source in tests. Fixtures live in `backend/tests/fixtures/loadboard_<source>_sample.html`.
+- Fixture-based parser tests: SHIPPED. `backend/tests/test_rss_parser.py` (38 unit tests, parametrized across 8 mandatory cases) + `backend/tests/test_loadboard_scraper.py` extended with 2 integration tests. Fixtures at `backend/tests/fixtures/loadboard/` (sample_rss_clean.xml, sample_rss_malformed.xml, sample_atom.xml).
+- Never hit the live source in tests. All tests use the synthetic XML fixtures and a stubbed `_fetch_html` for the integration path.
 
 ### 10.3 Tests deferred to Phase 10.2 (daily aggregate)
 
@@ -409,6 +409,37 @@ The 10.1 scaffold imports only stdlib + httpx. Adding `feedparser` etc. happens 
 8. Register the cron loop in `backend/cron_scheduler.py` (replace the TODO comment).
 9. Operator runs `set_env_var.ps1 CHL_LOADBOARD_SCRAPER_ENABLED true` and restarts backend.
 10. Verify first tick via `/api/health/scrapers` and a sample row in `db.loadboard_listings`.
+
+---
+
+## 13a. Phase 10.1.1 ship state (2026-05-08 EOD-16, Stream EE3)
+
+**SHIPPED (verifier-gate pending; code commit deferred to verifier):**
+- `backend/scrapers/rss_parser.py` (~340 LOC) -- generic RSS 2.0 + Atom 1.0 parser, stdlib `xml.etree.ElementTree` only, no new external deps.
+- `backend/scrapers/loadboard_scraper.py` -- `_parse_html(...)` wired to dispatch `"public_rss"` -> `rss_parser.parse_rss_feed(...)`; other sources raise `NotImplementedError` (surfaced as `status="error", reason="parser_not_shipped"`).
+- `REGISTERED_SOURCES["public_rss"]` registered with placeholder URL (feature flag still OFF; never fetched).
+- `backend/tests/fixtures/loadboard/{sample_rss_clean.xml, sample_rss_malformed.xml, sample_atom.xml, __init__.py}` -- synthetic; not scraped from any live source.
+- `backend/tests/test_rss_parser.py` (~210 LOC, 38 tests via parametrize, all 8 mandatory test names covered).
+- `backend/tests/test_loadboard_scraper.py` extended with 2 integration tests (5 baseline + 2 new = 7 total).
+
+**Test results:** 45/45 pass (`python -m pytest backend/tests/test_rss_parser.py backend/tests/test_loadboard_scraper.py -v`).
+
+**Still feature-flag-gated:** `CHL_LOADBOARD_SCRAPER_ENABLED` remains unset/false in `.env`. The disabled-path test still passes; no live network I/O is reachable from any code path until operator activates the flag via `scripts/set_env_var.ps1`.
+
+**Cron registration:** still NOT registered (per Phase 10.1 design doc Section 6.2).
+
+**Defensive behaviors validated by tests:**
+- Malformed top-level XML -> empty list (no exception).
+- Per-item bad data (missing guid, unparseable pubDate, future-dated pubDate, unparseable lane) -> item skipped, others returned.
+- Lane-arrow tokens supported: `->`, `-->`, ` to `, ` > `.
+- Equipment phrase canonicalization: REEFER, DRY_VAN, FLATBED, STEPDECK, RGN, POWER_ONLY (with bare "van" -> DRY_VAN as longer-phrase-wins fallback).
+- Rate extraction: lane-total only; `$1.85/mi` per-mile tokens excluded; multiple distinct totals -> None (ambiguous).
+- Future-dated pubDate (>5min skew) rejected as feed-bug.
+
+**Boot pointer for Phase 10.1.2 agent:**
+- Operator authorization required before adding a real `public_rss` URL or any source-specific parser.
+- The single-URL `_fetch_html` placeholder in `loadboard_scraper.py` still raises NotImplementedError; an actual httpx fetch + retry-once + per-source headers ships with 10.1.2.
+- The aggregated multi-feed strategy (10-20 broker feeds) needs a per-source URL list -- consider a JSON config file at `backend/scrapers/public_rss_sources.json`.
 
 ---
 
