@@ -395,6 +395,69 @@ The 10.1 scaffold imports only stdlib + httpx. Adding `feedparser` etc. happens 
 - **Why `last_seen_at` instead of delete-on-disappear:** preserves historical record for seasonality models. We MUST be able to ask "was this lane active in May 2025?"
 - **Why optional `raw_html_blob_gz_b64`:** ~30KB raw × 50K listings/day × 365 days = ~500GB/yr. Operator decides retention. Default off in 10.1 for safety; flip on per-source after first 30 days of validating the parser is stable.
 
+### 12.1 Phase 10.1.3 prep -- HTML source path scaffolded
+
+**Status (2026-05-08, Stream HH3):** The `public_html` parser dispatch path is wired in `loadboard_scraper._parse_html` (`source_name == "public_html"` -> `scrapers.html_parser.parse_html_listings`). The parser module ships as a SCAFFOLD ONLY -- `parse_html_listings` raises `NotImplementedError` with the message:
+
+> "HTML parsing requires beautifulsoup4 -- pending operator authorization for new dep."
+
+**Pending operator decision -- ADD-DEP AUTHORIZATION REQUEST:**
+
+- `beautifulsoup4 >= 4.12` and `lxml >= 5.0` need to be added to `backend/requirements.txt` before the first non-RSS HTML source can be scraped live.
+- Risk profile: both packages are widely-deployed, MIT-licensed, ~2MB combined wheel, zero net-new attack surface (parsers run on already-fetched HTML, not external requests).
+- Cost: $0 (free / open-source).
+- Reversibility: trivial -- remove the lines from `requirements.txt` + `pip uninstall`.
+- Decision threshold: pre-revenue + <$20/wk + reversible -> dev autonomy per `decision_thresholds.md`. Flagging here for visibility rather than blocking; dev WILL self-authorize the dep add when the first live HTML source URL is operator-vetted, unless operator says otherwise.
+
+**Until BS4 lands:**
+- The dispatch path raises `NotImplementedError` so a future Phase 10.1.3 commit only needs to swap the body of `parse_html_listings`. Call sites (`_parse_html`, the aggregator, `scrape_once`) are unchanged.
+- `html_parser.BS4_AVAILABLE` is a module-level sentinel that flips True the moment `bs4` becomes importable (try-import probe at module load).
+- `/api/health/scrapers` surfaces `html_parser.status_summary()` so the operator can see at-a-glance whether the dep has landed.
+
+**Activation steps for Phase 10.1.3 ship-day:**
+1. Operator authorizes the dep add (via the standing decision-threshold rule, or explicit OK).
+2. Append `beautifulsoup4>=4.12` and `lxml>=5.0` to `backend/requirements.txt`.
+3. `pip install` in venv.
+4. Implement the per-source CSS-selector / XPath logic in `html_parser.parse_html_listings`. First target broker TBD.
+5. Add a fixture-based parser test in `backend/tests/test_loadboard_html_parser.py`.
+6. Add the new source name (`public_html` family or per-broker name) to `public_rss_sources.json` with `enabled=false` placeholder URL.
+7. Add the per-source dispatch alias in `_parse_html` if the source uses a unique name rather than the generic `public_html`.
+8. Operator vets ToS + flips `enabled=true`.
+
+**robots.txt note (HTML scraping):** RSS feeds are an opt-in publishable surface; HTML scraping is not. The first HTML source MUST honor robots.txt at the fetcher layer before going live. Add the check in `_fetch_html` guarded by `parser_kind == "public_html"` (or push it into a dedicated `_fetch_html_page`).
+
+### 12.2 Phase 10.1.3 prep -- per-source rate-limit memory
+
+**Status (2026-05-08, Stream HH3):** The aggregator now enforces per-source minimum-poll-cadence across ticks via a module-level `_LAST_POLLED_AT: dict[str, float]` map.
+
+- `_should_skip_for_cadence(source_config)` returns `(True, "rate_limited_until_<remaining>s")` if `now - last_polled_at < interval_sec`, else `(False, None)`.
+- Called BEFORE any HTTP request inside `_scrape_aggregated_source`. Zero-cost skip on cadence violations.
+- Stamp happens on successful fetch (body in hand) -- a failed fetch does NOT update the map so the next tick can retry.
+- Aggregator result has a new bucket `sources_skipped_rate_limited` (NOT counted toward `sources_attempted` / `sources_succeeded` / `sources_failed`).
+- `reset_rate_limit_memory()` is the public test seam + future "force refresh now" admin hook.
+
+**Memory-growth profile:** dict is keyed by source name, bounded by operator-vetted source count (current placeholder set: 8; expected steady-state: 10-20). Renames never auto-expire old keys but rename frequency is operator-scale (single-digit/yr). No LRU cap needed for v1; revisit if dynamic source-naming ever lands.
+
+### 12.3 Phase 10.1.3 prep -- /api/health/scrapers endpoint
+
+**Status (2026-05-08, Stream HH3):** Mounted at `/api/health/scrapers` via `backend/scrapers/scrapers_router.py` -> `server.py` `include_router`. Auth: `require_broker`. Read-only. Shape:
+
+```
+{
+  "loadboard": <loadboard_scraper.health() output>,
+  "rate_limit": {
+    "registered_sources": int,
+    "sources_within_cadence": int,
+    "sources_eligible": int,
+    "by_source": {<name>: {last_polled_at, interval_sec, seconds_until_eligible, eligible}}
+  },
+  "html_parser": {module, bs4_available, live, pending_dep_message},
+  "as_of": <iso-8601>
+}
+```
+
+Preflight count: 169 -> 171 routers (171 includes Stream HH1's `redispatch_router` already in working tree).
+
 ---
 
 ## 13. Boot pointers (for the agent picking up Phase 10.1.1)
