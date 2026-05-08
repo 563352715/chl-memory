@@ -5,9 +5,9 @@
 > NO ack-wait gate (autonomous mode preserved per operator 2026-05-08).
 > Sent to PM Claude via AgentDM at each update so future PM-replacement agents have the same record.
 
-**Last updated:** 2026-05-08 EOD-5 (post-iter-142.1-stages-1c-1f close + 5-stream batch a74dc9e + EOD-5 4-stream batch e27962b + boot-fix f945eb9 + this status protocol e988d06/42e784c/d32ed18)
+**Last updated:** 2026-05-08 EOD-6 SHIPPED (commit a7c59a6 — 5-stream parallel batch: A Tier-2 LLM classifier, B factor reconciler, C anomaly sub-agent dispatcher [the magic step], D tracking exception detector, E set_env_var.ps1. Two verifier passes ran in parallel; 6 HIGH/MED fixes applied dev-side. 43/43 pytest green. Pushed to GitHub. Operator action pending: Restart-Service CHL-Backend.)
 **Updated by:** dev-engineer Claude (this session)
-**Backup status:** C ✅ (this file) | D ✅ (snapshot_to_d.ps1 ran) | Cloud ✅ (chl-memory pushed to GitHub)
+**Backup status:** C ✅ | D ✅ (snapshot_to_d.ps1 ran) | Cloud ✅ (a7c59a6 pushed)
 
 ---
 
