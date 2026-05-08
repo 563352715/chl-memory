@@ -1,5 +1,111 @@
 # Current status
 
+## Build Tree (operator-mandated visual; refresh on phase/iter status changes)
+
+```
+CHL Platform Build Tree (as of 2026-05-08 EOD-5)
+│
+├─ Phase 1: Foundation [✅ COMPLETE]
+│
+├─ Phase 2: Load Discovery & Evaluation [✅ FOUNDATION; 1d FMCSA-gated]
+│  ├─ Iter 141.1 [✅ CLOSED 2026-05-07]
+│  │  ├─ FractalEvaluator + LoadEvaluator (shadow) [✅]
+│  │  ├─ LaneEvaluator + /api/lanes/{o}/{d}/score [✅]
+│  │  ├─ lane_scoring_cron 6h refresh [✅]
+│  │  ├─ Stage 1d DAT live wiring [⏳ DEFERRED to iter 141.2]
+│  │  └─ /api/lanes/top/{N} dashboard [✅]
+│  └─ Iter 141.2 [⛔ BLOCKED on FMCSA broker authority ~May 13]
+│     ├─ Stage 1d DAT live wiring [⏳ pre-flight code RUNBOOK-COMPLETE]
+│     └─ Stage 1f auto-bid [⏳ RUNBOOK-COMPLETE]
+│
+├─ Phase 3: Carrier Network & Dispatch [✅ MILESTONE LIVE — first real load can be assigned]
+│  └─ Iter 142.1 [✅ CLOSED 2026-05-07]
+│     ├─ Phase 1 bulk Census import 480,912 carriers [✅]
+│     ├─ Phase 2 SMS BASIC scores fetcher [✅]
+│     ├─ Phase 4 vetting workflow + 9-step state machine [✅]
+│     ├─ Phase 5 frontend vetting UI + filters [✅]
+│     ├─ Phase 3 SAFER cargo + QCMobile insurance auto-refresh crons [✅]
+│     ├─ Stage 1c CarrierEvaluator [✅]
+│     ├─ Stage 1d OutreachOrchestrator + load-board fallback [✅]
+│     ├─ Stage 1e auto_assigner + ghost detector + confirm_handler [✅]
+│     └─ Stage 1f dispatch packet renderer + auto-bid handoff [✅]
+│
+├─ Phase 4: Tracking & Exception Handling [🔄 IN PROGRESS]
+│  └─ Iter 142.2 [🔄 stage 1a SHIPPED 2026-05-08]
+│     ├─ Stage 1a GPS event-store + tracking endpoints [✅]
+│     ├─ Stage 1b exception detection rule engine [📋 REMAINING]
+│     ├─ Stage 1c automated SMS check-ins (reuses 142.1 1d outreach) [📋 REMAINING]
+│     └─ Stage 1d operator dashboard + manual override [📋 REMAINING]
+│
+├─ Phase 5: Completion & Invoicing [🟡 PARTIAL]
+│  ├─ delivered_load_autofire (auto invoice on delivered) [✅]
+│  ├─ POD vision OCR via gpt-4o [✅]
+│  ├─ PDF stapler bundle (invoice+rateCon+POD+BOL) [✅]
+│  └─ Shipper-portal API integrations [📋 REMAINING (defer per ETA audit)]
+│
+├─ Phase 6: Factoring & Settlement [🔄 IN PROGRESS — closes cash-flow loop]
+│  ├─ Apex + Triumph factor SFTP [✅ pre-existing]
+│  └─ Iter 144.x [🔄 stages 1a + 1b SHIPPED 2026-05-08]
+│     ├─ Stage 1a RTS + OTR factor clients [✅]
+│     ├─ Stage 1b auto-submission pipeline + trust-gate [✅]
+│     ├─ Stage 1c reconciliation (email + Mercury + portal poll) [📋 REMAINING]
+│     └─ Stage 1d dispute / chargeback handler [📋 REMAINING]
+│
+├─ Phase 7: Throttle & SLA Foundation [✅ COMPLETE]
+│  └─ Iter 140.1 [✅ CLOSED]
+│     ├─ Health check framework + /api/health/* [✅]
+│     ├─ Throttle state machine GREEN/YELLOW/ORANGE/RED [✅]
+│     └─ SLA monitor + per-cron @track_sla [✅]
+│
+├─ Phase 8: Scale & Optimization [⏳ QUEUED]
+│  └─ MarketEvaluator (macro fractal) + Redis caching [📋 sketched]
+│
+├─ Phase 9 (Vision): Self-Healing Infrastructure [🔄 IN PROGRESS]
+│  └─ Iter 145.1 [🔄 stages 1a + 1b SHIPPED 2026-05-08]
+│     ├─ Detection layer (existing observability triad) [✅]
+│     ├─ Stage 1a anomaly-routing dispatcher [✅]
+│     ├─ Stage 1b context bundler [✅]
+│     ├─ Stage 1c sub-agent dispatch + patch-proposal [📋 REMAINING]
+│     ├─ Stage 1d outcome-feedback schema [📋 REMAINING]
+│     └─ Trust-gate matrix LOW/MED/HIGH [📋 design-only, build phased]
+│
+├─ Cross-cutting: Email Ingestion (4th observation surface) [🔄 IN PROGRESS]
+│  └─ Iter 143.1 [🔄 stages 1a + 1b SHIPPED 2026-05-08]
+│     ├─ Stage 1a IMAP poll cron + Message-ID dedup [✅ — 61 msgs ingested live]
+│     ├─ Stage 1b Tier-1 rule classifier (5 lanes) [✅]
+│     ├─ Stage 1c Tier-2 LLM classifier + budget cap [📋 REMAINING]
+│     └─ Stage 1d action-surface wiring + 3 v1 hooks [📋 REMAINING]
+│
+├─ Cross-cutting: Observability Triad [✅ COMPLETE]
+│  ├─ client_error_analyzer (browser errors) [✅]
+│  ├─ system_health_monitor (backend modules) [✅]
+│  └─ carriers_freshness_router (480K-row DB freshness) [✅]
+│
+├─ Cross-cutting: Carrier Documents Storage [✅ COMPLETE]
+│  ├─ Backend (CRUD + idempotency + path-traversal protection) [✅]
+│  └─ Frontend (CarrierDetailModal section) [✅]
+│
+├─ Cross-cutting: Operations Hygiene [🔄 ONGOING]
+│  ├─ TONU calculator integration [✅]
+│  ├─ Frontend equipment_types multi-select filter [✅]
+│  ├─ CLAUDE.md boot protocol [✅]
+│  ├─ ORCHESTRATION_PLAYBOOK.md [✅ this file's sibling]
+│  └─ set_env_var.ps1 helper [📋 REMAINING - next session priority]
+│
+└─ Cross-cutting: SMS / Voice Comms [⛔ BLOCKED on Plivo vendor]
+   └─ Iter 141.3 [⛔ STAGE-1A-BLOCKED-PENDING-PLIVO-SALES]
+      ├─ Plivo white-glove packet [✅ paste-ready]
+      ├─ plivo_client.py code [✅ smoke 6/6]
+      └─ Cutover [⛔ awaiting Plivo unblock + 7-21d white-glove approval]
+```
+
+**Legend:** ✅ COMPLETE | 🔄 IN PROGRESS | ⏳ QUEUED | 📋 REMAINING | ⛔ BLOCKED
+
+**Refresh trigger:** any phase/iter/stage status change. Dev updates this section at iter-close milestones (typically every ~3-6 hours during active build days). Per `~/.claude/projects/c--CHL/memory/feedback_status_reporting_synthesis.md`, NOT every commit.
+
+---
+
+
 > Live status file. Claude Code overwrites this as it works. PM Claude reads it via raw URL to gauge progress without paste-ins.
 
 **Last updated:** 2026-05-07 EOD-4 (Carrier dispatch milestone LIVE in production: iter 142.1 stages 1c-1f orchestrated batch shipped — CarrierEvaluator + OutreachOrchestrator + assignment state machine + dispatch packet renderer all integrated into server.py and showing healthy at /api/health/system. Built via 4 worktree-isolated sub-agents in parallel + 1 verifier sub-agent (caught 3 HIGH bugs pre-merge) + sequential merge gate. Backend restart confirmed all 8 expected modules registered + healthy. Today's velocity: 8 CHL commits + 11 chl-memory commits in single session.)
