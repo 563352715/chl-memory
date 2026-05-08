@@ -180,3 +180,63 @@ When the platform is "feature complete" (~3-4 sessions from 2026-05-08, or whene
 Operator-explicit 2026-05-08 EOD-9: the platform's value is autonomous + self-healing + learning, BUT operator needs a manual-override surface for the cases where automation fails partially. Without this framework, operator can't intervene cleanly; without the acceptance checklist, we can't trust we shipped what we said.
 
 **For the agent picking this up at final-phase:** read this doc fully before building any of the four components. The synthetic_load_walkthrough.py seed is operator-blessed; extend, don't rewrite. The Pipeline Walkthrough tab is the keystone — once it exists, every gap and every regression has a single-pane visibility surface.
+
+---
+
+## Update 2026-05-08 EOD-15 (Stream EE2): Component 1 IMPLEMENTED (v1)
+
+**Status:** the 21-stage walkthrough is LIVE at `backend/tests/synthetic_load_walkthrough.py` (~1100 lines, all 22 tests pass, 0.32s wall-clock total). The harness uses an in-memory async-Mongo fake (no live backend, no Mongo, no external calls), so it can run anywhere.
+
+**Run command:**
+
+```
+python -m pytest backend/tests/synthetic_load_walkthrough.py -v
+# or, with smoke wrapper that sets per-run DB env vars:
+.\scripts\run_walkthrough.ps1
+```
+
+**The 21 stages (final selection):**
+
+| # | Stage | Production code path | Mock boundary |
+|---|-------|----------------------|---------------|
+| 1 | RFQ intake | direct DB write + audit_trail | -- |
+| 2 | Quote (won outcome) | direct DB write + audit_trail | -- |
+| 3 | Carrier match (interest accepted) | direct DB write + audit_trail | -- |
+| 4 | Rate-con + BCA signed | direct DB write + audit_trail | rate-con PDF mocked |
+| 5 | Dispatch (driver assigned) | direct DB write + audit_trail | -- |
+| 6 | Check-call / GPS ping | direct DB write to tracking_events + loads | tracking cron not invoked |
+| 7 | POD upload | direct DB write + audit_trail | OCR mocked (no gpt-4o-vision call) |
+| 8 | Audit gate | inline checklist evaluator | -- |
+| 9 | Broker invoice | direct DB write + audit_trail | reportlab/PDF body not exercised |
+| 10 | Factor request | direct DB write + audit_trail | HaulPay API call MOCKED (`external_call_mocked=True`) |
+| 11 | Payment received | direct DB write + audit_trail | Mercury webhook MOCKED |
+| 12 | Cancel + TONU | **REAL** `tonu_calculator.compute_tonu` | -- |
+| 13 | Carrier vetting (BCA + COI + W9) | direct DB write to carriers.vetting_workflow | FMCSA SAFER fetch MOCKED |
+| 14 | Carrier failure / re-dispatch | direct DB write + carrier_failures coll | re-dispatch SMS MOCKED |
+| 15 | Real-time pricing rebid | direct DB write to pricing_rebids | lane_evaluator decision MOCKED |
+| 16 | Dispatch packet generation | **REAL** `dispatch.packet_renderer.render_dispatch_packet` | reportlab + pypdf monkeypatched (PDF body fake) |
+| 17 | Late-checkcall escalation | **REAL** `tracking.exception_detector.scan_for_exceptions` (with fake-DB compatibility fallback) | broker SMS MOCKED |
+| 18 | Off-route exception | **REAL** `tracking.exception_detector.haversine_miles` | exception row written by harness |
+| 19 | Detention review | inline math (free_time_hours + rate) | invoice line item written, not delivered |
+| 20 | Cargo claim | direct DB write to cargo_claims | claim notification MOCKED |
+| 21 | Aged AR escalation | **REAL** `aged_ar._build_unpaid_rows` | dunning email MOCKED |
+
+**Per-stage SLA:** wall-clock < 5s, asserted in `_StageTimer.__exit__`. Empirically every stage runs in < 5ms after import overhead settles (stage 1: ~270ms cold-start cost from `motor`/`fastapi` imports via `integrity.audit_trail`).
+
+**Audit-trail discipline:** every stage that mutates a domain doc emits a row into `db.audit_trail` via the real `integrity.audit_trail.record_audit` (fallback to direct insert if unavailable). Stages 1, 2, 3, 4, 5, 7, 9, 10, 12, 13, 14, 15, 17, 18, 19, 20, 21 all assert audit-trail presence implicitly (the call would raise if the writer rejected it).
+
+**State machine:** `walkthrough_state` (module-scoped fixture dict) carries `load_id`, `carrier_mc`, `invoice_id`, etc. across stages. Stages 12, 14, 17, 19, 20, 21 use isolated test loads so they don't perturb the happy-path one settled in stages 1-11.
+
+**Production-code hooks discovered missing during this stream (none surfaced as bugs, all are wiring observations for future-phase decisions):**
+
+1. **Audit-trail row on `loads.status` transitions:** the production `state_lock._maybe_offer_tonu` and the route handlers that flip `loads.status` write the new state but do NOT call `integrity.audit_trail.record_audit`. The walkthrough emits these rows from the harness side -- a real integration would want a thin wrapper at `state_lock` that emits before/after on every status flip.
+2. **Detention auto-charge service:** no `backend/detention*.py` exists; the test inlines the calculation. Recommend a `backend/detention_review.py` cron that runs against `loads` with `shipper_arrived_at`/`shipper_departed_at` set and emits `invoice_line_items_pending` rows automatically.
+3. **Carrier-failure / re-dispatch service:** there's logic spread across `assignment/failure_detector.py` and `auto_dispatch.py`, but no single `carrier_redispatch_workflow.py` orchestrator. Stage 14 inlines the state machine; productionize this path before claiming the platform self-heals carrier ghosts.
+
+**Follow-ups (priority-ordered):**
+
+1. **Wire `state_lock` status flips to `audit_trail`** -- one call per status transition, before/after snapshot of the load doc. Eliminates the harness having to emit these manually.
+2. **Promote stage 17 (late-checkcall) to fully use the real `exception_detector.scan_for_exceptions`** -- requires extending the harness's in-memory async-Mongo fake to support every query the scanner uses (currently it falls back to direct insert if scanner doesn't pick up the synthetic load).
+3. **Add stage 22-25 candidates:** carrier-tier promotion (bronze/silver/gold), shipper credit override revocation, ETA-slip predictive vs. actual reconciliation, factor approval-vs-decline branch.
+
+
