@@ -443,6 +443,51 @@ The 10.1 scaffold imports only stdlib + httpx. Adding `feedparser` etc. happens 
 
 ---
 
+## 13b. Phase 10.1.2 ship state (2026-05-08, Stream FF3)
+
+**SHIPPED (still feature-flag-gated end-to-end; code commit deferred to verifier):**
+- `backend/scrapers/loadboard_scraper.py` -- `_fetch_html` is now a real httpx async GET:
+  - 30-second total timeout (connect + read + write + pool); applied as the `timeout=` kwarg on every `client.get(...)` call.
+  - Retry-once on transient failures (5xx subset {500,502,503,504} + connection errors + timeouts). `HTTP_RETRY_BACKOFF_SEC = 2.0s` between attempts; `HTTP_RETRY_MAX_ATTEMPTS = 2` (initial + 1 retry).
+  - Per-source User-Agent + Accept headers merged onto module-level `DEFAULT_FETCH_HEADERS` so we always identify ourselves with `CHL-loadboard-scraper/0.1 (contact: dispatch@continentalhaul.com)`.
+  - Logs URL + HTTP status + bytes received + duration_ms per request. Body never logged (could be MB of XML).
+  - Returns response body as `str` (UTF-8 decoded; httpx handles charset detection).
+  - On final failure (post-retry) raises typed `LoadboardFetchError(message, *, url, status_code, attempts)` chained from the original cause via `raise ... from`.
+- `backend/scrapers/loadboard_scraper.py` -- new public function `scrape_all_enabled_sources(*, db, http_client_factory=None, sources_path=None, parser_kind="public_rss")`:
+  - Reads `public_rss_sources.json` (or override path for tests), iterates enabled sources, calls a per-source mini-pipeline (`_scrape_aggregated_source`) that fetches + RSS-parses + normalizes + upserts.
+  - Defense-in-depth gates: master `is_scraper_enabled()`, `integrity.operational_state.is_read_only()`, `integrity.operational_state.should_skip_tick()`. All three short-circuit BEFORE any HTTP work.
+  - Whole-batch resilient: a single source's `LoadboardFetchError` (or any uncaught exception) is logged + recorded in the per-source result dict but never aborts the batch.
+  - Skips `enabled=false` sources without any HTTP call (zero cost) -- verified by test contract (`http_client_factory` invocation count == 0).
+  - Returns `{status, sources_attempted, sources_succeeded, sources_failed, sources_skipped_disabled, total_listings, by_source: {<name>: {status, fetched, upserted, duplicates, reason?}}}`.
+- `backend/scrapers/public_rss_sources.json` -- 8 placeholder sources, all `enabled=false`, all using `loadboard.example` / `*-broker-*.invalid` non-resolvable hostnames so no live network call can occur even if the master flag is flipped on without operator URL-vetting first. Naming convention: `broker_<greek>_rss` (or `_atom` for Atom feeds), snake_case, globally unique. Each source carries `name`, `url`, `headers`, `interval_sec`, `enabled`, `notes`.
+- `backend/cron_scheduler.py` -- TODO block updated to "TODO PHASE 10.1.3" with the actual `register_cron`-style registration code COMMENTED OUT (not active). Activation gate documented: (1) operator vets ToS, (2) operator flips per-source enabled, (3) operator activates master flag via `scripts/set_env_var.ps1`.
+- `backend/tests/test_loadboard_scraper.py` -- 8 new tests added (45 -> 53 total combined with rss_parser tests):
+  - `test_fetch_html_returns_body_on_200_response` -- 200 OK returns body, headers threaded through.
+  - `test_fetch_html_retries_once_on_5xx` -- 503 then 200 -> success after 2 attempts.
+  - `test_fetch_html_raises_loadboard_fetch_error_after_retries` -- both attempts 503 -> typed error.
+  - `test_fetch_html_honors_30s_timeout` -- timeout applied to every `client.get`; TimeoutError on first attempt triggers retry.
+  - `test_scrape_all_enabled_sources_skips_disabled` -- two disabled sources -> zero factory calls, two `skipped_disabled` results.
+  - `test_scrape_all_enabled_sources_skips_when_master_flag_off` -- enabled source but master flag off -> short-circuit, zero factory calls.
+  - `test_scrape_all_enabled_sources_aggregates_per_source_counts` -- two sources each return clean RSS fixture -> 5+5 listings, 10 distinct DB rows (one per source via dedup hash).
+  - `test_scrape_all_enabled_sources_continues_after_one_source_fails` -- source A 503/503, source B 200 -> A failed, B succeeded, 5 rows in DB.
+
+**Test results:** 53/53 pass (`python -m pytest backend/tests/test_loadboard_scraper.py backend/tests/test_rss_parser.py -v`).
+
+**Preflight:** `scripts/preflight_server_smoke.py` -> `preflight OK: 169 routers + 18 crons + 5 health-registers verified`. No regressions.
+
+**robots.txt decision:** intentionally NOT consulted by `_fetch_html`. Rationale: RSS / Atom feeds are explicitly publishable resources -- a broker that exposes an RSS endpoint has already opted in to programmatic consumption. Compliance is instead enforced by (a) per-source operator ToS vetting in `public_rss_sources.json` BEFORE flipping `enabled=true`, and (b) an honest User-Agent identifying CHL with a contact email so brokers can reach out for opt-out before issuing a ban. If a future source requires robots.txt honoring (eg HTML scraping), add the check at that source's parser, not at the fetcher layer.
+
+**Still feature-flag-gated:** `CHL_LOADBOARD_SCRAPER_ENABLED` remains unset/false. Even if accidentally set, `public_rss_sources.json` ships with every `enabled=false` so the aggregator makes zero HTTP calls. Triple gate: master env flag + per-source enabled + operator-vetted URLs.
+
+**Cron registration:** still NOT registered. The block is documented + commented out in `cron_scheduler.py`; activating it requires uncommenting + restarting the backend.
+
+**Boot pointer for Phase 10.1.3 agent:**
+1. **Per-source rate-limit memory.** `interval_sec` is read from sources config but the aggregator does NOT yet enforce per-source minimum-poll-cadence across ticks. Add a `_last_polled_at[source_name]` map and skip a source if `now - last < interval_sec`.
+2. **`/api/health/scrapers` route.** `loadboard_scraper.health()` is wired but not exposed via FastAPI yet. Add a `routes/scrapers_health.py` and register in `server.py`.
+3. **HTML-source parser path.** Phase 10.1.3 first non-RSS source (eg an HTML load board) needs `_parse_html` dispatch + a BeautifulSoup-based parser. Add `beautifulsoup4 + lxml` to `requirements.txt` at that point.
+
+---
+
 ## 14. Standing operator directives (acknowledged)
 
 - **`set_env_var.ps1` helper** — When activating the feature flag in Phase 10.1.1, USE the helper at `C:\CHL\scripts\set_env_var.ps1`. Do NOT ask the operator to edit `.env` manually. (Quote: *"I need you to operate more autonomously so to speak. I introduce way too many possible failures"*.)
