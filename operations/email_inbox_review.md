@@ -61,3 +61,18 @@
 
 ### AUTO_ACK_OK / INFORMATIONAL (0)
 (none)
+
+## Hourly review 2026-05-09 05:25 UTC
+**Window**: last 75 min (since 2026-05-09T04:10 UTC).
+**Total ingested last 75min**: 1
+**By category**: SHIPPER_CARRIER_OR_OTHER=1
+**By verdict**: OPERATOR_REVIEW=1
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (1)
+- [mailer-daemon@mail.zoho.com] **Undelivered Mail Returned to Sender** -- 550 5.7.1 "This mailbox is no longer active". Unknown which recipient bounced (body parser couldn't extract Final-Recipient cleanly from the Zoho bounce format). Recommended action: operator opens dispatch@continentalhaul.com Inbox view tomorrow morning, finds the bounce, identifies the dead recipient, prunes from any contact list it came from. Low urgency -- bounces are routine, but worth eyeballing in case it's a partner/vendor/customer we expected to reach.
+
+### AUTO_ACK_OK / INFORMATIONAL (0)
+(none)
