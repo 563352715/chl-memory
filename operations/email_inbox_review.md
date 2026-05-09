@@ -286,3 +286,19 @@
 
 ### AUTO_ACK_OK / INFORMATIONAL (0)
 (none)
+
+## Hourly review 2026-05-09 18:26 UTC
+
+Total ingested last 75min: 0
+By category: (none)
+By verdict: (none)
+
+### URGENT (require operator attention)
+- (none)
+
+### OPERATOR_REVIEW (next session)
+- (none)
+
+### AUTO_ACK_OK / INFORMATIONAL (logged for completeness)
+- (none)
+
