@@ -334,3 +334,76 @@ By verdict: (none)
 ### AUTO_ACK_OK / INFORMATIONAL (logged for completeness)
 - (none)
 
+
+## Triage run -- 2026-05-09T20:51:17.247930+00:00
+**Window**: last 75 min (since 2026-05-09T19:36:17.223373+00:00). **Seen**: 1. **Classified**: 1. **Urgent**: 0. **Skipped (dup)**: 0.
+**By category**: SHIPPER_CARRIER_REPLY=1
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (0)
+(none)
+
+### AUTO_ACK_OK (1)
+- [SHIPPER_CARRIER_REPLY] conf=0.55 from=dispatch@continentalhaul.com subject='📄 Signed Rate Con · RC-7E516556 · Broker Admin' message_id=<19e0e6fe8bd.3040df53-1439717126.-4134513613164662778@zoho.com>
+    - freight_body_term:\bload\s+(?:#?\s*\w+)\b
+    - auto_ack_pattern:\b(?:rate|load)\s+confirmation\b.*\b(?:confirm(?:ed)?|accepted|booked)\b
+
+### INFORMATIONAL (0)
+(none)
+
+## Triage run -- 2026-05-09T21:09:57.098907+00:00
+**Window**: last 75 min (since 2026-05-09T19:54:57.085907+00:00). **Seen**: 2. **Classified**: 1. **Urgent**: 0. **Skipped (dup)**: 1.
+**By category**: VENDOR=1
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (1)
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0e8d73d6.7c5e523e929340954.-9076187813155615863@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (1)
+- [SHIPPER_CARRIER_REPLY] conf=0.55 from=dispatch@continentalhaul.com subject='📄 Signed Rate Con · RC-7E516556 · Broker Admin' message_id=<19e0e6fe8bd.3040df53-1439717126.-4134513613164662778@zoho.com>
+    - freight_body_term:\bload\s+(?:#?\s*\w+)\b
+    - auto_ack_pattern:\b(?:rate|load)\s+confirmation\b.*\b(?:confirm(?:ed)?|accepted|booked)\b
+
+### INFORMATIONAL (0)
+(none)
+
+## Triage run -- 2026-05-09T21:13:18.140404+00:00
+**Window**: last 75 min (since 2026-05-09T19:58:18.131152+00:00). **Seen**: 2. **Classified**: 0. **Urgent**: 0. **Skipped (dup)**: 2.
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (1)
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0e8d73d6.7c5e523e929340954.-9076187813155615863@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (1)
+- [SHIPPER_CARRIER_REPLY] conf=0.55 from=dispatch@continentalhaul.com subject='📄 Signed Rate Con · RC-7E516556 · Broker Admin' message_id=<19e0e6fe8bd.3040df53-1439717126.-4134513613164662778@zoho.com>
+    - freight_body_term:\bload\s+(?:#?\s*\w+)\b
+    - auto_ack_pattern:\b(?:rate|load)\s+confirmation\b.*\b(?:confirm(?:ed)?|accepted|booked)\b
+
+### INFORMATIONAL (0)
+(none)
+
+## Hourly review 2026-05-09 21:25 UTC
+
+Total ingested last 75min: 0
+By category: (none)
+By verdict: (none)
+
+### URGENT (require operator attention)
+- (none)
+
+### OPERATOR_REVIEW (next session)
+- (none)
+
+### AUTO_ACK_OK / INFORMATIONAL (logged for completeness)
+- (none)
+
