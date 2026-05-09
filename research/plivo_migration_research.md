@@ -70,7 +70,7 @@ from twilio.rest import Client
 
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 message = client.messages.create(
-    to="+18165609180",
+    to="+18165609180",  # operator personal — replaced 2026-05-08; new business: TF +1-866-490-6433 / local +1-417-219-3856
     from_=TWILIO_PHONE_NUMBER,
     body="SMS content"
 )

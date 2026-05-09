@@ -55,7 +55,7 @@
    PLIVO_AUTH_ID=<from vault>
    PLIVO_AUTH_TOKEN=<from vault>
    PLIVO_PHONE_NUMBER=<temp number from stage 1a provisioning>
-   OWNER_SMS_NUMBER=+18165609180  # unchanged
+   OWNER_SMS_NUMBER=+18165609180  # unchanged (operator personal — replaced 2026-05-08; new business: TF +1-866-490-6433 / local +1-417-219-3856)
    ```
 2. **Smoke battery (6 tests):**
    1. Profile creation success (response code 201)

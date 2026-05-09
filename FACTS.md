@@ -89,7 +89,7 @@ signal to halt the session and re-baseline.
 | Legal Name | **Jason Aaron Meyer** |
 | Preferred Display | "Jason Meyer" or "Jason Aaron Meyer" — both fine |
 | Title | Director / Owner / Founder of Continental Haul Logistics LLC |
-| Personal Cell | +1-816-560-9180 (operator-confirmed 2026-05-08 EOD-16; previously this row incorrectly listed +1-417-219-3856 which is CHL's business 10DLC, not the personal cell) |
+| Personal Cell | +1-816-560-9180 (operator-confirmed 2026-05-08 EOD-16; previously this row incorrectly listed +1-417-219-3856 which is CHL's business 10DLC, not the personal cell) (operator personal — replaced 2026-05-08; new business: TF +1-866-490-6433 / local +1-417-219-3856) |
 | Personal Email | <REDACTED-EMAIL> |
 | Mailing Address | 618 W Greenwood St, Springfield, MO 65807 |
 | User ID (DB) | f3780a65-56f9-48d7-9737-5f54584fd3db |

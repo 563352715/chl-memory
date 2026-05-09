@@ -13,7 +13,7 @@ Operator-confirmed 2026-05-08 EOD-16:
 | `+1-866-490-6433` | Toll-free | Twilio | Continental Haul Logistics LLC | Public-facing customer support |
 | `+1-417-219-3856` | 10DLC long code | Twilio | Continental Haul Logistics LLC | SMS dispatch + voice-forward to operator cell |
 
-**NOT porting:** `+1-816-560-9180` (operator's personal cell, not a CHL number).
+**NOT porting:** `+1-816-560-9180` (operator's personal cell, not a CHL number) (operator personal — replaced 2026-05-08; new business: TF +1-866-490-6433 / local +1-417-219-3856).
 
 ## Twilio-specific port info
 

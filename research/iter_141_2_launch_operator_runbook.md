@@ -30,7 +30,7 @@
   TWILIO_AUTH_TOKEN=<...>
   TWILIO_PHONE_NUMBER=+1<...>
   TWILIO_MESSAGING_SERVICE_SID=MG<...>
-  OWNER_SMS_NUMBER=+18165609180   # already saved
+  OWNER_SMS_NUMBER=+18165609180   # already saved (operator personal — replaced 2026-05-08; new business: TF +1-866-490-6433 / local +1-417-219-3856)
   ```
 - [ ] Restart CHL-Backend (admin shell): `Restart-Service CHL-Backend`
 - [ ] **Empirical SMS smoke test (NOT just env-var presence check):**

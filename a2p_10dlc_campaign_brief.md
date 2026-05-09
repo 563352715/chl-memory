@@ -8,7 +8,7 @@
 
 Continental Haul Logistics LLC (MC 1817555 · USDOT 4569843) is a federally
 registered freight brokerage operating a private carrier network across the
-continental United States. The number `+1 816-560-9180` is **not a marketing
+continental United States. The number `+1 816-560-9180` (operator personal — replaced 2026-05-08; new business: TF +1-866-490-6433 / local +1-417-219-3856) is **not a marketing
 line**. It is a dispatch-operations endpoint used exclusively to send
 **safety-critical and load-operations notifications** to a closed list of
 verified, onboarded owner-operators and W-9-contracted carriers who have
