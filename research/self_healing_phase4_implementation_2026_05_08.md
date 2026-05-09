@@ -421,3 +421,164 @@ to Phase 4 work. No new preflight failures introduced.
 - `chl-memory/research/self_healing_phase1_implementation_2026_05_08.md`
 - `chl-memory/research/self_healing_phase2_implementation_2026_05_08.md`
 - `chl-memory/research/self_healing_phase3_implementation_2026_05_08.md`
+
+---
+
+## TT2 closure (2026-05-08 EOD-14, sub-agent TT2)
+
+This section closes SS1 follow-ups #1 (real metric samplers + SLA
+persistence layer) and #2 (auto_merge_harness REVERT mode). All work
+is wired but uncommitted; doc IS committed to chl-memory.
+
+### A. SLA persistence layer
+
+The `@track_sla` decorator in `backend/sla_monitor.py` captured
+latencies via `record_timing` but persistence was bundled inline. TT2
+factors persistence into a stable `_persist_sla_sample` helper:
+
+```python
+async def _persist_sla_sample(
+    *, db, op_name: str, latency_ms: float,
+    success: bool, recorded_at: datetime,
+    target_ms: Optional[int] = None,
+    error_type: Optional[str] = None,
+    context: Optional[Dict[str, Any]] = None,
+) -> Optional[str]:
+    """Insert one sample into db.sla_metrics. Best-effort: never raises
+    on persistence failure. Returns inserted row id (str) or None."""
+```
+
+`record_timing` now routes through this helper, so the decorator path
++ direct callers (e.g., a future REST endpoint, manual telemetry
+backfill) share one insert path. Idempotency is NOT required (each
+sample is a distinct measurement). 90-day retention is documented as
+future work (separate prune cron).
+
+Failure semantics: the helper wraps `db.sla_metrics.insert_one` in
+try/except; persistence errors are logged + return None. The `@track_sla`
+decorator already runs persistence in an `asyncio.create_task` so the
+wrapped function is fully insulated from persistence failures. TT2
+verifies this with `test_track_sla_persistence_failure_does_not_break_wrapped_fn`.
+
+### B. Real metric samplers
+
+Stubs in `rollback_watcher.METRIC_REGISTRY` are replaced with real
+implementations:
+
+| sampler | source | logic |
+|---------|--------|-------|
+| `_sample_cron_success_rate` | `db.cron_health_events` | success/total ratio in window; canonical `last_run_status='success'` field with legacy `event_type='failed'` fallback; empty -> 100.0 |
+| `_sample_anomaly_volume` | `db.anomalies` | row count in window |
+| `_sample_p95_latency` | `db.sla_metrics` | nearest-rank p95 of `duration_ms` over window; empty -> 0.0 |
+| `_sample_test_pass_rate` | (still stub) | `CHL_TEST_PASS_RATE_OVERRIDE` env var allows manual feed during initial Phase 4 calibration; default 100.0 |
+
+Sample query for p95 (in code):
+
+```python
+cursor = db.sla_metrics.find({"timestamp": {"$gte": cutoff}})
+vals = []
+async for doc in cursor:
+    v = doc.get("duration_ms")
+    if isinstance(v, (int, float)):
+        vals.append(float(v))
+vals.sort()
+n = len(vals)
+raw = 0.95 * n
+ceil_idx = int(raw) + (1 if raw > int(raw) else 0)
+idx = max(0, min(n - 1, ceil_idx - 1))
+return float(vals[idx])
+```
+
+Nearest-rank p95 was chosen over linear interpolation per the SS1
+advisory: it is robust on small-n windows + matches the existing
+`sla_monitor.summarize` percentile math.
+
+### C. auto_merge_harness REVERT mode
+
+`revert_commit_isolated(*, db, commit_hash, ...)` mirrors
+`apply_green_patch_isolated` for revert:
+
+1. Honors the kill-switch (no Phase 2 feature-flag gate -- rollback is
+   a safety op + must run regardless of whether new GREEN merges are
+   armed).
+2. Runs `git show --name-only --pretty=format: <commit_hash>` to derive
+   the touched-file list (input to targeted-pytest discovery).
+3. Creates a temp worktree under `.claude/worktrees/auto_merge_revert_<short>`.
+4. Runs `git revert --no-edit <commit_hash>` inside the worktree.
+5. Runs targeted pytest (same `_candidate_test_paths` heuristic the
+   apply path uses).
+6. On pass: amends the revert commit with prefix `[selfheal:ROLLBACK]`,
+   ff-only-merges back to main.
+7. On fail: cleanup + log a failure row to `db.self_heal_actions`.
+
+`rollback_watcher._default_rollback_patch_applied` is rewired from the
+v1 dry-run to call `revert_commit_isolated(...)` with `log_outcome=False`
+(the watcher's own `_trigger_rollback` writes the audit row, so the
+inner write would duplicate). The `log_outcome` flag was added so direct
+callers still get an audit row by default.
+
+### D. Tests (16/16 pass)
+
+- `backend/tests/test_sla_persistence.py` (3): persist helper inserts
+  row + decorator persistence wired + persistence failure does not
+  break wrapped fn.
+- `backend/tests/test_revert_mode.py` (3): revert aborts on test
+  failure + commits with `[selfheal:ROLLBACK]` prefix + logs
+  self_heal_action (incl. `log_outcome=False` suppress).
+- `backend/tests/test_real_samplers.py` (2): p95 nearest-rank correctness
+  (n=20 -> sorted[18] = 19.0, n=1 -> only value, empty -> 0.0) +
+  cron_success_rate ratio (8 success / 2 fail / 1 out-of-window -> 80%,
+  empty -> 100, all-success -> 100, legacy event_type fallback).
+- `backend/tests/test_rollback_watcher.py` (8): SS1 regression set --
+  all still pass; the rewired `_default_rollback_patch_applied` keeps
+  `kind='patch_revert'` + `commit_to_revert` keys.
+
+### E. Integration test plan (next session)
+
+1. Spin up a temp git repo + commit a known-bad change. Call
+   `revert_commit_isolated` and assert the amend commit message has
+   `[selfheal:ROLLBACK]` prefix + the revert commit lands on main.
+2. Drive `rollback_watcher.watch_for_metric_degradation` end-to-end with
+   real samplers backed by seeded `db.cron_health_events` + `db.anomalies`
+   + `db.sla_metrics` rows. Verify the watcher detects the degradation
+   threshold breach + dispatches `revert_commit_isolated`.
+3. Wire `@track_sla` on a representative router endpoint (e.g.
+   `rfq_inbound._parse_with_ai`) + verify `db.sla_metrics` rows
+   accumulate + `_sample_p95_latency` reads them.
+
+### Status
+
+- Code modified (NOT committed):
+  - `backend/sla_monitor.py` (+72 lines: `_persist_sla_sample` helper +
+    `record_timing` rewire + `__all__` export).
+  - `backend/self_healing/rollback_watcher.py` (+~75 lines:
+    real samplers + `_default_rollback_patch_applied` rewire +
+    `TEST_PASS_RATE_OVERRIDE_ENV` constant).
+  - `backend/self_healing/auto_merge_harness.py` (+~315 lines:
+    `revert_commit_isolated` + `_safe_log_revert` + `_maybe_log` +
+    `__all__` export).
+- Tests added:
+  - `backend/tests/test_sla_persistence.py` (~210 lines, 3 tests).
+  - `backend/tests/test_revert_mode.py` (~270 lines, 3 tests).
+  - `backend/tests/test_real_samplers.py` (~200 lines, 2 tests).
+- pytest: 16/16 pass (8 new + 8 SS1 regression).
+- Preflight: only pre-existing dependency failures (reportlab, openai,
+  twilio, stripe, etc.) -- none caused by TT2 changes.
+
+### TT2 follow-ups (3 highest-priority)
+
+1. **CI webhook for `_sample_test_pass_rate`** -- the only sampler
+   still a stub. Build a `db.ci_runs` collection populated by the
+   GitHub Actions workflow's delivery webhook; replace the env-var
+   override path with a real query (last N runs, ratio of
+   `conclusion='success'`).
+2. **SLA prune cron (90-day retention)** -- `_persist_sla_sample` is
+   append-only with no retention cap. A nightly cron that deletes
+   `db.sla_metrics` rows where `timestamp < (now - 90d)` keeps the
+   collection bounded. Easy add: ~30 LOC + 1 test.
+3. **End-to-end smoke against a real git repo** -- TT2's revert-mode
+   tests mock `_run_git`. Add an integration test (gated by an env
+   var so it does not run in CI) that operates on a tmp git repo
+   with a real commit + verifies `revert_commit_isolated` actually
+   ff-merges the revert commit. Closes the gap between unit-test
+   coverage + production-shell behavior.
