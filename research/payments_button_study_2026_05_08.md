@@ -1,5 +1,74 @@
 # Payments Button Study -- 2026-05-08 (EOD-16-late)
 
+## 0. OPERATOR CORRECTIONS 2026-05-08 EOD-16-late (supersede sections 5-9 below)
+
+**Correction A:** "We factor our invoices"
+
+Initial Framing A in section 5 ("Receivables / shipper AR aging") is conceptually
+wrong. CHL never collects shipper-AR -- the factor collects directly from the
+shipper. Real money flow:
+
+  1. Load completes -> CHL generates invoice.
+  2. CHL submits invoice to factor (RTS / OTR / Apex / Triumph).
+  3. Factor advances CHL ~80-95% of invoice within hours.
+  4. Factor collects from shipper directly.
+  5. Factor releases reserve (~5-20% minus fee) to CHL when shipper pays.
+
+The corrected sub-tabs for "Cash Flow" (if not hiding outright):
+
+- **Factor Submissions** -- invoice -> submitted -> advanced (status, amounts,
+  factor name, age). This IS what the operator wants visibility into; replaces
+  Framing B as the primary view.
+- **Reserve Releases** -- pending releases + completed releases (tracks factor
+  collection latency from shipper).
+
+The original "Receivables" framing is OBSOLETE. Drop it.
+
+**Correction B:** "Stripe stays wired up but idle so we can pivot"
+
+Do NOT deprecate Stripe Checkout (`POST /api/payments/checkout`) or Stripe
+Connect (PendingCarrierPayouts). Keep both paths wired and idle. Operator
+preserves optionality: if CHL ever needs to take direct shipper payments
+(e.g., a shipper insists on credit card via CHL rather than ACH-to-factor)
+or pay a carrier directly (e.g., factor declines a load), the rails are
+still warm.
+
+Section 6 and 7 recommendations to "DEPRECATE Stripe Checkout" and the
+implied removal of Stripe Connect pay-now path are SUPERSEDED. Both stay.
+
+**Correction C:** Operator-explicit: "If we don't need a Payments button,
+maybe we can hide it somewhere?"
+
+Operator is green-lighting code action. Sub-section 6.5 below documents the
+chosen execution path: hide the Payments tab from primary navigation; leave
+all code + backend modules + db.payments collection in place; PaymentsView
+remains accessible via direct URL hash for dev/diagnostics if ever needed.
+
+## 6.5. Updated execution path (HIDE, not delete)
+
+Operator-confirmed action 2026-05-08 EOD-16-late:
+
+| Action | Status |
+|---|---|
+| Top-bar Payments tab nav entry | REMOVE from primary navigation |
+| `PaymentsView` component | KEEP (no breaking change) |
+| db.payments collection | KEEP (load-bearing for 7+ modules) |
+| `/api/payments/*` backend endpoints | KEEP (other code depends) |
+| Stripe Checkout `/api/payments/checkout` | KEEP wired idle |
+| Stripe Connect (PendingCarrierPayouts) | KEEP wired idle |
+| Carrier-side "My Payments" tab | KEEP for now (carrier-facing surface; separate decision pending) |
+| New "Cash Flow" tab | OUT OF SCOPE this iter -- defer until self-healing AI ships first |
+
+This is the lowest-risk execution: removes the operator-irritation surface
+without touching any data or money paths. PaymentsView can be unhidden in
+~30 seconds by re-adding the nav entry if operator ever needs it back.
+
+Code change: delete the single nav-array entry for `id: "payments"` in
+`frontend/src/App.js`. No imports removed (PaymentsView still defined).
+No backend touched.
+
+---
+
 ## 1. Operator question (verbatim)
 
 > "study why we might need the payments button if we never intend to pay anyone except for t use factoring for all payments"
