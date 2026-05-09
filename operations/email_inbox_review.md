@@ -179,3 +179,19 @@
 
 ### AUTO_ACK_OK / INFORMATIONAL (0)
 (none)
+
+## Hourly review 2026-05-09 11:26 UTC
+**Window**: last 75 min (since 2026-05-09T10:11 UTC).
+**Total ingested last 75min**: 0
+**By category**: (none)
+**By verdict**: (none)
+**Note**: poller still healthy per prior cycle's check (last_run_at within last few minutes; messages_ingested:0). Zoho INBOX genuinely empty.
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (0)
+(none)
+
+### AUTO_ACK_OK / INFORMATIONAL (0)
+(none)
