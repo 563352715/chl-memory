@@ -703,4 +703,198 @@ their "no pending / no unacked" empty-state cards.
 - MOD `chl-memory/research/self_healing_phase3_implementation_2026_05_08.md`
   (this section)
 
-End of SS3 closure section. End of implementation doc.
+End of SS3 closure section.
+
+---
+
+## TT1 closure -- Real Anthropic client wrapper (2026-05-08 EOD-14)
+
+Stream TT1 lands the real Anthropic client wrapper that swaps in for
+RR3's stub `factory=None` mode once Phase 3 is activated. Without this
+module the loop runs in safe-mode forever -- every event routes to
+`dev_review_queue` because no LLM call is ever made. TT1 is the
+"plug it in" stream: production wiring + httpx auth + JSON parsing +
+defense-in-depth at the LLM-call boundary.
+
+### Files added (TT1)
+
+- ADD `backend/self_healing/_llm_client_anthropic.py` (~440 lines) --
+  the wrapper module. Two public entrypoints: `make_factory(*,
+  http_timeout_sec, max_tokens, model)` and
+  `call_anthropic_for_recommendation(*, http_client, context,
+  max_tokens, model)`.
+- ADD `backend/tests/test_llm_client_anthropic.py` (~330 lines) --
+  6 unit tests covering factory construction, stub fallback, prompt
+  shape, response parsing (3 sub-cases), safe-fallback (5 sub-cases),
+  forbidden-path RED-override (12 sub-cases).
+- MOD `backend/cron_scheduler.py` -- updated CRON 12 commented block
+  to reference `make_factory()` + document the 5-step activation
+  runbook (env var, env var, vault confirm, uncomment, NSSM restart).
+
+### Factory pattern
+
+`make_factory(*, http_timeout_sec=30.0, max_tokens=2048,
+model="claude-3-5-sonnet-20241022")` returns a closure suitable for
+passing to `llm_reasoning_loop.reasoning_tick(http_client_factory=...)`.
+
+Resolution order for the API key:
+
+1. `backend.security.secret_reader.get_secret("ANTHROPIC_API_KEY")` --
+   vault-first (DPAPI/Fernet store at
+   `C:\CHL\data\secrets_store.json`).
+2. `os.environ.get("ANTHROPIC_API_KEY")` -- fallback.
+3. `None` -- safe-mode degradation.
+
+When the key resolves: factory builds an `httpx.AsyncClient` with
+`x-api-key` + `anthropic-version` + `content-type` headers bound and
+caches it as a singleton. The closure is decorated with
+`._stub=False`, `._model=...`, `._max_tokens=...` attrs so the
+cron_scheduler log line can report which mode the loop is running in.
+
+When the key is missing: factory returns a `_StubAsyncClient` whose
+`.post(...)` always responds with `503` + an error body. The reasoning
+loop's existing `_call_llm_for_recommendation` sees the non-200 + falls
+through to its YELLOW dev-review-queue fallback. Net effect: a missing
+API key NEVER silently auto-merges anything -- the platform routes all
+events to human review until the operator vaults the key.
+
+### System prompt design
+
+The prompt in `SYSTEM_PROMPT_TEMPLATE` instructs the LLM to:
+
+- Identify itself as the embedded self-healing supervisor for
+  Continental Haul Logistics, a freight brokerage SaaS.
+- Receive an event drawn from one of four backend streams + similar
+  past events.
+- Recommend ONE action from {`cron_restart`, `patch_apply`,
+  `weight_adjust`, `noop`}.
+- Output a single JSON object with EXACTLY these keys: `tier`
+  (GREEN/YELLOW/RED), `action`, `confidence` (0.0-1.0), `reasoning`
+  (1-3 sentences), `affected_files` (repo-relative paths).
+- Output ONLY the JSON object. No prose preamble. No markdown fences.
+
+Tiering rules (load-bearing in the prompt):
+
+- GREEN with confidence >= 0.85 ONLY if the LLM has seen the exact
+  pattern before AND the action falls in a documented GREEN class:
+  test fixture update / log level adjustment / dependency pin bump /
+  typo fix / missing import / retry tuning.
+- YELLOW = needs human review (default when in doubt).
+- RED = operator escalation. ALWAYS RED for events touching auth,
+  payments, FMCSA, Telnyx, JWT, schema migrations.
+
+Forbidden paths enumerated in the prompt (force tier=RED):
+
+- `backend/auth/`, `backend/security/`, `backend/integrity/`,
+  `backend/self_healing/` (recursion bug), `db.payments`, `fmcsa_*`,
+  `stripe_*`, `telnyx_*`, `jwt_*`, `schema_migration`,
+  `backend/cron_scheduler.py`, `backend/health_monitor.py`,
+  `backend/sla_monitor.py`.
+
+### Safe fallback
+
+`_safe_fallback(reason)` returns `{tier:"RED", action:"noop",
+confidence:0.0, reasoning:<reason>, affected_files:[]}`. Used on:
+
+- HTTP exception during `client.post(...)` (e.g. DNS failure, timeout).
+- non-200 HTTP status (e.g. Anthropic 429 / 500 / 503).
+- Body that's not a JSON object.
+- Body whose `content[0].text` is missing or empty.
+- Text that isn't valid JSON (after code-fence stripping).
+- `http_client is None`.
+
+RED routes to `urgent_alert` in the loop -- operator sees the broken
+signal immediately AND it never auto-merges. Confidence=0.0 so even
+under defective downstream tier-mapping, the
+`MIN_CONFIDENCE_FLOOR=0.30` gate routes it to `read_only_log` not
+`dev_review_queue`.
+
+### Recursion guard reinforcement at the LLM-call layer (defense-in-depth)
+
+The platform now has THREE independent layers preventing the LLM from
+modifying the self-heal infrastructure:
+
+  Layer 1 (NEW, this stream) -- `_llm_client_anthropic._validate_and_coerce`
+  forces tier=RED at parse time if the LLM returned GREEN/YELLOW with
+  any forbidden-path file in `affected_files`. Even if the LLM ignores
+  the prompt's forbidden-path enumeration, the wrapper overrides at the
+  HTTP boundary. The original LLM reasoning is preserved in the
+  override message ("Original reasoning: ...") for audit trail.
+
+  Layer 2 (RR3) -- `llm_reasoning_loop._apply_recursion_guard` re-checks
+  every recommendation at routing time + forces RED for any
+  `affected_files` matching the loop's `RECURSION_GUARD_PATTERNS` regex
+  set.
+
+  Layer 3 (QQ2) -- `patch_classifier.classify_patch` deterministic
+  regex-based RED gate at patch-application time. If a patch ever
+  reaches `auto_merge_harness.apply_green_patch_isolated`, the harness
+  re-classifies defensively + bails on non-GREEN.
+
+This is the explicit `defense-in-depth` posture from MM4 advisory
+section 5.5: the LLM is reasoned-with, not trusted. Three independent
+deterministic checks all have to be bypassed for a self-modifying
+recommendation to reach disk -- the system is safe-by-default even if
+the LLM is jailbroken or returns adversarial output.
+
+### Activation runbook (5 steps)
+
+```powershell
+# 1. Feature flag
+C:/CHL/scripts/set_env_var.ps1 -Key CHL_SELF_HEAL_PHASE3_ENABLED -Value "true"
+
+# 2. Daily LLM budget cap
+C:/CHL/scripts/set_env_var.ps1 -Key CHL_SELF_HEAL_LLM_DAILY_CAP_USD -Value "30"
+
+# 3. Confirm ANTHROPIC_API_KEY is in the secrets vault.
+# (Use the vault helper / scripts/migrate_secrets_to_vault.py to add
+# if not present. _resolve_api_key() handles the vault-first lookup
+# with env-fallback automatically.)
+
+# 4. Uncomment the CRON 12 block in backend/cron_scheduler.py.
+# The block now imports make_factory + passes the factory to
+# llm_reasoning_loop_supervisor.
+
+# 5. Restart the NSSM service.
+nssm restart chl-backend
+```
+
+### Test results (TT1)
+
+`pytest backend/tests/test_llm_client_anthropic.py -v` -- 6/6 PASS in
+0.53s on Python 3.14.4 / pytest-9.0.3.
+
+Combined TT1 + RR3 regression:
+`pytest backend/tests/test_llm_client_anthropic.py
+backend/tests/test_llm_reasoning_loop.py -v` -- 16/16 PASS in 0.80s.
+
+The 6 TT1 tests:
+
+1. `test_factory_returns_callable_when_key_present` -- factory builds
+   real client + caches singleton.
+2. `test_factory_returns_stub_when_key_missing` -- factory returns
+   stub; stub.post() yields 503.
+3. `test_call_anthropic_builds_correct_system_prompt` -- request body
+   shape + prompt language assertions (FORBIDDEN PATHS, recursion
+   warnings, GREEN/YELLOW/RED tiering, 0.85 threshold, JSON-only).
+4. `test_call_anthropic_parses_valid_json_response` -- happy path,
+   code-fence stripping, confidence clamping.
+5. `test_call_anthropic_returns_safe_fallback_on_parse_failure` -- 5
+   sub-cases (HTTP 500, empty content, non-JSON text, exception, None
+   client).
+6. `test_call_anthropic_forces_RED_when_LLM_recommends_forbidden_path`
+   -- 12 forbidden paths; YELLOW also overridden; safe path passes
+   through unchanged.
+
+Preflight: `20 issues found` -- all 20 are pre-existing missing-package
+import failures (reportlab, openai, twilio, stripe, cryptography,
+email-validator, psutil). NONE reference `_llm_client_anthropic` or any
+TT1 surface. Matches RR3 baseline exactly.
+
+### Code-not-committed posture
+
+Per the TT1 brief, code is left UNCOMMITTED on the dev side; only this
+doc is committed to chl-memory. The operator green-lights the code
+commit + the activation steps together.
+
+End of TT1 closure section. End of implementation doc.
