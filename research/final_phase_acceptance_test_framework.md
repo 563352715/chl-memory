@@ -239,4 +239,73 @@ python -m pytest backend/tests/synthetic_load_walkthrough.py -v
 2. **Promote stage 17 (late-checkcall) to fully use the real `exception_detector.scan_for_exceptions`** -- requires extending the harness's in-memory async-Mongo fake to support every query the scanner uses (currently it falls back to direct insert if scanner doesn't pick up the synthetic load).
 3. **Add stage 22-25 candidates:** carrier-tier promotion (bronze/silver/gold), shipper credit override revocation, ETA-slip predictive vs. actual reconciliation, factor approval-vs-decline branch.
 
+---
+
+## Update 2026-05-08 EOD-15 (Stream QQ3): Stages 22-25 IMPLEMENTED (v2)
+
+**Status:** the walkthrough is now 25 stages LIVE at `backend/tests/synthetic_load_walkthrough.py` (~2269 lines, all 26 tests pass = 25 stages + summary, 0.28s total wall-clock across stages, 0.41s full pytest suite). EE2's #3 follow-up landed.
+
+**Run command (unchanged):**
+
+```
+python -m pytest backend/tests/synthetic_load_walkthrough.py -v
+# or, with smoke wrapper that sets per-run DB env vars:
+.\scripts\run_walkthrough.ps1
+```
+
+**The 4 added stages (22-25):**
+
+| # | Stage | Production code path | Mock boundary |
+|---|-------|----------------------|---------------|
+| 22 | Carrier-tier promotion | direct DB write to `carriers` + `audit_trail` | tier-promotion cron MISSING (harness inlines state machine) |
+| 23 | Shipper credit-override revocation | direct DB write to `shippers` + `payment_events` + `audit_trail` | revocation cron MISSING (harness inlines logic) |
+| 24 | Predictive ETA-slip vs actual reconciliation | **REAL** `lane_evaluator._normalize_lane` + **REAL** `tracking.exception_detector.haversine_miles` | lane_evaluator's `eta_accuracy` field MISSING -- harness writes to parallel `db.lane_eta_accuracy` collection |
+| 25 | Factor approval-vs-decline branching (BOTH paths) | direct DB write to `factor_submissions` + `alerts` + `collection_workflows` + `audit_trail` | HaulPay/Triumph external API calls MOCKED (`external_call_mocked=True`); `factors.factor_submission_router` not invoked because it requires HTTP/operator-approval queue |
+
+**Per-stage detail:**
+
+### Stage 22 -- Carrier-tier promotion
+
+Seeds carrier with `tier=watch`, `successful_load_count=N-1` (N=5 threshold). Stage simulates a delivered load and increments the success counter. When count crosses threshold AND tier=watch, code flips to `tier=preferred` and stamps `tier_promoted_at`/`tier_promoted_from`/`tier_promoted_reason`. Asserts:
+- `successful_load_count` == threshold post-increment
+- `tier` flips watch -> preferred
+- audit_trail row with action=`carrier_tier_promoted` and before/after delta captured
+
+### Stage 23 -- Shipper credit-override revocation
+
+Seeds shipper with `credit_score=540` + `credit_score_override=true` (operator-set). Stage records a `payment_events` row with `event_type=payment_failed` (Mercury ACH-fail simulation). Code asserts the override is currently true, then flips it to false with `override_revoked_at`/`override_revoked_reason=auto:payment_failed_event`/`override_revoked_event_id`. Final assertion: with override now false + credit_score 540, the credit gate would block the next load (proves the next-load credit-check kicks back in). Audit-trail row asserted.
+
+### Stage 24 -- Predictive ETA-slip vs actual reconciliation
+
+Seeds load with `predicted_eta` and an `actual_arrival` 75 minutes later (above 30-min slip threshold). Imports the real `lane_evaluator._normalize_lane` to compute the lane key + the real `tracking.exception_detector.haversine_miles` to compute lane miles. Writes:
+- `db.lane_eta_accuracy` row keyed `<origin_city>_<state>__<dest_city>_<state>__<carrier_mc>` with `$inc` on sample_count + total_slip_minutes + slip_breach_count
+- `db.eta_reconciliations` per-load row with predicted/actual/slip_minutes/breached flag
+
+Asserts: lane metric updated (sample_count >= 1, slip_breach_count >= 1), reconciliation row has breached=true.
+
+### Stage 25 -- Factor approval-vs-decline branching
+
+Tests BOTH paths in one stage:
+
+**Branch A (approval):** Submit invoice to `haulpay`, factor returns approved with 95% advance ($1425 of $1500). Asserts factor_submissions.status=approved, broker_invoices.status=factored, audit-trail action=factor_approved.
+
+**Branch B (decline):** Submit invoice to `haulpay`, factor returns declined with reason=`shipper_credit_insufficient`. Stage asserts:
+- `db.alerts` row with type=factor_declined, severity=high, notification_queued=true (delivery MOCKED)
+- Retry submission to alternative factor (`triumph`) with `retry_of=<original_id>` and `retry_reason` populated
+- Fallback `db.collection_workflows` row queued with `trigger=factor_decline_fallback`, stage=direct_collection_queued
+- audit-trail rows for both `factor_declined` and `factor_retry_dispatched`
+
+**Production-code hooks discovered missing during this stream:**
+
+1. **`carrier_tier_promoter` cron MISSING** -- no `backend/carrier_tier_promoter.py` exists. The watch -> preferred transition is currently un-automated. Stage 22 inlines the state machine; recommend a cron that runs against `db.carriers` after `delivered_load_autofire` and flips tier when `successful_load_count` crosses configured thresholds (watch -> preferred at 5; preferred -> elite at 25; demotion paths on failure-rate breach). Audit-trail emit on every flip.
+2. **`credit_override_revoker` cron MISSING** -- no service subscribes to `db.payment_events.event_type=payment_failed` to flip `shippers.credit_score_override`. Stage 23 inlines the logic; recommend a cron that runs every N min (or webhook-driven via Mercury/factor portal events) and revokes outstanding overrides on payment failure.
+3. **`lane_evaluator.eta_accuracy` field MISSING** -- production `LaneEvaluator.get_reliability_data` returns delivered-on-time-rate from `db.loads`, but doesn't expose a per-lane+per-carrier ETA-accuracy metric or a slip-breach counter. Stage 24 writes to a parallel `db.lane_eta_accuracy` collection; recommend extending `FractalEvaluator.get_reliability_data` with an eta-accuracy sub-component, or wiring the parallel collection into the LaneEvaluator scoring path.
+4. **`factor_decline_alert + retry_dispatcher` MISSING orchestrator** -- `factors/factor_submission_router.py` handles the operator-approval queue but not the post-submission reconciler that processes factor APIs returning declined. Stage 25 inlines the alert + retry-to-alternative + fallback-to-direct-collection state machine; recommend a `backend/factor_decline_handler.py` orchestrator that consumes factor API decline responses, fires alerts, attempts retry against the next-best factor in the matrix, and queues direct-collection if all factors decline.
+
+**Follow-ups (priority-ordered) for next stream:**
+
+1. **Stages 26-30 candidates:** accessorial billing (lumper / chassis / detention re-charge after operator approves), claim escalation (insurance underwriter handoff after carrier denies liability), Mercury reconciliation 3-signal (email + Mercury + factor portal poll), shipper scorecard auto-update on POD outcome, cross-broker handoff (load referred to partner broker).
+2. **Wire production hooks:** build the 4 missing services flagged above (carrier_tier_promoter, credit_override_revoker, lane_evaluator.eta_accuracy extension, factor_decline_handler). Each is ~150-300 LOC with cron + tests.
+3. **Promote stage 24 to use real lane_evaluator scoring** once `lane_evaluator.eta_accuracy` field lands -- replace the parallel collection write with a direct call to the scoring API.
+
 
