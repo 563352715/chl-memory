@@ -126,3 +126,98 @@ These are ~5% of operator-time at scale; that 5% is the operator's actual job. E
 - `feedback_autonomous_continue_until_build_complete.md` — "complete the build" now means: close the autonomy gap defined here. NOT add net-new features.
 - `project_may_14_platform_readiness_deadline.md` — May 14 is PHASE A only. PHASE B starts May 15.
 - The build tree in `chl-memory/progress/current_status.md` — that's a feature-axis view; this is a capability-axis view. Both stay live.
+
+---
+
+## VALIDATION TIER (operator-mandated 2026-05-09)
+
+Per `~/.claude/projects/c--CHL/memory/feedback_validate_findings_before_acting.md`: only act on items where operator's canonical reference AND at least one agent report agree. Defer single-source items until tomorrow's deeper research. Critical fraud-prevention items (NOA, authority-age, phone-FMCSA) are exempt from "wait" rule because cost-of-not-doing >> cost-of-doing.
+
+### TIER 1 — VALIDATED (overlap; act now)
+
+These appear in BOTH operator's canonical reference AND at least one agent report. Proceed.
+
+| # | Fix | Operator ref location | Agent confirmation |
+|---|---|---|---|
+| 1 | Auto-send dispatch packet on booking | Phase 3 "send specific pickup address + numbers to driver" | Capability audit gap #1 |
+| 2 | Cron settlement trigger 24h post-factor-funding | Phase 5 "use these funds to pay carrier's invoice" | Capability audit gap #2 |
+| 3 | NOA detection + payment routing | Phase 4 "if carrier factors, NOA tells you to pay their bank not them" | Research agent fraud playbook + capability audit gap |
+| 4 | Detention/layover auto-detect | Phase 3 "verify driver arrived, loaded, departed" | Research agent #1 + capability audit gap #4 |
+| 5 | POD red-flag auto-escalation | Phase 4 POD collection | Research agent #2 + capability audit gap #8 |
+| 6 | Schedule-of-Accounts batch submission | Phase 5 "Submit Schedule of Accounts" | Research agent #4 |
+| 7 | Factor decline auto-reroute (test + production-wire) | Phase 5 implied (factor verification) | Research agent #4 + capability audit gap #8 |
+| 8 | Per-load carrier re-vetting (auth-age + phone-FMCSA + recent-inspections combined) | Phase 2 "Vetting Checklist" red flags | Research agent #3 (fraud surge $725M, +60% YoY) |
+
+### TIER 2 — CRITICAL-FRAUD EXEMPT (single-source but proceed anyway)
+
+Cost-of-not-doing >> cost-of-doing. Even though only operator-source, fraud exposure is real.
+
+| # | Fix | Operator ref location | Why exempt |
+|---|---|---|---|
+| 9 | Authority-age check (<90 days) | Phase 2 red flag | Specific filter recommended by canonical source |
+| 10 | Phone-FMCSA cross-check | Phase 2 red flag | Specific filter recommended by canonical source |
+
+(These are the components of #8 above — listed separately for engineering tractability.)
+
+### TIER 3 — UNVALIDATED (defer until tomorrow's deeper research)
+
+Single-source items. Hold pending validation. **Don't dispatch yet.**
+
+#### Operator-only (need agent confirmation)
+
+| Item | Reason for hold |
+|---|---|
+| Shipper anonymization on board posts | Need to confirm anti-back-solicit is actually how brokers post (or if board hides shipper natively) |
+| Insurance call-the-agent automation | Hardest to automate; need to validate alternative (auto-email confirmation may suffice) |
+| Recent-inspections lookup as standalone | May be redundant if SAFER CSA data covers it |
+| Pre-quote shipper credit gate | `factor_credit_lookup.py` may already partially do this — needs audit |
+
+#### Agent-only (need operator confirmation in tomorrow's review)
+
+| Item | Reason for hold |
+|---|---|
+| SMS-to-carrier-interest bridge | Operator's reference shows web/email; SMS may not match operator's actual carrier-comms preference |
+| Email-to-carrier-interest bridge | Same as above |
+| SMS POD submission | Operator may prefer driver web/email POD as today |
+| Counter-offer workflow | Operator may want all counters to escalate to human; not autonomous |
+| DAT/Truckstop external scraper | Large effort; operator may prefer to keep load-source = inbound-only initially |
+| Carrier load-board fraud monitor | Same as above — depends on whether DAT integration goes live |
+| CSA / SaferDB integration | Large effort; may overlap with operator's "recent-inspections" item |
+| Bank API listener for shipper payment | **REMOVED — `we factor our invoices` rule says factor handles collection. Not our concern.** |
+| Shipper portal | Operator may want operator-relay-only by design |
+| Carrier portal | QROnboard.jsx exists; scope unclear |
+| Multi-broker offer dedup | Requires multi-broker network — may not be in CHL solo-broker scope |
+
+### What changed because of "we factor our invoices"
+
+- **Bank API listener removed** from the build plan. Factor collects from shipper; we don't track shipper-side direct payment.
+- **AR dunning re-scoped** — targets factor-declined invoices and direct-pay edge cases, NOT default-state shipper invoices.
+- **Settlement cron clarified** — "24h post-factor-funding," not "24h post-shipper-payment."
+- **Schedule-of-Accounts elevated** — this is the canonical broker→factor handoff. TIER 1.
+- **Stripe stays wired but idle** for pivot-ability. Phase 5 = factoring. Period.
+
+---
+
+## Updated PHASE B.1 (TIER-1 + TIER-2 only — what we ship May 15-19)
+
+8 fixes, all VALIDATED or fraud-exempt. Estimated 60% → 80% autonomous after this batch.
+
+1. Auto-send dispatch packet on booking (Small)
+2. Cron settlement trigger 24h post-factor-funding (Small)
+3. NOA detection + payment routing (Small/Medium)
+4. Authority-age check (<90 days) (Small)
+5. Phone-FMCSA cross-check (Small)
+6. POD red-flag auto-escalation (Small)
+7. Schedule-of-Accounts batch submission (Medium)
+8. Factor decline auto-reroute production-wire (Medium)
+
+Detention/layover auto-detect (TIER-1) and per-load re-vetting harness (TIER-1) move to B.2 because they're medium effort.
+
+---
+
+## What gets reviewed tomorrow
+
+Operator + dev walk through TIER-3 list. For each item, decide:
+- **Validate** (proceed in B.2/B.3)
+- **Defer** (out of scope for this build; revisit later)
+- **Reframe** (operator clarifies the real need; rewrite the item)
