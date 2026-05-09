@@ -1,12 +1,21 @@
 # Current status
 
-**Last updated:** 2026-05-08 EOD-16 cap-cycle 5 close. Latest commit on main: `512700f` (3rd close handoff doc). Latest code commit: `3899bb3` (II1 -- Stripe security trio). Backend at started_at=22:08:47 UTC, 54/58 modules healthy + 4 known idle-cron-degraded. 7 batches shipped autonomously this session over ~4h (CC+DD+EE+FF+GG+HH+II = 22 streams, ~440 new tests, 0 STOP CONDITIONS). Bridge cumulative: ~10 iters / ~80+ stages / ~570+ smoke tests.
+**Last updated:** 2026-05-09 EOD-17 close (cap-cycle 6 -> 7 boundary). Latest commit on main: `ce5cb40` (VV2 Stripe webhook hardening). Recent ship chain: `f3e1c88` (TT1+TT2+TT3 self-heal Phase 3+4) -> `c18479b` (VV1 personal cell cleanup) -> `ce5cb40` (VV2). Operator went to sleep ~03:40 UTC with directive "Keep going through the night. Continue to outsource work to all resources that are available. I want to complete the build ASAP". Bridge cumulative: **~11 iters / ~85+ stages / ~610+ smoke tests / 0 STOP CONDITIONS.**
+
+**In-flight overnight (will land before next session):**
+- UU1: Cost-monitoring dashboard for Phase 3 (Anthropic per-token pricing, spend recorder, aggregator, owner widget, integrity.budget_caps wiring).
+- VV3: IMAP poller multi-folder + auto-move handled to `Handled/<lane>` (CC1).
+- WW1: Operator-push consumer activation runbook (TT3 closure -- drains `db.operator_push_queue`).
+- WW5: Live Anthropic client smoke test (TT1 closure -- one real call, hard-gated by `--confirm-live`).
 
 **Pending operator actions (top of mind):**
-1. CRITICAL: provision STRIPE_WEBHOOK_SECRET via `scripts/set_env_var.ps1` (until then webhook returns 503).
-2. Hard-refresh browser (Ctrl+Shift+R) -- DD batch rotated JWT_SECRET, browser tokens invalidated.
-3. 8 operator-surface decisions queued in `memory/handoff_session_2026_05_08_eod16_close_v3.md`.
-4. Telnyx signup (in flight 2026-05-08 evening per operator).
+1. Re-upload v2 Telnyx LoA to sr_edc875 (file: `memory/CHL_Telnyx_LoA_TollFree_v2_2026_05_08.pdf`; has the required "Port to QIT02" phrase).
+2. Submit Toll-Free Messaging Use Case + Hosted SMS request on Telnyx portal (only for `+1-866-490-6433`).
+3. Pick canonical Phase 3 flag name (`CHL_EMBEDDED_REASONING_LOOP_ENABLED` vs `CHL_SELF_HEAL_PHASE3_ENABLED`).
+4. Set revenue activation threshold for Phase 3 (recommended ≥$5k/mo or ≥25 loads/wk sustained 30 days).
+5. Activate Self-Heal Phase 1 (cron supervisor) -- recommended sequence 1->24h->2->48h->4->3-post-revenue.
+6. Run `seed_renewals.py` + `prune_env_after_vault_migration.py` + `rotate_master_key.py --apply`.
+7. Telnyx FOC confirmations May 14-15 (auto-arrive; queue voice-forward + env vars + Plivo deactivate + Twilio close).
 
 **Cap-cycle 5 features shipped:** Multi-folder IMAP polling + auto-folder | Auth hardening (JWT hard-fail, failover gates, XFF, 2FA scaffold, login rate limit) | DPAPI secrets store foundation | Pipeline Walkthrough + Aggregates UI | 21-stage synthetic walkthrough test framework | Detention service (per-shipper, multi-stop) | Phase 10.1 RSS scraper (parser + fetcher + rate-limit + HTML scaffold) | carrier_redispatch_workflow orchestrator | Stripe webhook signature verification (CRITICAL: bundled shim did NO verification; explicit construct_event added) | audit_trail completeness across 7 collections.
 
@@ -66,15 +75,22 @@ CHL Platform Build Tree (as of 2026-05-09 ~03:30 UTC; through SS batch in flight
 │
 ├─ Phase 8 / Phase 10: substrate (see Phase 2 sub-tree above)
 │
-├─ Phase 9 (Vision): Self-Healing Infrastructure [🔄 4-PHASE SCAFFOLDS COMPLETE; activation flag-gated]
+├─ Phase 9 (Vision): Self-Healing Infrastructure [🔄 4-PHASE SCAFFOLDS+CLIENTS COMPLETE; activation flag-gated]
 │  ├─ Iter 145.1 stages 1a/1b/1c (anomaly + context + patch-propose) [✅]
 │  ├─ Stage 1d outcome-feedback schema [✅ EOD-7]
 │  ├─ Trust-gate matrix LOW/MED/HIGH [✅]
 │  ├─ Phase 1 SCAFFOLD (PP1; cron self-resurrection + memory log + frontend tab) [✅; flag-gated CHL_SELF_HEAL_PHASE1_ENABLED]
 │  ├─ Phase 2 SCAFFOLD (QQ2; GREEN-tier auto-merge classifier + isolated harness) [✅; flag-gated CHL_SELF_HEAL_PHASE2_ENABLED]
 │  ├─ Phase 3 SCAFFOLD (RR3; LLM reasoning loop + 4 event subscribers + tier×confidence routing) [✅; flag-gated CHL_SELF_HEAL_PHASE3_ENABLED]
+│  ├─ Phase 3 LLM CLIENT (TT1; real Anthropic wrapper + 3-layer recursion guard + safe-fallback; 16/16 pass) [✅]
+│  ├─ Phase 3 cost dashboard (UU1; in flight) [🔄]
 │  ├─ Phase 4 SCAFFOLD (SS1; rollback metric watch + 4 metrics + auto-rollback dispatch) [✅; flag-gated CHL_SELF_HEAL_PHASE4_ENABLED]
-│  └─ Frontend visibility surfaces (SS3 in flight; Reviews + Alerts tabs)
+│  ├─ Phase 4 REAL SAMPLERS + REVERT MODE (TT2; cron success / anomaly volume / p95 latency real queries; auto_merge_harness.revert_commit_isolated mirror; 8/8 pass) [✅]
+│  ├─ Operator push notify (TT3; db.operator_push_queue producer + bulk_reject/bulk_ack endpoints; 12/12 pass) [✅]
+│  ├─ Push consumer activation (WW1; in flight) [🔄]
+│  ├─ Live LLM smoke test (WW5; in flight) [🔄]
+│  ├─ Verifier-gate (post-TT batch; 42/42 SHIP verdict, no contract drift, no recursion risk) [✅]
+│  └─ Frontend visibility surfaces (SS3; Reviews + Alerts tabs) [✅]
 │
 ├─ Phase 11 (NEW): Renewals Platform Feature [✅ COMPLETE]
 │  ├─ Backend renewals package (KK1; calculator + scanner + router; 6h cron) [✅]
@@ -110,9 +126,10 @@ CHL Platform Build Tree (as of 2026-05-09 ~03:30 UTC; through SS batch in flight
 │  ├─ FF1 sweep: loads + carrier_assignments + carrier_vetting [✅]
 │  └─ GG1 expansion: factor_submissions + cargo_claims + payments + factor_disputes [✅; transition_payment_status helper]
 │
-├─ Cross-cutting: Stripe webhook hardening [✅ COMPLETE]
+├─ Cross-cutting: Stripe webhook hardening [✅ COMPLETE; deepened VV2]
 │  ├─ II1 signature verification + idempotency + savings_sweep parity [✅]
-│  └─ Auth-bypass + guard-order fixes (post-II1) [✅]
+│  ├─ Auth-bypass + guard-order fixes (post-II1) [✅]
+│  └─ VV2 deeper hardening: 5min timestamp tolerance + 1MiB body cap + 60rpm/IP token-bucket + audit-log per event (commit `ce5cb40`; 8/8 + II1 regression 8/8) [✅]
 │
 ├─ Cross-cutting: Secrets Vault [✅ FOUNDATION + Phase 1; Phase 2 tools ready]
 │  ├─ DPAPI/Fernet store (DD3) [✅]
