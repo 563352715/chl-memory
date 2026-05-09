@@ -579,4 +579,128 @@ The advisory's 4-phase plan ends with:
 - `~/.claude/projects/c--CHL/memory/feedback_verifier_gate_pattern.md`
   (verifier-gate pattern for batch-parallel orchestration)
 
-End of implementation doc.
+---
+
+## Visibility Surfaces (SS3 closure -- 2026-05-08 EOD)
+
+Stream SS3 ships the operator-facing surfaces over the two persisted
+queues that Phase 3's `llm_reasoning_loop` writes to. Without these
+surfaces, `db.dev_review_queue` (YELLOW-tier handoffs) and
+`db.urgent_alerts` (RED-tier escalations) are write-only graveyards.
+
+### Backend -- `backend/self_healing/dev_review_alerts_router.py`
+
+New sub-router mounted alongside `self_heal_router.py` under the same
+`/api/_self_heal` prefix. All endpoints `require_owner`.
+
+  GET  `/api/_self_heal/dev_review_queue/pending?since_hours=72&limit=100`
+       Returns pending YELLOW-tier reviews newest-first with by-tier
+       breakdown. since_hours window default 72h, max 720h.
+
+  POST `/api/_self_heal/dev_review_queue/{review_id}/approve`
+       Body: `{"notes": "..."}` (optional)
+       Flips `review_status='approved'` + stamps `approved_at` /
+       `approved_by`. For `event_kind=patch_proposal` events, performs
+       a best-effort handoff to Phase 2's
+       `auto_merge_harness.apply_green_patch_isolated`. ALWAYS logs a
+       `db.self_heal_actions` row with `actor='operator_override'` +
+       `outcome_reason` reflecting whether the Phase 2 handoff
+       succeeded. Returns 409 if the row is already approved/rejected.
+
+  POST `/api/_self_heal/dev_review_queue/{review_id}/reject`
+       Body: `{"notes": "..."}` (optional)
+       Flips `review_status='rejected'` + stamps `rejected_at` /
+       `rejected_by`. Logs a `db.self_heal_actions` noop row with
+       `outcome_reason='operator_rejected'`. Returns 409 if not pending.
+
+  GET  `/api/_self_heal/urgent_alerts/active?since_hours=168&source=&limit=100`
+       Returns unacked alerts newest-first with by-source breakdown.
+       Optional `source` filter (one of `triage`, `self_heal`, `inbox`,
+       `llm_reasoning_loop`). Default since_hours=168h (7d), max 720h.
+
+  POST `/api/_self_heal/urgent_alerts/{alert_id}/ack`
+       Body: `{"notes": "..."}` (optional)
+       Stamps `ack_status='acked'` + `acked_at` + `acked_by` +
+       `ack_notes`. Idempotent -- re-acking returns 200 with
+       `already_acked=true`.
+
+The router is `require_owner`-only (no broker access). Mounted in
+`backend/server.py` immediately after `self_heal_router.py` -- safe to
+mount unconditionally because the underlying collections are written
+by the Phase 3 loop only when its feature flag is set.
+
+### Frontend -- `frontend/src/App.js`
+
+Two new owner-only tabs adjacent to the existing Self-Heal tab:
+
+  1. **Reviews tab** (id: `dev_reviews`, label: "Reviews", icon:
+     `ListChecks`)
+     - `DevReviewQueueView` component.
+     - Header tiles: pending count + by-tier breakdown.
+     - Sortable table: Trigger | Recommendation | Tier | Confidence |
+       Reasoning preview | Created | Actions.
+     - Drill-down on row click: full reasoning text + affected_files
+       list + patch_id pointer (read-only `<pre className="whitespace-pre-wrap font-mono text-xs">`).
+     - Decision UI: notes textarea + Approve / Reject buttons.
+     - Auto-refresh every 60s.
+
+  2. **Alerts tab** (id: `urgent_alerts`, label: "Alerts", icon:
+     `Warning`)
+     - `UrgentAlertsView` component.
+     - Header tiles: unacked count + by-source breakdown.
+     - Filter pills: All / Triage / Self-Heal / Inbox.
+     - Sortable table: Source | Subject | Severity | Created | Actions.
+     - Drill-down: full alert payload pretty-printed.
+     - Acknowledge UI: notes textarea + Acknowledge button.
+     - Auto-refresh every 30s.
+
+Both tabs are gated behind `currentUser?.is_owner` in the nav array
+construction and the conditional render block. NO new frontend
+dependencies (no syntax-highlight library; diff preview pointer uses
+`<pre>` only).
+
+### Tests -- `backend/tests/test_dev_review_and_alerts_router.py`
+
+Six tests, all using the `_FakeDB` async-Mongo stub pattern:
+
+  - `test_list_dev_review_queue_filters_by_since` -- since_hours
+    window + limit + by-tier breakdown.
+  - `test_approve_dev_review_hands_off_to_phase2_harness` -- stubs
+    `auto_merge_harness.apply_green_patch_isolated`; verifies handoff
+    captured + `self_heal_actions` row logged with
+    `action_taken='patch_applied'` when handoff succeeded.
+  - `test_reject_dev_review_logs_self_heal_action` -- noop row +
+    `outcome_reason='operator_rejected'`.
+  - `test_list_urgent_alerts_filters_by_source` -- source filter +
+    400 on bad source + acked rows excluded from active list.
+  - `test_ack_urgent_alert_stamps_acked_at` -- field stamping +
+    idempotent re-ack + 404 on missing.
+  - `test_routes_require_owner_auth` -- all 5 endpoints 403 when
+    `require_owner` raises 403.
+
+Combined Phase 1+2+3+SS3 regression: 27 tests pass (Phase 1 = 7,
+Phase 2 = 4, Phase 3 = 10, SS3 = 6).
+
+### Build delta
+
+Frontend production build: +2.47 kB gzipped main bundle (734.94 kB).
+No new ESLint warnings on SS3 code.
+
+### Activation
+
+The surfaces are mounted unconditionally and safe-by-default. Until
+the Phase 3 loop's feature flag (`CHL_SELF_HEAL_PHASE3_ENABLED=true`)
+is set, the underlying collections stay empty and both tabs render
+their "no pending / no unacked" empty-state cards.
+
+### Files added / modified (SS3)
+
+- ADD `backend/self_healing/dev_review_alerts_router.py` (~480 lines)
+- ADD `backend/tests/test_dev_review_and_alerts_router.py` (~480 lines)
+- MOD `backend/server.py` (+9 lines mount block)
+- MOD `frontend/src/App.js` (+~530 lines: 2 nav entries, 2 conditional
+  renders, 2 view components, 4 helper constants/functions)
+- MOD `chl-memory/research/self_healing_phase3_implementation_2026_05_08.md`
+  (this section)
+
+End of SS3 closure section. End of implementation doc.
