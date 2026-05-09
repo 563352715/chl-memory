@@ -39,10 +39,11 @@ curl -X POST http://localhost:8001/api/_renewals \
   }'
 ```
 
-### Option 2: Script
+### Option 2: Script (recommended for first-time bulk seeding)
 
-Future `scripts/seed_renewals.py` could read a CSV of (name, category,
-expires_at, cadence_days, ...) and bulk-POST. Not built this stream.
+`scripts/seed_renewals.py` (Iter 145.x Stream NN3, 2026-05-08 EOD) ships
+the Tier 1 + 2 + 3 baseline (34 rows) hard-coded. Idempotent by `name`,
+dry-run by default. See "Run instructions" below.
 
 ---
 
@@ -155,3 +156,102 @@ don't fire spuriously every 30-day cycle.
 5. **TOTP backup codes** -- recommend storing in 1Password or similar +
    regenerating immediately after each use. Cadence_days=365 is "verify
    yearly" not "rotate yearly."
+
+---
+
+## Run instructions (`scripts/seed_renewals.py`)
+
+Iter 145.x Stream NN3 (2026-05-08 EOD) followup to KK1. The script
+populates `db.renewals` with 34 baseline rows (Tier 1: 15 regulatory +
+tax + insurance / Tier 2: 10 vendor / Tier 3: 9 security). Idempotent
+by row `name` -- safe to re-run. Dry-run is the default; `--apply`
+performs writes.
+
+### Dry-run first (mandatory)
+
+```powershell
+C:\CHL\.venv-local\Scripts\python.exe C:\CHL\scripts\seed_renewals.py
+```
+
+Reports `[WOULD-CREATE] <name>` for each seed that would be inserted
+plus `[SKIPPED] <name> (already_exists)` for any row already present
+in `db.renewals`. NO writes are made.
+
+### Apply
+
+```powershell
+C:\CHL\.venv-local\Scripts\python.exe C:\CHL\scripts\seed_renewals.py --apply
+```
+
+Inserts every seed not already present. Each new row stamps:
+
+- `expires_at = now() + renewal_cadence_days` (operator corrects below).
+- `current_value_hash = None`, `last_renewed_at = None`,
+  `reminders_sent_at = []`.
+- `archived = False`, `auto_renew = False`,
+  `operator_action_required = True`.
+- `reminder_thresholds_days = [60, 30, 14, 7, 3, 1]` by default; the
+  monthly-cadence rows (Twilio/Telnyx/Plivo/Mongo Atlas/Mercury) and
+  SSL (90d) override to `[14, 7, 3, 1]`; OpenAI/Anthropic (60d) use
+  `[30, 14, 7, 3, 1]`.
+
+### Filter by category
+
+```powershell
+# Seed only regulatory rows
+C:\CHL\.venv-local\Scripts\python.exe C:\CHL\scripts\seed_renewals.py --apply --filter regulatory
+
+# Categories: regulatory | tax | insurance | vendor | security
+```
+
+### Recovery: un-archive a soft-deleted seed row
+
+```powershell
+C:\CHL\.venv-local\Scripts\python.exe C:\CHL\scripts\seed_renewals.py --apply --reset-archived
+```
+
+For each seed name, if a row exists with `archived=True`, flips it
+back to `archived=False`. Does NOT touch unarchived rows.
+
+### Correcting `expires_at` after seeding
+
+The default `expires_at = now() + cadence_days` is a placeholder. For
+rows where the operator knows the real anchor date (e.g., LLC
+formation date for the Missouri SoS annual; broker bond purchase date
+for BMC-84; tax-quarter due dates), correct via the operator
+dashboard or via:
+
+1. **Mark renewed (preferred)** -- POST `/api/_renewals/{id}/mark-renewed`
+   with `renewed_at` set to the actual last renewal date. The router
+   computes `new_expires_at = renewed_at + cadence_days`, resets the
+   reminder ladder, and stamps `last_renewed_at`.
+
+2. **Direct correction** -- the dashboard (when wired) exposes a PATCH
+   endpoint per Stream NN2; until then, recreate the row by archiving
+   the seed (DELETE) and POSTing fresh with the correct `expires_at`.
+
+### Verify after seeding
+
+```powershell
+# Hit the summary endpoint (requires owner JWT):
+curl http://localhost:8001/api/_renewals/summary -H "Authorization: Bearer $JWT"
+```
+
+Expect `count: 34` (or whatever subset was filtered) with
+`band_counts` distributed across `fine` / `soon` / `urgent` / `critical`
+based on cadence. Monthly-cadence rows (30d) will land in `soon` /
+`urgent` immediately, which is expected -- the operator clears
+`operator_action_required` after confirming the actual subscription
+billing date.
+
+### Safety properties
+
+- **Idempotent.** Re-running never double-creates. Match key is `name`.
+- **Dry-run default.** No writes unless `--apply` is passed.
+- **No data destruction.** The script only INSERTs (or, with
+  `--reset-archived`, flips `archived: false`). It never deletes or
+  overwrites existing rows.
+- **No external deps** beyond `pymongo` (already in repo).
+
+Tests live at `backend/tests/test_seed_renewals.py` (4 tests, all
+passing as of the NN3 ship).
