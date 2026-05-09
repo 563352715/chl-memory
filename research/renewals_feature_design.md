@@ -343,3 +343,26 @@ crons + 5 health-registers verified).
    manually per row; could ship preset constants
    ("monthly", "quarterly", "annual") in calculator. Estimated effort:
    30 min.
+
+---
+
+## UI shipped 2026-05-08 EOD-16 (Stream LL3)
+
+Operator-facing surface landed at `frontend/src/App.js` -- new
+`RenewalsView` component (owner-only nav tab "Renewals", icon:
+CalendarCheck). Mirrors the surface shape of PipelineWalkthroughView
+(EE1) for consistency. Components added:
+
+- `RenewalsView` -- header band tiles (critical/urgent/soon/fine
+  counts), category filter pills, sortable color-coded table, and the
+  drill-down right panel.
+- `RenewalDrillDown` -- full row data + reminders history + action
+  buttons (mark-renewed / archive / inline notes edit). Notes-edit
+  stamps via mark-renewed since backend has no PATCH endpoint yet.
+- `RenewalAddModal` -- form mirroring POST /api/_renewals schema.
+
+Helpers added: `_renewalUrgencyClass`, `_renewalRelDate`,
+`_renewalCategoryIcon`, `_renewalBandLabel`, `_renewalBandTileClass`.
+
+Build delta: +4.85 kB gzipped on `main.js`. No new dependencies.
+ASCII-only.
