@@ -897,4 +897,221 @@ Per the TT1 brief, code is left UNCOMMITTED on the dev side; only this
 doc is committed to chl-memory. The operator green-lights the code
 commit + the activation steps together.
 
-End of TT1 closure section. End of implementation doc.
+End of TT1 closure section.
+
+---
+
+## TT3 closure -- AgentDM RED-tier push-notify + bulk-action endpoints (2026-05-08 EOD)
+
+SS3 follow-ups #1 + #3, addressing two gaps in the Phase 3 visibility
+surface:
+
+  1. RED-tier urgent_alerts inserts get *queued* but never *pushed* to
+     the operator. Per
+     `~/.claude/projects/c--CHL/memory/feedback_pm_does_not_autopoll_messages.md`,
+     a polling-only "operator checks the dashboard" loop is not
+     reliable; AgentDM is the operator-facing notification channel and
+     the receiver does NOT auto-poll. We need an active push.
+  2. A long-pause Phase 3 reasoning loop (or a multi-hour inbox-triage
+     batch) can dump dozens of stale rows into `dev_review_queue` /
+     `urgent_alerts`. The single-row `approve` / `reject` / `ack`
+     endpoints make batch-clear painful. We need bulk endpoints.
+
+### Architecture -- push-queue decoupling
+
+The backend cannot directly invoke `mcp__agentdm__send_message` because
+those tools live in the Claude-session runtime, NOT in the FastAPI
+process. The architectural workaround is a write-side queue plus a
+Claude-side consumer:
+
+```
+   producer (RED alert)              consumer (Claude session)
+   ---------------------             ---------------------------
+   llm_reasoning_loop._handle_       cron'd /loop activator runs:
+     urgent_alert(...)                  await list_pending_pushes(db)
+       |                                  |
+       v                                  v
+   queue_push_notification(            for row in pending:
+     db, alert_id, severity='RED',       mcp__agentdm__send_message(
+     subject, body_excerpt,                to='@operator',
+     source='llm_reasoning_loop')          message=format(row))
+       |                                  |
+       v                                  v
+   db.operator_push_queue              mark_push_dispatched(
+     {dispatch_status='pending',          db, push_id,
+      created_at, alert_id, ...}          agentdm_message_id)
+
+   producer (URGENT triage)
+   ---------------------
+   inbox_triage._persist_urgent_alert(...)
+     -> on NEW insert, also:
+     queue_push_notification(severity='URGENT', source='inbox_triage')
+```
+
+The push-queue collection (`db.operator_push_queue`) is the boundary.
+The producer is purely backend; the consumer is purely Claude-runtime.
+Backend has zero knowledge of the AgentDM transport, and the
+Claude-session has zero knowledge of which Mongo collections produced
+the alert. This decoupling lets us swap transports later (Slack, SMS,
+push-notification API) by swapping the consumer alone.
+
+### Files added / modified (TT3)
+
+- ADD `backend/self_healing/agentdm_push.py` (~290 lines) -- queue,
+  list-pending, mark-dispatched, mark-failed, health.
+- MOD `backend/self_healing/llm_reasoning_loop.py` (+~50 lines in
+  `_handle_urgent_alert`) -- queue a push for every RED-route alert.
+- MOD `backend/inbox_triage/triage_scanner.py` (+~45 lines in
+  `_persist_urgent_alert`) -- queue a push when a NEW URGENT row is
+  inserted (idempotent: re-runs do not double-push because the urgent
+  row's `$setOnInsert` upsert returns `upserted_id=None` on duplicate).
+- MOD `backend/self_healing/dev_review_alerts_router.py` (+~245 lines)
+  -- two new bulk endpoints:
+  - `POST /api/_self_heal/dev_review_queue/bulk_reject`
+  - `POST /api/_self_heal/urgent_alerts/bulk_ack`
+- ADD `backend/tests/test_agentdm_push.py` (~470 lines, 6 tests).
+- MOD this doc (TT3 closure section).
+
+### Bulk endpoint signatures
+
+Both bulk endpoints share the same shape:
+
+  `POST /api/_self_heal/dev_review_queue/bulk_reject`
+  `POST /api/_self_heal/urgent_alerts/bulk_ack`
+  Auth: `require_owner`
+  Body: `{"ids": ["..."], "notes": "..."}`
+  Constraints:
+    - 1 <= len(ids) <= BULK_MAX_IDS (=50); 400 on violation
+    - missing or non-list `ids` -> 400
+  Per-id semantics:
+    - missing -> error row in response (id + reason)
+    - already-non-pending -> idempotent skip (NOT an error, NOT a write)
+    - pending -> flip + record id under `acked_ids` / `rejected_ids`
+  Aggregate `db.self_heal_actions` row on success:
+    - action_taken='noop'
+    - actor='operator_override'
+    - outcome_reason starts with 'operator_rejected_bulk:<count>' /
+      'operator_acked_bulk:<count>'
+    - after_state.bulk_action_taken in {'bulk_reject', 'bulk_ack'}
+    - after_state.bulk_count = number flipped
+    - after_state.bulk_ids = list of flipped ids
+  Response:
+    {rejected|acked: int, skipped: int, errored: int, errors: [...],
+     rejected_ids|acked_ids: [...], skipped_ids: [...],
+     logged_action_id: str | None}
+
+### Claude-session consumer pattern
+
+Document this snippet in the operator-facing runbook. It is the
+canonical drainer for `db.operator_push_queue`. Run it via a CronCreate
+job (separate from the inbox-triage cron) at a 5-15 min cadence:
+
+```python
+# claude_session_consumer.py -- runs in a Claude Code session that has
+# the mcp__agentdm__* tools available + db Motor handle.
+import asyncio
+from self_healing.agentdm_push import (
+    list_pending_pushes,
+    mark_push_dispatched,
+    mark_push_failed,
+)
+
+async def drain_push_queue(db) -> dict:
+    """Drain the operator push queue. Returns summary."""
+    pending = await list_pending_pushes(db=db, max_age_minutes=60)
+    sent = 0
+    failed = 0
+    for row in pending:
+        message = (
+            f"[{row['severity']}] {row['subject']}\n\n"
+            f"{row['body_excerpt']}\n\n"
+            f"alert_id={row['alert_id']} source={row['source']}"
+        )
+        try:
+            # mcp__agentdm__send_message is invoked by the Claude
+            # session, not via this Python code -- the snippet is a
+            # template the session reads + fires per row.
+            result = await call_mcp_send_message(
+                to="@operator", message=message,
+            )
+            agentdm_message_id = result.get("message_id", "unknown")
+            await mark_push_dispatched(
+                db=db, push_id=row["_id"],
+                agentdm_message_id=agentdm_message_id,
+            )
+            sent += 1
+        except Exception as exc:
+            await mark_push_failed(
+                db=db, push_id=row["_id"], error=str(exc),
+            )
+            failed += 1
+    return {"sent": sent, "failed": failed}
+```
+
+Cadence rationale: 5-15 min is fast enough that operator never has to
+wait more than ~quarter-hour to see a RED alert, but slow enough that
+the Claude session does not flood AgentDM if the pending queue is
+small. Failed rows automatically retry on the next tick (status stays
+`pending`) until the 5-attempt cap flips them to `failed`.
+
+### Test coverage (TT3)
+
+`backend/tests/test_agentdm_push.py` (6 tests):
+
+push (3):
+  - `test_queue_push_inserts_pending_row` -- field shape, severity
+    coercion (bogus -> HIGH), body-excerpt truncation at
+    `BODY_EXCERPT_MAX_CHARS`.
+  - `test_list_pending_filters_by_age_and_status` -- age window
+    (default 60min), status filter (pending only), newest-first
+    ordering, limit cap.
+  - `test_mark_dispatched_stamps_id_and_status` -- field stamping,
+    list_pending no longer surfaces the row, unknown id returns False
+    (not raised), `mark_push_failed` retry counter + 5-attempt-cap
+    flip to STATUS_FAILED.
+
+bulk (3):
+  - `test_bulk_reject_dev_review_aggregates_into_one_self_heal_action`
+    -- 5 pending + 1 already-rejected + 1 missing; expects 5 rejected,
+    1 skipped, 1 errored, exactly ONE aggregate self_heal_actions row.
+  - `test_bulk_ack_urgent_alerts_skips_already_acked` -- 3 pending +
+    2 acked + 1 missing; idempotent re-run produces ZERO new aggregate
+    rows.
+  - `test_bulk_endpoints_enforce_50_max_ids` -- 51 ids -> 400, empty
+    list -> 400, missing key -> 400, exactly 50 -> 200.
+
+Combined SS3 + TT3 regression: 12 tests pass (6 SS3 + 6 TT3).
+LL2 regression: 4 tests pass (inbox-triage scanner unchanged behavior).
+RR3 regression: 10 tests pass (llm_reasoning_loop hook is additive).
+
+### Activation
+
+`agentdm_push.py` is mounted unconditionally (the queue is just a
+collection; producers + consumer are the active surfaces). The TT3
+hooks fire automatically once Phase 3 / inbox-triage are armed -- no
+new env var. The Claude-session consumer requires an operator decision
+on cadence (recommended: every 10 min via CronCreate) plus an
+operator-side DM to a Claude session with the consumer prompt template.
+
+### Code-not-committed posture
+
+Per the TT3 brief, code is left UNCOMMITTED on the dev side; only this
+doc is committed to chl-memory. The operator green-lights the code
+commit + the activation steps together.
+
+### Follow-ups for next stream
+
+1. Build the consumer activation runbook (CronCreate job + Claude
+   prompt template + verification check that AgentDM messages actually
+   land in operator's queue).
+2. Add a `GET /api/_self_heal/operator_push_queue/stats` surface so
+   the Reviews / Alerts tabs show "X pending push notifications" tile
+   for operator visibility into the consumer's health (otherwise a
+   silently-down consumer is undetectable until the operator notices
+   they stopped getting alerts).
+3. Wire `self_heal_log.list_recent_actions` to also surface
+   bulk-action rows distinctly in the Self-Heal tab (currently they
+   render as generic noop rows; a `bulk_action_taken` field-aware
+   renderer would make iter-close audits faster).
+
+End of TT3 closure section. End of implementation doc.
