@@ -226,3 +226,130 @@ If anything regresses, the Twilio softphone is still on disk:
 Twilio softphone has a 5-day useful-life ceiling per operator decision
 2026-05-09 — keep this rollback path open only through the May 14-15
 port window, then it can be retired with the Twilio account close.
+
+---
+
+## Modern Features (KKK2, 2026-05-09)
+
+Layered on top of KKK1's base softphone per operator walkthrough
+2026-05-09: *"Make the phone look nice too. Should have all features
+of a modern phone. With stored numbers and redial, and call waiting."*
+
+### 3 sub-tabs (Keypad / Recents / Contacts)
+
+The configured-state UI now has a 3-tab strip at the top:
+
+- **Keypad** (default) — the original dialpad. Type a number, tap Call.
+- **Recents** — last 50 calls from `db.voice_call_log`, sorted newest
+  first. Each row shows caller name (resolved against carriers +
+  shippers + personal contacts), direction icon (incoming ↘ /
+  outgoing ↗ / missed ↙), time, and duration. **Tap any row to
+  redial that number.** Voicemails (with embedded audio + transcription)
+  appear in a section at the top of this tab.
+- **Contacts** — A-Z merged list of carriers, shippers, and personal
+  contacts. Each row shows source label (Carrier / Shipper / Personal),
+  name, phone, and MC/DOT (carriers only). **Tap to call.** Search
+  bar filters by name or phone substring. Personal contacts have a
+  delete (×) button; carrier/shipper contacts cannot be deleted from
+  here (they live in their canonical collections).
+
+### Caller-ID resolution
+
+When a call comes in OR you view recents, the system resolves the
+remote phone number against:
+
+1. `db.carriers` — `contact_phone` / `dispatch_phone` / `primary_phone` →
+   shows carrier `legal_name`.
+2. `db.shippers` — `ap_phone` / `primary_phone` → shows shipper `name`.
+3. `db.softphone_contacts` — personal contacts.
+4. Fallback: pretty-formatted phone like `(816) 555-0123`.
+
+This means an incoming call from a carrier in your database shows the
+carrier name immediately, and recents shows "Alpha Trucking" instead
+of just `+18165550111`.
+
+### Adding personal contacts
+
+In the Contacts tab, click **+ Add**. Form takes name, phone (any
+format — auto-normalized to E.164), and optional notes. Persists to
+`db.softphone_contacts`. Soft-delete (archived: true) when you click the
+× button — never hard-delete to preserve history.
+
+### DTMF tones
+
+Tapping a dialpad digit plays the standard DTMF tone via Web Audio API
+(two simultaneous sine waves at 697-1633 Hz frequency pair, ~150ms
+duration). Works both from the Keypad tab AND in the active-call view's
+"Keys" sub-panel — useful for IVR menus when you're already on a call.
+
+### Active-call view
+
+When a call connects, the entire panel switches to the active-call
+view: large caller name centered, formatted phone below, mm:ss timer,
+and 5 control buttons in a row:
+
+- **Mute** — toggles `muteAudio` / `unmuteAudio` on the call object.
+- **Hold** — toggles `hold` / `unhold`. Uses Telnyx server-side hold
+  (caller hears music-on-hold).
+- **Keys** — opens an in-call keypad for IVR navigation (DTMF tones
+  are sent over the call AND played locally for audible feedback).
+- **Speaker** — placeholder for `setSinkId` audio routing (browser
+  device-permission gated — left as future iter).
+- **End** (red) — hangs up.
+
+### Call waiting (multi-call)
+
+If a second call arrives while you're already on one:
+
+1. An amber "Incoming call (waiting)" banner appears at the top.
+2. Two buttons: **Hold current and answer** OR **Decline**.
+3. Hold-and-answer: current call is put on hold (caller hears MOH),
+   new call is answered. The held call shows in the active-call view
+   as "On hold: {name}" with a **Swap** button to toggle which call is
+   active (held call resumes, current goes on hold).
+4. When the active call ends, if there's a held call it auto-promotes
+   to the active position.
+
+### Voicemail
+
+Inbound calls that go unanswered (no client + cell timeout in
+`browser-incoming` simul-ring) now hit a TeXML `<Record>` action with
+`maxLength=120 transcribe=true`. Telnyx posts the recording URL +
+auto-transcription to `/api/telnyx/voice/voicemail-callback`, which
+persists to `db.voicemails`.
+
+Recents tab shows unread voicemails at the top with:
+- Caller name (resolver-matched) + time
+- Embedded HTML5 `<audio>` player for the recording URL
+- Auto-transcription text (italicized)
+- "Mark read" button
+
+A red badge with the unread count appears next to the **Recents** tab.
+
+### Endpoints reference (KKK2)
+
+| Endpoint | Purpose |
+|---|---|
+| `GET  /api/telnyx/voice/recents?limit=50` | Last N calls with caller-ID-resolved names |
+| `GET  /api/telnyx/voice/contacts?q=&limit=200` | Merged carrier+shipper+personal contacts (q = case-insens substring filter) |
+| `POST /api/telnyx/voice/contacts` | Add personal contact `{name, phone, notes}` |
+| `DEL  /api/telnyx/voice/contacts/{id}` | Soft-delete personal contact (carrier/shipper rejected 403) |
+| `POST /api/telnyx/voice/voicemail-callback` | Telnyx webhook — recording URL + transcription |
+| `GET  /api/telnyx/voice/voicemails?limit=25` | Last N voicemails + unread_count |
+| `POST /api/telnyx/voice/voicemails/{id}/mark_read` | Mark a voicemail read |
+
+All require_broker auth except `voicemail-callback` which uses ed25519
+signature verification (same pattern as the KKK1 webhooks).
+
+### Tests
+
+19/19 pass in `backend/tests/test_telnyx_webrtc.py` (9 KKK1 regression
++ 10 KKK2 new):
+- recents sorted desc + paginates
+- contacts merged + q filter works
+- POST /contacts adds personal contact
+- DELETE /contacts archives personal, rejects carrier/shipper 403
+- caller-ID resolver matches carrier / shipper / unknown
+- voicemail-callback writes db.voicemails row
+- /voicemails GET + mark_read
+- inbound TeXML now includes the `<Record>` voicemail fallback
