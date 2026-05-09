@@ -142,3 +142,19 @@
 
 ### AUTO_ACK_OK / INFORMATIONAL (0)
 (none)
+
+## Hourly review 2026-05-09 09:25 UTC
+**Window**: last 75 min (since 2026-05-09T08:10 UTC).
+**Total ingested last 75min**: 0
+**By category**: (none)
+**By verdict**: (none)
+**Note**: deep-night window. Last fetched_at remains 2026-05-09T05:25 UTC (~4h ago). No fresh inbound — consistent with operator-asleep + empty Zoho INBOX, not poller failure (would investigate at >6h gap).
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (0)
+(none)
+
+### AUTO_ACK_OK / INFORMATIONAL (0)
+(none)
