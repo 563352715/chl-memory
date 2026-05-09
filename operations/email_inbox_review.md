@@ -158,3 +158,24 @@
 
 ### AUTO_ACK_OK / INFORMATIONAL (0)
 (none)
+
+## Hourly review 2026-05-09 10:26 UTC
+**Window**: last 75 min (since 2026-05-09T09:11 UTC).
+**Total ingested last 75min**: 0
+**By category**: (none)
+**By verdict**: (none)
+
+**Poller sanity check (because latest fetched_at was 04:48 UTC = ~5.6h ago, near the 6h investigate threshold):**
+- `/api/health/system` reports `inbound_email_poller` HEALTHY — `last_run_at: 2026-05-09T10:23:44 UTC` (~2 min ago), `last_run_status: success`, `last_run_messages_ingested: 0`, `loop_running: true`, `password_present: true`.
+- Cursor's `last_poll_at: 04:48 UTC` only updates when cursor advances (UID 78 hasn't moved). Misleading-named field; not an outage.
+- `polled_folders: ['INBOX']` — production is still on pre-VV3 code. Multi-folder polling (Newsletter/Promotions/Updates/Forums/Social/Spam) activates after operator restart-verifies the 27-commit chain per CCC1 runbook on May 14.
+- Conclusion: Zoho INBOX is genuinely empty. No action needed.
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (0)
+(none)
+
+### AUTO_ACK_OK / INFORMATIONAL (0)
+(none)
