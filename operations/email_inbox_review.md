@@ -76,3 +76,37 @@
 
 ### AUTO_ACK_OK / INFORMATIONAL (0)
 (none)
+
+## Triage run -- 2026-05-09T05:29:56.974227+00:00
+**Window**: last 75 min (since 2026-05-09T04:14:56.959874+00:00). **Seen**: 1. **Classified**: 1. **Urgent**: 0. **Skipped (dup)**: 0.
+**By category**: VENDOR=1
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (1)
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0b0d0b42.6ef28a61-73435860.6817904581010161565@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (0)
+(none)
+
+### INFORMATIONAL (0)
+(none)
+
+## Hourly review 2026-05-09 06:25 UTC
+**Window**: last 75 min (since 2026-05-09T05:10 UTC).
+**Total ingested last 75min**: 0
+**By category**: (none)
+**By verdict**: (none)
+**Note**: deep-night window continues. Last fetched_at was 2026-05-09T05:25 UTC (the Zoho mailer-daemon bounce, already logged in prior cycle).
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (0)
+(none)
+
+### AUTO_ACK_OK / INFORMATIONAL (0)
+(none)
