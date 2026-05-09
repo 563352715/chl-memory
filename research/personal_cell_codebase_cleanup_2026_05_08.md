@@ -271,3 +271,93 @@ frontend/src/views/QROnboardLoad.jsx
 
 All in-codebase frontend surfaces displaying operator's personal cell as a tel: link (or paired display label, or directly-adjacent plaintext) have been migrated to the appropriate business number. Combined with KK3 (backend + scripts), all frontend + backend + scripts code-side personal-cell exposure is now eliminated. Remaining work is operator-side at vendor portals (Phase 2, KK3 section 5 items 1-11).
 
+---
+
+## 10. QQ1 closure -- Frontend identity-drift fix (DeckSlide7 + sweep)
+
+**Author:** sub-agent QQ1
+**Date:** 2026-05-08
+**Stream:** Frontend identity drift cleanup (de-scoped from PP2 section 9c flag, closed here)
+**Authority:** Operator directive `chl-memory/FACTS.md` Section 1 (canonical operator identity) + parent stream QQ1 brief.
+
+### 10a. Drift definition
+
+PP2 (section 9c) flagged two adjacent identity-drift issues in `DeckSlide7.jsx` while doing personal-cell tel: link substitution but left them out-of-scope. QQ1 closes that follow-up + sweeps the rest of `frontend/` for the same drift pattern.
+
+Canonical identity (per `chl-memory/FACTS.md` Section 1):
+- Legal Name: **Jason Aaron Meyer** (NOT "Jason Andrews", "Jason Jones", or any other surname)
+- Public-facing email: **dispatch@continentalhaul.com** (NOT `jasonandpugee@gmail.com` -- personal Gmail; NOT `jason@continentalhaul.com` -- non-existent alias)
+
+### 10b. Frontend hits found + dispositions
+
+| File | Line | Before | After | Context | Disposition |
+|---|---|---|---|---|---|
+| `frontend/src/views/DeckSlide7.jsx` | 572 | `Jason Andrews . Director` | `Jason Aaron Meyer . Director` | Pitch-deck Slide 7 sponsor block (institutional bank deck) | FIXED -- public investor-facing surface |
+| `frontend/src/views/DeckSlide7.jsx` | 579 | `jasonandpugee@gmail.com` | `dispatch@continentalhaul.com` | Pitch-deck Slide 7 sponsor block contact email | FIXED -- public investor-facing surface |
+| `frontend/public/chl-bank-deck.html` | 690 | `Jason Jones . Sponsor / Broker of Record` | `Jason Aaron Meyer . Sponsor / Broker of Record` | Static HTML bank deck (slide 8 footer signature) | FIXED -- different drifted surname ("Jones") found during sweep |
+| `frontend/public/chl-bank-deck.html` | 691 | `jasonandpugee@gmail.com . MC 1817555` | `dispatch@continentalhaul.com . MC 1817555` | Same static HTML bank deck contact line | FIXED |
+| `frontend/public/assets/INSTALL.md` | 114 | ``email `jason@continentalhaul.com` `` | ``email `dispatch@continentalhaul.com` `` | PWA installation instructions footer (public-facing) | FIXED -- non-canonical email alias swapped to canonical dispatch address |
+
+Total: **5 hits across 3 files, all fixed**. Two distinct drifted surnames found ("Andrews" + "Jones"), both replaced with canonical "Jason Aaron Meyer".
+
+### 10c. Sweeps performed (negative results)
+
+- `Jason Andrews` / `J\. Andrews` across `frontend/`: only the one hit (DeckSlide7 line 572). No additional drift.
+- `Jones` across `frontend/`: only the one hit (chl-bank-deck.html line 690). No other "Jones" identity drift.
+- `Jason\s+(?!Aaron|Meyer|Andrews|Jones)[A-Z][a-z]+` (any other plausible surname after "Jason"): zero matches.
+- `@gmail.com` / `@yahoo.com` / `@hotmail.com` / `@outlook.com` across `frontend/`: only the two `jasonandpugee@gmail.com` hits already fixed. No other personal-domain emails leaking into frontend.
+- `jason@` / `jmeyer@` / `j.meyer@` (case-insensitive) across `frontend/`: only the one INSTALL.md hit (`jason@continentalhaul.com`) already fixed.
+- Other `Jason X` references in `frontend/src/`: all are dev-comments (`// per Jason: ...`) referencing the operator by first name as the directing developer. Legitimate dev-context, NOT public-facing identity drift. Not touched.
+
+### 10d. Test fixtures + skipped instances
+
+Zero test fixtures or memory references contained "Jason Andrews" / "Jason Jones" / `jasonandpugee@gmail.com`. The `Jason X` dev-comment references in `RateMargin.jsx`, `BrowserPhoneView.jsx`, `CarrierPrevetView.jsx`, `CommandPhoneView.jsx`, `Day1Walkthrough.jsx`, `LoadDossier.jsx`, `OperatorConsoleView.jsx`, `ShipperScorecardView.jsx`, `TollFreeCompliancePage.jsx`, and `sw.js` are all developer attribution comments, not customer-facing identity claims. Per parent constraint, left untouched.
+
+### 10e. Verification
+
+**Re-grep after edits:**
+```
+grep -rn "Jason Andrews\|Jason Jones\|jasonandpugee\|jason@continentalhaul" C:/CHL/frontend/
+-> No matches found
+```
+
+**Build:**
+```
+cd C:\CHL\frontend && npm run build
+-> Compiled with warnings.
+-> File sizes after gzip:
+   732.48 kB (-2 B)  build/static/js/main.d4b050aa.js
+   33.64 kB          build/static/css/main.922321f9.css
+   13.21 kB          build/static/js/54.ba1d9394.chunk.js
+   9.33 kB           build/static/js/307.cf5edf88.chunk.js
+   3.67 kB           build/static/js/15.2365d22b.chunk.js
+   3.17 kB           build/static/js/305.0e392e56.chunk.js
+-> The build folder is ready to be deployed.
+```
+
+Bundle delta: **-2 B on main.js** (gzip). Negligible -- "Jason Andrews" (13 chars) -> "Jason Aaron Meyer" (17 chars) +4 chars; "jasonandpugee@gmail.com" (23 chars) -> "dispatch@continentalhaul.com" (28 chars) +5 chars; net post-minification + gzip works out to -2B (string-table dedup with existing "dispatch@continentalhaul.com" references elsewhere in the bundle). Eslint warnings are all pre-existing react-hooks/exhaustive-deps; none related to this cleanup.
+
+**Preflight:** `python scripts/preflight_server_smoke.py` -> 20 pre-existing import failures (reportlab, openai, twilio, stripe, cryptography, psutil, email-validator pydantic[email]). **Zero net-new preflight regressions from this cleanup.** Same baseline as KK3 + PP2 closures.
+
+### 10f. Files modified (full list)
+
+```
+frontend/src/views/DeckSlide7.jsx
+frontend/public/chl-bank-deck.html
+frontend/public/assets/INSTALL.md
+```
+
+3 files, 5 line-level edits, all in-scope per parent stream QQ1 brief.
+
+**Per parent constraint: dev code is NOT committed (parent verifier-gates first). Tracker doc append IS committed to chl-memory.**
+
+### 10g. QQ1 status: CLOSED
+
+All known identity-drift instances ("Jason Andrews", "Jason Jones", `jasonandpugee@gmail.com`, `jason@continentalhaul.com`) on public-facing frontend surfaces (pitch deck, static bank deck, PWA install instructions) have been corrected to canonical identity ("Jason Aaron Meyer" + `dispatch@continentalhaul.com`). Combined with KK3 (backend personal-cell scrub) + PP2 (frontend tel: link scrub), the frontend + backend + scripts code-side identity hygiene is now consistent with FACTS.md.
+
+### 10h. Three follow-up suggestions
+
+1. **Investor PDF rendering pipeline** -- if the bank deck is exported to PDF for distribution, regenerate any cached PDFs / S3 objects so investors don't see the old "Jason Andrews" / "Jason Jones" drift in already-circulated artifacts. Worth grepping `backend/` + `scripts/` for PDF generators that consume the deck slides + invalidate any cached outputs.
+2. **Identity invariant test** -- add a frontend smoke test (`frontend/src/__tests__/identity_invariant.test.js`) that renders DeckSlide1-8 + chl-bank-deck.html + checks for the literal strings "Jason Andrews", "Jason Jones", `jasonandpugee`, `@gmail.com` -- fails build if any reappear. Would have caught both the "Andrews" + "Jones" drift at first commit. ~30 LOC.
+3. **Backend signature templates audit** -- KK3 fixed the banker-digest email signature (server.py:12373/12410) but a broader sweep across all email templates / SMS templates / document generators (rate-con, invoice, broker-carrier-agreement) for any literal-string operator identity should follow. Pattern: any string containing "Jason" + a non-canonical surname or non-canonical email is a candidate. Would close the loop on outbound document hygiene before authority-grant 2026-05-13 takes platform live.
+
