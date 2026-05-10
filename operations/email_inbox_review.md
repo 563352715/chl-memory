@@ -950,3 +950,96 @@ By verdict: (none)
 ### AUTO_ACK_OK / INFORMATIONAL (logged for completeness)
 - (none)
 
+
+## Triage run -- 2026-05-10T00:15:43.176041+00:00
+**Window**: last 75 min (since 2026-05-09T23:00:43.137347+00:00). **Seen**: 21. **Classified**: 6. **Urgent**: 0. **Skipped (dup)**: 15.
+**By category**: SHIPPER_CARRIER_REPLY=3, VENDOR=3
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (18)
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0efe03b0.38de2a54-1419507658.86452821339920040@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0efe2af4.3bf65e4b360028282.472010910818700220@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0efe4a1a.3a6d91421586213204.-8175245616320427950@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0efe70e3.293fbaac273572185.3671484765812938492@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0efe9876.2c5aeb502120919082.-2678778374590816938@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0efeb76e.71eff0b7-1520398870.8549494620099699230@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0efede77.7d93497c1638772998.-721797808068131854@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0eff0573.6d14f5bf52769745.-5545042643303712466@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0eff2cc0.2fd9156b1189569048.-1782257395755766740@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0eff53b8.40e0f04e-1732270913.8801295109055259226@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0eff7ae1.373d872551629227.-521054825529841864@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0effa242.7e56e23c-1180829212.457369637879473257@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0effc142.233a7ed92062643486.-731795659367550562@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f011196.5c9125e6-2002558203.-2208388762151651158@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f032c77.74e33138-560023084.6387556077697886626@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f391f90.70764c46-1498813414.6148582107705625685@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f392747.248ae68b1464400411.1842476649405998384@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f3936c8.1539ff18124090062.96685830498940838@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (3)
+- [SHIPPER_CARRIER_REPLY] conf=0.55 from=dispatch@continentalhaul.com subject='📄 Signed Rate Con · RC-928F2AC1 · Broker Admin' message_id=<19e0f0da94b.1f57918d-114713197.5498517886933654237@zoho.com>
+    - freight_body_term:\bload\s+(?:#?\s*\w+)\b
+    - auto_ack_pattern:\b(?:rate|load)\s+confirmation\b.*\b(?:confirm(?:ed)?|accepted|booked)\b
+- [SHIPPER_CARRIER_REPLY] conf=0.55 from=dispatch@continentalhaul.com subject='📄 Signed Rate Con · RC-D5F41766 · Broker Admin' message_id=<19e0f224389.73c56d5-1602924205.5113976614359917580@zoho.com>
+    - freight_body_term:\bload\s+(?:#?\s*\w+)\b
+    - auto_ack_pattern:\b(?:rate|load)\s+confirmation\b.*\b(?:confirm(?:ed)?|accepted|booked)\b
+- [SHIPPER_CARRIER_REPLY] conf=0.55 from=dispatch@continentalhaul.com subject='📄 Signed Rate Con · RC-C9F07472 · Broker Admin' message_id=<19e0f2ec89b.10c99861-1518311747.7847499651145137042@zoho.com>
+    - freight_body_term:\bload\s+(?:#?\s*\w+)\b
+    - auto_ack_pattern:\b(?:rate|load)\s+confirmation\b.*\b(?:confirm(?:ed)?|accepted|booked)\b
+
+### INFORMATIONAL (0)
+(none)
+
+## Hourly review 2026-05-10 01:11 UTC
+
+Total ingested last 75min: 0
+By category: (none)
+By verdict: (none)
+
+### URGENT (require operator attention)
+- (none)
+
+### OPERATOR_REVIEW (next session)
+- (none)
+
+### AUTO_ACK_OK / INFORMATIONAL (logged for completeness)
+- (none)
+
