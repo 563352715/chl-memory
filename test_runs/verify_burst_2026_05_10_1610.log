@@ -1,0 +1,140 @@
+[2026-05-10T16:09:40.473613+00:00] ============================================================
+[2026-05-10T16:09:40.474086+00:00] OVERNIGHT SUPERVISOR starting
+[2026-05-10T16:09:40.474375+00:00] Stop target: 2026-05-10T17:15:00+00:00
+[2026-05-10T16:09:40.474673+00:00] ============================================================
+[2026-05-10T16:09:41.470970+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:09:41.471427+00:00] RESTART runner 'rc'
+[2026-05-10T16:10:45.836422+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:10:45.836850+00:00] RESTART runner 'rc'
+[2026-05-10T16:11:28.585463+00:00] ============================================================
+[2026-05-10T16:11:28.585820+00:00] OVERNIGHT SUPERVISOR starting
+[2026-05-10T16:11:28.586104+00:00] Stop target: 2026-05-10T17:15:00+00:00
+[2026-05-10T16:11:28.586368+00:00] ============================================================
+[2026-05-10T16:11:29.264276+00:00] runner 'sop' DOWN; restarting
+[2026-05-10T16:11:29.264696+00:00] RESTART runner 'sop'
+[2026-05-10T16:11:29.275091+00:00] runner 'ma' DOWN; restarting
+[2026-05-10T16:11:29.275588+00:00] RESTART runner 'ma'
+[2026-05-10T16:11:29.287470+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:11:29.287969+00:00] RESTART runner 'rc'
+[2026-05-10T16:12:33.494990+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:12:33.495544+00:00] RESTART runner 'rc'
+[2026-05-10T16:13:39.254475+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:13:39.254882+00:00] RESTART runner 'rc'
+[2026-05-10T16:14:43.632754+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:14:43.633208+00:00] RESTART runner 'rc'
+[2026-05-10T16:15:47.961698+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:15:47.962149+00:00] RESTART runner 'rc'
+[2026-05-10T16:16:52.350546+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:16:52.350945+00:00] RESTART runner 'rc'
+[2026-05-10T16:17:56.732272+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:17:56.732663+00:00] RESTART runner 'rc'
+[2026-05-10T16:19:01.047808+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:19:01.048238+00:00] RESTART runner 'rc'
+[2026-05-10T16:20:05.384112+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:20:05.384492+00:00] RESTART runner 'rc'
+[2026-05-10T16:21:09.789111+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:21:09.789494+00:00] RESTART runner 'rc'
+[2026-05-10T16:22:14.152652+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:22:14.153085+00:00] RESTART runner 'rc'
+[2026-05-10T16:23:18.494791+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:23:18.495210+00:00] RESTART runner 'rc'
+[2026-05-10T16:24:22.830745+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:24:22.831131+00:00] RESTART runner 'rc'
+[2026-05-10T16:25:27.169372+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:25:27.169762+00:00] RESTART runner 'rc'
+[2026-05-10T16:26:31.495248+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:26:31.495651+00:00] RESTART runner 'rc'
+[2026-05-10T16:27:35.911852+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:27:35.912245+00:00] RESTART runner 'rc'
+[2026-05-10T16:28:40.267047+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:28:40.267425+00:00] RESTART runner 'rc'
+[2026-05-10T16:29:44.594358+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:29:44.594762+00:00] RESTART runner 'rc'
+[2026-05-10T16:30:48.962416+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:30:48.962800+00:00] RESTART runner 'rc'
+[2026-05-10T16:31:53.332047+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:31:53.332424+00:00] RESTART runner 'rc'
+[2026-05-10T16:32:57.700323+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:32:57.700712+00:00] RESTART runner 'rc'
+[2026-05-10T16:34:02.185804+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:34:02.186184+00:00] RESTART runner 'rc'
+[2026-05-10T16:35:06.502074+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:35:06.502614+00:00] RESTART runner 'rc'
+[2026-05-10T16:36:10.815990+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:36:10.816416+00:00] RESTART runner 'rc'
+[2026-05-10T16:37:15.242077+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:37:15.242492+00:00] RESTART runner 'rc'
+[2026-05-10T16:38:19.588077+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:38:19.588488+00:00] RESTART runner 'rc'
+[2026-05-10T16:39:23.927112+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:39:23.927512+00:00] RESTART runner 'rc'
+[2026-05-10T16:40:28.268144+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:40:28.268710+00:00] RESTART runner 'rc'
+[2026-05-10T16:41:32.695891+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:41:32.696308+00:00] RESTART runner 'rc'
+[2026-05-10T16:41:36.111969+00:00] snapshot written: overnight_20260510_1641.md
+[2026-05-10T16:42:37.108301+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:42:37.108683+00:00] RESTART runner 'rc'
+[2026-05-10T16:43:41.480105+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:43:41.480480+00:00] RESTART runner 'rc'
+[2026-05-10T16:44:45.851888+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:44:45.852303+00:00] RESTART runner 'rc'
+[2026-05-10T16:45:50.196728+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:45:50.197107+00:00] RESTART runner 'rc'
+[2026-05-10T16:46:54.615989+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:46:54.616582+00:00] RESTART runner 'rc'
+[2026-05-10T16:47:58.976667+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:47:58.977047+00:00] RESTART runner 'rc'
+[2026-05-10T16:49:03.312312+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:49:03.312679+00:00] RESTART runner 'rc'
+[2026-05-10T16:50:07.837076+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:50:07.837486+00:00] RESTART runner 'rc'
+[2026-05-10T16:51:12.202960+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:51:12.203363+00:00] RESTART runner 'rc'
+[2026-05-10T16:52:16.587776+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:52:16.588158+00:00] RESTART runner 'rc'
+[2026-05-10T16:53:21.014761+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:53:21.015198+00:00] RESTART runner 'rc'
+[2026-05-10T16:54:25.382880+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:54:25.383301+00:00] RESTART runner 'rc'
+[2026-05-10T16:55:29.812347+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:55:29.812986+00:00] RESTART runner 'rc'
+[2026-05-10T16:56:34.149370+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:56:34.149786+00:00] RESTART runner 'rc'
+[2026-05-10T16:57:38.501027+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:57:38.501452+00:00] RESTART runner 'rc'
+[2026-05-10T16:58:43.098764+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:58:43.099166+00:00] RESTART runner 'rc'
+[2026-05-10T16:59:47.430907+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T16:59:47.431314+00:00] RESTART runner 'rc'
+[2026-05-10T17:00:51.786226+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:00:51.786602+00:00] RESTART runner 'rc'
+[2026-05-10T17:01:56.224195+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:01:56.224557+00:00] RESTART runner 'rc'
+[2026-05-10T17:03:00.547907+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:03:00.548323+00:00] RESTART runner 'rc'
+[2026-05-10T17:04:04.846658+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:04:04.847067+00:00] RESTART runner 'rc'
+[2026-05-10T17:05:09.179029+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:05:09.179460+00:00] RESTART runner 'rc'
+[2026-05-10T17:06:13.543171+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:06:13.543587+00:00] RESTART runner 'rc'
+[2026-05-10T17:07:17.880122+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:07:17.880514+00:00] RESTART runner 'rc'
+[2026-05-10T17:08:22.202051+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:08:22.202457+00:00] RESTART runner 'rc'
+[2026-05-10T17:09:26.643168+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:09:26.643587+00:00] RESTART runner 'rc'
+[2026-05-10T17:10:31.033010+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:10:31.033387+00:00] RESTART runner 'rc'
+[2026-05-10T17:11:35.366989+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:11:35.367369+00:00] RESTART runner 'rc'
+[2026-05-10T17:11:38.774898+00:00] snapshot written: overnight_20260510_1711.md
+[2026-05-10T17:12:39.778417+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:12:39.778822+00:00] RESTART runner 'rc'
+[2026-05-10T17:13:44.156155+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:13:44.156677+00:00] RESTART runner 'rc'
+[2026-05-10T17:14:48.496942+00:00] runner 'rc' DOWN; restarting
+[2026-05-10T17:14:48.497324+00:00] RESTART runner 'rc'
+[2026-05-10T17:15:51.859348+00:00] STOP_AT_UTC reached -- supervisor exiting (test runners will continue until stopped manually)
+[2026-05-10T17:15:51.860809+00:00] OVERNIGHT SUPERVISOR exiting cleanly
