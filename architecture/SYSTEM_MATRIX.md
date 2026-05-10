@@ -232,6 +232,7 @@
 | Platform north star | Autonomous + self-healing + learning + AI-embedded | `project_platform_north_star.md` |
 | Business model | Model C generalist EVERYWHERE (not niche). Default premium 1.12, floor 1.08, band 1.08-1.18. | `project_business_model_decision_2026_05_09.md` |
 | Pricing layer | 25 mechanisms across 6 layers already exist. Consult catalog BEFORE building new pricing logic. | `feedback_pricing_toolkit_full_catalog.md` |
+| Pricing pipeline spec | 6-layer absolute-bottom-dollar pipeline. Operator supplied reference code 2026-05-10; code has 6 hard issues, math is sound. Build plan at `chl-memory/architecture/pricing_pipeline_spec_2026_05_10.md`. DO NOT save reference code verbatim. | `reference_pricing_pipeline_spec.md` |
 | Loss floor | HARD RULE: never book at a loss. `pnl_monitor.compute_load_pnl` is absolute. Aggregate RED state (24h net < -1%) auto-blocks new quotes. | `project_network_control_strategy_2026_05_09.md` |
 | Market posture | Phase 1 = survival/net-profit. Phase 2 = sustained undercut. Lane-adaptive behaviors not just multipliers. | `project_market_dominance_strategy_2026_05_09.md` |
 | Tracking | PWA primary, no ELD vendor signups. ~25% PWA failure acceptable. | `project_pwa_is_primary_tracking_no_eld_vendor.md` |
