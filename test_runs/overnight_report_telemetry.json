@@ -1,0 +1,95 @@
+{
+  "window": {
+    "start": "2026-05-10T05:57:08",
+    "end": "2026-05-10T09:59:00",
+    "cadence_change_at": "2026-05-10T06:53:22"
+  },
+  "sop": {
+    "total": 437,
+    "pass": 356,
+    "bugs": 21,
+    "by_scenario": {
+      "happy_van_500mi_30k": 22,
+      "happy_reefer_temp_range": 22,
+      "happy_flatbed_tarp": 22,
+      "happy_hazmat_class3": 22,
+      "happy_oversize_permit": 22,
+      "happy_team_driver": 22,
+      "happy_local_trip": 22,
+      "happy_long_haul_1500mi": 21,
+      "happy_short_haul_150mi": 21,
+      "fi_geofence_pickup": 21,
+      "fi_geofence_delivery": 20,
+      "fi_status_skip": 20,
+      "fi_re_accept": 20,
+      "fi_expired_token": 20,
+      "fi_bad_bol_upload": 20,
+      "fi_pod_missing_on_deliver": 20,
+      "fi_wrong_consignee_pin": 20,
+      "fi_cancel_load_tonu": 20,
+      "fi_missing_rate_con_sign": 20,
+      "fi_insurance_expired_carrier": 20,
+      "fi_mc_revoked": 20
+    },
+    "bugs_by_scenario": {
+      "fi_wrong_consignee_pin": 20,
+      "fi_status_skip": 1
+    }
+  },
+  "multi_actor": {
+    "total": 485,
+    "outcomes": {
+      "fail": 35,
+      "pass": 361,
+      "open": 89
+    }
+  },
+  "rate_calc": {
+    "total": 10710,
+    "grades": {
+      "PASS": 9996,
+      "OPEN": 476,
+      "FAIL": 238
+    }
+  },
+  "loads": {
+    "total": 8945,
+    "delivered": 220,
+    "by_status": {
+      "delivered": 200,
+      "available": 8588,
+      "booked": 57,
+      "en_route": 40,
+      "at_pickup": 20,
+      "unloaded": 20,
+      "cancelled": 20
+    },
+    "rate_total": 418188.19,
+    "market_total": 468370.77,
+    "spread": 50182.580000000016,
+    "factor_fee": 11709.269250000001,
+    "net": 38473.310750000004
+  },
+  "pnl_state_24h": {
+    "state": "yellow",
+    "net_usd": 20741.03,
+    "loads_delivered": 353,
+    "revenue_after_factor_usd": 732546.42,
+    "breakdown": {
+      "factor_fee_pct": 0.025,
+      "per_load_ops_cost_usd": 12.0,
+      "visibility_bonus_usd": 50.0,
+      "thresholds": {
+        "green_pct": 0.05,
+        "yellow_pct": 0.01,
+        "orange_pct": -0.01
+      },
+      "net_pct_of_revenue": 0.0283
+    }
+  },
+  "self_heal": {
+    "urgent_alerts": 0,
+    "dev_review": 0,
+    "operator_push": 0
+  }
+}
