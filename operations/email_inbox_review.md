@@ -2246,3 +2246,737 @@ The 73-bounce signal above is `*@test.continentalhaul.com` — a fake domain my 
 
 **Action:** none on the bounces themselves (working as designed). **Triage script TODO**: skip-list `mailer-daemon@mail.zoho.com` rows whose body contains `test.continentalhaul.com` so future hourly fires don't generate URGENT false-positives.
 
+
+## Triage run -- 2026-05-10T03:07:15.326721+00:00
+**Window**: last 75 min (since 2026-05-10T01:52:15.245141+00:00). **Seen**: 45. **Classified**: 34. **Urgent**: 0. **Skipped (dup)**: 11.
+**By category**: VENDOR=34
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (45)
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f923e66.81012757-2132830669.-4696981618173214717@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f9226e5.2661f0a0-389177174.-7378442521244006842@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f925d9d.54e2fd3b1091210588.-323532211885667304@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f927ce8.4769aa33-1964596870.-3320901463319997287@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f929c2e.199010f4352835101.-1221341097765603888@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f92d2e1.1a28e4d8-189131308.1596800244893068355@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f92ea7a.5dba49081081985154.-7729067009414834438@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f931938.6d97145d-1445078388.1525164376962533161@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f933868.7d31305b551835306.-3694665294800872718@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f938e8c.164caeb72095002125.2463408315165996786@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0f93ada8.7b0f2f9e900643619.-2059714022188433466@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa1d8f2.10c022f31528874380.-3529215730903429051@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa1f022.7ebea101576724251.-8320045846657159913@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa20f92.107d1cb0-1419789349.-2318925078850749042@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa22f0a.aecd8a1961212710.7811904109528188866@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa24e08.67aa5ef7200479808.976030982439614243@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa26d5f.3416925e-602073497.3817628428467716161@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa28ca2.502070521395308313.219869259328892644@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa2b3bf.3f442b0f-1052714195.4391660388358132959@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa2e29f.2261a6f8-158075594.-8618263458813928456@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa309d1.44d6c988-1571793637.6874162743051214589@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa32915.4a7eb9b41202905356.1014148941020261237@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa3487c.44aff42b-1998926272.-6519548814735845003@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa367cc.5403d8a3739184455.-1422998201349232243@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa39697.201580d2-812809404.-7808803271815418584@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa3b601.39b1c966570586737.8868683311123208131@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa3d57b.3903366d-191536053.-2952083713159950985@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa3f485.23ce7206-340256774.-6689215572859698921@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa488e7.5f200129-1108772115.-7246596766363501987@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa4a852.38b4db91-1996922026.-916236221615165777@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa4c77a.4c372a6b-1492350789.770509000926236289@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa4e71c.3e3d88e0-388909491.5435653002978337261@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa50def.76070bbf-532813956.3266379111835739118@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa52d3a.161d68e5-1345761298.3326740504805783929@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa544fa.4b6cb5e0-159432335.-1496887963577017502@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa563d1.3af4edfa92817388.-7688218307238131843@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa59abe.3fae2e611416577812.7383193250284486945@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa5b9db.478844111232312812.-4369298432006517393@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa5d945.7694ba882005944642.2722557832986381840@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa5f87d.3f873ad7-5922195.-9153850268274933025@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa60ffb.3e18aa0c-1663617325.4820918547611881357@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa646a7.400659de1000114680.4218725547021588886@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa665fb.58f3e5ba-2132950089.-7070292499555242759@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa68555.3b254fe8332207594.-3825902796770259041@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa6a48f.562ed5a31547217093.6012309905619361952@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (0)
+(none)
+
+### INFORMATIONAL (0)
+(none)
+
+## Triage run -- 2026-05-10T03:28:27.837285+00:00
+**Window**: last 75 min (since 2026-05-10T02:13:27.790846+00:00). **Seen**: 43. **Classified**: 39. **Urgent**: 0. **Skipped (dup)**: 4.
+**By category**: VENDOR=39
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (43)
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa646a7.400659de1000114680.4218725547021588886@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa665fb.58f3e5ba-2132950089.-7070292499555242759@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa68555.3b254fe8332207594.-3825902796770259041@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fa6a48f.562ed5a31547217093.6012309905619361952@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=noreply@zoho.com subject='Zoho : Email Outgoing Blocked' message_id=<19e0fd9fe0e.114ba560b584089.2317293746634835465@zoho.com>
+    - sender_domain_match:vendor=zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fda127c.68056139631423688.848910092845117060@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fda4997.65d11391150590653.-8340616987723352627@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fda7fed.5327b491-2098836881.-8469358864494672115@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdaaeed.4de06b3e-1611509985.7696164029885564682@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdadddc.8982dd931704217884.-440082538622418824@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdafd1a.67289aa31709682047.-6504616988577158388@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb1c6c.14b74a19981439095.291305934387405323@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb43b7.258191ba1309262094.5732247555862219335@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb62cb.1b9420df-1229139516.-8729269005003952161@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb822b.36cd7bea986243284.-2692965854180142284@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdba174.33726b5b604613339.6823723806384333101@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdbc103.461c37e2-1089068260.6312638384880067908@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdbe01e.86df8efd-703137362.-5963852577411359826@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc0edc.39c56f341871481721.-6229537418737809662@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc2e3b.6f797292842992014.-2338062165869900043@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc4d68.65fa5e2d1694121876.8204243611644799291@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc6ccb.7cb8f4d12025193158.7174309202842497485@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdcca8e.7468b03f-336837356.-6723506584792417557@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdce20f.58e14ca1-1085493975.304060258426044589@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd0156.3ec84ee8-1275377788.-3386394373430838451@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd2096.66a445a61147409825.3815360049789264741@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd37fa.6202e29f1847749217.-7373671424032376766@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd575f.28847df1-1152216328.-8959086299597796447@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd6eab.1ae819a8-1210116196.2299105441599607152@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd95cd.647009d5-2060049474.-4035175862135594769@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fddbcec.4d1631a6355448931.-7239522543809082808@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdde419.6c09062e88248.-2101619485930692962@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde034d.2c40fd43-406692430.-6334065729754243038@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde22a0.700357bb747675224.351897934669137485@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde3a06.673d1018-99544816.-1639385849798912800@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde7116.87c54f3a-719155336.-8975925984075246124@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde900a.6c090dba-601228864.5312965947984781569@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdeaf6d.59a5a89d904927196.-7498970480877383405@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feb741f.6826cae3-2077149330.-1667270378344372872@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feb8b62.517394d8-1227531522.-7302641662198394119@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0febaadc.1c1d7e63-1767886448.-7294895555702501240@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0febc9f0.cc5ad691300321215.2485555422211663113@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0febe177.7e5be96e-877224407.3387286514392483571@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (0)
+(none)
+
+### INFORMATIONAL (0)
+(none)
+
+## Triage run -- 2026-05-10T03:51:53.994978+00:00
+**Window**: last 75 min (since 2026-05-10T02:36:53.917667+00:00). **Seen**: 67. **Classified**: 28. **Urgent**: 0. **Skipped (dup)**: 39.
+**By category**: VENDOR=28
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (67)
+- [VENDOR] conf=0.85 from=noreply@zoho.com subject='Zoho : Email Outgoing Blocked' message_id=<19e0fd9fe0e.114ba560b584089.2317293746634835465@zoho.com>
+    - sender_domain_match:vendor=zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fda127c.68056139631423688.848910092845117060@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fda4997.65d11391150590653.-8340616987723352627@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fda7fed.5327b491-2098836881.-8469358864494672115@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdaaeed.4de06b3e-1611509985.7696164029885564682@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdadddc.8982dd931704217884.-440082538622418824@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdafd1a.67289aa31709682047.-6504616988577158388@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb1c6c.14b74a19981439095.291305934387405323@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb43b7.258191ba1309262094.5732247555862219335@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb62cb.1b9420df-1229139516.-8729269005003952161@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdb822b.36cd7bea986243284.-2692965854180142284@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdba174.33726b5b604613339.6823723806384333101@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdbc103.461c37e2-1089068260.6312638384880067908@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdbe01e.86df8efd-703137362.-5963852577411359826@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc0edc.39c56f341871481721.-6229537418737809662@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc2e3b.6f797292842992014.-2338062165869900043@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc4d68.65fa5e2d1694121876.8204243611644799291@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdc6ccb.7cb8f4d12025193158.7174309202842497485@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdcca8e.7468b03f-336837356.-6723506584792417557@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdce20f.58e14ca1-1085493975.304060258426044589@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd0156.3ec84ee8-1275377788.-3386394373430838451@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd2096.66a445a61147409825.3815360049789264741@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd37fa.6202e29f1847749217.-7373671424032376766@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd575f.28847df1-1152216328.-8959086299597796447@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd6eab.1ae819a8-1210116196.2299105441599607152@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdd95cd.647009d5-2060049474.-4035175862135594769@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fddbcec.4d1631a6355448931.-7239522543809082808@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdde419.6c09062e88248.-2101619485930692962@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde034d.2c40fd43-406692430.-6334065729754243038@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde22a0.700357bb747675224.351897934669137485@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde3a06.673d1018-99544816.-1639385849798912800@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde7116.87c54f3a-719155336.-8975925984075246124@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fde900a.6c090dba-601228864.5312965947984781569@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fdeaf6d.59a5a89d904927196.-7498970480877383405@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feb741f.6826cae3-2077149330.-1667270378344372872@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feb8b62.517394d8-1227531522.-7302641662198394119@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0febaadc.1c1d7e63-1767886448.-7294895555702501240@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0febc9f0.cc5ad691300321215.2485555422211663113@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0febe177.7e5be96e-877224407.3387286514392483571@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fec00bc.c6d8c3e-939100560.-4455842583385563927@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fec1fe2.7b02b2b1-153219697.7863675237567841484@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fec4edb.5a478f57-779491272.-6553836884620101130@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fec8d94.26f4ce8d-1007327842.-4114907390424842939@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fecbc8b.8a098bb4-217901878.5965391114194514758@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fecdb8f.6cfb83f61440150419.8490217018736106269@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fecfabb.31b16594-1036589888.-4401320025687240552@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fed1a20.2039be5b-52780594.-4805386982842025879@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fed50dd.81627a74785783660.-5901242910408046502@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fed782e.496092f81097149017.1560029694546670124@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fed9ee5.12d09f0e213339958.-503653194310897606@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fedbe41.617d422d821540358.5710960686095979148@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fee143f.41a92af0-1595728019.-9180650502716831908@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fee3ba2.7889891d174639761.-9110268162595502638@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fee5b1b.68a0569a1820355125.-1244286238351332834@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fee7a03.1a97e636448610893.-7990552872463613934@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fee916f.547db2ee-1390394520.6361829546975677440@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feeb0d4.65078cac-1993029243.-8892185830384863166@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feed000.67c494da-364651457.7324283011094582424@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feeef8a.42aa70ce876384227.501210204635100658@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fef1e52.6048c44c-419050423.6358013790150685421@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fef45b0.538b6b681454357696.2955121814120856228@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fef649a.74ddedab-1166120746.-2531618393495201858@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fef8bb9.3e0a12d8-1649835331.-8373785544586407523@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fefa330.a6fb5ac-1548740677.7014707023720014381@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0fefd9dc.6bf58d98-1721363396.-811475454811701365@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0feff925.14abab6d-72993090.8304032750474733851@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=mailer-daemon@mail.zoho.com subject='Undelivered Mail Returned to Sender' message_id=<19e0ff01883.83ec70cc30549609.-8323302969761649183@zohomail.com>
+    - sender_domain_match:vendor=mail.zoho.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (0)
+(none)
+
+### INFORMATIONAL (0)
+(none)
+
+## Hourly review 2026-05-10 03:53 UTC
+
+Total ingested last 75min: 67
+By category: {'PROVIDER': 67}
+By verdict: {'INFORMATIONAL': 67}
+
+### URGENT (require operator attention) (0)
+
+_(none this window)_
+
+### OPERATOR_REVIEW (next session) (0)
+
+_(none this window)_
+
+### AUTO_ACK_OK (0)
+
+_(none this window)_
+
+### INFORMATIONAL (67)
+
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `noreply@zoho.com` -- **Zoho : Email Outgoing Blocked**
+  - cat=PROVIDER  summary: Dear User, Email outgoing for your Zoho account has been blocked because your email outgoing rate has exceeded the allow
+  - action: No action
+
+---
