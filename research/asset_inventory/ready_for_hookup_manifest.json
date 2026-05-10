@@ -30,6 +30,19 @@
       "intended_use": "UI badge showing whether the platform is running in shadow mode (running operations but not actually firing real outbound). Visible safety indicator while in pre-launch testing or during incident-response shutdowns. Color + label change with mode state.",
       "hookup_blockers": "Needs the shadow-mode flag concept defined in the platform. If the operator has decided shadow-mode isn't a thing they want to track visibly, this can be deleted instead.",
       "estimated_hookup_effort": "TBD -- depends on whether operator wants shadow-mode visibility. If yes: ~1h to define the flag in business_settings + render the pill in the top bar. If no: delete."
+    },
+    {
+      "path": "backend/scrapers/html_parser.py + backend/scrapers/llm_parser.py + backend/board_adapter_normalizer.py::normalize_public_html_load",
+      "intended_use": "3-layer parsing stack shipped 2026-05-10. Layer A (JSON normalizer) maps official-API responses for 5 boards (DAT/Truckstop/123/Direct Freight/SAM.gov) to ObservedLoad. Layer B (BS4 deterministic) parses HTML via selector-map dispatch + generic-heuristic fallback (already extracts 25 loads from real FreightFinder HTML without per-source selectors). Layer C (Claude haiku-4.5 LLM fallback) parses arbitrary HTML when Layer B returns []. Spend-capped at $5/day with race-safe atomic counter. End-to-end smoke-tested at $0.087/3 fixtures.",
+      "hookup_blockers": "Awaits real load-board connection. Activation steps when load board connects: (1) fill SELECTOR_MAPS in html_parser.py:95-128 per source from observed HTML, (2) register parser_failure as new source in self_healing/anomaly_dispatcher.py (~30 lines), (3) flip CHL_SELF_HEAL_PHASE{1,2,3}_ENABLED feature flags, (4) wire scraper output to db.market_loads_observed via existing board_adapter_normalizer.",
+      "estimated_hookup_effort": "Small (~1-2 hours per board for selector maps, ~30 min for self-heal source registration). Architecture is in place; the work is per-source calibration not new code.",
+      "current_state": "LIVE in code (3-layer dispatch endpoint /api/scrapers/parse-test reachable + auth-gated). Dormant in workflow (no scraper cron firing, no parser_failures collection populating). Calibration phase begins on first real load-board payload."
+    },
+    {
+      "path": "backend/scrapers/loadboard_scraper.py + backend/loadboards.py (13 unfilled adapters)",
+      "intended_use": "18 load board adapter classes scaffolded in loadboards.py (DAT, Truckstop, 123Loadboard, Direct Freight, SAM.gov, Loadsmart, UberFreight, TruckSmarter, ChlDirect, FMCSA Census + 8 niche: BulkLoads, LivestockTalk, LivestockTransportNation, HopLoads, FR8Star, TankTransport, AgriCarriers, OnlineFreight). 5 have JSON normalizers in board_adapter_normalizer.py; 13 lack normalizers + many lack credentials.",
+      "hookup_blockers": "Per-board: (a) operator obtains API credentials or confirms public-HTML-scraping is acceptable per ToS; (b) write the normalizer function mapping that board's response shape to ObservedLoad; (c) register in BOARD_NORMALIZERS dict; (d) populate public_rss_sources.json with feed URL or HTML endpoint. Gated downstream on FMCSA broker authority (~May 13) for credentialed boards.",
+      "estimated_hookup_effort": "Medium (~1-2 hours per board for normalizer + smoke test against real response sample). Total backlog: ~13-26 hours across all 13 unfilled adapters. Niche boards (8) likely HTML-only, will use Layer B once selector maps are written."
     }
   ]
 }

@@ -1,6 +1,6 @@
 # CHL Asset Inventory -- Orphans + Broken
 
-_Generated: 2026-05-10T07:27:30.068402+00:00_
+_Generated: 2026-05-10T21:35:06.971691+00:00_
 
 > **Triage focus.** These files are present in the codebase but
 > are NOT reachable from `backend/server.py` or `frontend/src/App.js`,
@@ -16,7 +16,7 @@ _Generated: 2026-05-10T07:27:30.068402+00:00_
 
 _None — no parse errors or unresolved internal imports detected._
 
-## ORPHAN (50)
+## ORPHAN (52)
 
 ### `frontend/src/lib/manualOverrideFields.js` (211 LOC)
 
@@ -63,6 +63,24 @@ _None — no parse errors or unresolved internal imports detected._
 - **Docstring:** * MarginFloorModal.jsx — Iter 139.37 * * Two-mode modal that renders either: * • HARD BLOCK — no override possible, "Got it, change rate" close button only * • SOFT WARN — explicit "Yes, dispatch anyw
 - **Note:** Not reachable from frontend/src/App.js
 - **Exports:** `MarginFloorModal`
+
+### `backend/.smoke_3_layer_parsing.py` (149 LOC)
+
+- **Subsystem:** Synthetic Test
+- **Type:** python_module
+- **Last modified:** 2026-05-10T21:17:41.816360+00:00
+- **Docstring:** End-to-end smoke test of the 3-layer parsing stack against REAL captured public HTML. Tests Layer B (BS4 deterministic) and Layer C (Claude LLM fallback) against 3 captured fixtures from Agent 1's dis
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `test_layer_b(), test_layer_c(), main()`
+
+### `backend/.smoke_vault_files.py` (135 LOC)
+
+- **Subsystem:** Synthetic Test
+- **Type:** python_module
+- **Last modified:** 2026-05-10T20:11:37.485114+00:00
+- **Docstring:** Smoke test for vault file-storage feature. Validates: encrypt/decrypt round-trip + Mongo folder/file CRUD against the live database. Bypasses the HTTP layer (we already proved the routes are wired by 
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `main()`
 
 ### `frontend/src/components/ui/form.jsx` (133 LOC)
 

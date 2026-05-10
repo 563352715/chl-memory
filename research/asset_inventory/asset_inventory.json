@@ -1,40 +1,40 @@
 {
-  "generated_at": "2026-05-10T07:27:30.068402+00:00",
+  "generated_at": "2026-05-10T21:35:06.971691+00:00",
   "scan_dirs": [
     "C:\\CHL\\backend",
     "C:\\CHL\\backend\\tests",
     "C:\\CHL\\frontend\\src",
     "C:\\CHL\\scripts"
   ],
-  "total_assets": 1162,
+  "total_assets": 1182,
   "by_status": {
-    "LIVE": 522,
+    "ORPHAN": 57,
+    "LIVE": 524,
     "LIBRARY": 21,
     "CODE-READY": 9,
-    "ORPHAN": 55,
-    "DEV-TOOL": 555
+    "DEV-TOOL": 571
   },
   "by_subsystem": {
+    "Synthetic Test": 289,
     "Self-Healing": 74,
-    "Misc": 168,
-    "Communications": 117,
+    "Misc": 169,
+    "Communications": 120,
     "Continuity Layer": 4,
     "Compliance": 79,
-    "Carrier Operations": 44,
+    "Carrier Operations": 45,
     "Load Lifecycle": 29,
     "Owner Tooling": 6,
-    "Intelligence": 35,
+    "Intelligence": 38,
     "Documents": 14,
     "Financial": 53,
     "LLL14-19 Recent Build": 5,
-    "Dev-Ops Scripts": 17,
+    "Dev-Ops Scripts": 18,
     "Public-Facing": 19,
     "Manual Override": 1,
-    "Synthetic Test": 282,
     "Frontend UI": 172,
-    "Scripts / Tooling": 43
+    "Scripts / Tooling": 47
   },
-  "live_python_modules": 772,
+  "live_python_modules": 776,
   "live_frontend_files": 137,
   "assets": [
     {
@@ -193,7 +193,9 @@
       "imported_by": [
         "backend/server.py",
         "backend/tests/test_carrier_contact_enricher.py",
-        "backend/tests/test_kill_switch_integration.py"
+        "backend/tests/test_kill_switch_integration.py",
+        "scripts/enrich_all_carriers_from_fmcsa_cache.py",
+        "scripts/fill_carrier_contacts_gap.py"
       ],
       "lines_of_code": 34,
       "last_modified": "2026-05-08T15:37:30.280670+00:00",
@@ -286,7 +288,9 @@
         "backend/carrier_contacts/contact_router.py",
         "backend/carrier_contacts/enricher.py",
         "backend/carrier_contacts/enrichment_cron.py",
-        "backend/tests/test_carrier_contact_enricher.py"
+        "backend/tests/test_carrier_contact_enricher.py",
+        "scripts/enrich_all_carriers_from_fmcsa_cache.py",
+        "scripts/fill_carrier_contacts_gap.py"
       ],
       "lines_of_code": 733,
       "last_modified": "2026-05-08T15:39:04.024919+00:00",
@@ -1961,7 +1965,7 @@
       "rel_path": "backend/vetting_checks.py",
       "type": "python_module",
       "subsystem": "Carrier Operations",
-      "status": "CODE-READY",
+      "status": "LIVE",
       "description": "Standalone carrier-vetting fraud-signal checks (Phase B.1 #4 + #5). Two TIER-2 fraud-exempt checks lifted out of `carrier_vetting.py` so they can be called independently of the full vet flow (e.g. lig",
       "exports": [
         "check_authority_age()",
@@ -1976,6 +1980,7 @@
         "typing"
       ],
       "imported_by": [
+        "backend/carrier_outreach.py",
         "scripts/smoke_vetting_checks.py"
       ],
       "lines_of_code": 393,
@@ -1985,10 +1990,42 @@
         "\"\\nStandalone carrier-vetting fraud-signal checks (Phase B.1 #4 + #5).\\n\\nTwo TIER-2 fraud-exempt checks lifted out of `carrier_vetting.py` so they\\ncan be called independently of the full vet flow (e"
       ],
       "parse_error": null,
-      "notes": [
-        "Has smoke test scripts/smoke_vetting_checks.py but no LIVE caller"
-      ],
+      "notes": [],
       "module_name": "vetting_checks"
+    },
+    {
+      "path": "C:/CHL/scripts/fill_carrier_contacts_gap.py",
+      "rel_path": "scripts/fill_carrier_contacts_gap.py",
+      "type": "python_module",
+      "subsystem": "Carrier Operations",
+      "status": "DEV-TOOL",
+      "description": "Fill the 457 carrier_contacts rows missing after the FMCSA-cache enrichment ran. These carriers exist in db.carriers with phone/address fields populated, but were skipped because they had no fmcsa_loo",
+      "exports": [
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "carrier_contacts",
+        "carrier_contacts.contact_store",
+        "motor",
+        "os",
+        "pathlib",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 108,
+      "last_modified": "2026-05-10T15:41:26.647033+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Fill the 457 carrier_contacts rows missing after the FMCSA-cache\\nenrichment ran. These carriers exist in db.carriers with phone/address\\nfields populated, but were skipped because they had no fmcsa_",
+        "sys.path.insert(0, 'C:/CHL/backend')",
+        "asyncio.run(main())"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "fill_carrier_contacts_gap"
     },
     {
       "path": "C:/CHL/backend/aged_ar.py",
@@ -2303,13 +2340,16 @@
         "state_lock",
         "state_lock.transition_load_status",
         "typing",
-        "uuid"
+        "uuid",
+        "vetting_checks",
+        "vetting_checks.run_full_vetting"
       ],
       "imported_by": [
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_carrier_outreach_vetting_gate.py"
       ],
-      "lines_of_code": 1659,
-      "last_modified": "2026-05-10T07:11:24.817866+00:00",
+      "lines_of_code": 1690,
+      "last_modified": "2026-05-10T17:20:37.491969+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nCold-Carrier Outreach & Acceptance Funnel.\\n\\nFlow:\\n 1. Broker initiates outreach on a specific load \u2192 we generate a short-lived token\\n 2. SMS fires to carrier\\'s phone: \"CHL: Dallas\u2192Atlanta Van "
@@ -4828,6 +4868,80 @@
       "module_name": "tests.test_business_plan_and_prefill"
     },
     {
+      "path": "C:/CHL/backend/tests/test_carrier_outreach_vetting_gate.py",
+      "rel_path": "backend/tests/test_carrier_outreach_vetting_gate.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "DEV-TOOL",
+      "description": "LL_PLATFORM_GAP_002 -- carrier_outreach.initiate_outreach must consult vetting_checks.run_full_vetting before sending any SMS / email and must mark the offer token as `vetting_blocked` with no send wh",
+      "exports": [
+        "test_red_vetting_blocks_outreach_no_send_token_marked_vetting_blocked()",
+        "test_clean_vetting_proceeds_to_send()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "carrier_outreach",
+        "fastapi",
+        "os",
+        "pytest",
+        "starlette",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 199,
+      "last_modified": "2026-05-10T15:41:25.227049+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nLL_PLATFORM_GAP_002 -- carrier_outreach.initiate_outreach must consult\\nvetting_checks.run_full_vetting before sending any SMS / email and must\\nmark the offer token as `vetting_blocked` with no se",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-outreach-vetting')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_carrier_outreach_vetting_gate"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_carrier_outreach_vetting_gate.py",
+      "rel_path": "backend/tests/test_carrier_outreach_vetting_gate.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "DEV-TOOL",
+      "description": "LL_PLATFORM_GAP_002 -- carrier_outreach.initiate_outreach must consult vetting_checks.run_full_vetting before sending any SMS / email and must mark the offer token as `vetting_blocked` with no send wh",
+      "exports": [
+        "test_red_vetting_blocks_outreach_no_send_token_marked_vetting_blocked()",
+        "test_clean_vetting_proceeds_to_send()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "carrier_outreach",
+        "fastapi",
+        "os",
+        "pytest",
+        "starlette",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 199,
+      "last_modified": "2026-05-10T15:41:25.227049+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nLL_PLATFORM_GAP_002 -- carrier_outreach.initiate_outreach must consult\\nvetting_checks.run_full_vetting before sending any SMS / email and must\\nmark the offer token as `vetting_blocked` with no se",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-outreach-vetting')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_carrier_outreach_vetting_gate"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_email_poller.py",
       "rel_path": "backend/tests/test_email_poller.py",
       "type": "python_module",
@@ -6671,6 +6785,49 @@
         "Script \u2014 assumed operator-run; investigate if name unfamiliar"
       ],
       "module_name": "extract_telnyx_status"
+    },
+    {
+      "path": "C:/CHL/scripts/generate_hosted_sms_loa.py",
+      "rel_path": "scripts/generate_hosted_sms_loa.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "DEV-TOOL",
+      "description": "Generate the Hosted SMS LOA PDF for Telnyx +1-866-490-6433. Distinct from the port LOA: this authorizes Telnyx to enable SMS on the number while voice service stays with Twilio during the porting tran",
+      "exports": [],
+      "imports": [
+        "reportlab"
+      ],
+      "imported_by": [],
+      "lines_of_code": 142,
+      "last_modified": "2026-05-10T14:29:15.512248+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Generate the Hosted SMS LOA PDF for Telnyx +1-866-490-6433.\\n\\nDistinct from the port LOA: this authorizes Telnyx to enable SMS on the\\nnumber while voice service stays with Twilio during the porting",
+        "story.append(Paragraph('LETTER OF AUTHORIZATION FOR HOSTED SMS MESSAGING', title))",
+        "story.append(Paragraph('Date: 05/10/2026', body))",
+        "story.append(Spacer(1, 6))",
+        "story.append(Paragraph('To: Telnyx LLC, 311 W Superior St, Suite 504, Chicago, IL 60654', body))",
+        "story.append(Spacer(1, 6))",
+        "story.append(Paragraph('From:', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;&nbsp;&nbsp;Continental Haul Logistics LLC', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;&nbsp;&nbsp;618 West Greenwood Street', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;&nbsp;&nbsp;Springfield, MO 65807', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;&nbsp;&nbsp;EIN: 42-2003434', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;&nbsp;&nbsp;MC 1817555 &nbsp;|&nbsp; USDOT 4569843', body))",
+        "story.append(Paragraph(DIV, body))",
+        "story.append(Paragraph('I, Jason Aaron Meyer, as the authorized representative of Continental Haul Logistics LLC, hereby authorize Telnyx LLC to provision Hosted SMS Messaging service on the toll-free",
+        "story.append(Paragraph('I authorize Telnyx to:', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;1.&nbsp;&nbsp;Enable inbound and outbound SMS messaging on the listed number through Telnyx&rsquo;s messaging platform.', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;2.&nbsp;&nbsp;Communicate with the voice carrier of record (Twilio Inc.) and any required intermediaries to enable, maintain, and operate Hosted SMS service on the ",
+        "story.append(Paragraph('&nbsp;&nbsp;3.&nbsp;&nbsp;Continue providing Hosted SMS service through the porting transition and after the port to Telnyx completes, at which point messaging service will ope",
+        "story.append(Paragraph('I understand that:', body))",
+        "story.append(Paragraph('&nbsp;&nbsp;-&nbsp;&nbsp;Voice service on the listed number remains with Twilio Inc. until the port to Telnyx completes.', body))"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "generate_hosted_sms_loa"
     },
     {
       "path": "C:/CHL/scripts/hourly_inbox_triage.py",
@@ -10944,8 +11101,8 @@
         "sys"
       ],
       "imported_by": [],
-      "lines_of_code": 285,
-      "last_modified": "2026-05-10T06:52:53.954866+00:00",
+      "lines_of_code": 297,
+      "last_modified": "2026-05-10T16:09:33.334584+00:00",
       "smoke_test": null,
       "decorators": [
         "'overnight_supervisor.py -- Watchdog + periodic snapshotter + bug ledger.\\n\\nOperator-mandated 2026-05-10 EOD-17:\\n> \"Keep going through the night ... continue saving\"\\n> \"do not fix issues unless tho",
@@ -10967,8 +11124,8 @@
       "exports": [],
       "imports": [],
       "imported_by": [],
-      "lines_of_code": 81,
-      "last_modified": "2026-05-10T05:54:42.368114+00:00",
+      "lines_of_code": 132,
+      "last_modified": "2026-05-10T20:13:52.955640+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -10976,6 +11133,40 @@
         "Install / snapshot / backup script"
       ],
       "module_name": ""
+    },
+    {
+      "path": "C:/CHL/scripts/vault_metadata_dump.py",
+      "rel_path": "scripts/vault_metadata_dump.py",
+      "type": "python_module",
+      "subsystem": "Dev-Ops Scripts",
+      "status": "DEV-TOOL",
+      "description": "Dump vault_* MongoDB collections to JSON for cold backup. Called from snapshot_to_d.ps1 on every save so vault metadata rides every backup alongside the encrypted blobs. Without this, you'd have the e",
+      "exports": [
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "json",
+        "motor",
+        "os",
+        "pathlib",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 62,
+      "last_modified": "2026-05-10T20:13:42.254924+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Dump vault_* MongoDB collections to JSON for cold backup.\\n\\nCalled from snapshot_to_d.ps1 on every save so vault metadata rides every\\nbackup alongside the encrypted blobs. Without this, you'd have ",
+        "load_dotenv('C:/CHL/backend/.env')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "vault_metadata_dump"
     },
     {
       "path": "C:/CHL/backend/carrier_docs/expiry_cron.py",
@@ -11099,8 +11290,8 @@
         "scripts/get_pin_and_inject.py",
         "scripts/get_pin_for_ref.py"
       ],
-      "lines_of_code": 347,
-      "last_modified": "2026-05-04T22:04:39.859868+00:00",
+      "lines_of_code": 350,
+      "last_modified": "2026-05-10T15:46:11.047540+00:00",
       "smoke_test": null,
       "decorators": [
         "'Iter 113 \u2014 Consignee Delivery Confirmation.\\n\\nBulletproofs the final mile of the Driver Handshake. Before a driver can flip\\na load to ``delivered`` from the public dashboard, the consignee must pro"
@@ -13678,8 +13869,8 @@
         "zlib"
       ],
       "imported_by": [],
-      "lines_of_code": 1736,
-      "last_modified": "2026-05-10T00:14:53.236487+00:00",
+      "lines_of_code": 1748,
+      "last_modified": "2026-05-10T15:41:11.638253+00:00",
       "smoke_test": null,
       "decorators": [
         "'multi_actor_synthesizer.py -- 3-actor input synthesizer (driver / shipper / factor).\\n\\nPURPOSE\\n  Operator-mandated 2026-05-09: \"Synthesize driver, shipper, and factoring\\n  inputs. Run all their sy",
@@ -18192,8 +18383,8 @@
       "imported_by": [
         "frontend/src/App.js"
       ],
-      "lines_of_code": 307,
-      "last_modified": "2026-05-04T22:04:40.063961+00:00",
+      "lines_of_code": 755,
+      "last_modified": "2026-05-10T20:09:09.073426+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -18237,7 +18428,8 @@
         "normalize_truckstop_load",
         "normalize_loadboard123_load",
         "normalize_direct_freight_load",
-        "normalize_sam_gov_load"
+        "normalize_sam_gov_load",
+        "normalize_public_html_load"
       ],
       "imports": [
         "__future__",
@@ -18248,10 +18440,11 @@
         "typing"
       ],
       "imported_by": [
+        "backend/tests/test_board_adapter_normalizer.py",
         "scripts/smoke_market_loads_observed.py"
       ],
-      "lines_of_code": 446,
-      "last_modified": "2026-05-10T05:01:19.216082+00:00",
+      "lines_of_code": 500,
+      "last_modified": "2026-05-10T21:21:24.198645+00:00",
       "smoke_test": null,
       "decorators": [
         "\"board_adapter_normalizer.py -- NCS-1 normalization layer.\\n\\nMaps each load board's native response shape to the universal `ObservedLoad`\\ndataclass used by `market_loads_observed.py`. The existing `"
@@ -18624,6 +18817,7 @@
       ],
       "imported_by": [
         "backend/board_adapter_normalizer.py",
+        "backend/tests/test_board_adapter_normalizer.py",
         "scripts/smoke_market_loads_observed.py"
       ],
       "lines_of_code": 517,
@@ -18845,9 +19039,11 @@
       "imported_by": [
         "backend/model_calculators.py",
         "backend/model_selector.py",
+        "backend/pricing_schemes.py",
         "scripts/smoke_model_calculators.py",
         "scripts/smoke_model_selector.py",
-        "scripts/smoke_pricing_modes.py"
+        "scripts/smoke_pricing_modes.py",
+        "scripts/smoke_pricing_schemes.py"
       ],
       "lines_of_code": 418,
       "last_modified": "2026-05-10T04:21:36.281914+00:00",
@@ -18862,6 +19058,57 @@
         "Has smoke test scripts/smoke_pricing_modes.py but no LIVE caller"
       ],
       "module_name": "pricing_modes"
+    },
+    {
+      "path": "C:/CHL/backend/pricing_schemes.py",
+      "rel_path": "backend/pricing_schemes.py",
+      "type": "python_module",
+      "subsystem": "Intelligence",
+      "status": "CODE-READY",
+      "description": "pricing_schemes.py -- Alternative pricing mechanics for CHL's rate calculator. This module is a SIBLING of `pricing_modes.py`. The distinction: - `pricing_modes.py` Operating-phase strategies (surviva",
+      "exports": [
+        "PricingScheme",
+        "SCHEME_DISPATCH",
+        "SCHEMES_CATALOG",
+        "WEATHER_RISK_UPLIFT_TABLE",
+        "decide_with_scheme",
+        "time_of_day_premium",
+        "reverse_auction_evaluate",
+        "dutch_auction_step",
+        "fixed_price_contract",
+        "spread_based",
+        "hybrid_pct_min_dollar",
+        "cost_plus_transparent",
+        "time_decay_surge",
+        "weather_route_risk"
+      ],
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "datetime",
+        "enum",
+        "pricing_modes",
+        "pricing_modes.PricingContext",
+        "pricing_modes.PricingDecision",
+        "pricing_modes.PricingMode",
+        "pricing_modes._build_decision",
+        "pricing_modes._clamp_to_floor",
+        "typing"
+      ],
+      "imported_by": [
+        "scripts/smoke_pricing_schemes.py"
+      ],
+      "lines_of_code": 972,
+      "last_modified": "2026-05-10T10:11:54.704709+00:00",
+      "smoke_test": "scripts/smoke_pricing_schemes.py",
+      "decorators": [
+        "'pricing_schemes.py -- Alternative pricing mechanics for CHL\\'s rate calculator.\\n\\nThis module is a SIBLING of `pricing_modes.py`. The distinction:\\n\\n  - `pricing_modes.py`     Operating-phase strat"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Has smoke test scripts/smoke_pricing_schemes.py but no LIVE caller"
+      ],
+      "module_name": "pricing_schemes"
     },
     {
       "path": "C:/CHL/backend/rate_calc_engine.py",
@@ -18973,6 +19220,140 @@
       "parse_error": null,
       "notes": [],
       "module_name": "shipper_scorecard"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_board_adapter_normalizer.py",
+      "rel_path": "backend/tests/test_board_adapter_normalizer.py",
+      "type": "python_module",
+      "subsystem": "Intelligence",
+      "status": "DEV-TOOL",
+      "description": "test_board_adapter_normalizer.py -- Layer A validation harness for NCS-1. Validates that backend/board_adapter_normalizer.py correctly maps each board's native JSON response shape to the universal `Ob",
+      "exports": [
+        "test_dat_normalizer_processes_all_three_loads()",
+        "test_dat_normalizer_first_load_field_mapping()",
+        "test_dat_normalizer_missing_latlng_yields_none()",
+        "test_dat_normalizer_falls_back_to_now_when_no_posted_at()",
+        "test_truckstop_normalizer_processes_all_three_loads()",
+        "test_truckstop_normalizer_field_mapping_with_latlng()",
+        "test_truckstop_normalizer_specials_string_parses_csv()",
+        "test_truckstop_normalizer_missing_latlng_yields_none()",
+        "test_loadboard123_normalizer_processes_all_three_loads()",
+        "test_loadboard123_normalizer_field_mapping_with_latlng()",
+        "test_loadboard123_normalizer_csv_requirements_split()",
+        "test_loadboard123_normalizer_falls_back_to_created_at()",
+        "test_direct_freight_normalizer_processes_all_three_loads()",
+        "test_direct_freight_normalizer_field_mapping()",
+        "test_direct_freight_normalizer_age_missing_falls_back_to_pickup()",
+        "test_sam_gov_normalizer_processes_all_three_opportunities()",
+        "test_sam_gov_normalizer_field_mapping()",
+        "test_sam_gov_normalizer_no_set_aside_yields_none_specials()",
+        "test_sam_gov_normalizer_uses_fullparentpath_when_no_org_type()",
+        "class TestSafeInt",
+        "class TestSafeFloat",
+        "class TestSafeStr",
+        "test_board_normalizers_has_all_expected_boards()",
+        "test_board_normalizers_entries_are_callable()",
+        "test_board_normalizers_dispatch_via_dict()"
+      ],
+      "imports": [
+        "__future__",
+        "board_adapter_normalizer",
+        "board_adapter_normalizer.BOARD_NORMALIZERS",
+        "board_adapter_normalizer._safe_float",
+        "board_adapter_normalizer._safe_int",
+        "board_adapter_normalizer._safe_str",
+        "board_adapter_normalizer.normalize_dat_load",
+        "board_adapter_normalizer.normalize_direct_freight_load",
+        "board_adapter_normalizer.normalize_loadboard123_load",
+        "board_adapter_normalizer.normalize_sam_gov_load",
+        "board_adapter_normalizer.normalize_truckstop_load",
+        "json",
+        "market_loads_observed",
+        "market_loads_observed.ObservedLoad",
+        "os",
+        "pathlib",
+        "pytest",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 460,
+      "last_modified": "2026-05-10T21:24:14.685609+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_board_adapter_normalizer.py -- Layer A validation harness for NCS-1.\\n\\nValidates that backend/board_adapter_normalizer.py correctly maps each board's\\nnative JSON response shape to the universa"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_board_adapter_normalizer"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_board_adapter_normalizer.py",
+      "rel_path": "backend/tests/test_board_adapter_normalizer.py",
+      "type": "python_module",
+      "subsystem": "Intelligence",
+      "status": "DEV-TOOL",
+      "description": "test_board_adapter_normalizer.py -- Layer A validation harness for NCS-1. Validates that backend/board_adapter_normalizer.py correctly maps each board's native JSON response shape to the universal `Ob",
+      "exports": [
+        "test_dat_normalizer_processes_all_three_loads()",
+        "test_dat_normalizer_first_load_field_mapping()",
+        "test_dat_normalizer_missing_latlng_yields_none()",
+        "test_dat_normalizer_falls_back_to_now_when_no_posted_at()",
+        "test_truckstop_normalizer_processes_all_three_loads()",
+        "test_truckstop_normalizer_field_mapping_with_latlng()",
+        "test_truckstop_normalizer_specials_string_parses_csv()",
+        "test_truckstop_normalizer_missing_latlng_yields_none()",
+        "test_loadboard123_normalizer_processes_all_three_loads()",
+        "test_loadboard123_normalizer_field_mapping_with_latlng()",
+        "test_loadboard123_normalizer_csv_requirements_split()",
+        "test_loadboard123_normalizer_falls_back_to_created_at()",
+        "test_direct_freight_normalizer_processes_all_three_loads()",
+        "test_direct_freight_normalizer_field_mapping()",
+        "test_direct_freight_normalizer_age_missing_falls_back_to_pickup()",
+        "test_sam_gov_normalizer_processes_all_three_opportunities()",
+        "test_sam_gov_normalizer_field_mapping()",
+        "test_sam_gov_normalizer_no_set_aside_yields_none_specials()",
+        "test_sam_gov_normalizer_uses_fullparentpath_when_no_org_type()",
+        "class TestSafeInt",
+        "class TestSafeFloat",
+        "class TestSafeStr",
+        "test_board_normalizers_has_all_expected_boards()",
+        "test_board_normalizers_entries_are_callable()",
+        "test_board_normalizers_dispatch_via_dict()"
+      ],
+      "imports": [
+        "__future__",
+        "board_adapter_normalizer",
+        "board_adapter_normalizer.BOARD_NORMALIZERS",
+        "board_adapter_normalizer._safe_float",
+        "board_adapter_normalizer._safe_int",
+        "board_adapter_normalizer._safe_str",
+        "board_adapter_normalizer.normalize_dat_load",
+        "board_adapter_normalizer.normalize_direct_freight_load",
+        "board_adapter_normalizer.normalize_loadboard123_load",
+        "board_adapter_normalizer.normalize_sam_gov_load",
+        "board_adapter_normalizer.normalize_truckstop_load",
+        "json",
+        "market_loads_observed",
+        "market_loads_observed.ObservedLoad",
+        "os",
+        "pathlib",
+        "pytest",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 460,
+      "last_modified": "2026-05-10T21:24:14.685609+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_board_adapter_normalizer.py -- Layer A validation harness for NCS-1.\\n\\nValidates that backend/board_adapter_normalizer.py correctly maps each board's\\nnative JSON response shape to the universa"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_board_adapter_normalizer"
     },
     {
       "path": "C:/CHL/backend/tests/test_iteration35_market_intel.py",
@@ -19241,8 +19622,8 @@
         "uuid"
       ],
       "imported_by": [],
-      "lines_of_code": 1308,
-      "last_modified": "2026-05-10T01:56:33.360221+00:00",
+      "lines_of_code": 1316,
+      "last_modified": "2026-05-10T15:54:38.383342+00:00",
       "smoke_test": null,
       "decorators": [
         "'rate_calc_scenarios.py -- HTTP-only rate-calculator scenario runner.\\n\\nOperator brief 2026-05-09 (REDIRECT, replaces direct-import approach):\\n    \"Do not synthesize fixes. Synthesize driver, shippe"
@@ -25362,8 +25743,8 @@
       "imported_by": [
         "backend/server.py"
       ],
-      "lines_of_code": 531,
-      "last_modified": "2026-05-04T22:04:39.883816+00:00",
+      "lines_of_code": 535,
+      "last_modified": "2026-05-10T15:14:32.620579+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nMatch-Only Daily Dry-Run Report  (Iter 115)\\n-------------------------------------------\\nDirector\\'s pre-launch test plan: surface as many load\u2194carrier matches as\\npossible across a 24-hour window"
@@ -26273,9 +26654,12 @@
       "exports": [],
       "imports": [],
       "imported_by": [
+        "backend/.smoke_3_layer_parsing.py",
         "backend/scrapers/loadboard_scraper.py",
         "backend/scrapers/scrapers_router.py",
         "backend/server.py",
+        "backend/tests/test_html_parser.py",
+        "backend/tests/test_llm_parser.py",
         "backend/tests/test_loadboard_scraper.py",
         "backend/tests/test_rss_parser.py"
       ],
@@ -26295,31 +26679,90 @@
       "type": "python_module",
       "subsystem": "Misc",
       "status": "LIVE",
-      "description": "html_parser.py -- Phase 10.1.3 prep scaffold for HTML load-board sources. Status: SCAFFOLD ONLY. No live HTML parsing yet. The actual parser implementation requires a `beautifulsoup4` + `lxml` depende",
+      "description": "html_parser.py -- Phase 10.1.3 deterministic HTML load-board parser. Layer B of the CHL parsing stack. BeautifulSoup4 + lxml driven extraction with a per-source SELECTOR_MAPS dispatch and a heuristic ",
       "exports": [
+        "class ParserError",
         "parse_html_listings()",
         "status_summary()"
       ],
       "imports": [
         "__future__",
         "bs4",
+        "bs4.BeautifulSoup",
+        "datetime",
+        "hashlib",
         "logging",
-        "typing"
+        "re",
+        "typing",
+        "xml"
       ],
       "imported_by": [
+        "backend/.smoke_3_layer_parsing.py",
         "backend/scrapers/loadboard_scraper.py",
         "backend/scrapers/scrapers_router.py",
+        "backend/tests/test_html_parser.py",
         "backend/tests/test_loadboard_scraper.py"
       ],
-      "lines_of_code": 125,
-      "last_modified": "2026-05-08T21:51:48.546620+00:00",
+      "lines_of_code": 522,
+      "last_modified": "2026-05-10T21:08:13.660638+00:00",
       "smoke_test": null,
       "decorators": [
-        "'html_parser.py -- Phase 10.1.3 prep scaffold for HTML load-board sources.\\n\\nStatus: SCAFFOLD ONLY. No live HTML parsing yet. The actual parser\\nimplementation requires a `beautifulsoup4` + `lxml` de"
+        "'html_parser.py -- Phase 10.1.3 deterministic HTML load-board parser.\\n\\nLayer B of the CHL parsing stack. BeautifulSoup4 + lxml driven extraction\\nwith a per-source SELECTOR_MAPS dispatch and a heuri"
       ],
       "parse_error": null,
       "notes": [],
       "module_name": "scrapers.html_parser"
+    },
+    {
+      "path": "C:/CHL/backend/scrapers/llm_parser.py",
+      "rel_path": "backend/scrapers/llm_parser.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "llm_parser.py -- Layer C parsing fallback (Claude HTML->JSON extraction). Phase 10.1.4: when Layer A (RSS) and Layer B (per-source HTML selectors) miss or break, this module asks Claude (claude-haiku-",
+      "exports": [
+        "parse_html_via_llm",
+        "LLMParserError",
+        "LLMSpendCapExceeded",
+        "DEFAULT_MODEL",
+        "DEFAULT_MAX_TOKENS",
+        "MAX_HTML_CHARS",
+        "DEFAULT_DAILY_CAP_USD",
+        "CACHE_TTL_HOURS",
+        "TARGET_LISTING_FIELDS",
+        "REQUIRED_LISTING_FIELDS"
+      ],
+      "imports": [
+        "__future__",
+        "anthropic",
+        "backend",
+        "backend.security",
+        "backend.security.secret_reader",
+        "datetime",
+        "hashlib",
+        "json",
+        "logging",
+        "os",
+        "re",
+        "security",
+        "security.secret_reader",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [
+        "backend/.smoke_3_layer_parsing.py",
+        "backend/scrapers/scrapers_router.py",
+        "backend/tests/test_llm_parser.py"
+      ],
+      "lines_of_code": 611,
+      "last_modified": "2026-05-10T21:25:08.250147+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'llm_parser.py -- Layer C parsing fallback (Claude HTML->JSON extraction).\\n\\nPhase 10.1.4: when Layer A (RSS) and Layer B (per-source HTML selectors) miss\\nor break, this module asks Claude (claude-h"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "scrapers.llm_parser"
     },
     {
       "path": "C:/CHL/backend/scrapers/loadboard_scraper.py",
@@ -26414,14 +26857,21 @@
       "status": "LIVE",
       "description": "scrapers_router.py -- Phase 10.1.3 prep health endpoint. Surfaces `loadboard_scraper.health()` plus per-source rate-limit state summary at `/api/health/scrapers`. Read-only. Auth: require_broker. Wire",
       "exports": [
+        "class ParseTestRequest",
         "build_router()"
       ],
       "imports": [
         "__future__",
         "datetime",
         "fastapi",
+        "logging",
+        "pydantic",
         "scrapers",
         "scrapers.html_parser",
+        "scrapers.llm_parser",
+        "scrapers.llm_parser.LLMParserError",
+        "scrapers.llm_parser.LLMSpendCapExceeded",
+        "scrapers.llm_parser.parse_html_via_llm",
         "scrapers.loadboard_scraper",
         "time",
         "typing"
@@ -26430,8 +26880,8 @@
         "backend/server.py",
         "backend/tests/test_loadboard_scraper.py"
       ],
-      "lines_of_code": 143,
-      "last_modified": "2026-05-08T21:52:13.000914+00:00",
+      "lines_of_code": 273,
+      "last_modified": "2026-05-10T21:21:36.959033+00:00",
       "smoke_test": null,
       "decorators": [
         "'scrapers_router.py -- Phase 10.1.3 prep health endpoint.\\n\\nSurfaces `loadboard_scraper.health()` plus per-source rate-limit state\\nsummary at `/api/health/scrapers`. Read-only. Auth: require_broker."
@@ -26458,6 +26908,7 @@
         "backend/inbound_email/handled_folder_mover.py",
         "backend/inbound_email/imap_poller.py",
         "backend/noa_detector.py",
+        "backend/scrapers/llm_parser.py",
         "backend/security/secret_reader.py",
         "backend/self_healing/_llm_client_anthropic.py",
         "backend/server.py",
@@ -26518,6 +26969,7 @@
         "backend/healthz_all_router.py",
         "backend/inbound_email/handled_folder_mover.py",
         "backend/inbound_email/imap_poller.py",
+        "backend/scrapers/llm_parser.py",
         "backend/self_healing/_llm_client_anthropic.py",
         "backend/server.py",
         "backend/stripe_health_router.py",
@@ -27352,7 +27804,7 @@
         "scripts/fire_full_dryrun.py"
       ],
       "lines_of_code": 13453,
-      "last_modified": "2026-05-10T05:34:26.246249+00:00",
+      "last_modified": "2026-05-10T21:21:52.315787+00:00",
       "smoke_test": null,
       "decorators": [
         "load_dotenv(ROOT_DIR / '.env')",
@@ -28170,6 +28622,9 @@
         "class VaultEntryIn",
         "class VaultEntryUpdate",
         "class VaultExportRequest",
+        "class VaultFolderIn",
+        "class VaultFolderUpdate",
+        "class VaultFileUpdate",
         "build_router()"
       ],
       "imports": [
@@ -28185,22 +28640,28 @@
         "cryptography.hazmat.primitives.kdf.pbkdf2.PBKDF2HMAC",
         "datetime",
         "fastapi",
+        "io",
         "json",
         "logging",
+        "mimetypes",
         "os",
+        "pathlib",
         "pydantic",
         "typing",
         "uuid"
       ],
       "imported_by": [
+        "backend/.smoke_vault_files.py",
         "backend/server.py",
-        "backend/vault_config.py"
+        "backend/vault_config.py",
+        "scripts/.migrate_llc_folder_to_vault.py"
       ],
-      "lines_of_code": 243,
-      "last_modified": "2026-05-04T22:04:39.957014+00:00",
+      "lines_of_code": 562,
+      "last_modified": "2026-05-10T20:06:39.336441+00:00",
       "smoke_test": null,
       "decorators": [
-        "\"\\nSecure Credential Vault \u2014 Continental Haul Logistics\\n\\nOwner-only password manager. Every password/token is AES-256 encrypted at rest\\nusing a symmetric key stored in `VAULT_ENCRYPTION_KEY` env va"
+        "\"\\nSecure Credential Vault \u2014 Continental Haul Logistics\\n\\nOwner-only password manager. Every password/token is AES-256 encrypted at rest\\nusing a symmetric key stored in `VAULT_ENCRYPTION_KEY` env va",
+        "VAULT_FILES_DIR.mkdir(parents=True, exist_ok=True)"
       ],
       "parse_error": null,
       "notes": [],
@@ -29621,6 +30082,45 @@
       "module_name": ""
     },
     {
+      "path": "C:/CHL/scripts/.migrate_llc_folder_to_vault.py",
+      "rel_path": "scripts/.migrate_llc_folder_to_vault.py",
+      "type": "python_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "Migrate Continental Logistics LLC folder into the Vault Documents. Examines each file to categorize, creates the folder structure, encrypts + inserts blobs, registers metadata in db.vault_files / db.v",
+      "exports": [
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "mimetypes",
+        "motor",
+        "os",
+        "pathlib",
+        "sys",
+        "uuid",
+        "vault",
+        "vault.VAULT_FILES_DIR",
+        "vault._encrypt_bytes"
+      ],
+      "imported_by": [],
+      "lines_of_code": 195,
+      "last_modified": "2026-05-10T20:12:53.383050+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Migrate Continental Logistics LLC folder into the Vault Documents.\\n\\nExamines each file to categorize, creates the folder structure, encrypts +\\ninserts blobs, registers metadata in db.vault_files /",
+        "load_dotenv('C:/CHL/backend/.env')",
+        "sys.path.insert(0, 'C:/CHL/backend')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": ".migrate_llc_folder_to_vault"
+    },
+    {
       "path": "C:/CHL/scripts/asset_inventory.py",
       "rel_path": "scripts/asset_inventory.py",
       "type": "python_module",
@@ -29697,8 +30197,8 @@
         "sys"
       ],
       "imported_by": [],
-      "lines_of_code": 557,
-      "last_modified": "2026-05-10T07:27:17.305147+00:00",
+      "lines_of_code": 563,
+      "last_modified": "2026-05-10T07:27:54.184300+00:00",
       "smoke_test": null,
       "decorators": [
         "'asset_inventory_render.py -- Read asset_inventory.json and emit:\\n  - asset_inventory.md           (subsystem-grouped markdown)\\n  - asset_inventory_orphans.md   (focused orphan + broken list)\\n  - a"
@@ -30140,6 +30640,39 @@
       "module_name": "collect_verify_telemetry"
     },
     {
+      "path": "C:/CHL/scripts/compile_overnight_report.py",
+      "rel_path": "scripts/compile_overnight_report.py",
+      "type": "python_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "Compile the morning report from overnight test telemetry. Window: 2026-05-10 05:57:08 UTC -> 2026-05-10 09:58:29 UTC (~4 hours)",
+      "exports": [
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "collections",
+        "datetime",
+        "json",
+        "motor",
+        "os",
+        "pathlib"
+      ],
+      "imported_by": [],
+      "lines_of_code": 142,
+      "last_modified": "2026-05-10T09:59:23.094152+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Compile the morning report from overnight test telemetry.\\n\\nWindow: 2026-05-10 05:57:08 UTC -> 2026-05-10 09:58:29 UTC (~4 hours)\\n'",
+        "asyncio.run(main())"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "compile_overnight_report"
+    },
+    {
       "path": "C:/CHL/scripts/dump_one_bounce.py",
       "rel_path": "scripts/dump_one_bounce.py",
       "type": "python_module",
@@ -30166,6 +30699,43 @@
       "parse_error": null,
       "notes": [],
       "module_name": "dump_one_bounce"
+    },
+    {
+      "path": "C:/CHL/scripts/enrich_all_carriers_from_fmcsa_cache.py",
+      "rel_path": "scripts/enrich_all_carriers_from_fmcsa_cache.py",
+      "type": "python_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "enrich_all_carriers_from_fmcsa_cache.py Operator-mandated 2026-05-10: fill out the 9 contact-enrichment fields on every carrier in db.carriers using the FMCSA published data we already have on hand (n",
+      "exports": [
+        "build_fields_from_carrier()",
+        "enrich_one()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "carrier_contacts",
+        "carrier_contacts.contact_store",
+        "datetime",
+        "motor",
+        "os",
+        "pathlib",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 264,
+      "last_modified": "2026-05-10T07:41:29.321250+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'enrich_all_carriers_from_fmcsa_cache.py\\n\\nOperator-mandated 2026-05-10: fill out the 9 contact-enrichment fields\\non every carrier in db.carriers using the FMCSA published data we\\nalready have on h",
+        "sys.path.insert(0, str(Path('C:/CHL/backend')))"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "enrich_all_carriers_from_fmcsa_cache"
     },
     {
       "path": "C:/CHL/scripts/explain_burst3_profit.py",
@@ -30484,6 +31054,34 @@
         "Script \u2014 assumed operator-run; investigate if name unfamiliar"
       ],
       "module_name": "load_noa_templates"
+    },
+    {
+      "path": "C:/CHL/scripts/md_to_html.py",
+      "rel_path": "scripts/md_to_html.py",
+      "type": "python_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "Convert a Markdown file to a self-contained styled HTML file. Usage: python md_to_html.py <input.md> <output.html>",
+      "exports": [
+        "convert()"
+      ],
+      "imports": [
+        "markdown",
+        "pathlib",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 56,
+      "last_modified": "2026-05-10T19:52:02.186239+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Convert a Markdown file to a self-contained styled HTML file.\\n\\nUsage: python md_to_html.py <input.md> <output.html>\\n'"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "md_to_html"
     },
     {
       "path": "C:/CHL/scripts/migrate_secrets_to_vault.py",
@@ -34642,6 +35240,90 @@
       "module_name": "self_heal_bridge"
     },
     {
+      "path": "C:/CHL/backend/.smoke_3_layer_parsing.py",
+      "rel_path": "backend/.smoke_3_layer_parsing.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "ORPHAN",
+      "description": "End-to-end smoke test of the 3-layer parsing stack against REAL captured public HTML. Tests Layer B (BS4 deterministic) and Layer C (Claude LLM fallback) against 3 captured fixtures from Agent 1's dis",
+      "exports": [
+        "test_layer_b()",
+        "test_layer_c()",
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "dotenv",
+        "json",
+        "motor",
+        "os",
+        "pathlib",
+        "scrapers",
+        "scrapers.html_parser",
+        "scrapers.llm_parser",
+        "scrapers.llm_parser.LLMParserError",
+        "scrapers.llm_parser.LLMSpendCapExceeded",
+        "scrapers.llm_parser.parse_html_via_llm",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 149,
+      "last_modified": "2026-05-10T21:17:41.816360+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"End-to-end smoke test of the 3-layer parsing stack against REAL captured public HTML.\\n\\nTests Layer B (BS4 deterministic) and Layer C (Claude LLM fallback) against\\n3 captured fixtures from Agent 1'",
+        "load_dotenv('C:/CHL/backend/.env')",
+        "sys.path.insert(0, 'C:/CHL/backend')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".smoke_3_layer_parsing"
+    },
+    {
+      "path": "C:/CHL/backend/.smoke_vault_files.py",
+      "rel_path": "backend/.smoke_vault_files.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "ORPHAN",
+      "description": "Smoke test for vault file-storage feature. Validates: encrypt/decrypt round-trip + Mongo folder/file CRUD against the live database. Bypasses the HTTP layer (we already proved the routes are wired by ",
+      "exports": [
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "dotenv",
+        "motor",
+        "os",
+        "pathlib",
+        "sys",
+        "uuid",
+        "vault",
+        "vault.VAULT_CATEGORIES",
+        "vault.VAULT_FILES_DIR",
+        "vault.VAULT_MAX_FILE_BYTES",
+        "vault._decrypt_bytes",
+        "vault._encrypt_bytes",
+        "vault._safe_filename",
+        "vault._validate_category"
+      ],
+      "imported_by": [],
+      "lines_of_code": 135,
+      "last_modified": "2026-05-10T20:11:37.485114+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Smoke test for vault file-storage feature.\\n\\nValidates: encrypt/decrypt round-trip + Mongo folder/file CRUD against the\\nlive database. Bypasses the HTTP layer (we already proved the routes are\\nwir",
+        "load_dotenv('C:/CHL/backend/.env')",
+        "sys.path.insert(0, 'C:/CHL/backend')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".smoke_vault_files"
+    },
+    {
       "path": "C:/CHL/backend/credit_override_revoker/__init__.py",
       "rel_path": "backend/credit_override_revoker/__init__.py",
       "type": "python_module",
@@ -38045,6 +38727,90 @@
       "module_name": "tests.test_healthz_all"
     },
     {
+      "path": "C:/CHL/backend/tests/test_html_parser.py",
+      "rel_path": "backend/tests/test_html_parser.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_html_parser.py -- Phase 10.1.3 deterministic HTML parser tests. Run from C:/CHL with: python -m pytest backend/tests/test_html_parser.py -v",
+      "exports": [
+        "test_all_niche_sources_present_in_selector_maps()",
+        "test_empty_html_returns_empty_list()",
+        "test_garbage_html_returns_empty_list_no_exception()",
+        "test_selector_map_path_extracts_listings()",
+        "test_generic_fallback_table_extraction()",
+        "test_generic_fallback_div_extraction()",
+        "test_dispatch_exception_wraps_in_parser_error()",
+        "test_required_minimum_fields_present_on_extraction()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.html_parser",
+        "scrapers.html_parser.ParserError",
+        "scrapers.html_parser.SELECTOR_MAPS",
+        "scrapers.html_parser.parse_html_listings",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 232,
+      "last_modified": "2026-05-10T21:08:45.350839+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_html_parser.py -- Phase 10.1.3 deterministic HTML parser tests.\\n\\nRun from C:/CHL with:\\n    python -m pytest backend/tests/test_html_parser.py -v\\n'"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_html_parser"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_html_parser.py",
+      "rel_path": "backend/tests/test_html_parser.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_html_parser.py -- Phase 10.1.3 deterministic HTML parser tests. Run from C:/CHL with: python -m pytest backend/tests/test_html_parser.py -v",
+      "exports": [
+        "test_all_niche_sources_present_in_selector_maps()",
+        "test_empty_html_returns_empty_list()",
+        "test_garbage_html_returns_empty_list_no_exception()",
+        "test_selector_map_path_extracts_listings()",
+        "test_generic_fallback_table_extraction()",
+        "test_generic_fallback_div_extraction()",
+        "test_dispatch_exception_wraps_in_parser_error()",
+        "test_required_minimum_fields_present_on_extraction()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.html_parser",
+        "scrapers.html_parser.ParserError",
+        "scrapers.html_parser.SELECTOR_MAPS",
+        "scrapers.html_parser.parse_html_listings",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 232,
+      "last_modified": "2026-05-10T21:08:45.350839+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_html_parser.py -- Phase 10.1.3 deterministic HTML parser tests.\\n\\nRun from C:/CHL with:\\n    python -m pytest backend/tests/test_html_parser.py -v\\n'"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_html_parser"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_inbox_endpoint.py",
       "rel_path": "backend/tests/test_inbox_endpoint.py",
       "type": "python_module",
@@ -42187,6 +42953,86 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_llm_client_smoke"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_llm_parser.py",
+      "rel_path": "backend/tests/test_llm_parser.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_llm_parser.py -- Layer C (Claude HTML->JSON) parser unit tests. Mandatory tests: - test_prompt_construction_mentions_schema_fields - test_parse_success_path_with_mocked_claude - test_parse_failur",
+      "exports": [
+        "test_prompt_construction_mentions_schema_fields()",
+        "test_parse_success_path_with_mocked_claude()",
+        "test_parse_failure_wraps_in_llm_parser_error()",
+        "test_spend_cap_enforcement_raises_before_api_call()",
+        "test_cache_hit_skips_api_call()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "json",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.llm_parser",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 344,
+      "last_modified": "2026-05-10T21:24:07.407367+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_llm_parser.py -- Layer C (Claude HTML->JSON) parser unit tests.\\n\\nMandatory tests:\\n  - test_prompt_construction_mentions_schema_fields\\n  - test_parse_success_path_with_mocked_claude\\n  - test",
+        "os.environ.setdefault('ANTHROPIC_API_KEY', 'test-key-not-real')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_llm_parser"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_llm_parser.py",
+      "rel_path": "backend/tests/test_llm_parser.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_llm_parser.py -- Layer C (Claude HTML->JSON) parser unit tests. Mandatory tests: - test_prompt_construction_mentions_schema_fields - test_parse_success_path_with_mocked_claude - test_parse_failur",
+      "exports": [
+        "test_prompt_construction_mentions_schema_fields()",
+        "test_parse_success_path_with_mocked_claude()",
+        "test_parse_failure_wraps_in_llm_parser_error()",
+        "test_spend_cap_enforcement_raises_before_api_call()",
+        "test_cache_hit_skips_api_call()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "json",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.llm_parser",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 344,
+      "last_modified": "2026-05-10T21:24:07.407367+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_llm_parser.py -- Layer C (Claude HTML->JSON) parser unit tests.\\n\\nMandatory tests:\\n  - test_prompt_construction_mentions_schema_fields\\n  - test_parse_success_path_with_mocked_claude\\n  - test",
+        "os.environ.setdefault('ANTHROPIC_API_KEY', 'test-key-not-real')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_llm_parser"
     },
     {
       "path": "C:/CHL/backend/tests/test_llm_reasoning_loop.py",
@@ -42372,7 +43218,7 @@
         "test_rate_limit_allows_after_interval_elapses()",
         "test_rate_limit_per_source_isolated()",
         "test_health_endpoint_returns_loadboard_health_plus_rate_limit_summary()",
-        "test_html_parser_raises_not_implemented_until_bs4_lands()",
+        "test_html_parser_layer_b_live_and_returns_list()",
         "test_loadboard_scraper_dispatches_public_html_to_html_parser()"
       ],
       "imports": [
@@ -42392,8 +43238,8 @@
         "typing"
       ],
       "imported_by": [],
-      "lines_of_code": 1229,
-      "last_modified": "2026-05-08T21:56:09.794099+00:00",
+      "lines_of_code": 1218,
+      "last_modified": "2026-05-10T21:09:22.240496+00:00",
       "smoke_test": null,
       "decorators": [
         "'test_loadboard_scraper.py -- Unit tests for the Phase 10.1 load-board\\nscraper scaffold.\\n\\nMandatory tests (per spec):\\n  - test_scrape_disabled_returns_skip_no_network\\n  - test_dedup_hash_stable_f",
@@ -42435,7 +43281,7 @@
         "test_rate_limit_allows_after_interval_elapses()",
         "test_rate_limit_per_source_isolated()",
         "test_health_endpoint_returns_loadboard_health_plus_rate_limit_summary()",
-        "test_html_parser_raises_not_implemented_until_bs4_lands()",
+        "test_html_parser_layer_b_live_and_returns_list()",
         "test_loadboard_scraper_dispatches_public_html_to_html_parser()"
       ],
       "imports": [
@@ -42455,8 +43301,8 @@
         "typing"
       ],
       "imported_by": [],
-      "lines_of_code": 1229,
-      "last_modified": "2026-05-08T21:56:09.794099+00:00",
+      "lines_of_code": 1218,
+      "last_modified": "2026-05-10T21:09:22.240496+00:00",
       "smoke_test": null,
       "decorators": [
         "'test_loadboard_scraper.py -- Unit tests for the Phase 10.1 load-board\\nscraper scaffold.\\n\\nMandatory tests (per spec):\\n  - test_scrape_disabled_returns_skip_no_network\\n  - test_dedup_hash_stable_f",
@@ -46196,6 +47042,72 @@
       "module_name": "smoke_pod_gate"
     },
     {
+      "path": "C:/CHL/scripts/smoke_pricing_schemes.py",
+      "rel_path": "scripts/smoke_pricing_schemes.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Smoke-test all 9 pricing schemes (LLL18d -- AVAILABLE_NOT_WIRED). These are pure functions sitting alongside the 6 pricing modes. None are wired into the API yet; this smoke test exercises them in iso",
+      "exports": [
+        "assert_eq()",
+        "assert_true()",
+        "assert_in()",
+        "section()",
+        "base_ctx()"
+      ],
+      "imports": [
+        "datetime",
+        "pricing_modes",
+        "pricing_modes.PricingContext",
+        "pricing_modes.PricingDecision",
+        "pricing_schemes",
+        "pricing_schemes.PricingScheme",
+        "pricing_schemes.SCHEMES_CATALOG",
+        "pricing_schemes.SCHEME_DISPATCH",
+        "pricing_schemes.WEATHER_RISK_UPLIFT_TABLE",
+        "pricing_schemes.cost_plus_transparent",
+        "pricing_schemes.decide_with_scheme",
+        "pricing_schemes.dutch_auction_step",
+        "pricing_schemes.fixed_price_contract",
+        "pricing_schemes.hybrid_pct_min_dollar",
+        "pricing_schemes.reverse_auction_evaluate",
+        "pricing_schemes.spread_based",
+        "pricing_schemes.time_decay_surge",
+        "pricing_schemes.time_of_day_premium",
+        "pricing_schemes.weather_route_risk",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 381,
+      "last_modified": "2026-05-10T10:13:04.206196+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Smoke-test all 9 pricing schemes (LLL18d -- AVAILABLE_NOT_WIRED).\\n\\nThese are pure functions sitting alongside the 6 pricing modes. None are\\nwired into the API yet; this smoke test exercises them i",
+        "sys.path.insert(0, 'C:/CHL/backend')",
+        "section('1. time_of_day_premium')",
+        "assert_eq('peak hour 8 -> raw premium', d.audit['raw_premium_requested'], 1.14)",
+        "assert_eq('peak hour window', d.audit['window'], 'peak')",
+        "assert_eq('peak hour adjustment', d.audit['adjustment_applied'], 0.02)",
+        "assert_eq('peak source tag', d.premium_source, 'SCHEME_time_of_day_premium')",
+        "assert_eq('off hour 2 -> raw premium', d.audit['raw_premium_requested'], 1.11)",
+        "assert_eq('off hour window', d.audit['window'], 'off')",
+        "assert_eq('neutral hour 14 -> raw premium', d.audit['raw_premium_requested'], 1.12)",
+        "assert_eq('neutral hour window', d.audit['window'], 'neutral')",
+        "assert_eq('neutral adjustment', d.audit['adjustment_applied'], 0.0)",
+        "section('2. reverse_auction_evaluate')",
+        "assert_eq('3-bid auction: lowest acceptable wins', d.audit['accepted_carrier_id'], 'C2')",
+        "assert_eq('accepted bid amount', d.audit['accepted_bid'], 2900.0)",
+        "assert_eq('no_acceptable_bid flag', d.audit['no_acceptable_bid'], False)",
+        "assert_eq('rejected count = 2', len(d.audit['rejected_bids']), 2)",
+        "assert_eq('all-below-reserve -> no accept', d.audit['no_acceptable_bid'], True)",
+        "assert_eq('all-below-reserve -> accepted=None', d.audit['accepted_carrier_id'], None)",
+        "assert_eq('all-above-ceiling -> no accept', d.audit['no_acceptable_bid'], True)"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "smoke_pricing_schemes"
+    },
+    {
       "path": "C:/CHL/scripts/synthetic_auto_driver.py",
       "rel_path": "scripts/synthetic_auto_driver.py",
       "type": "python_module",
@@ -46394,8 +47306,8 @@
       "imported_by": [
         "scripts/sample_realistic_rates.py"
       ],
-      "lines_of_code": 985,
-      "last_modified": "2026-05-10T03:44:38.457134+00:00",
+      "lines_of_code": 986,
+      "last_modified": "2026-05-10T15:40:44.747859+00:00",
       "smoke_test": null,
       "decorators": [
         "'synthetic_pipeline_runner.py -- Phase 1 plug-and-play synthetic load runner.\\n\\nOPERATOR USAGE\\n  python C:\\\\CHL\\\\scripts\\\\synthetic_pipeline_runner.py --single\\n  python C:\\\\CHL\\\\scripts\\\\synthetic_"
