@@ -1,0 +1,73 @@
+﻿{
+    "GeneratedAt":  "2026-05-10 18:19:38",
+    "BackupRoot":  "D:\\CHL_backups",
+    "StaleHours":  24,
+    "OldestMaxHours":  96,
+    "OverallStatus":  "healthy",
+    "ExitCode":  0,
+    "NewestSlotLetter":  "d",
+    "NewestSlotAgeH":  17.4,
+    "OldestSlotLetter":  "c",
+    "OldestSlotAgeH":  17.5,
+    "RotationFlags":  [
+                          "OK: rotation window healthy"
+                      ],
+    "Slots":  [
+                  {
+                      "Slot":  "a",
+                      "Status":  "OK",
+                      "Path":  "D:\\CHL_backups\\5copy_floor_a_2026-05-10_0048",
+                      "Created":  "2026-05-10 00:48:37",
+                      "AgeHours":  17.5,
+                      "SizeMB":  792.01,
+                      "ChlBundleMB":  7.22,
+                      "ArtifactsOK":  true,
+                      "MissingItems":  [
+
+                                       ],
+                      "Health":  "fresh + complete (17.5 h)"
+                  },
+                  {
+                      "Slot":  "b",
+                      "Status":  "OK",
+                      "Path":  "D:\\CHL_backups\\5copy_floor_b_2026-05-10_0050",
+                      "Created":  "2026-05-10 00:50:06",
+                      "AgeHours":  17.5,
+                      "SizeMB":  792.03,
+                      "ChlBundleMB":  7.22,
+                      "ArtifactsOK":  true,
+                      "MissingItems":  [
+
+                                       ],
+                      "Health":  "fresh + complete (17.5 h)"
+                  },
+                  {
+                      "Slot":  "c",
+                      "Status":  "OK",
+                      "Path":  "D:\\CHL_backups\\5copy_floor_c_2026-05-10_0051",
+                      "Created":  "2026-05-10 00:51:27",
+                      "AgeHours":  17.5,
+                      "SizeMB":  792.06,
+                      "ChlBundleMB":  7.22,
+                      "ArtifactsOK":  true,
+                      "MissingItems":  [
+
+                                       ],
+                      "Health":  "fresh + complete (17.5 h)"
+                  },
+                  {
+                      "Slot":  "d",
+                      "Status":  "OK",
+                      "Path":  "D:\\CHL_backups\\5copy_floor_d_2026-05-10_0052",
+                      "Created":  "2026-05-10 00:52:42",
+                      "AgeHours":  17.4,
+                      "SizeMB":  792.09,
+                      "ChlBundleMB":  7.22,
+                      "ArtifactsOK":  true,
+                      "MissingItems":  [
+
+                                       ],
+                      "Health":  "fresh + complete (17.4 h)"
+                  }
+              ]
+}

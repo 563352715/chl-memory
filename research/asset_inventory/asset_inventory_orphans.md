@@ -1,6 +1,6 @@
 # CHL Asset Inventory -- Orphans + Broken
 
-_Generated: 2026-05-10T21:35:06.971691+00:00_
+_Generated: 2026-05-10T23:03:28.335431+00:00_
 
 > **Triage focus.** These files are present in the codebase but
 > are NOT reachable from `backend/server.py` or `frontend/src/App.js`,
@@ -16,7 +16,7 @@ _Generated: 2026-05-10T21:35:06.971691+00:00_
 
 _None — no parse errors or unresolved internal imports detected._
 
-## ORPHAN (52)
+## ORPHAN (53)
 
 ### `frontend/src/lib/manualOverrideFields.js` (211 LOC)
 
@@ -265,6 +265,15 @@ _None — no parse errors or unresolved internal imports detected._
 - **Last modified:** 2026-05-09T21:50:50.067768+00:00
 - **Docstring:** Local-dev only. CRA picks this up automatically when `yarn start` runs.
 - **Note:** Not reachable from frontend/src/App.js
+
+### `frontend/src/constants/equipmentTypes.js` (36 LOC)
+
+- **Subsystem:** Misc
+- **Type:** js_module
+- **Last modified:** 2026-05-10T22:18:27.278737+00:00
+- **Docstring:** Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- **Note:** Not reachable from frontend/src/App.js
+- **Exports:** `CANONICAL_EQUIPMENT_TYPES, EQUIPMENT_LABELS, RATE_PER_MILE_MAX, RATE_PER_MILE_MIN`
 
 ### `frontend/src/components/ui/badge.jsx` (34 LOC)
 

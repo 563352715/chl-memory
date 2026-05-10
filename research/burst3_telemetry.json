@@ -1,0 +1,58 @@
+{
+  "window_local": "2026-05-09 22:06:37 - 22:11:57 CDT",
+  "window_utc": "2026-05-10T03:06:37 - 2026-05-10T03:12:00",
+  "sop": {
+    "total": 38,
+    "pass": 33,
+    "bugs": 2,
+    "bug_detail": [
+      {
+        "cycle": 17,
+        "scenario": "fi_wrong_consignee_pin",
+        "expected": "bad_pin",
+        "actual": "conflict"
+      },
+      {
+        "cycle": 38,
+        "scenario": "fi_wrong_consignee_pin",
+        "expected": "bad_pin",
+        "actual": "conflict"
+      }
+    ]
+  },
+  "multi_actor": {
+    "total": 51,
+    "by_outcome": {
+      "fail": 4,
+      "pass": 37,
+      "open": 10
+    }
+  },
+  "rate_calc": {
+    "total": 45,
+    "grades": {
+      "PASS": 45
+    }
+  },
+  "loads": {
+    "total": 73,
+    "rate_calc_priced": 35,
+    "statuses": {
+      "available": 40,
+      "delivered": 18,
+      "booked": 6,
+      "en_route": 4,
+      "at_pickup": 2,
+      "unloaded": 2,
+      "cancelled": 1
+    },
+    "rate_total": 148576.86000000004,
+    "market_total": 152214.4900000001,
+    "margin_spread": 3637.630000000063,
+    "delivered_count": 20,
+    "delivered_carrier_pay": 38779.49,
+    "delivered_market": 40718.48,
+    "delivered_profit_no_visibility_bonus": 921.0280000000057,
+    "factor_fee_pct": 0.025
+  }
+}

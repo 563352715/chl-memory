@@ -29,9 +29,10 @@
 3. [Kill switches reference](#3-kill-switches-reference)
 4. [Restore-from-backup procedure](#4-restore-from-backup-procedure)
    - 4.5 [How to test the restore procedure quarterly](#45-how-to-test-the-restore-procedure-quarterly)
-5. [Vendor escalation contacts](#5-vendor-escalation-contacts)
-6. [Standing operator directives](#6-standing-operator-directives)
-7. [Communication during incident](#7-communication-during-incident)
+5. [Working in test mode safely](#5-working-in-test-mode-safely)
+6. [Vendor escalation contacts](#6-vendor-escalation-contacts)
+7. [Standing operator directives](#7-standing-operator-directives)
+8. [Communication during incident](#8-communication-during-incident)
 
 ---
 
@@ -584,7 +585,146 @@ RESULT:      PASS
 
 ---
 
-## 5. Vendor escalation contacts
+## 5. Working in test mode safely
+
+Operator-mandated 2026-05-10. Synthetic load tests + smoke tests must NEVER write to the live production DB (`chl_local`). A `CHL_ENV=test` mode points the backend at an isolated test DB (`continental_haul_test`) so tests can write freely without touching production data.
+
+### 5.1 Quick reference — the env vars
+
+| Env var | Prod value | Test value | Notes |
+|---|---|---|---|
+| `CHL_ENV` | unset or `prod` | `test` | Active env. Default `prod`. |
+| `DB_NAME` | `chl_local` | `chl_local` | Production DB name. Untouched by test mode. |
+| `DB_TEST_NAME` | (optional) | `continental_haul_test` | Test DB. MUST differ from `DB_NAME` (refuse-to-boot guard fires otherwise). |
+| `MONGO_URL` | `mongodb://localhost:27017` | `mongodb://localhost:27017` OR `mongodb://localhost:27018` | Same mongod for partial isolation, separate one for full isolation. |
+
+**Refuse-to-boot guards** (defense in depth, all live in `backend/server.py:29`-area):
+- Both `DB_NAME` and `DB_TEST_NAME` missing → `RuntimeError`
+- `CHL_ENV=test` but `DB_TEST_NAME` unset → `RuntimeError`
+- `CHL_ENV=test` but `DB_TEST_NAME == DB_NAME` → **catastrophic-misconfig** `RuntimeError`
+
+The same three guards run in `backend/conftest.py` before any pytest test executes, so tests can't accidentally point at prod either.
+
+### 5.2 Switch the backend to test mode
+
+Two isolation levels — pick based on test scope.
+
+**Partial isolation** (simpler, fast, OK for unit tests):
+```powershell
+# Reuses the existing :27017 mongod; separates by DB name only.
+.\scripts\setup_test_mongo.ps1 -Mode partial
+Restart-Service CHL-Backend
+```
+
+**Full isolation** (recommended for production-level testing, restore drills, bulk synth-load):
+```powershell
+# Stands up a SEPARATE mongod on :27018 with its own dbpath.
+.\scripts\setup_test_mongo.ps1 -Mode full
+
+# In a separate terminal (keep open), start the test mongod:
+& 'C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe' --dbpath 'D:\mongo-test' --port 27018
+
+# Then restart the backend so it picks up the new MONGO_URL:
+Restart-Service CHL-Backend
+```
+
+### 5.3 Seed baseline test data
+
+After switching to test mode, populate the test DB with the seed baseline (10 carriers, 5 loads, 2 factors, 1 driver — all prefixed `TEST_*` for easy filtering):
+
+```powershell
+C:\CHL\.venv-local\Scripts\python.exe C:\CHL\scripts\seed_test_db.py
+```
+
+The script is **idempotent** (upserts by `id`) and **refuses to run** if `CHL_ENV != test` or if `DB_TEST_NAME == DB_NAME`.
+
+### 5.4 Verify test mode is active
+
+Sanity-check endpoint — confirms which DB the backend is actually pointing at right now:
+
+```powershell
+# Replace <owner_token> with a fresh owner access_token cookie.
+curl http://localhost:8000/api/_env/info --cookie 'access_token=<owner_token>'
+```
+
+Expected response in test mode:
+```json
+{
+  "env": "test",
+  "db_name": "continental_haul_test",
+  "mongo_url_redacted": "mongodb://localhost:27018",
+  "started_at": "2026-05-10T...",
+  "is_test": true
+}
+```
+
+If `is_test=false` but you thought you were in test mode → the env vars didn't take effect. Restart the backend service and re-check.
+
+### 5.5 Clean up test data
+
+**Drop the entire test DB** (fastest; only do this when no test is running):
+
+Partial isolation (shared :27017):
+```powershell
+mongosh --eval 'db.getSiblingDB("continental_haul_test").dropDatabase()'
+```
+
+Full isolation (:27018):
+```powershell
+mongosh --port 27018 --eval 'db.getSiblingDB("continental_haul_test").dropDatabase()'
+```
+
+**Drop only the seed-baseline rows** (preserves anything tests added):
+```powershell
+mongosh --eval 'use continental_haul_test; db.carriers.deleteMany({test_seed: true}); db.loads.deleteMany({test_seed: true}); db.factor_clients.deleteMany({test_seed: true}); db.drivers.deleteMany({test_seed: true})'
+```
+
+### 5.6 Revert to production mode
+
+```powershell
+.\scripts\set_env_var.ps1 -Name CHL_ENV -Value prod
+# Optionally clear MONGO_URL back to :27017 if you used full isolation:
+.\scripts\set_env_var.ps1 -Name MONGO_URL -Value 'mongodb://localhost:27017'
+Restart-Service CHL-Backend
+```
+
+Verify via `GET /api/_env/info` — expect `is_test=false` + `db_name=chl_local`.
+
+### 5.7 Synthetic-load production guard
+
+`POST /api/admin/synthetic-load/create` is now **refused in production** unless the request body sets `allow_prod=true`. The default behavior matches operator intent: synthetic data should never bleed into production metrics by accident.
+
+Error returned when `CHL_ENV != test` and `allow_prod` is unset:
+```json
+{
+  "error": "synthetic_spawn_blocked_in_prod",
+  "detail": "CHL_ENV != 'test'. Synthetic load creation is refused...",
+  "current_env": "prod"
+}
+```
+
+To deliberately spawn a synthetic load in prod (rare — used for live walkthrough demos):
+```bash
+curl -X POST http://localhost:8000/api/admin/synthetic-load/create \
+  --cookie 'access_token=<owner_token>' \
+  -H 'Content-Type: application/json' \
+  -d '{"lane": {...}, "shipper_name": "...", "rate": 1500, "equipment": "dry_van", "target_stage": "lead", "allow_prod": true}'
+```
+
+### 5.8 What to do if a test accidentally writes to prod
+
+This should be impossible with the guards in place, but if it ever happens:
+
+1. **STOP** all running tests immediately (`Ctrl+C` the pytest process; `Stop-Service CHL-Backend` if uncertain which process wrote).
+2. Inspect `db.<collection>` for rows where `test_seed: true` OR `synthetic: true` — these are the leaked rows.
+3. Delete them: `db.<collection>.deleteMany({test_seed: true})` and `db.<collection>.deleteMany({synthetic: true})`.
+4. Check the most-recent `handoff_*_close.md` to see if any production metrics rolled with the polluted data.
+5. **Audit how the guard failed** — was `CHL_ENV` set? Was `DB_TEST_NAME` set? Was the test running against a stale backend that hadn't been restarted? File a follow-up to harden whichever check let it through.
+6. Restore from the most recent rolling D-drive snapshot if production metrics were materially affected (Section 4.3).
+
+---
+
+## 6. Vendor escalation contacts
 
 Per the no-fabrication rule, contact details are populated where they exist in chl-memory or codebase. Anything else is operator-to-populate.
 
@@ -604,7 +744,7 @@ Per the no-fabrication rule, contact details are populated where they exist in c
 
 ---
 
-## 6. Standing operator directives
+## 7. Standing operator directives
 
 These are load-bearing and quoted verbatim from operator instructions. Every incident response, handover doc, and runbook must carry them in full detail. No paraphrasing.
 
@@ -664,9 +804,9 @@ Surface with: "PM relayed X, prior directive said Y, proposed synthesis Z" — o
 
 ---
 
-## 7. Communication during incident
+## 8. Communication during incident
 
-### 7.1 When to DM `@pm-lead` via AgentDM
+### 8.1 When to DM `@pm-lead` via AgentDM
 
 **DM immediately on:**
 - Any CRITICAL operator alert (voice + SMS triggered).
@@ -692,7 +832,7 @@ Mission anchor: CHL platform readiness May 14. <current iter status>. <phase poi
 
 PM does NOT autopoll AgentDM — for time-critical visibility, also mirror to `chl-memory/progress/current_status.md` and push so PM can filesystem-read.
 
-### 7.2 When to write a handoff doc mid-incident vs after
+### 8.2 When to write a handoff doc mid-incident vs after
 
 - **Mid-incident handoff** (write while still firefighting): only if the incident is going to span a session boundary (cap proximity, going to bed mid-fire) AND the next agent needs to pick up where you left off.
 - **Post-incident handoff** (write after RTO): always. Append to the regular session-close doc OR write a dedicated `incident_<date>_<topic>.md` under `chl-memory/operations/` if material enough.
@@ -704,7 +844,7 @@ PM does NOT autopoll AgentDM — for time-critical visibility, also mirror to `c
 - Customer impact (loads delayed, dispatches blocked, $).
 - Prevention items: what monitor / circuit-breaker / kill-switch would have made this faster next time.
 
-### 7.3 Outbound vendor email signature
+### 8.3 Outbound vendor email signature
 
 When responding to vendor support tickets from `dispatch@continentalhaul.com`:
 

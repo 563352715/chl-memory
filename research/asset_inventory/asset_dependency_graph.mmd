@@ -2,103 +2,103 @@
 graph LR
 
   %% Subsystem nodes (size in label = LIVE / total)
-  S_Carrier_Operations["Carrier Operations<br/>32/45 LIVE"]
-  S_Communications["Communications<br/>63/120 LIVE"]
-  S_Compliance["Compliance<br/>30/79 LIVE"]
+  S_Carrier_Operations["Carrier Operations<br/>32/50 LIVE"]
+  S_Communications["Communications<br/>63/124 LIVE"]
+  S_Compliance["Compliance<br/>31/82 LIVE"]
   S_Continuity_Layer["Continuity Layer<br/>4/4 LIVE"]
   S_Dev_Ops_Scripts["Dev-Ops Scripts<br/>2/18 LIVE"]
   S_Documents["Documents<br/>6/14 LIVE"]
-  S_Financial["Financial<br/>23/53 LIVE"]
-  S_Frontend_UI["Frontend UI<br/>120/172 LIVE<br/><small>45 orphan</small>"]
-  S_Intelligence["Intelligence<br/>9/38 LIVE"]
+  S_Financial["Financial<br/>23/57 LIVE"]
+  S_Frontend_UI["Frontend UI<br/>122/174 LIVE<br/><small>45 orphan</small>"]
+  S_Intelligence["Intelligence<br/>9/40 LIVE"]
   S_LLL14_19_Recent_Build["LLL14-19 Recent Build<br/>1/5 LIVE"]
   S_Load_Lifecycle["Load Lifecycle<br/>14/29 LIVE"]
   S_Manual_Override["Manual Override<br/>1/1 LIVE"]
-  S_Misc["Misc<br/>161/169 LIVE<br/><small>5 orphan</small>"]
+  S_Misc["Misc<br/>167/176 LIVE<br/><small>6 orphan</small>"]
   S_Owner_Tooling["Owner Tooling<br/>6/6 LIVE"]
   S_Public_Facing["Public-Facing<br/>9/19 LIVE"]
-  S_Scripts___Tooling["Scripts / Tooling<br/>0/47 LIVE"]
+  S_Scripts___Tooling["Scripts / Tooling<br/>0/49 LIVE"]
   S_Self_Healing["Self-Healing<br/>37/74 LIVE"]
-  S_Synthetic_Test["Synthetic Test<br/>6/289 LIVE<br/><small>2 orphan</small>"]
+  S_Synthetic_Test["Synthetic Test<br/>6/311 LIVE<br/><small>2 orphan</small>"]
 
   %% Cross-subsystem edges (weighted by caller-file count)
-  S_Misc -- 113 --> S_Self_Healing
-  S_Synthetic_Test -- 92 --> S_Misc
-  S_Misc -- 77 --> S_Frontend_UI
-  S_Misc -- 67 --> S_Communications
+  S_Misc -- 116 --> S_Self_Healing
+  S_Synthetic_Test -- 102 --> S_Misc
+  S_Misc -- 79 --> S_Frontend_UI
+  S_Misc -- 72 --> S_Communications
   S_Communications -- 51 --> S_Self_Healing
   S_Synthetic_Test -- 48 --> S_Self_Healing
   S_Frontend_UI -- 43 --> S_Misc
-  S_Misc -- 40 --> S_Compliance
+  S_Misc -- 42 --> S_Compliance
   S_Synthetic_Test -- 39 --> S_Communications
-  S_Misc -- 33 --> S_Carrier_Operations
+  S_Misc -- 34 --> S_Carrier_Operations
   S_Carrier_Operations -- 33 --> S_Self_Healing
+  S_Communications -- 28 --> S_Misc
   S_Misc -- 27 --> S_Financial
-  S_Communications -- 26 --> S_Misc
-  S_Compliance -- 20 --> S_Misc
+  S_Compliance -- 26 --> S_Misc
+  S_Self_Healing -- 18 --> S_Misc
   S_Compliance -- 16 --> S_Self_Healing
-  S_Self_Healing -- 15 --> S_Misc
   S_Misc -- 12 --> S_Load_Lifecycle
   S_Carrier_Operations -- 12 --> S_Misc
+  S_Scripts___Tooling -- 12 --> S_Misc
   S_Financial -- 11 --> S_Misc
   S_Misc -- 11 --> S_Public_Facing
+  S_Synthetic_Test -- 10 --> S_Compliance
+  S_Carrier_Operations -- 10 --> S_Compliance
   S_Load_Lifecycle -- 10 --> S_Misc
-  S_Scripts___Tooling -- 10 --> S_Misc
   S_Intelligence -- 10 --> S_Self_Healing
-  S_Carrier_Operations -- 9 --> S_Compliance
   S_Misc -- 9 --> S_Intelligence
+  S_Misc -- 8 --> S_Documents
   S_Misc -- 8 --> S_Synthetic_Test
-  S_Synthetic_Test -- 7 --> S_Compliance
-  S_Misc -- 7 --> S_Documents
   S_Load_Lifecycle -- 7 --> S_Self_Healing
   S_Communications -- 6 --> S_Financial
   S_Misc -- 6 --> S_Owner_Tooling
   S_Documents -- 6 --> S_Self_Healing
+  S_Compliance -- 5 --> S_Carrier_Operations
+  S_Communications -- 5 --> S_Carrier_Operations
   S_Synthetic_Test -- 5 --> S_Carrier_Operations
+  S_Carrier_Operations -- 5 --> S_Communications
   S_Documents -- 5 --> S_Compliance
   S_Communications -- 5 --> S_Continuity_Layer
   S_Documents -- 5 --> S_Misc
-  S_Compliance -- 4 --> S_Carrier_Operations
-  S_Communications -- 4 --> S_Carrier_Operations
   S_Load_Lifecycle -- 4 --> S_Communications
   S_Communications -- 4 --> S_Compliance
   S_Misc -- 4 --> S_Continuity_Layer
+  S_Carrier_Operations -- 4 --> S_Documents
   S_Synthetic_Test -- 4 --> S_Intelligence
+  S_Financial -- 4 --> S_Synthetic_Test
   S_Load_Lifecycle -- 3 --> S_Carrier_Operations
   S_Financial -- 3 --> S_Communications
   S_Compliance -- 3 --> S_Communications
-  S_Carrier_Operations -- 3 --> S_Communications
   S_Scripts___Tooling -- 3 --> S_Documents
   S_Load_Lifecycle -- 3 --> S_Financial
   S_Synthetic_Test -- 3 --> S_Load_Lifecycle
   S_Communications -- 3 --> S_Load_Lifecycle
   S_Compliance -- 3 --> S_Synthetic_Test
-  S_Financial -- 3 --> S_Synthetic_Test
   S_Documents -- 2 --> S_Carrier_Operations
   S_Self_Healing -- 2 --> S_Carrier_Operations
   S_Scripts___Tooling -- 2 --> S_Carrier_Operations
   S_Continuity_Layer -- 2 --> S_Communications
+  S_Load_Lifecycle -- 2 --> S_Compliance
   S_Financial -- 2 --> S_Compliance
   S_Misc -- 2 --> S_Dev_Ops_Scripts
-  S_Carrier_Operations -- 2 --> S_Documents
   S_Communications -- 2 --> S_Documents
   S_Synthetic_Test -- 2 --> S_Financial
+  S_Misc -- 2 --> S_LLL14_19_Recent_Build
+  S_Intelligence -- 2 --> S_LLL14_19_Recent_Build
+  S_Compliance -- 2 --> S_Load_Lifecycle
   S_Owner_Tooling -- 2 --> S_Misc
   S_Intelligence -- 2 --> S_Misc
   S_Manual_Override -- 2 --> S_Self_Healing
   S_Financial -- 2 --> S_Self_Healing
   S_Load_Lifecycle -- 2 --> S_Synthetic_Test
+  S_Intelligence -- 1 --> S_Carrier_Operations
   S_LLL14_19_Recent_Build -- 1 --> S_Carrier_Operations
+  S_Intelligence -- 1 --> S_Communications
   S_Documents -- 1 --> S_Communications
   S_Self_Healing -- 1 --> S_Communications
   S_Scripts___Tooling -- 1 --> S_Communications
   S_Frontend_UI -- 1 --> S_Communications
+  S_Intelligence -- 1 --> S_Compliance
   S_Self_Healing -- 1 --> S_Compliance
-  S_Load_Lifecycle -- 1 --> S_Compliance
   S_Synthetic_Test -- 1 --> S_Continuity_Layer
-  S_Dev_Ops_Scripts -- 1 --> S_Continuity_Layer
-  S_Compliance -- 1 --> S_Continuity_Layer
-  S_Carrier_Operations -- 1 --> S_Continuity_Layer
-  S_Manual_Override -- 1 --> S_Continuity_Layer
-  S_Financial -- 1 --> S_Continuity_Layer
-  S_Intelligence -- 1 --> S_Continuity_Layer

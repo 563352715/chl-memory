@@ -1,41 +1,41 @@
 {
-  "generated_at": "2026-05-10T21:35:06.971691+00:00",
+  "generated_at": "2026-05-10T23:03:28.335431+00:00",
   "scan_dirs": [
     "C:\\CHL\\backend",
     "C:\\CHL\\backend\\tests",
     "C:\\CHL\\frontend\\src",
     "C:\\CHL\\scripts"
   ],
-  "total_assets": 1182,
+  "total_assets": 1233,
   "by_status": {
-    "ORPHAN": 57,
-    "LIVE": 524,
-    "LIBRARY": 21,
+    "ORPHAN": 55,
+    "LIVE": 536,
+    "LIBRARY": 22,
     "CODE-READY": 9,
-    "DEV-TOOL": 571
+    "DEV-TOOL": 611
   },
   "by_subsystem": {
-    "Synthetic Test": 289,
+    "Synthetic Test": 311,
     "Self-Healing": 74,
-    "Misc": 169,
-    "Communications": 120,
+    "Misc": 176,
+    "Communications": 124,
     "Continuity Layer": 4,
-    "Compliance": 79,
-    "Carrier Operations": 45,
+    "Compliance": 82,
+    "Carrier Operations": 50,
     "Load Lifecycle": 29,
     "Owner Tooling": 6,
-    "Intelligence": 38,
+    "Intelligence": 40,
     "Documents": 14,
-    "Financial": 53,
+    "Financial": 57,
     "LLL14-19 Recent Build": 5,
     "Dev-Ops Scripts": 18,
     "Public-Facing": 19,
     "Manual Override": 1,
-    "Frontend UI": 172,
-    "Scripts / Tooling": 47
+    "Frontend UI": 174,
+    "Scripts / Tooling": 49
   },
-  "live_python_modules": 776,
-  "live_frontend_files": 137,
+  "live_python_modules": 796,
+  "live_frontend_files": 139,
   "assets": [
     {
       "path": "C:/CHL/backend/auto_dispatch.py",
@@ -566,7 +566,7 @@
       "type": "python_module",
       "subsystem": "Carrier Operations",
       "status": "LIVE",
-      "description": "Carrier match preferences + per-carrier notification settings. Powers the Match & Notify worker: - preferred_origin_states / preferred_destination_states (rectangle filters) - preferred_equipment (dry",
+      "description": "Carrier match preferences + per-carrier notification settings. Powers the Match & Notify worker: - preferred_origin_states / preferred_destination_states (rectangle filters) - preferred_equipment (any",
       "exports": [
         "class PreferencesPayload",
         "get_carrier_prefs()",
@@ -575,16 +575,23 @@
       "imports": [
         "__future__",
         "datetime",
+        "equipment_types",
+        "equipment_types.CANONICAL_EQUIPMENT_TYPES",
+        "equipment_types.EquipmentType",
+        "equipment_types.RATE_PER_MILE_MAX",
+        "equipment_types.RATE_PER_MILE_MIN",
+        "equipment_types.normalize_equipment_slug",
         "fastapi",
         "pydantic",
         "typing"
       ],
       "imported_by": [
         "backend/carrier_load_match.py",
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_equipment_enum_canonical.py"
       ],
-      "lines_of_code": 109,
-      "last_modified": "2026-05-04T22:04:39.854882+00:00",
+      "lines_of_code": 145,
+      "last_modified": "2026-05-10T21:52:04.808753+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nCarrier match preferences + per-carrier notification settings.\\n\\nPowers the Match & Notify worker:\\n  - preferred_origin_states / preferred_destination_states (rectangle filters)\\n  - preferred_eq"
@@ -852,7 +859,9 @@
       ],
       "imported_by": [
         "backend/carrier_outreach.py",
-        "backend/tests/test_carrier_vetting_hardening.py"
+        "backend/tests/test_carrier_vetting_hardening.py",
+        "backend/tests/test_pnl_guard.py",
+        "backend/tests/test_rate_con_autofire.py"
       ],
       "lines_of_code": 505,
       "last_modified": "2026-05-09T21:47:10.978114+00:00",
@@ -1561,6 +1570,74 @@
       "module_name": "tests.test_carrier_contact_enricher"
     },
     {
+      "path": "C:/CHL/backend/tests/test_carrier_contact_name_backfill.py",
+      "rel_path": "backend/tests/test_carrier_contact_name_backfill.py",
+      "type": "python_module",
+      "subsystem": "Carrier Operations",
+      "status": "DEV-TOOL",
+      "description": "test_carrier_contact_name_backfill.py -- Unit tests for scripts/backfill_carrier_contact_name_from_legal.py Covers: - _title_case_company normalizer (4 documented cases + edge cases) - Idempotency: ru",
+      "exports": [
+        "class TestTitleCaseCompany",
+        "stub_db()",
+        "class TestBackfillRun"
+      ],
+      "imports": [
+        "__future__",
+        "backfill_carrier_contact_name_from_legal",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 286,
+      "last_modified": "2026-05-10T22:44:13.198035+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_carrier_contact_name_backfill.py -- Unit tests for\\nscripts/backfill_carrier_contact_name_from_legal.py\\n\\nCovers:\\n  - _title_case_company normalizer (4 documented cases + edge cases)\\n  - Idem",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_carrier_contact_name_backfill"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_carrier_contact_name_backfill.py",
+      "rel_path": "backend/tests/test_carrier_contact_name_backfill.py",
+      "type": "python_module",
+      "subsystem": "Carrier Operations",
+      "status": "DEV-TOOL",
+      "description": "test_carrier_contact_name_backfill.py -- Unit tests for scripts/backfill_carrier_contact_name_from_legal.py Covers: - _title_case_company normalizer (4 documented cases + edge cases) - Idempotency: ru",
+      "exports": [
+        "class TestTitleCaseCompany",
+        "stub_db()",
+        "class TestBackfillRun"
+      ],
+      "imports": [
+        "__future__",
+        "backfill_carrier_contact_name_from_legal",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 286,
+      "last_modified": "2026-05-10T22:44:13.198035+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_carrier_contact_name_backfill.py -- Unit tests for\\nscripts/backfill_carrier_contact_name_from_legal.py\\n\\nCovers:\\n  - _title_case_company normalizer (4 documented cases + edge cases)\\n  - Idem",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_carrier_contact_name_backfill"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_carrier_tier_promoter.py",
       "rel_path": "backend/tests/test_carrier_tier_promoter.py",
       "type": "python_module",
@@ -1871,6 +1948,100 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_hauler_types"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_rate_con_autofire.py",
+      "rel_path": "backend/tests/test_rate_con_autofire.py",
+      "type": "python_module",
+      "subsystem": "Carrier Operations",
+      "status": "DEV-TOOL",
+      "description": "Rate-Con Auto-Fire on Carrier Acceptance \u2014 unit tests. Covers the hook in carrier_outreach.accept_offer that triggers rate_con generation immediately after the load transitions to status='booked' + ca",
+      "exports": [
+        "test_happy_path_acceptance_fires_rate_con()",
+        "test_idempotency_existing_rate_con_id_skips_regeneration()",
+        "test_rate_con_failure_does_not_undo_acceptance()",
+        "test_feature_flag_off_skips_silently()",
+        "test_concurrent_atomic_claim_only_one_winner()",
+        "test_concurrent_accept_only_one_rate_con_created()",
+        "test_race_loser_sees_winner_rate_con_id()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "carrier_outreach",
+        "carrier_vetting",
+        "consignee_confirmation",
+        "fastapi",
+        "httpx",
+        "os",
+        "pymongo",
+        "pytest",
+        "rate_con",
+        "starlette",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 720,
+      "last_modified": "2026-05-10T22:23:44.729038+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nRate-Con Auto-Fire on Carrier Acceptance \u2014 unit tests.\\n\\nCovers the hook in carrier_outreach.accept_offer that triggers rate_con\\ngeneration immediately after the load transitions to status='booke",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-rate-con-autofire')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_rate_con_autofire"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_rate_con_autofire.py",
+      "rel_path": "backend/tests/test_rate_con_autofire.py",
+      "type": "python_module",
+      "subsystem": "Carrier Operations",
+      "status": "DEV-TOOL",
+      "description": "Rate-Con Auto-Fire on Carrier Acceptance \u2014 unit tests. Covers the hook in carrier_outreach.accept_offer that triggers rate_con generation immediately after the load transitions to status='booked' + ca",
+      "exports": [
+        "test_happy_path_acceptance_fires_rate_con()",
+        "test_idempotency_existing_rate_con_id_skips_regeneration()",
+        "test_rate_con_failure_does_not_undo_acceptance()",
+        "test_feature_flag_off_skips_silently()",
+        "test_concurrent_atomic_claim_only_one_winner()",
+        "test_concurrent_accept_only_one_rate_con_created()",
+        "test_race_loser_sees_winner_rate_con_id()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "carrier_outreach",
+        "carrier_vetting",
+        "consignee_confirmation",
+        "fastapi",
+        "httpx",
+        "os",
+        "pymongo",
+        "pytest",
+        "rate_con",
+        "starlette",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 720,
+      "last_modified": "2026-05-10T22:23:44.729038+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nRate-Con Auto-Fire on Carrier Acceptance \u2014 unit tests.\\n\\nCovers the hook in carrier_outreach.accept_offer that triggers rate_con\\ngeneration immediately after the load transitions to status='booke",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-rate-con-autofire')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_rate_con_autofire"
     },
     {
       "path": "C:/CHL/backend/tests/test_redispatch_workflow.py",
@@ -1970,21 +2141,28 @@
       "exports": [
         "check_authority_age()",
         "check_phone_match()",
+        "refresh_sms_for_dot()",
         "run_full_vetting()"
       ],
       "imports": [
         "__future__",
         "datetime",
+        "fmcsa_sms_scores",
+        "fmcsa_sms_scores.fetch_full_sms_for_carrier",
+        "fmcsa_sms_scores.update_carrier_sms_in_db",
+        "httpx",
         "logging",
         "re",
         "typing"
       ],
       "imported_by": [
         "backend/carrier_outreach.py",
+        "backend/server.py",
+        "backend/tests/test_fmcsa_sms_wire.py",
         "scripts/smoke_vetting_checks.py"
       ],
-      "lines_of_code": 393,
-      "last_modified": "2026-05-10T03:38:24.614806+00:00",
+      "lines_of_code": 510,
+      "last_modified": "2026-05-10T21:43:36.417450+00:00",
       "smoke_test": "scripts/smoke_vetting_checks.py",
       "decorators": [
         "\"\\nStandalone carrier-vetting fraud-signal checks (Phase B.1 #4 + #5).\\n\\nTwo TIER-2 fraud-exempt checks lifted out of `carrier_vetting.py` so they\\ncan be called independently of the full vet flow (e"
@@ -1992,6 +2170,44 @@
       "parse_error": null,
       "notes": [],
       "module_name": "vetting_checks"
+    },
+    {
+      "path": "C:/CHL/scripts/backfill_carrier_contact_name_from_legal.py",
+      "rel_path": "scripts/backfill_carrier_contact_name_from_legal.py",
+      "type": "python_module",
+      "subsystem": "Carrier Operations",
+      "status": "LIBRARY",
+      "description": "backfill_carrier_contact_name_from_legal.py Operator-mandated 2026-05-10: backfill the 9th contact field (`fields.contact_name`) on every row in db.carrier_contacts from db.carriers.legal_name. Source",
+      "exports": [
+        "run_backfill()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "argparse",
+        "datetime",
+        "os",
+        "pathlib",
+        "pymongo",
+        "re",
+        "sys",
+        "time",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/tests/test_carrier_contact_name_backfill.py"
+      ],
+      "lines_of_code": 306,
+      "last_modified": "2026-05-10T22:44:45.027697+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'backfill_carrier_contact_name_from_legal.py\\n\\nOperator-mandated 2026-05-10: backfill the 9th contact field\\n(`fields.contact_name`) on every row in db.carrier_contacts from\\ndb.carriers.legal_name.\\"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script imported by another asset (unusual)"
+      ],
+      "module_name": "backfill_carrier_contact_name_from_legal"
     },
     {
       "path": "C:/CHL/scripts/fill_carrier_contacts_gap.py",
@@ -2332,6 +2548,10 @@
         "logging",
         "math",
         "os",
+        "pnl_monitor",
+        "pnl_monitor.LoadEconomics",
+        "pnl_monitor.compute_load_pnl",
+        "pnl_monitor.queue_pnl_warning",
         "pydantic",
         "pymongo",
         "rate_con",
@@ -2346,10 +2566,12 @@
       ],
       "imported_by": [
         "backend/server.py",
-        "backend/tests/test_carrier_outreach_vetting_gate.py"
+        "backend/tests/test_carrier_outreach_vetting_gate.py",
+        "backend/tests/test_pnl_guard.py",
+        "backend/tests/test_rate_con_autofire.py"
       ],
-      "lines_of_code": 1690,
-      "last_modified": "2026-05-10T17:20:37.491969+00:00",
+      "lines_of_code": 1948,
+      "last_modified": "2026-05-10T22:22:57.719420+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nCold-Carrier Outreach & Acceptance Funnel.\\n\\nFlow:\\n 1. Broker initiates outreach on a specific load \u2192 we generate a short-lived token\\n 2. SMS fires to carrier\\'s phone: \"CHL: Dallas\u2192Atlanta Van "
@@ -2578,6 +2800,8 @@
         "uuid"
       ],
       "imported_by": [
+        "backend/delivery_completion.py",
+        "backend/operator_queues_router.py",
         "backend/server.py"
       ],
       "lines_of_code": 602,
@@ -3198,7 +3422,7 @@
       "rel_path": "backend/fmcsa_sms_scores.py",
       "type": "python_module",
       "subsystem": "Communications",
-      "status": "ORPHAN",
+      "status": "LIVE",
       "description": "FMCSA SMS BASIC Safety Scores per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2). Fetches Behavior Analysis & Safety Improvement Categories (BASIC) percentile scores, inspections, a",
       "exports": [
         "fetch_sms_overview_html()",
@@ -3223,7 +3447,10 @@
         "sys",
         "typing"
       ],
-      "imported_by": [],
+      "imported_by": [
+        "backend/cron_scheduler.py",
+        "backend/vetting_checks.py"
+      ],
       "lines_of_code": 621,
       "last_modified": "2026-05-07T18:58:27.934759+00:00",
       "smoke_test": null,
@@ -3231,9 +3458,7 @@
         "\"FMCSA SMS BASIC Safety Scores per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2).\\n\\nFetches Behavior Analysis & Safety Improvement Categories (BASIC) percentile scores,\\ninspectio"
       ],
       "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
+      "notes": [],
       "module_name": "fmcsa_sms_scores"
     },
     {
@@ -5018,6 +5243,112 @@
       "module_name": "tests.test_email_poller"
     },
     {
+      "path": "C:/CHL/backend/tests/test_fmcsa_sms_wire.py",
+      "rel_path": "backend/tests/test_fmcsa_sms_wire.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "DEV-TOOL",
+      "description": "test_fmcsa_sms_wire.py \u2014 iter 142.1 Phase 2 FMCSA SMS wiring tests. Covers the three integration points added in iter 142.1 Phase 2: 1. `vetting_checks.run_full_vetting` extension --- when DOT is supp",
+      "exports": [
+        "test_refresh_sms_for_dot_invalid_input()",
+        "test_refresh_sms_for_dot_happy_path_writes_to_db()",
+        "test_refresh_sms_for_dot_bad_dot_returns_ok_false_no_db_write()",
+        "test_evaluate_sms_warnings_high_crash_triggers_flag()",
+        "test_evaluate_sms_warnings_boundary_at_65_does_not_trigger()",
+        "test_evaluate_sms_warnings_low_crash_no_flag()",
+        "test_evaluate_sms_warnings_non_public_crash_no_flag()",
+        "test_evaluate_sms_warnings_failed_fetch_no_flag()",
+        "test_run_full_vetting_attaches_sms_scores_when_dot_known()",
+        "test_run_full_vetting_high_crash_flags_warn()",
+        "test_run_full_vetting_no_dot_skips_sms()",
+        "test_run_full_vetting_sms_fetch_failure_does_not_block()",
+        "test_fmcsa_sms_cron_flag_off_short_circuits()",
+        "test_fmcsa_sms_cron_happy_path_writes_log_and_carrier()",
+        "test_fmcsa_sms_cron_rate_limit_abort()",
+        "test_fmcsa_sms_cron_handles_bad_dot_no_abort()",
+        "test_fmcsa_sms_cron_helper_enabled_reads_env()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "cron_scheduler",
+        "datetime",
+        "httpx",
+        "os",
+        "pytest",
+        "sys",
+        "typing",
+        "unittest",
+        "vetting_checks",
+        "vetting_checks._evaluate_sms_warnings"
+      ],
+      "imported_by": [],
+      "lines_of_code": 556,
+      "last_modified": "2026-05-10T21:46:40.872674+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_fmcsa_sms_wire.py \u2014 iter 142.1 Phase 2 FMCSA SMS wiring tests.\\n\\nCovers the three integration points added in iter 142.1 Phase 2:\\n\\n  1. `vetting_checks.run_full_vetting` extension --- when DO"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_fmcsa_sms_wire"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_fmcsa_sms_wire.py",
+      "rel_path": "backend/tests/test_fmcsa_sms_wire.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "DEV-TOOL",
+      "description": "test_fmcsa_sms_wire.py \u2014 iter 142.1 Phase 2 FMCSA SMS wiring tests. Covers the three integration points added in iter 142.1 Phase 2: 1. `vetting_checks.run_full_vetting` extension --- when DOT is supp",
+      "exports": [
+        "test_refresh_sms_for_dot_invalid_input()",
+        "test_refresh_sms_for_dot_happy_path_writes_to_db()",
+        "test_refresh_sms_for_dot_bad_dot_returns_ok_false_no_db_write()",
+        "test_evaluate_sms_warnings_high_crash_triggers_flag()",
+        "test_evaluate_sms_warnings_boundary_at_65_does_not_trigger()",
+        "test_evaluate_sms_warnings_low_crash_no_flag()",
+        "test_evaluate_sms_warnings_non_public_crash_no_flag()",
+        "test_evaluate_sms_warnings_failed_fetch_no_flag()",
+        "test_run_full_vetting_attaches_sms_scores_when_dot_known()",
+        "test_run_full_vetting_high_crash_flags_warn()",
+        "test_run_full_vetting_no_dot_skips_sms()",
+        "test_run_full_vetting_sms_fetch_failure_does_not_block()",
+        "test_fmcsa_sms_cron_flag_off_short_circuits()",
+        "test_fmcsa_sms_cron_happy_path_writes_log_and_carrier()",
+        "test_fmcsa_sms_cron_rate_limit_abort()",
+        "test_fmcsa_sms_cron_handles_bad_dot_no_abort()",
+        "test_fmcsa_sms_cron_helper_enabled_reads_env()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "cron_scheduler",
+        "datetime",
+        "httpx",
+        "os",
+        "pytest",
+        "sys",
+        "typing",
+        "unittest",
+        "vetting_checks",
+        "vetting_checks._evaluate_sms_warnings"
+      ],
+      "imported_by": [],
+      "lines_of_code": 556,
+      "last_modified": "2026-05-10T21:46:40.872674+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_fmcsa_sms_wire.py \u2014 iter 142.1 Phase 2 FMCSA SMS wiring tests.\\n\\nCovers the three integration points added in iter 142.1 Phase 2:\\n\\n  1. `vetting_checks.run_full_vetting` extension --- when DO"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_fmcsa_sms_wire"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_imap_multi_folder.py",
       "rel_path": "backend/tests/test_imap_multi_folder.py",
       "type": "python_module",
@@ -6024,6 +6355,124 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_noa_detector"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_operator_alerts.py",
+      "rel_path": "backend/tests/test_operator_alerts.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "DEV-TOOL",
+      "description": "test_operator_alerts.py \u2014 unit tests for backend/operator_alerts.py. Coverage: - test_severity_routing_info_log_only - test_severity_routing_medium_notification_service - test_severity_routing_high_te",
+      "exports": [
+        "mock_transports()",
+        "failing_transports()",
+        "test_severity_routing_info_log_only()",
+        "test_severity_routing_medium_notification_service()",
+        "test_severity_routing_high_text_only()",
+        "test_severity_routing_critical_text_and_voice()",
+        "test_severity_unknown_falls_back_to_medium()",
+        "test_redaction_bearer_token()",
+        "test_redaction_openai_sk_key()",
+        "test_redaction_long_generic_token()",
+        "test_redaction_env_secret_value()",
+        "test_audit_row_format()",
+        "test_audit_skipped_when_db_none_but_dispatch_succeeds()",
+        "test_message_truncated_to_500_in_audit()",
+        "test_text_failure_does_not_crash_or_break_audit()",
+        "test_voice_failure_does_not_crash_or_break_audit()",
+        "test_dispatch_never_raises()",
+        "test_severity_lowercase_normalized()",
+        "test_module_level_init_db()",
+        "test_redaction_mongo_connection_url()",
+        "test_redaction_jwt_token()",
+        "test_redaction_http_basic_auth_url()",
+        "test_twilio_cap_under_limit_high_alert_sends()",
+        "test_twilio_cap_exceeded_critical_throttles_to_medium()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "operator_alerts",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 530,
+      "last_modified": "2026-05-10T22:18:18.071895+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\ntest_operator_alerts.py \u2014 unit tests for backend/operator_alerts.py.\\n\\nCoverage:\\n  - test_severity_routing_info_log_only\\n  - test_severity_routing_medium_notification_service\\n  - test_severity_",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-operator-alerts')",
+        "pytest.fixture",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_operator_alerts"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_operator_alerts.py",
+      "rel_path": "backend/tests/test_operator_alerts.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "DEV-TOOL",
+      "description": "test_operator_alerts.py \u2014 unit tests for backend/operator_alerts.py. Coverage: - test_severity_routing_info_log_only - test_severity_routing_medium_notification_service - test_severity_routing_high_te",
+      "exports": [
+        "mock_transports()",
+        "failing_transports()",
+        "test_severity_routing_info_log_only()",
+        "test_severity_routing_medium_notification_service()",
+        "test_severity_routing_high_text_only()",
+        "test_severity_routing_critical_text_and_voice()",
+        "test_severity_unknown_falls_back_to_medium()",
+        "test_redaction_bearer_token()",
+        "test_redaction_openai_sk_key()",
+        "test_redaction_long_generic_token()",
+        "test_redaction_env_secret_value()",
+        "test_audit_row_format()",
+        "test_audit_skipped_when_db_none_but_dispatch_succeeds()",
+        "test_message_truncated_to_500_in_audit()",
+        "test_text_failure_does_not_crash_or_break_audit()",
+        "test_voice_failure_does_not_crash_or_break_audit()",
+        "test_dispatch_never_raises()",
+        "test_severity_lowercase_normalized()",
+        "test_module_level_init_db()",
+        "test_redaction_mongo_connection_url()",
+        "test_redaction_jwt_token()",
+        "test_redaction_http_basic_auth_url()",
+        "test_twilio_cap_under_limit_high_alert_sends()",
+        "test_twilio_cap_exceeded_critical_throttles_to_medium()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "operator_alerts",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 530,
+      "last_modified": "2026-05-10T22:18:18.071895+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\ntest_operator_alerts.py \u2014 unit tests for backend/operator_alerts.py.\\n\\nCoverage:\\n  - test_severity_routing_info_log_only\\n  - test_severity_routing_medium_notification_service\\n  - test_severity_",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-operator-alerts')",
+        "pytest.fixture",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_operator_alerts"
     },
     {
       "path": "C:/CHL/backend/tests/test_schedule_of_accounts.py",
@@ -6416,7 +6865,7 @@
       "rel_path": "backend/text_operator.py",
       "type": "python_module",
       "subsystem": "Communications",
-      "status": "ORPHAN",
+      "status": "LIVE",
       "description": "text_operator.py \u2014 operator-facing SMS alert wrapper (iter 141.1). NOT for driver/carrier comms \u2014 that path lives in notification_service.py and is gated on A2P 10DLC APPROVED. This module is for *int",
       "exports": [
         "text_operator()"
@@ -6428,7 +6877,9 @@
         "twilio",
         "typing"
       ],
-      "imported_by": [],
+      "imported_by": [
+        "backend/operator_alerts.py"
+      ],
       "lines_of_code": 107,
       "last_modified": "2026-05-07T02:34:13.388360+00:00",
       "smoke_test": null,
@@ -6436,9 +6887,7 @@
         "'\\ntext_operator.py \u2014 operator-facing SMS alert wrapper (iter 141.1).\\n\\nNOT for driver/carrier comms \u2014 that path lives in notification_service.py and\\nis gated on A2P 10DLC APPROVED. This module is f"
       ],
       "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
+      "notes": [],
       "module_name": "text_operator"
     },
     {
@@ -6537,7 +6986,7 @@
       "rel_path": "backend/voice_operator.py",
       "type": "python_module",
       "subsystem": "Communications",
-      "status": "ORPHAN",
+      "status": "LIVE",
       "description": "voice_operator.py \u2014 operator-facing Voice (robo-call) alert wrapper (iter 141.1). Sister module to text_operator.py. Same role (alert the platform owner) but uses Twilio Voice instead of SMS. Voice is",
       "exports": [
         "voice_operator()"
@@ -6549,7 +6998,9 @@
         "twilio",
         "typing"
       ],
-      "imported_by": [],
+      "imported_by": [
+        "backend/operator_alerts.py"
+      ],
       "lines_of_code": 124,
       "last_modified": "2026-05-07T02:51:51.116978+00:00",
       "smoke_test": null,
@@ -6557,9 +7008,7 @@
         "\"\\nvoice_operator.py \u2014 operator-facing Voice (robo-call) alert wrapper (iter 141.1).\\n\\nSister module to text_operator.py. Same role (alert the platform owner) but\\nuses Twilio Voice instead of SMS. V"
       ],
       "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
+      "notes": [],
       "module_name": "voice_operator"
     },
     {
@@ -7388,6 +7837,8 @@
         "document_store",
         "document_store.get_document_file",
         "extraction_store",
+        "hazmat_types",
+        "hazmat_types.normalize_hazmat_class_list",
         "health_monitor",
         "health_monitor.register_health_check",
         "json",
@@ -7403,8 +7854,8 @@
         "backend/server.py",
         "backend/tests/test_doc_extractor.py"
       ],
-      "lines_of_code": 908,
-      "last_modified": "2026-05-08T14:56:13.472039+00:00",
+      "lines_of_code": 921,
+      "last_modified": "2026-05-10T21:52:51.313845+00:00",
       "smoke_test": null,
       "decorators": [
         "'carrier_docs.doc_extractor -- OCR + structured-field extraction for\\ncarrier compliance documents (iter 145.1 EOD-10 stage).\\n\\nPipeline\\n--------\\n    db.carrier_documents row exists (uploaded by op"
@@ -7723,6 +8174,40 @@
       "module_name": "enrichment.orchestrator"
     },
     {
+      "path": "C:/CHL/backend/equipment_types.py",
+      "rel_path": "backend/equipment_types.py",
+      "type": "python_module",
+      "subsystem": "Compliance",
+      "status": "LIVE",
+      "description": "Canonical equipment-type enum \u2014 single source of truth for the whole platform. Operator-mandated 2026-05-10 (Phase-1 input-surface audit Finding #1): forms across CarrierPreferences / QROnboardLoad / ",
+      "exports": [
+        "is_canonical_equipment()",
+        "normalize_equipment_slug()"
+      ],
+      "imports": [
+        "__future__",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/carrier_preferences.py",
+        "backend/driver_preferences.py",
+        "backend/load_intake.py",
+        "backend/loadboards.py",
+        "backend/rate_calc_engine.py",
+        "backend/tests/test_equipment_enum_canonical.py"
+      ],
+      "lines_of_code": 147,
+      "last_modified": "2026-05-10T21:51:42.764106+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nCanonical equipment-type enum \u2014 single source of truth for the whole platform.\\n\\nOperator-mandated 2026-05-10 (Phase-1 input-surface audit Finding #1):\\nforms across CarrierPreferences / QROnboard"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "equipment_types"
+    },
+    {
       "path": "C:/CHL/backend/integrity/audit_trail.py",
       "rel_path": "backend/integrity/audit_trail.py",
       "type": "python_module",
@@ -7816,14 +8301,27 @@
         "__future__",
         "datetime",
         "fastapi",
+        "hazmat_types",
+        "hazmat_types.HazmatClass",
+        "hazmat_types.PackingGroup",
+        "hazmat_types.normalize_hazmat_class",
+        "hazmat_types.normalize_packing_group",
+        "payment_terms",
+        "payment_terms.PaymentTerm",
         "pydantic",
+        "safety_rating_types",
+        "safety_rating_types.CarrierMinSafetyRating",
+        "safety_rating_types.normalize_safety_rating",
         "typing"
       ],
       "imported_by": [
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_hazmat_canonical.py",
+        "backend/tests/test_payment_terms_canonical.py",
+        "backend/tests/test_safety_rating_canonical.py"
       ],
-      "lines_of_code": 735,
-      "last_modified": "2026-05-04T22:04:39.878828+00:00",
+      "lines_of_code": 839,
+      "last_modified": "2026-05-10T22:17:52.245193+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nLoad Schema v2 \u2014 Industry-Standard Compliance Blocks\\n=====================================================\\n\\nAdds four conditional compliance blocks to every load:\\n\\n  A. ComplianceBlock      \u2014 "
@@ -9287,6 +9785,154 @@
       "module_name": "tests.test_enrichment_audit"
     },
     {
+      "path": "C:/CHL/backend/tests/test_equipment_enum_canonical.py",
+      "rel_path": "backend/tests/test_equipment_enum_canonical.py",
+      "type": "python_module",
+      "subsystem": "Compliance",
+      "status": "DEV-TOOL",
+      "description": "Phase-1 input-surface audit canonical-enum tests (2026-05-10). Verifies: Finding #1 \u2014 equipment-type canonical 9 is imported + enforced by every backend Pydantic model that takes equipment_type / pref",
+      "exports": [
+        "test_canonical_9_count_and_contents()",
+        "test_all_slugs_lowercase_underscore()",
+        "test_is_canonical_equipment()",
+        "test_normalize_equipment_slug()",
+        "test_normalize_unknown_passes_through_cleaned()",
+        "test_carrier_preferences_accepts_all_9()",
+        "test_carrier_preferences_rejects_invalid_equipment()",
+        "test_carrier_preferences_normalizes_aliases()",
+        "test_driver_preferences_accepts_all_9()",
+        "test_driver_preferences_rejects_invalid_equipment()",
+        "test_driver_preferences_update_rejects_invalid()",
+        "test_driver_onboarding_submission_rejects_invalid()",
+        "test_load_intake_equipment_accepts_all_9()",
+        "test_load_intake_equipment_rejects_invalid()",
+        "test_load_intake_equipment_normalizes_alias()",
+        "test_loadboard_filter_accepts_all_9()",
+        "test_loadboard_filter_rejects_invalid()",
+        "test_loadboard_filter_normalizes_lowboy_to_heavy_haul()",
+        "test_cross_module_canonical_identity()",
+        "test_rate_per_mile_bounds_constants()",
+        "test_rate_per_mile_rejects_zero()",
+        "test_rate_per_mile_accepts_floor()",
+        "test_rate_per_mile_accepts_ceiling()",
+        "test_rate_per_mile_rejects_just_over_ceiling()",
+        "test_rate_per_mile_rejects_fat_finger_million()",
+        "test_rate_per_mile_rejects_below_floor()",
+        "test_rate_per_mile_optional_none_ok()"
+      ],
+      "imports": [
+        "__future__",
+        "carrier_preferences",
+        "carrier_preferences.PreferencesPayload",
+        "driver_preferences",
+        "driver_preferences.DriverPreferences",
+        "driver_preferences.OnboardingSubmission",
+        "driver_preferences.PreferencesUpdate",
+        "equipment_types",
+        "equipment_types.CANONICAL_EQUIPMENT_TYPES",
+        "equipment_types.EquipmentType",
+        "equipment_types.RATE_PER_MILE_MAX",
+        "equipment_types.RATE_PER_MILE_MIN",
+        "equipment_types.is_canonical_equipment",
+        "equipment_types.normalize_equipment_slug",
+        "load_intake",
+        "load_intake.LoadIntakeEquipment",
+        "loadboards",
+        "loadboards.LoadBoardEquipmentFilter",
+        "os",
+        "pydantic",
+        "pytest",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 244,
+      "last_modified": "2026-05-10T21:56:59.664266+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nPhase-1 input-surface audit canonical-enum tests (2026-05-10).\\n\\nVerifies:\\n  Finding #1 \u2014 equipment-type canonical 9 is imported + enforced by every\\n  backend Pydantic model that takes equipment",
+        "pytest.mark.parametrize('raw,expected', [('van', 'dry_van'), ('VAN', 'dry_van'), ('Dry Van', 'dry_van'), ('dry-van', 'dry_van'), ('v', 'dry_van'), ('refrigerated', 'reefer'), ('flat', 'flatbed'), ('st"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_equipment_enum_canonical"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_equipment_enum_canonical.py",
+      "rel_path": "backend/tests/test_equipment_enum_canonical.py",
+      "type": "python_module",
+      "subsystem": "Compliance",
+      "status": "DEV-TOOL",
+      "description": "Phase-1 input-surface audit canonical-enum tests (2026-05-10). Verifies: Finding #1 \u2014 equipment-type canonical 9 is imported + enforced by every backend Pydantic model that takes equipment_type / pref",
+      "exports": [
+        "test_canonical_9_count_and_contents()",
+        "test_all_slugs_lowercase_underscore()",
+        "test_is_canonical_equipment()",
+        "test_normalize_equipment_slug()",
+        "test_normalize_unknown_passes_through_cleaned()",
+        "test_carrier_preferences_accepts_all_9()",
+        "test_carrier_preferences_rejects_invalid_equipment()",
+        "test_carrier_preferences_normalizes_aliases()",
+        "test_driver_preferences_accepts_all_9()",
+        "test_driver_preferences_rejects_invalid_equipment()",
+        "test_driver_preferences_update_rejects_invalid()",
+        "test_driver_onboarding_submission_rejects_invalid()",
+        "test_load_intake_equipment_accepts_all_9()",
+        "test_load_intake_equipment_rejects_invalid()",
+        "test_load_intake_equipment_normalizes_alias()",
+        "test_loadboard_filter_accepts_all_9()",
+        "test_loadboard_filter_rejects_invalid()",
+        "test_loadboard_filter_normalizes_lowboy_to_heavy_haul()",
+        "test_cross_module_canonical_identity()",
+        "test_rate_per_mile_bounds_constants()",
+        "test_rate_per_mile_rejects_zero()",
+        "test_rate_per_mile_accepts_floor()",
+        "test_rate_per_mile_accepts_ceiling()",
+        "test_rate_per_mile_rejects_just_over_ceiling()",
+        "test_rate_per_mile_rejects_fat_finger_million()",
+        "test_rate_per_mile_rejects_below_floor()",
+        "test_rate_per_mile_optional_none_ok()"
+      ],
+      "imports": [
+        "__future__",
+        "carrier_preferences",
+        "carrier_preferences.PreferencesPayload",
+        "driver_preferences",
+        "driver_preferences.DriverPreferences",
+        "driver_preferences.OnboardingSubmission",
+        "driver_preferences.PreferencesUpdate",
+        "equipment_types",
+        "equipment_types.CANONICAL_EQUIPMENT_TYPES",
+        "equipment_types.EquipmentType",
+        "equipment_types.RATE_PER_MILE_MAX",
+        "equipment_types.RATE_PER_MILE_MIN",
+        "equipment_types.is_canonical_equipment",
+        "equipment_types.normalize_equipment_slug",
+        "load_intake",
+        "load_intake.LoadIntakeEquipment",
+        "loadboards",
+        "loadboards.LoadBoardEquipmentFilter",
+        "os",
+        "pydantic",
+        "pytest",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 244,
+      "last_modified": "2026-05-10T21:56:59.664266+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nPhase-1 input-surface audit canonical-enum tests (2026-05-10).\\n\\nVerifies:\\n  Finding #1 \u2014 equipment-type canonical 9 is imported + enforced by every\\n  backend Pydantic model that takes equipment",
+        "pytest.mark.parametrize('raw,expected', [('van', 'dry_van'), ('VAN', 'dry_van'), ('Dry Van', 'dry_van'), ('dry-van', 'dry_van'), ('v', 'dry_van'), ('refrigerated', 'reefer'), ('flat', 'flatbed'), ('st"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_equipment_enum_canonical"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_integrity.py",
       "rel_path": "backend/tests/test_integrity.py",
       "type": "python_module",
@@ -9573,7 +10219,7 @@
       ],
       "imported_by": [],
       "lines_of_code": 574,
-      "last_modified": "2026-05-04T22:04:39.938086+00:00",
+      "last_modified": "2026-05-10T22:18:09.562334+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nIteration 120 \u2014 Load Schema v2 Backend Tests\\n=============================================\\nTests for the new Load Schema v2 module (load_schema_v2.py) which adds\\nindustry-standard compliance blo",
@@ -9617,7 +10263,7 @@
       ],
       "imported_by": [],
       "lines_of_code": 574,
-      "last_modified": "2026-05-04T22:04:39.938086+00:00",
+      "last_modified": "2026-05-10T22:18:09.562334+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nIteration 120 \u2014 Load Schema v2 Backend Tests\\n=============================================\\nTests for the new Load Schema v2 module (load_schema_v2.py) which adds\\nindustry-standard compliance blo",
@@ -11287,6 +11933,7 @@
       "imported_by": [
         "backend/carrier_outreach.py",
         "backend/server.py",
+        "backend/tests/test_rate_con_autofire.py",
         "scripts/get_pin_and_inject.py",
         "scripts/get_pin_for_ref.py"
       ],
@@ -11371,7 +12018,9 @@
       "imported_by": [
         "backend/carrier_outreach.py",
         "backend/multi_leg.py",
+        "backend/operator_queues_router.py",
         "backend/server.py",
+        "backend/tests/test_rate_con_autofire.py",
         "scripts/fire_full_dryrun.py"
       ],
       "lines_of_code": 693,
@@ -12299,6 +12948,7 @@
       "description": "Payment Rails \u2014 Iteration 77.1. Three responsibilities: 1. Settlement queue \u2014 GET /api/broker/settlements/pending 2. Integrity-gated funding \u2014 POST /api/broker/settlements/{payment_id}/fund Preconditi",
       "exports": [
         "transition_payment_status()",
+        "check_funding_gate()",
         "build_router()"
       ],
       "imports": [
@@ -12316,11 +12966,12 @@
       "imported_by": [
         "backend/command_control.py",
         "backend/server.py",
+        "backend/tests/test_funding_gate.py",
         "backend/tests/test_payments_status_migration.py",
         "backend/tests/test_state_lock_audit_domain_expansion.py"
       ],
-      "lines_of_code": 452,
-      "last_modified": "2026-05-08T21:41:05.021492+00:00",
+      "lines_of_code": 792,
+      "last_modified": "2026-05-10T21:43:33.172727+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nPayment Rails \u2014 Iteration 77.1.\\n\\nThree responsibilities:\\n\\n  1. Settlement queue  \u2014 GET /api/broker/settlements/pending\\n  2. Integrity-gated funding \u2014 POST /api/broker/settlements/{payment_id}/"
@@ -12702,6 +13353,162 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_auto_settlement_trigger"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_delivered_no_stripe_autopay.py",
+      "rel_path": "backend/tests/test_delivered_no_stripe_autopay.py",
+      "type": "python_module",
+      "subsystem": "Financial",
+      "status": "DEV-TOOL",
+      "description": "test_delivered_no_stripe_autopay.py -- Confirm the delivery-flow auto-pay block in backend/server.py is disabled (operator decision 2026-05-10: factoring is the rail, NOT Stripe). We can't easily impo",
+      "exports": [
+        "class TestDeliveredNoStripeAutopay"
+      ],
+      "imports": [
+        "__future__",
+        "ast",
+        "os",
+        "pathlib",
+        "pytest",
+        "re"
+      ],
+      "imported_by": [],
+      "lines_of_code": 130,
+      "last_modified": "2026-05-10T22:51:35.712733+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_delivered_no_stripe_autopay.py -- Confirm the delivery-flow\\nauto-pay block in backend/server.py is disabled (operator decision\\n2026-05-10: factoring is the rail, NOT Stripe).\\n\\nWe can\\'t easi"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_delivered_no_stripe_autopay"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_delivered_no_stripe_autopay.py",
+      "rel_path": "backend/tests/test_delivered_no_stripe_autopay.py",
+      "type": "python_module",
+      "subsystem": "Financial",
+      "status": "DEV-TOOL",
+      "description": "test_delivered_no_stripe_autopay.py -- Confirm the delivery-flow auto-pay block in backend/server.py is disabled (operator decision 2026-05-10: factoring is the rail, NOT Stripe). We can't easily impo",
+      "exports": [
+        "class TestDeliveredNoStripeAutopay"
+      ],
+      "imports": [
+        "__future__",
+        "ast",
+        "os",
+        "pathlib",
+        "pytest",
+        "re"
+      ],
+      "imported_by": [],
+      "lines_of_code": 130,
+      "last_modified": "2026-05-10T22:51:35.712733+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_delivered_no_stripe_autopay.py -- Confirm the delivery-flow\\nauto-pay block in backend/server.py is disabled (operator decision\\n2026-05-10: factoring is the rail, NOT Stripe).\\n\\nWe can\\'t easi"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_delivered_no_stripe_autopay"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_funding_gate.py",
+      "rel_path": "backend/tests/test_funding_gate.py",
+      "type": "python_module",
+      "subsystem": "Financial",
+      "status": "DEV-TOOL",
+      "description": "test_funding_gate.py -- soft funding gate (payment_rails.check_funding_gate) + POST /api/funding/{load_id}/manual-approve endpoint. Verifies the four gate states per spec: 1. PASSED -> all signals gre",
+      "exports": [
+        "test_gate_passed_all_signals_green()",
+        "test_gate_pending_when_gps_missing()",
+        "test_gate_pending_when_pod_missing()",
+        "test_gate_fraud_when_gps_disputes_delivery()",
+        "test_gate_stale_gps_treated_as_missing_not_fraud()",
+        "test_fund_returns_202_when_gate_pending()",
+        "test_fund_returns_409_fraud_block_when_gps_disputes()",
+        "test_manual_approve_funds_pending_gate()",
+        "test_manual_approve_refused_on_fraud()",
+        "test_manual_approve_requires_owner_role()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "fastapi",
+        "os",
+        "payment_rails",
+        "pytest",
+        "starlette",
+        "synthetic_load_walkthrough",
+        "synthetic_load_walkthrough._FakeDB",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 450,
+      "last_modified": "2026-05-10T21:46:14.351938+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\ntest_funding_gate.py -- soft funding gate (payment_rails.check_funding_gate)\\n+ POST /api/funding/{load_id}/manual-approve endpoint.\\n\\nVerifies the four gate states per spec:\\n  1. PASSED         "
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_funding_gate"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_funding_gate.py",
+      "rel_path": "backend/tests/test_funding_gate.py",
+      "type": "python_module",
+      "subsystem": "Financial",
+      "status": "DEV-TOOL",
+      "description": "test_funding_gate.py -- soft funding gate (payment_rails.check_funding_gate) + POST /api/funding/{load_id}/manual-approve endpoint. Verifies the four gate states per spec: 1. PASSED -> all signals gre",
+      "exports": [
+        "test_gate_passed_all_signals_green()",
+        "test_gate_pending_when_gps_missing()",
+        "test_gate_pending_when_pod_missing()",
+        "test_gate_fraud_when_gps_disputes_delivery()",
+        "test_gate_stale_gps_treated_as_missing_not_fraud()",
+        "test_fund_returns_202_when_gate_pending()",
+        "test_fund_returns_409_fraud_block_when_gps_disputes()",
+        "test_manual_approve_funds_pending_gate()",
+        "test_manual_approve_refused_on_fraud()",
+        "test_manual_approve_requires_owner_role()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "fastapi",
+        "os",
+        "payment_rails",
+        "pytest",
+        "starlette",
+        "synthetic_load_walkthrough",
+        "synthetic_load_walkthrough._FakeDB",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 450,
+      "last_modified": "2026-05-10T21:46:14.351938+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\ntest_funding_gate.py -- soft funding gate (payment_rails.check_funding_gate)\\n+ POST /api/funding/{load_id}/manual-approve endpoint.\\n\\nVerifies the four gate states per spec:\\n  1. PASSED         "
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_funding_gate"
     },
     {
       "path": "C:/CHL/backend/tests/test_iteration15_features.py",
@@ -13767,8 +14574,8 @@
       "imported_by": [
         "frontend/src/App.js"
       ],
-      "lines_of_code": 276,
-      "last_modified": "2026-05-04T22:04:40.057238+00:00",
+      "lines_of_code": 389,
+      "last_modified": "2026-05-10T21:45:04.331932+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -15733,8 +16540,8 @@
       "imported_by": [
         "frontend/src/App.js"
       ],
-      "lines_of_code": 253,
-      "last_modified": "2026-05-04T22:04:40.017709+00:00",
+      "lines_of_code": 257,
+      "last_modified": "2026-05-10T22:19:14.828953+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -15954,6 +16761,31 @@
       ],
       "lines_of_code": 146,
       "last_modified": "2026-05-09T03:50:23.745132+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
+    },
+    {
+      "path": "C:/CHL/frontend/src/views/Day1Dashboard.jsx",
+      "rel_path": "frontend/src/views/Day1Dashboard.jsx",
+      "type": "jsx_component",
+      "subsystem": "Frontend UI",
+      "status": "LIVE",
+      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
+      "exports": [
+        "Day1Dashboard"
+      ],
+      "imports": [
+        "axios",
+        "react"
+      ],
+      "imported_by": [
+        "frontend/src/App.js"
+      ],
+      "lines_of_code": 580,
+      "last_modified": "2026-05-10T22:31:05.004283+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -16271,8 +17103,8 @@
       "imported_by": [
         "frontend/src/views/RateConSignPage.jsx"
       ],
-      "lines_of_code": 334,
-      "last_modified": "2026-05-04T22:04:40.027390+00:00",
+      "lines_of_code": 336,
+      "last_modified": "2026-05-10T22:19:41.544146+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -17040,8 +17872,8 @@
       "imported_by": [
         "frontend/src/App.js"
       ],
-      "lines_of_code": 768,
-      "last_modified": "2026-05-04T22:04:40.039061+00:00",
+      "lines_of_code": 771,
+      "last_modified": "2026-05-10T22:19:53.485289+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -17146,8 +17978,8 @@
       "imported_by": [
         "frontend/src/App.js"
       ],
-      "lines_of_code": 533,
-      "last_modified": "2026-05-04T22:04:40.040457+00:00",
+      "lines_of_code": 544,
+      "last_modified": "2026-05-10T22:18:15.351177+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -17461,6 +18293,31 @@
       ],
       "lines_of_code": 733,
       "last_modified": "2026-05-09T02:02:42.876648+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
+    },
+    {
+      "path": "C:/CHL/frontend/src/views/OperatorQueuesView.jsx",
+      "rel_path": "frontend/src/views/OperatorQueuesView.jsx",
+      "type": "jsx_component",
+      "subsystem": "Frontend UI",
+      "status": "LIVE",
+      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
+      "exports": [
+        "OperatorQueuesView"
+      ],
+      "imports": [
+        "axios",
+        "react"
+      ],
+      "imported_by": [
+        "frontend/src/App.js"
+      ],
+      "lines_of_code": 731,
+      "last_modified": "2026-05-10T22:30:31.075237+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -17783,8 +18640,8 @@
       "imported_by": [
         "frontend/src/App.js"
       ],
-      "lines_of_code": 572,
-      "last_modified": "2026-05-09T16:12:29.726372+00:00",
+      "lines_of_code": 574,
+      "last_modified": "2026-05-10T22:19:32.843442+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -18050,7 +18907,7 @@
         "frontend/src/views/SchemaHealthWidget.jsx"
       ],
       "lines_of_code": 385,
-      "last_modified": "2026-05-04T22:04:40.056241+00:00",
+      "last_modified": "2026-05-10T22:18:25.119816+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -18129,8 +18986,8 @@
       "imported_by": [
         "frontend/src/views/RequiredTasksTray.jsx"
       ],
-      "lines_of_code": 285,
-      "last_modified": "2026-05-04T22:04:40.057238+00:00",
+      "lines_of_code": 287,
+      "last_modified": "2026-05-10T21:52:07.053985+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -19132,18 +19989,25 @@
       ],
       "imports": [
         "__future__",
+        "equipment_types",
+        "equipment_types.normalize_equipment_slug",
         "margin_config",
         "margin_config.get_broker_premium",
         "margin_config.get_margin_floor",
         "math",
+        "pnl_monitor",
+        "pnl_monitor.LoadEconomics",
+        "pnl_monitor.compute_load_pnl",
+        "pnl_monitor.queue_pnl_warning",
         "typing"
       ],
       "imported_by": [
         "backend/server.py",
+        "backend/tests/test_pnl_guard.py",
         "scripts/smoke_margin_config.py"
       ],
-      "lines_of_code": 397,
-      "last_modified": "2026-05-10T03:37:58.429991+00:00",
+      "lines_of_code": 485,
+      "last_modified": "2026-05-10T22:01:46.436296+00:00",
       "smoke_test": null,
       "decorators": [
         "'rate_calc_engine.py \u2014 Real-world 2026 freight market rate calculator.\\n\\nOperator-authorized 2026-05-10 rebuild of `/api/rate-calculator` to cover:\\n  - Equipment-type RPM bands for ALL 9 common equi"
@@ -19594,6 +20458,94 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_lane_eta_accuracy"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_pnl_guard.py",
+      "rel_path": "backend/tests/test_pnl_guard.py",
+      "type": "python_module",
+      "subsystem": "Intelligence",
+      "status": "DEV-TOOL",
+      "description": "Never-book-at-loss two-phase guard. Phase 1 (pre-quote): rate_calc_engine.calculate_with_config() warns when the estimated carrier_rate (lane median or 92% of quote) would yield a per-load loss. Quote",
+      "exports": [
+        "test_phase1_lossy_quote_emits_warning_but_does_not_block()",
+        "test_phase1_healthy_quote_no_warning()",
+        "test_phase1_no_lane_history_uses_92pct_fallback()",
+        "test_phase2_lossy_accept_queues_warning_and_marks_load()",
+        "test_phase2_healthy_accept_no_warning()",
+        "test_queue_pnl_warning_persists_doc()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "carrier_outreach",
+        "carrier_vetting",
+        "fastapi",
+        "os",
+        "pnl_monitor",
+        "pytest",
+        "rate_calc_engine",
+        "starlette",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 356,
+      "last_modified": "2026-05-10T21:42:59.874700+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Never-book-at-loss two-phase guard.\\n\\nPhase 1 (pre-quote):  rate_calc_engine.calculate_with_config() warns when\\n                      the estimated carrier_rate (lane median or 92% of\\n            ",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-pnl-guard')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_pnl_guard"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_pnl_guard.py",
+      "rel_path": "backend/tests/test_pnl_guard.py",
+      "type": "python_module",
+      "subsystem": "Intelligence",
+      "status": "DEV-TOOL",
+      "description": "Never-book-at-loss two-phase guard. Phase 1 (pre-quote): rate_calc_engine.calculate_with_config() warns when the estimated carrier_rate (lane median or 92% of quote) would yield a per-load loss. Quote",
+      "exports": [
+        "test_phase1_lossy_quote_emits_warning_but_does_not_block()",
+        "test_phase1_healthy_quote_no_warning()",
+        "test_phase1_no_lane_history_uses_92pct_fallback()",
+        "test_phase2_lossy_accept_queues_warning_and_marks_load()",
+        "test_phase2_healthy_accept_no_warning()",
+        "test_queue_pnl_warning_persists_doc()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "carrier_outreach",
+        "carrier_vetting",
+        "fastapi",
+        "os",
+        "pnl_monitor",
+        "pytest",
+        "rate_calc_engine",
+        "starlette",
+        "sys",
+        "typing",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 356,
+      "last_modified": "2026-05-10T21:42:59.874700+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Never-book-at-loss two-phase guard.\\n\\nPhase 1 (pre-quote):  rate_calc_engine.calculate_with_config() warns when\\n                      the estimated carrier_rate (lane median or 92% of\\n            ",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-pnl-guard')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_pnl_guard"
     },
     {
       "path": "C:/CHL/scripts/rate_calc_scenarios.py",
@@ -20086,21 +21038,34 @@
         "PnlState",
         "WindowPnl",
         "evaluate_window_pnl",
-        "is_quote_auto_blocked"
+        "is_quote_auto_blocked",
+        "queue_pnl_warning",
+        "resolve_pnl_warning",
+        "list_pnl_warnings",
+        "RESOLUTION_DECISIONS",
+        "build_router"
       ],
       "imports": [
         "__future__",
         "dataclasses",
         "datetime",
         "enum",
-        "typing"
+        "fastapi",
+        "pydantic",
+        "typing",
+        "uuid"
       ],
       "imported_by": [
+        "backend/carrier_outreach.py",
+        "backend/operator_queues_router.py",
+        "backend/rate_calc_engine.py",
         "backend/server.py",
+        "backend/tests/test_pnl_guard.py",
+        "backend/tests/test_pnl_warning_resolution.py",
         "scripts/smoke_pnl_monitor.py"
       ],
-      "lines_of_code": 329,
-      "last_modified": "2026-05-10T04:31:25.421709+00:00",
+      "lines_of_code": 554,
+      "last_modified": "2026-05-10T22:22:02.078451+00:00",
       "smoke_test": "scripts/smoke_pnl_monitor.py",
       "decorators": [
         "'pnl_monitor.py -- Platform-wide P&L surveillance.\\n\\nOperator-mandated 2026-05-09 EOD-17:\\n> \"Our platform need to know when we are losing money overall. I don\\'t ever\\n>  want to book loads at a los",
@@ -20540,6 +21505,7 @@
       "status": "LIVE",
       "description": "Load Intake Engine \u2014 Iteration 71. text \u2192 parsed load dict \u2192 margin decision \u2192 priority queue Capabilities: 1. parse_load_text(raw) Regex-first, heuristic fallback. <1 ms/load on typical 6-line DAT/Tr",
       "exports": [
+        "class LoadIntakeEquipment",
         "parse_load_text()",
         "phantom_check()",
         "margin_decision()",
@@ -20549,18 +21515,24 @@
       "imports": [
         "__future__",
         "datetime",
+        "equipment_types",
+        "equipment_types.CANONICAL_EQUIPMENT_TYPES",
+        "equipment_types.EquipmentType",
+        "equipment_types.normalize_equipment_slug",
         "fastapi",
         "logging",
+        "pydantic",
         "re",
         "time",
         "typing"
       ],
       "imported_by": [
         "backend/server.py",
-        "backend/tests/chaos_iron_cage.py"
+        "backend/tests/chaos_iron_cage.py",
+        "backend/tests/test_equipment_enum_canonical.py"
       ],
-      "lines_of_code": 516,
-      "last_modified": "2026-05-09T14:52:27.200741+00:00",
+      "lines_of_code": 544,
+      "last_modified": "2026-05-10T21:53:07.731246+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nLoad Intake Engine \u2014 Iteration 71.\\n\\n  text \u2192 parsed load dict \u2192 margin decision \u2192 priority queue\\n\\nCapabilities:\\n  1. parse_load_text(raw)        Regex-first, heuristic fallback. <1 ms/load on\\"
@@ -23159,6 +24131,7 @@
         "eld_fleet_sweep_loop()",
         "dispatch_release_loop()",
         "records_request_sla_loop()",
+        "fmcsa_sms_cron_loop()",
         "start_all()"
       ],
       "imports": [
@@ -23219,6 +24192,9 @@
         "factor_schedule_of_accounts",
         "factor_schedule_of_accounts._batch_hour_utc",
         "factor_schedule_of_accounts.run_daily_soa_for_all_factors",
+        "fmcsa_sms_scores",
+        "fmcsa_sms_scores.fetch_full_sms_for_carrier",
+        "fmcsa_sms_scores.update_carrier_sms_in_db",
         "health_monitor",
         "health_monitor.register_health_check",
         "httpx",
@@ -23267,10 +24243,11 @@
       "imported_by": [
         "backend/server.py",
         "backend/tests/test_dispatch_release_gate.py",
+        "backend/tests/test_fmcsa_sms_wire.py",
         "backend/tests/test_records_request.py"
       ],
-      "lines_of_code": 3651,
-      "last_modified": "2026-05-09T15:23:05.156817+00:00",
+      "lines_of_code": 3953,
+      "last_modified": "2026-05-10T21:45:35.285965+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\ncron_scheduler.py \u2014 Consolidated background cron loops.\\n\\n(Iter 135.11, 2026-05-03)\\n\\nCloses 5 silent failure paths from the Operating Manual Chapter 5.3:\\n  1. Pre-pickup re-verify (every 30min)"
@@ -23278,6 +24255,51 @@
       "parse_error": null,
       "notes": [],
       "module_name": "cron_scheduler"
+    },
+    {
+      "path": "C:/CHL/backend/dashboard_router.py",
+      "rel_path": "backend/dashboard_router.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "dashboard_router.py -- Day-1 operator-monitoring dashboard aggregate endpoint. Single GET endpoint at `/api/dashboard/day1` (require_owner) that collapses the four launch-day quadrants into ONE payloa",
+      "exports": [
+        "build_router",
+        "build_day1_payload",
+        "get_day1_payload_cached",
+        "_reset_cache_for_tests"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "backend",
+        "backend.health_monitor",
+        "backend.health_monitor.get_system_health",
+        "datetime",
+        "fastapi",
+        "health_monitor",
+        "health_monitor.get_system_health",
+        "logging",
+        "os",
+        "psutil",
+        "shutil",
+        "subprocess",
+        "time",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/server.py",
+        "backend/tests/test_dashboard_router.py"
+      ],
+      "lines_of_code": 521,
+      "last_modified": "2026-05-10T22:28:59.882232+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'dashboard_router.py -- Day-1 operator-monitoring dashboard aggregate endpoint.\\n\\nSingle GET endpoint at `/api/dashboard/day1` (require_owner) that collapses the\\nfour launch-day quadrants into ONE p"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "dashboard_router"
     },
     {
       "path": "C:/CHL/backend/day1_readiness_email.py",
@@ -23405,6 +24427,8 @@
       "imports": [
         "__future__",
         "datetime",
+        "delivered_load_autofire",
+        "delivered_load_autofire.on_delivered",
         "fastapi",
         "integrity",
         "integrity.audit_trail",
@@ -23415,10 +24439,11 @@
         "uuid"
       ],
       "imported_by": [
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_delivered_autofire_wire.py"
       ],
-      "lines_of_code": 330,
-      "last_modified": "2026-05-08T21:30:19.053328+00:00",
+      "lines_of_code": 466,
+      "last_modified": "2026-05-10T22:02:02.591396+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nDelivery Completion Module \u2014 Iteration 72.\\n\\nCloses the driver-side loop:\\n  1. GET  /api/carrier/loads/{load_id}/delivery-eligibility\\n       Reads latest GPS ping, computes miles-to-destination,"
@@ -23661,6 +24686,10 @@
       "imports": [
         "__future__",
         "datetime",
+        "equipment_types",
+        "equipment_types.CANONICAL_EQUIPMENT_TYPES",
+        "equipment_types.EquipmentType",
+        "equipment_types.normalize_equipment_slug",
         "fastapi",
         "logging",
         "math",
@@ -23668,10 +24697,11 @@
         "typing"
       ],
       "imported_by": [
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_equipment_enum_canonical.py"
       ],
-      "lines_of_code": 462,
-      "last_modified": "2026-05-04T22:04:39.862862+00:00",
+      "lines_of_code": 486,
+      "last_modified": "2026-05-10T21:52:31.450969+00:00",
       "smoke_test": null,
       "decorators": [
         "'Driver Preferences + Lane Statistics \u2014 Iter 111\\n\\nDirector\\'s spec (verbatim, paraphrased here for engineers):\\n\\n  * Drivers pick their OWN home base when they sign up. Default is editable.\\n  * Tw"
@@ -25052,6 +26082,42 @@
       "module_name": "hardware_sentinel"
     },
     {
+      "path": "C:/CHL/backend/hazmat_types.py",
+      "rel_path": "backend/hazmat_types.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "hazmat_types.py -- Canonical source of truth for hazmat enum values. ==================================================================== Phase 1 input-surface finding #4: hazmat packing-group values ",
+      "exports": [
+        "PACKING_GROUPS",
+        "HAZMAT_CLASSES",
+        "PackingGroup",
+        "HazmatClass",
+        "normalize_packing_group",
+        "normalize_hazmat_class",
+        "normalize_hazmat_class_list"
+      ],
+      "imports": [
+        "__future__",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/carrier_docs/doc_extractor.py",
+        "backend/load_schema_v2.py",
+        "backend/tests/test_hazmat_canonical.py",
+        "scripts/migrate_hazmat_lowercase.py"
+      ],
+      "lines_of_code": 116,
+      "last_modified": "2026-05-10T21:51:43.662897+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nhazmat_types.py -- Canonical source of truth for hazmat enum values.\\n====================================================================\\n\\nPhase 1 input-surface finding #4: hazmat packing-group "
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "hazmat_types"
+    },
+    {
       "path": "C:/CHL/backend/headers_middleware.py",
       "rel_path": "backend/headers_middleware.py",
       "type": "python_module",
@@ -25485,6 +26551,7 @@
       "status": "LIVE",
       "description": "CHL External Load Boards \u2014 Multi-Source Aggregator -------------------------------------------------- Real adapters, no mock data. Each source is modular and honest about its current status (active / ",
       "exports": [
+        "class LoadBoardEquipmentFilter",
         "class LoadBoardAdapter",
         "class SamGovAdapter",
         "class DirectFreightAdapter",
@@ -25515,18 +26582,24 @@
         "__future__",
         "asyncio",
         "datetime",
+        "equipment_types",
+        "equipment_types.CANONICAL_EQUIPMENT_TYPES",
+        "equipment_types.EquipmentType",
+        "equipment_types.normalize_equipment_slug",
         "fastapi",
         "httpx",
         "logging",
         "os",
+        "pydantic",
         "typing"
       ],
       "imported_by": [
         "backend/match_dry_run.py",
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_equipment_enum_canonical.py"
       ],
-      "lines_of_code": 1675,
-      "last_modified": "2026-05-09T19:25:33.181456+00:00",
+      "lines_of_code": 1698,
+      "last_modified": "2026-05-10T21:53:16.085429+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nCHL External Load Boards \u2014 Multi-Source Aggregator\\n--------------------------------------------------\\nReal adapters, no mock data. Each source is modular and honest about its\\ncurrent status (act"
@@ -25923,6 +26996,100 @@
       "module_name": "observability"
     },
     {
+      "path": "C:/CHL/backend/operator_alerts.py",
+      "rel_path": "backend/operator_alerts.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "operator_alerts.py \u2014 severity-tiered operator-alert dispatch (iter 145.x). Single entry point: ``await dispatch_operator_alert(severity, message, source)``. This module is the *intermediary* between a",
+      "exports": [
+        "dispatch_operator_alert",
+        "init",
+        "SEVERITY_ROUTING",
+        "SEVERITIES"
+      ],
+      "imports": [
+        "__future__",
+        "datetime",
+        "integrity",
+        "integrity.budget_caps",
+        "integrity.budget_caps.check_budget",
+        "integrity.budget_caps.record_spend",
+        "logging",
+        "os",
+        "re",
+        "text_operator",
+        "text_operator.text_operator",
+        "typing",
+        "uuid",
+        "voice_operator",
+        "voice_operator.voice_operator"
+      ],
+      "imported_by": [
+        "backend/kill_switch.py",
+        "backend/sla_monitor.py",
+        "backend/tests/test_operator_alerts.py",
+        "backend/throttle_system.py"
+      ],
+      "lines_of_code": 386,
+      "last_modified": "2026-05-10T22:17:50.610785+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\noperator_alerts.py \u2014 severity-tiered operator-alert dispatch (iter 145.x).\\n\\nSingle entry point: ``await dispatch_operator_alert(severity, message, source)``.\\n\\nThis module is the *intermediary* "
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "operator_alerts"
+    },
+    {
+      "path": "C:/CHL/backend/operator_queues_router.py",
+      "rel_path": "backend/operator_queues_router.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "operator_queues_router.py -- Wave-1 review-queue surfaces for the operator. Mounts read + actionable endpoints under /api/operator-queues for the 5 post-Wave-1 collections that had no dashboard surfac",
+      "exports": [
+        "build_router",
+        "list_gate_overrides",
+        "list_delivered_pending_factor",
+        "list_rate_con_pending",
+        "list_operator_alerts",
+        "assign_factor_and_retry",
+        "dismiss_pending_factor",
+        "retry_rate_con",
+        "dismiss_rate_con_pending",
+        "compute_summary"
+      ],
+      "imports": [
+        "__future__",
+        "datetime",
+        "delivered_load_autofire",
+        "delivered_load_autofire.on_delivered",
+        "fastapi",
+        "logging",
+        "pnl_monitor",
+        "pnl_monitor.list_pnl_warnings",
+        "pydantic",
+        "rate_con",
+        "rate_con.create_rate_con",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [
+        "backend/server.py",
+        "backend/tests/test_operator_queues_router.py"
+      ],
+      "lines_of_code": 727,
+      "last_modified": "2026-05-10T22:28:13.198543+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'operator_queues_router.py -- Wave-1 review-queue surfaces for the operator.\\n\\nMounts read + actionable endpoints under /api/operator-queues for the 5\\npost-Wave-1 collections that had no dashboard s"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "operator_queues_router"
+    },
+    {
       "path": "C:/CHL/backend/outbound_autobid.py",
       "rel_path": "backend/outbound_autobid.py",
       "type": "python_module",
@@ -26022,6 +27189,38 @@
       "parse_error": null,
       "notes": [],
       "module_name": "outreach.load_board_fallback"
+    },
+    {
+      "path": "C:/CHL/backend/payment_terms.py",
+      "rel_path": "backend/payment_terms.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "Canonical payment-terms enum + days-until-due lookup. ===================================================== Single source of truth for shipper-facing payment terms across all Pydantic models, frontend",
+      "exports": [
+        "normalize_payment_term()",
+        "is_valid_payment_term()",
+        "payment_term_to_days()",
+        "list_canonical_terms()"
+      ],
+      "imports": [
+        "__future__",
+        "logging",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/load_schema_v2.py",
+        "backend/tests/test_payment_terms_canonical.py"
+      ],
+      "lines_of_code": 151,
+      "last_modified": "2026-05-10T21:51:23.851632+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nCanonical payment-terms enum + days-until-due lookup.\\n=====================================================\\n\\nSingle source of truth for shipper-facing payment terms across all Pydantic\\nmodels, "
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "payment_terms"
     },
     {
       "path": "C:/CHL/backend/performance.py",
@@ -26609,6 +27808,35 @@
       "module_name": "rfq_inbound"
     },
     {
+      "path": "C:/CHL/backend/safety_rating_types.py",
+      "rel_path": "backend/safety_rating_types.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "safety_rating_types.py -- Canonical source of truth for carrier_min_safety_rating values. ========================================================================================== Phase 1 input-surfa",
+      "exports": [
+        "normalize_safety_rating()"
+      ],
+      "imports": [
+        "__future__",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/load_schema_v2.py",
+        "backend/tests/test_safety_rating_canonical.py",
+        "scripts/migrate_safety_rating_unrated.py"
+      ],
+      "lines_of_code": 89,
+      "last_modified": "2026-05-10T22:17:25.129103+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nsafety_rating_types.py -- Canonical source of truth for carrier_min_safety_rating values.\\n==========================================================================================\\n\\nPhase 1 inpu"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "safety_rating_types"
+    },
+    {
       "path": "C:/CHL/backend/saved_searches.py",
       "rel_path": "backend/saved_searches.py",
       "type": "python_module",
@@ -26659,7 +27887,9 @@
         "backend/scrapers/scrapers_router.py",
         "backend/server.py",
         "backend/tests/test_html_parser.py",
+        "backend/tests/test_html_parser_next_data.py",
         "backend/tests/test_llm_parser.py",
+        "backend/tests/test_llm_parser_preproc.py",
         "backend/tests/test_loadboard_scraper.py",
         "backend/tests/test_rss_parser.py"
       ],
@@ -26691,6 +27921,7 @@
         "bs4.BeautifulSoup",
         "datetime",
         "hashlib",
+        "json",
         "logging",
         "re",
         "typing",
@@ -26701,10 +27932,11 @@
         "backend/scrapers/loadboard_scraper.py",
         "backend/scrapers/scrapers_router.py",
         "backend/tests/test_html_parser.py",
+        "backend/tests/test_html_parser_next_data.py",
         "backend/tests/test_loadboard_scraper.py"
       ],
-      "lines_of_code": 522,
-      "last_modified": "2026-05-10T21:08:13.660638+00:00",
+      "lines_of_code": 843,
+      "last_modified": "2026-05-10T22:17:13.279809+00:00",
       "smoke_test": null,
       "decorators": [
         "'html_parser.py -- Phase 10.1.3 deterministic HTML load-board parser.\\n\\nLayer B of the CHL parsing stack. BeautifulSoup4 + lxml driven extraction\\nwith a per-source SELECTOR_MAPS dispatch and a heuri"
@@ -26730,7 +27962,8 @@
         "DEFAULT_DAILY_CAP_USD",
         "CACHE_TTL_HOURS",
         "TARGET_LISTING_FIELDS",
-        "REQUIRED_LISTING_FIELDS"
+        "REQUIRED_LISTING_FIELDS",
+        "_strip_non_content_html"
       ],
       "imports": [
         "__future__",
@@ -26738,6 +27971,9 @@
         "backend",
         "backend.security",
         "backend.security.secret_reader",
+        "bs4",
+        "bs4.BeautifulSoup",
+        "bs4.Comment",
         "datetime",
         "hashlib",
         "json",
@@ -26752,10 +27988,11 @@
       "imported_by": [
         "backend/.smoke_3_layer_parsing.py",
         "backend/scrapers/scrapers_router.py",
-        "backend/tests/test_llm_parser.py"
+        "backend/tests/test_llm_parser.py",
+        "backend/tests/test_llm_parser_preproc.py"
       ],
-      "lines_of_code": 611,
-      "last_modified": "2026-05-10T21:25:08.250147+00:00",
+      "lines_of_code": 741,
+      "last_modified": "2026-05-10T22:16:25.647871+00:00",
       "smoke_test": null,
       "decorators": [
         "'llm_parser.py -- Layer C parsing fallback (Claude HTML->JSON extraction).\\n\\nPhase 10.1.4: when Layer A (RSS) and Layer B (per-source HTML selectors) miss\\nor break, this module asks Claude (claude-h"
@@ -27277,6 +28514,8 @@
         "cron_scheduler.start_all",
         "cron_settlement_24h",
         "cron_settlement_24h.run_settlement_cron",
+        "dashboard_router",
+        "dashboard_router.build_router",
         "datetime",
         "day1_readiness_email",
         "day1_readiness_email.build_router",
@@ -27563,6 +28802,8 @@
         "observability.rebuild_suggestions",
         "observability.record_intervention",
         "openai",
+        "operator_queues_router",
+        "operator_queues_router.build_router",
         "ops_state",
         "ops_state.build_router",
         "ops_state.compose_state",
@@ -27596,6 +28837,7 @@
         "playback.record",
         "pnl_monitor",
         "pnl_monitor.LoadEconomics",
+        "pnl_monitor.build_router",
         "pnl_monitor.compute_load_pnl",
         "pnl_monitor.evaluate_window_pnl",
         "posting_blob",
@@ -27770,6 +29012,8 @@
         "uuid",
         "vault",
         "vault.build_router",
+        "vetting_checks",
+        "vetting_checks.refresh_sms_for_dot",
         "visibility_bonus",
         "visibility_bonus.bonus_loop",
         "visibility_bonus.build_router",
@@ -27803,8 +29047,8 @@
         "scripts/dispatch_test_load_bellavista.py",
         "scripts/fire_full_dryrun.py"
       ],
-      "lines_of_code": 13453,
-      "last_modified": "2026-05-10T21:21:52.315787+00:00",
+      "lines_of_code": 13557,
+      "last_modified": "2026-05-10T22:51:07.826398+00:00",
       "smoke_test": null,
       "decorators": [
         "load_dotenv(ROOT_DIR / '.env')",
@@ -28773,6 +30017,7 @@
         "./views/CompliancePages",
         "./views/ComplianceTab",
         "./views/DashboardView",
+        "./views/Day1Dashboard",
         "./views/DeckSlide1",
         "./views/DeckSlide2",
         "./views/DeckSlide3",
@@ -28810,6 +30055,7 @@
         "./views/MercuryBalanceCard",
         "./views/NotificationLogView",
         "./views/OperatorConsoleView",
+        "./views/OperatorQueuesView",
         "./views/OwnerDashboard",
         "./views/PendingCarrierPayouts",
         "./views/PendingCarrierRequests",
@@ -28847,12 +30093,37 @@
       "imported_by": [
         "frontend/src/index.js"
       ],
-      "lines_of_code": 18183,
-      "last_modified": "2026-05-09T16:03:37.202866+00:00",
+      "lines_of_code": 18228,
+      "last_modified": "2026-05-10T22:41:16.391043+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
       "notes": [],
+      "module_name": ""
+    },
+    {
+      "path": "C:/CHL/frontend/src/constants/equipmentTypes.js",
+      "rel_path": "frontend/src/constants/equipmentTypes.js",
+      "type": "js_module",
+      "subsystem": "Misc",
+      "status": "ORPHAN",
+      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
+      "exports": [
+        "CANONICAL_EQUIPMENT_TYPES",
+        "EQUIPMENT_LABELS",
+        "RATE_PER_MILE_MAX",
+        "RATE_PER_MILE_MIN"
+      ],
+      "imports": [],
+      "imported_by": [],
+      "lines_of_code": 36,
+      "last_modified": "2026-05-10T22:18:27.278737+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [
+        "Not reachable from frontend/src/App.js"
+      ],
       "module_name": ""
     },
     {
@@ -31084,6 +32355,82 @@
       "module_name": "md_to_html"
     },
     {
+      "path": "C:/CHL/scripts/migrate_hazmat_lowercase.py",
+      "rel_path": "scripts/migrate_hazmat_lowercase.py",
+      "type": "python_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "migrate_hazmat_lowercase.py -- one-time hazmat-value migration. Phase 1 input-surface finding #4 (2026-05-10): hazmat values were stored as UPPERCASE Roman numerals (\"I\"/\"II\"/\"III\") in some MongoDB do",
+      "exports": [
+        "run()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "argparse",
+        "datetime",
+        "dotenv",
+        "hazmat_types",
+        "hazmat_types.PACKING_GROUPS",
+        "hazmat_types.normalize_packing_group",
+        "os",
+        "pathlib",
+        "pymongo",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 244,
+      "last_modified": "2026-05-10T21:53:33.331377+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'migrate_hazmat_lowercase.py -- one-time hazmat-value migration.\\n\\nPhase 1 input-surface finding #4 (2026-05-10): hazmat values were stored as\\nUPPERCASE Roman numerals (\"I\"/\"II\"/\"III\") in some Mongo"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "migrate_hazmat_lowercase"
+    },
+    {
+      "path": "C:/CHL/scripts/migrate_safety_rating_unrated.py",
+      "rel_path": "scripts/migrate_safety_rating_unrated.py",
+      "type": "python_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "migrate_safety_rating_unrated.py -- one-time safety-rating value migration. Phase 1 input-surface finding #2 (2026-05-10): the VettingGatesBlock literal field ``carrier_min_safety_rating`` used the ST",
+      "exports": [
+        "run()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "argparse",
+        "datetime",
+        "dotenv",
+        "os",
+        "pathlib",
+        "pymongo",
+        "safety_rating_types",
+        "safety_rating_types.SAFETY_RATINGS",
+        "safety_rating_types.normalize_safety_rating",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 260,
+      "last_modified": "2026-05-10T22:18:58.750760+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'migrate_safety_rating_unrated.py -- one-time safety-rating value migration.\\n\\nPhase 1 input-surface finding #2 (2026-05-10): the VettingGatesBlock literal\\nfield ``carrier_min_safety_rating`` used t"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "migrate_safety_rating_unrated"
+    },
+    {
       "path": "C:/CHL/scripts/migrate_secrets_to_vault.py",
       "rel_path": "scripts/migrate_secrets_to_vault.py",
       "type": "python_module",
@@ -31841,6 +33188,7 @@
         "backend/carrier_redispatch/redispatch_workflow.py",
         "backend/client_error_analyzer.py",
         "backend/cron_scheduler.py",
+        "backend/dashboard_router.py",
         "backend/evaluators/carrier_evaluator.py",
         "backend/factor_decline_handler/decline_handler.py",
         "backend/factors/dispute_cron.py",
@@ -31964,6 +33312,7 @@
         "backend/lane_scoring_cron.py",
         "backend/manual_override_router.py",
         "backend/margin_floor_router.py",
+        "backend/operator_alerts.py",
         "backend/payment_rails.py",
         "backend/renewals/renewals_notifier.py",
         "backend/renewals/renewals_scanner.py",
@@ -32049,13 +33398,14 @@
         "backend/cost_monitor/spend_recorder.py",
         "backend/inbound_email/sender_classifier.py",
         "backend/integrity/integrity_router.py",
+        "backend/operator_alerts.py",
         "backend/self_healing/llm_reasoning_loop.py",
         "backend/server.py",
         "backend/tests/test_carrier_contact_enricher.py",
         "backend/tests/test_integrity.py"
       ],
-      "lines_of_code": 329,
-      "last_modified": "2026-05-08T15:21:03.629848+00:00",
+      "lines_of_code": 334,
+      "last_modified": "2026-05-10T22:17:13.007980+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nintegrity/budget_caps.py -- Unified daily LLM budget caps (EOD-11\\nComponent B mitigation #2).\\n\\nReplaces the per-module ad-hoc daily counters used by:\\n  - self_healing/sub_agent_dispatcher  ($15"
@@ -32268,6 +33618,8 @@
         "datetime",
         "fastapi",
         "logging",
+        "operator_alerts",
+        "operator_alerts.dispatch_operator_alert",
         "pydantic",
         "typing"
       ],
@@ -32276,8 +33628,8 @@
         "backend/outbound_autobid.py",
         "backend/server.py"
       ],
-      "lines_of_code": 133,
-      "last_modified": "2026-05-04T22:04:39.874269+00:00",
+      "lines_of_code": 167,
+      "last_modified": "2026-05-10T21:43:21.006090+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nKill-Switch \u2014 Iteration 54.\\n\\nSingle source of truth for \"is automation allowed right now?\" flags. Workers\\n(capacity_hunter.scan_cycle, outbound_autobid.maybe_fire_autobid, future market\\nintel, "
@@ -33571,6 +34923,8 @@
         "integrity.operational_state",
         "integrity.operational_state.should_skip_tick",
         "logging",
+        "operator_alerts",
+        "operator_alerts.dispatch_operator_alert",
         "os",
         "statistics",
         "throttle_models",
@@ -33614,8 +34968,8 @@
         "backend/tracking/checkin_cron.py",
         "backend/tracking/exception_detector_cron.py"
       ],
-      "lines_of_code": 444,
-      "last_modified": "2026-05-09T03:30:36.441979+00:00",
+      "lines_of_code": 463,
+      "last_modified": "2026-05-10T21:43:01.484201+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nsla_monitor.py \u2014 Performance-target tracking + alerting.\\n\\niter 140.1 stage 1c. Task 3 (Emergent scaffolding).\\n\\nTracks per-operation latencies against playbook targets. Persists each\\ntiming int"
@@ -34939,6 +36293,8 @@
         "health_monitor",
         "health_monitor.register_health_check",
         "logging",
+        "operator_alerts",
+        "operator_alerts.dispatch_operator_alert",
         "os",
         "random",
         "statistics",
@@ -34960,8 +36316,8 @@
         "backend/sla_monitor.py",
         "backend/throttle_integration.py"
       ],
-      "lines_of_code": 581,
-      "last_modified": "2026-05-06T17:19:23.051144+00:00",
+      "lines_of_code": 595,
+      "last_modified": "2026-05-10T21:42:51.139492+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nthrottle_system.py \u2014 Autonomous throttle state machine.\\n\\nIter 140.1 stage 1b. Adapted from emergent scaffolding (Task 2) with the\\nfollowing production refinements:\\n  - dict-or-SystemHealth get_"
@@ -35718,6 +37074,7 @@
         "uuid"
       ],
       "imported_by": [
+        "backend/tests/test_funding_gate.py",
         "backend/tests/test_payments_status_migration.py",
         "backend/tests/test_state_lock_audit_completeness.py",
         "backend/tests/test_state_lock_audit_domain_expansion.py",
@@ -37591,6 +38948,168 @@
       "module_name": "tests.test_cron_supervisor"
     },
     {
+      "path": "C:/CHL/backend/tests/test_dashboard_router.py",
+      "rel_path": "backend/tests/test_dashboard_router.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_dashboard_router.py -- Day-1 operator monitoring dashboard tests. Covers: 1. Shape: /api/dashboard/day1 returns the documented 4-quadrant payload with the right keys. 2. Cache: a second call with",
+      "exports": [
+        "test_day1_payload_shape()",
+        "test_cache_returns_same_payload_within_ttl()",
+        "test_recent_alerts_truncates_and_uppercases()",
+        "test_require_owner_dependency_wired_on_route()",
+        "test_quadrant_failure_does_not_crash_payload()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "dashboard_router",
+        "datetime",
+        "fastapi",
+        "os",
+        "pytest",
+        "sys",
+        "time",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 311,
+      "last_modified": "2026-05-10T22:30:01.114374+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_dashboard_router.py -- Day-1 operator monitoring dashboard tests.\\n\\nCovers:\\n    1. Shape: /api/dashboard/day1 returns the documented 4-quadrant payload\\n       with the right keys.\\n    2. Cac"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_dashboard_router"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_dashboard_router.py",
+      "rel_path": "backend/tests/test_dashboard_router.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_dashboard_router.py -- Day-1 operator monitoring dashboard tests. Covers: 1. Shape: /api/dashboard/day1 returns the documented 4-quadrant payload with the right keys. 2. Cache: a second call with",
+      "exports": [
+        "test_day1_payload_shape()",
+        "test_cache_returns_same_payload_within_ttl()",
+        "test_recent_alerts_truncates_and_uppercases()",
+        "test_require_owner_dependency_wired_on_route()",
+        "test_quadrant_failure_does_not_crash_payload()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "dashboard_router",
+        "datetime",
+        "fastapi",
+        "os",
+        "pytest",
+        "sys",
+        "time",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 311,
+      "last_modified": "2026-05-10T22:30:01.114374+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_dashboard_router.py -- Day-1 operator monitoring dashboard tests.\\n\\nCovers:\\n    1. Shape: /api/dashboard/day1 returns the documented 4-quadrant payload\\n       with the right keys.\\n    2. Cac"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_dashboard_router"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_delivered_autofire_wire.py",
+      "rel_path": "backend/tests/test_delivered_autofire_wire.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_delivered_autofire_wire.py -- Iter 145.x tests for the delivered-load autofire hook on the carrier-side complete-delivery endpoint. Validates the four required behaviors of delivery_completion._f",
+      "exports": [
+        "patch_autofire()",
+        "patch_autofire_raises()",
+        "test_happy_path_factor_selected_fires_both()",
+        "test_no_factor_writes_to_pending_review_collection()",
+        "test_idempotency_second_call_does_not_double_fire()",
+        "test_feature_flag_off_skips_silently()",
+        "test_feature_flag_missing_defaults_to_disabled()",
+        "test_autofire_exception_writes_pending_review_row()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "delivery_completion",
+        "importlib",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 368,
+      "last_modified": "2026-05-10T22:03:08.931815+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_delivered_autofire_wire.py -- Iter 145.x tests for the delivered-load\\nautofire hook on the carrier-side complete-delivery endpoint.\\n\\nValidates the four required behaviors of delivery_comple",
+        "pytest.fixture",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_delivered_autofire_wire"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_delivered_autofire_wire.py",
+      "rel_path": "backend/tests/test_delivered_autofire_wire.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_delivered_autofire_wire.py -- Iter 145.x tests for the delivered-load autofire hook on the carrier-side complete-delivery endpoint. Validates the four required behaviors of delivery_completion._f",
+      "exports": [
+        "patch_autofire()",
+        "patch_autofire_raises()",
+        "test_happy_path_factor_selected_fires_both()",
+        "test_no_factor_writes_to_pending_review_collection()",
+        "test_idempotency_second_call_does_not_double_fire()",
+        "test_feature_flag_off_skips_silently()",
+        "test_feature_flag_missing_defaults_to_disabled()",
+        "test_autofire_exception_writes_pending_review_row()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "delivery_completion",
+        "importlib",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 368,
+      "last_modified": "2026-05-10T22:03:08.931815+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_delivered_autofire_wire.py -- Iter 145.x tests for the delivered-load\\nautofire hook on the carrier-side complete-delivery endpoint.\\n\\nValidates the four required behaviors of delivery_comple",
+        "pytest.fixture",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_delivered_autofire_wire"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_detention_calculator.py",
       "rel_path": "backend/tests/test_detention_calculator.py",
       "type": "python_module",
@@ -38649,6 +40168,132 @@
       "module_name": "tests.test_handled_folder_mover"
     },
     {
+      "path": "C:/CHL/backend/tests/test_hazmat_canonical.py",
+      "rel_path": "backend/tests/test_hazmat_canonical.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_hazmat_canonical.py -- unit tests for Phase 1 input-surface fix #4. Covers: - hazmat_types.normalize_packing_group: uppercase/lowercase/whitespace/invalid - hazmat_types.normalize_hazmat_class: d",
+      "exports": [
+        "test_normalize_packing_group_accepts_valid()",
+        "test_normalize_packing_group_rejects_invalid()",
+        "test_normalize_hazmat_class_accepts_valid()",
+        "test_normalize_hazmat_class_rejects_invalid()",
+        "test_normalize_hazmat_class_list_dedupes_and_preserves_order()",
+        "test_normalize_hazmat_class_list_handles_none_and_scalar()",
+        "test_normalize_hazmat_class_list_drops_invalid()",
+        "test_packing_groups_are_lowercase()",
+        "test_hazmat_classes_are_digit_strings_1_through_9()",
+        "test_hazmat_detail_accepts_uppercase_input_stores_lowercase()",
+        "test_hazmat_detail_accepts_lowercase_unchanged()",
+        "test_hazmat_detail_accepts_whitespace_and_mixed_case()",
+        "test_hazmat_detail_rejects_invalid_packing_group()",
+        "test_hazmat_detail_packing_group_optional()",
+        "test_hazmat_detail_hazmat_class_accepts_int_and_string()",
+        "test_hazmat_detail_hazmat_class_rejects_invalid()",
+        "test_migration_dry_run_does_not_mutate()",
+        "test_migration_apply_rewrites_uppercase_to_lowercase()",
+        "test_migration_is_idempotent()"
+      ],
+      "imports": [
+        "__future__",
+        "hazmat_types",
+        "hazmat_types.HAZMAT_CLASSES",
+        "hazmat_types.PACKING_GROUPS",
+        "hazmat_types.normalize_hazmat_class",
+        "hazmat_types.normalize_hazmat_class_list",
+        "hazmat_types.normalize_packing_group",
+        "importlib",
+        "load_schema_v2",
+        "load_schema_v2.HazmatDetail",
+        "os",
+        "pathlib",
+        "pydantic",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 346,
+      "last_modified": "2026-05-10T21:54:43.105248+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_hazmat_canonical.py -- unit tests for Phase 1 input-surface fix #4.\\n\\nCovers:\\n  - hazmat_types.normalize_packing_group: uppercase/lowercase/whitespace/invalid\\n  - hazmat_types.normalize_hazma",
+        "pytest.mark.parametrize('inp,expected', [('I', 'i'), ('II', 'ii'), ('III', 'iii'), ('i', 'i'), ('ii', 'ii'), ('iii', 'iii'), ('  I  ', 'i'), ('  iii\\n', 'iii'), ('Ii', 'ii'), ('iII', 'iii')])",
+        "pytest.mark.parametrize('inp', [None, '', '   ', 'garbage', 'IV', '4', 'iiii', 0, 'I I'])",
+        "pytest.mark.parametrize('inp,expected', [('1', '1'), ('9', '9'), ('  5  ', '5'), (3, '3'), (1, '1')])",
+        "pytest.mark.parametrize('inp', [None, '', '0', '10', '1.5', 'Class 3', 'iii', True, False])"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_hazmat_canonical"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_hazmat_canonical.py",
+      "rel_path": "backend/tests/test_hazmat_canonical.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_hazmat_canonical.py -- unit tests for Phase 1 input-surface fix #4. Covers: - hazmat_types.normalize_packing_group: uppercase/lowercase/whitespace/invalid - hazmat_types.normalize_hazmat_class: d",
+      "exports": [
+        "test_normalize_packing_group_accepts_valid()",
+        "test_normalize_packing_group_rejects_invalid()",
+        "test_normalize_hazmat_class_accepts_valid()",
+        "test_normalize_hazmat_class_rejects_invalid()",
+        "test_normalize_hazmat_class_list_dedupes_and_preserves_order()",
+        "test_normalize_hazmat_class_list_handles_none_and_scalar()",
+        "test_normalize_hazmat_class_list_drops_invalid()",
+        "test_packing_groups_are_lowercase()",
+        "test_hazmat_classes_are_digit_strings_1_through_9()",
+        "test_hazmat_detail_accepts_uppercase_input_stores_lowercase()",
+        "test_hazmat_detail_accepts_lowercase_unchanged()",
+        "test_hazmat_detail_accepts_whitespace_and_mixed_case()",
+        "test_hazmat_detail_rejects_invalid_packing_group()",
+        "test_hazmat_detail_packing_group_optional()",
+        "test_hazmat_detail_hazmat_class_accepts_int_and_string()",
+        "test_hazmat_detail_hazmat_class_rejects_invalid()",
+        "test_migration_dry_run_does_not_mutate()",
+        "test_migration_apply_rewrites_uppercase_to_lowercase()",
+        "test_migration_is_idempotent()"
+      ],
+      "imports": [
+        "__future__",
+        "hazmat_types",
+        "hazmat_types.HAZMAT_CLASSES",
+        "hazmat_types.PACKING_GROUPS",
+        "hazmat_types.normalize_hazmat_class",
+        "hazmat_types.normalize_hazmat_class_list",
+        "hazmat_types.normalize_packing_group",
+        "importlib",
+        "load_schema_v2",
+        "load_schema_v2.HazmatDetail",
+        "os",
+        "pathlib",
+        "pydantic",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 346,
+      "last_modified": "2026-05-10T21:54:43.105248+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_hazmat_canonical.py -- unit tests for Phase 1 input-surface fix #4.\\n\\nCovers:\\n  - hazmat_types.normalize_packing_group: uppercase/lowercase/whitespace/invalid\\n  - hazmat_types.normalize_hazma",
+        "pytest.mark.parametrize('inp,expected', [('I', 'i'), ('II', 'ii'), ('III', 'iii'), ('i', 'i'), ('ii', 'ii'), ('iii', 'iii'), ('  I  ', 'i'), ('  iii\\n', 'iii'), ('Ii', 'ii'), ('iII', 'iii')])",
+        "pytest.mark.parametrize('inp', [None, '', '   ', 'garbage', 'IV', '4', 'iiii', 0, 'I I'])",
+        "pytest.mark.parametrize('inp,expected', [('1', '1'), ('9', '9'), ('  5  ', '5'), (3, '3'), (1, '1')])",
+        "pytest.mark.parametrize('inp', [None, '', '0', '10', '1.5', 'Class 3', 'iii', True, False])"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_hazmat_canonical"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_healthz_all.py",
       "rel_path": "backend/tests/test_healthz_all.py",
       "type": "python_module",
@@ -38809,6 +40454,98 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_html_parser"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_html_parser_next_data.py",
+      "rel_path": "backend/tests/test_html_parser_next_data.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_html_parser_next_data.py -- Layer B-0 Next.js __NEXT_DATA__ extractor. Tests the JSON-from-SSR extraction path added 2026-05-10 to handle Next.js freight load boards (BulkLoads, FR8Star, ~30% of ",
+      "exports": [
+        "test_status_summary_advertises_next_data_extractor()",
+        "test_extracts_via_origin_city_destination_city_heuristic()",
+        "test_extracts_via_origin_dest_prefix_heuristic_camelcase()",
+        "test_extracts_via_equipment_pickup_heuristic()",
+        "test_extracts_from_dehydrated_state_react_query_pattern()",
+        "test_html_without_next_data_falls_through_to_generic()",
+        "test_next_data_present_but_no_freight_lists_falls_through()",
+        "test_malformed_json_in_next_data_does_not_crash()",
+        "test_empty_next_data_string_does_not_crash()",
+        "test_next_data_with_empty_listings_array_falls_through()",
+        "test_bulkloads_iowa_fixture_extracts_listings()"
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.html_parser",
+        "scrapers.html_parser.parse_html_listings",
+        "scrapers.html_parser.status_summary",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 334,
+      "last_modified": "2026-05-10T22:17:52.292067+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_html_parser_next_data.py -- Layer B-0 Next.js __NEXT_DATA__ extractor.\\n\\nTests the JSON-from-SSR extraction path added 2026-05-10 to handle Next.js\\nfreight load boards (BulkLoads, FR8Star, ~30",
+        "pytest.mark.skipif(not os.path.exists(_BULKLOADS_FIXTURE), reason='BulkLoads iowa fixture not available')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_html_parser_next_data"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_html_parser_next_data.py",
+      "rel_path": "backend/tests/test_html_parser_next_data.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_html_parser_next_data.py -- Layer B-0 Next.js __NEXT_DATA__ extractor. Tests the JSON-from-SSR extraction path added 2026-05-10 to handle Next.js freight load boards (BulkLoads, FR8Star, ~30% of ",
+      "exports": [
+        "test_status_summary_advertises_next_data_extractor()",
+        "test_extracts_via_origin_city_destination_city_heuristic()",
+        "test_extracts_via_origin_dest_prefix_heuristic_camelcase()",
+        "test_extracts_via_equipment_pickup_heuristic()",
+        "test_extracts_from_dehydrated_state_react_query_pattern()",
+        "test_html_without_next_data_falls_through_to_generic()",
+        "test_next_data_present_but_no_freight_lists_falls_through()",
+        "test_malformed_json_in_next_data_does_not_crash()",
+        "test_empty_next_data_string_does_not_crash()",
+        "test_next_data_with_empty_listings_array_falls_through()",
+        "test_bulkloads_iowa_fixture_extracts_listings()"
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.html_parser",
+        "scrapers.html_parser.parse_html_listings",
+        "scrapers.html_parser.status_summary",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 334,
+      "last_modified": "2026-05-10T22:17:52.292067+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_html_parser_next_data.py -- Layer B-0 Next.js __NEXT_DATA__ extractor.\\n\\nTests the JSON-from-SSR extraction path added 2026-05-10 to handle Next.js\\nfreight load boards (BulkLoads, FR8Star, ~30",
+        "pytest.mark.skipif(not os.path.exists(_BULKLOADS_FIXTURE), reason='BulkLoads iowa fixture not available')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_html_parser_next_data"
     },
     {
       "path": "C:/CHL/backend/tests/test_inbox_endpoint.py",
@@ -41766,8 +43503,8 @@
         "requests"
       ],
       "imported_by": [],
-      "lines_of_code": 498,
-      "last_modified": "2026-05-04T22:04:39.940083+00:00",
+      "lines_of_code": 504,
+      "last_modified": "2026-05-10T21:51:51.037865+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nIteration 124 \u2014 Schema Defaults Profile (Org-Level Cold-Start Template)\\n========================================================================\\n\\nTests for the new Schema Defaults Profile featur",
@@ -41802,8 +43539,8 @@
         "requests"
       ],
       "imported_by": [],
-      "lines_of_code": 498,
-      "last_modified": "2026-05-04T22:04:39.940083+00:00",
+      "lines_of_code": 504,
+      "last_modified": "2026-05-10T21:51:51.037865+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nIteration 124 \u2014 Schema Defaults Profile (Org-Level Cold-Start Template)\\n========================================================================\\n\\nTests for the new Schema Defaults Profile featur",
@@ -43035,6 +44772,102 @@
       "module_name": "tests.test_llm_parser"
     },
     {
+      "path": "C:/CHL/backend/tests/test_llm_parser_preproc.py",
+      "rel_path": "backend/tests/test_llm_parser_preproc.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_llm_parser_preproc.py -- Layer C HTML preprocessing unit tests. Validates _strip_non_content_html() removes chrome/script/style noise while preserving load-bearing content (and the Next.js + JSON",
+      "exports": [
+        "test_plain_script_is_stripped()",
+        "test_next_data_script_is_preserved()",
+        "test_jsonld_script_is_preserved()",
+        "test_style_noscript_svg_are_stripped()",
+        "test_header_footer_nav_are_stripped()",
+        "test_link_meta_are_stripped()",
+        "test_html_comments_are_stripped()",
+        "test_inline_event_handlers_stripped()",
+        "test_load_bearing_content_survives_unchanged()",
+        "test_reduction_pct_on_realistic_shaped_input()",
+        "test_reduction_pct_calculation_consistent()",
+        "test_idempotent_second_pass_is_stable()",
+        "test_empty_input_returns_empty_stats()",
+        "test_non_string_input_returns_empty()",
+        "test_reduction_on_captured_fixture()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.llm_parser",
+        "scrapers.llm_parser._strip_non_content_html",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 288,
+      "last_modified": "2026-05-10T22:17:04.156968+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_llm_parser_preproc.py -- Layer C HTML preprocessing unit tests.\\n\\nValidates _strip_non_content_html() removes chrome/script/style noise while\\npreserving load-bearing content (and the Next.js +",
+        "os.environ.setdefault('ANTHROPIC_API_KEY', 'test-key-not-real')",
+        "pytest.mark.parametrize('fixture_name', ['public_bulkloads_classifieds.html', 'public_bulkloads_iowa.html', 'public_freightfinder_iowa.html'])"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_llm_parser_preproc"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_llm_parser_preproc.py",
+      "rel_path": "backend/tests/test_llm_parser_preproc.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_llm_parser_preproc.py -- Layer C HTML preprocessing unit tests. Validates _strip_non_content_html() removes chrome/script/style noise while preserving load-bearing content (and the Next.js + JSON",
+      "exports": [
+        "test_plain_script_is_stripped()",
+        "test_next_data_script_is_preserved()",
+        "test_jsonld_script_is_preserved()",
+        "test_style_noscript_svg_are_stripped()",
+        "test_header_footer_nav_are_stripped()",
+        "test_link_meta_are_stripped()",
+        "test_html_comments_are_stripped()",
+        "test_inline_event_handlers_stripped()",
+        "test_load_bearing_content_survives_unchanged()",
+        "test_reduction_pct_on_realistic_shaped_input()",
+        "test_reduction_pct_calculation_consistent()",
+        "test_idempotent_second_pass_is_stable()",
+        "test_empty_input_returns_empty_stats()",
+        "test_non_string_input_returns_empty()",
+        "test_reduction_on_captured_fixture()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pytest",
+        "scrapers",
+        "scrapers.llm_parser",
+        "scrapers.llm_parser._strip_non_content_html",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 288,
+      "last_modified": "2026-05-10T22:17:04.156968+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_llm_parser_preproc.py -- Layer C HTML preprocessing unit tests.\\n\\nValidates _strip_non_content_html() removes chrome/script/style noise while\\npreserving load-bearing content (and the Next.js +",
+        "os.environ.setdefault('ANTHROPIC_API_KEY', 'test-key-not-real')",
+        "pytest.mark.parametrize('fixture_name', ['public_bulkloads_classifieds.html', 'public_bulkloads_iowa.html', 'public_freightfinder_iowa.html'])"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_llm_parser_preproc"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_llm_reasoning_loop.py",
       "rel_path": "backend/tests/test_llm_reasoning_loop.py",
       "type": "python_module",
@@ -43659,6 +45492,108 @@
       "module_name": "tests.test_operator_push_consumer"
     },
     {
+      "path": "C:/CHL/backend/tests/test_operator_queues_router.py",
+      "rel_path": "backend/tests/test_operator_queues_router.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Tests for operator_queues_router. Covers list shapes, per-row actions (assign factor, dismiss, retry, dismiss rate-con), summary aggregation, and auth gating.",
+      "exports": [
+        "test_list_pnl_warnings_endpoint_shape()",
+        "test_list_gate_overrides_default_pending()",
+        "test_list_gate_overrides_fraud_filter()",
+        "test_list_pending_factor_open_excludes_resolved()",
+        "test_list_rate_con_pending_open()",
+        "test_list_operator_alerts_high_includes_critical()",
+        "test_list_operator_alerts_critical_only()",
+        "test_assign_factor_stamps_load_and_resolves_row()",
+        "test_assign_factor_no_retry()",
+        "test_assign_factor_unknown_row_404()",
+        "test_dismiss_pending_factor()",
+        "test_retry_rate_con_success()",
+        "test_retry_rate_con_failure_records_error()",
+        "test_dismiss_rate_con_pending()",
+        "test_summary_aggregates_correctly()",
+        "test_auth_gate_blocks_non_owner_on_every_endpoint()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "fastapi",
+        "operator_queues_router",
+        "os",
+        "pytest",
+        "starlette",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 575,
+      "last_modified": "2026-05-10T22:29:18.030139+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Tests for operator_queues_router.\\n\\nCovers list shapes, per-row actions (assign factor, dismiss, retry, dismiss\\nrate-con), summary aggregation, and auth gating.\\n'",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-operator-queues')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_operator_queues_router"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_operator_queues_router.py",
+      "rel_path": "backend/tests/test_operator_queues_router.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Tests for operator_queues_router. Covers list shapes, per-row actions (assign factor, dismiss, retry, dismiss rate-con), summary aggregation, and auth gating.",
+      "exports": [
+        "test_list_pnl_warnings_endpoint_shape()",
+        "test_list_gate_overrides_default_pending()",
+        "test_list_gate_overrides_fraud_filter()",
+        "test_list_pending_factor_open_excludes_resolved()",
+        "test_list_rate_con_pending_open()",
+        "test_list_operator_alerts_high_includes_critical()",
+        "test_list_operator_alerts_critical_only()",
+        "test_assign_factor_stamps_load_and_resolves_row()",
+        "test_assign_factor_no_retry()",
+        "test_assign_factor_unknown_row_404()",
+        "test_dismiss_pending_factor()",
+        "test_retry_rate_con_success()",
+        "test_retry_rate_con_failure_records_error()",
+        "test_dismiss_rate_con_pending()",
+        "test_summary_aggregates_correctly()",
+        "test_auth_gate_blocks_non_owner_on_every_endpoint()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "fastapi",
+        "operator_queues_router",
+        "os",
+        "pytest",
+        "starlette",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 575,
+      "last_modified": "2026-05-10T22:29:18.030139+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Tests for operator_queues_router.\\n\\nCovers list shapes, per-row actions (assign factor, dismiss, retry, dismiss\\nrate-con), summary aggregation, and auth gating.\\n'",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-operator-queues')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_operator_queues_router"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_outcome_tracker.py",
       "rel_path": "backend/tests/test_outcome_tracker.py",
       "type": "python_module",
@@ -43939,6 +45874,92 @@
       "module_name": "tests.test_patch_classifier"
     },
     {
+      "path": "C:/CHL/backend/tests/test_payment_terms_canonical.py",
+      "rel_path": "backend/tests/test_payment_terms_canonical.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Phase 1 input-surface finding #3 \u2014 canonical payment_terms enum tests. ====================================================================== Regression contract: every Pydantic model that constrains ",
+      "exports": [
+        "class TestCanonicalSet",
+        "class TestVettingGatesBlockAcceptsCanonical",
+        "class TestPaymentTermToDays",
+        "class TestNormalizePaymentTerm",
+        "class TestFrontendBackendAgree"
+      ],
+      "imports": [
+        "__future__",
+        "load_schema_v2",
+        "load_schema_v2.VettingGatesBlock",
+        "os",
+        "payment_terms",
+        "payment_terms.CANONICAL_PAYMENT_TERMS",
+        "payment_terms.DEFAULT_PAYMENT_TERM",
+        "payment_terms.is_valid_payment_term",
+        "payment_terms.list_canonical_terms",
+        "payment_terms.normalize_payment_term",
+        "payment_terms.payment_term_to_days",
+        "pydantic",
+        "pytest",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 252,
+      "last_modified": "2026-05-10T21:53:08.096013+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nPhase 1 input-surface finding #3 \u2014 canonical payment_terms enum tests.\\n======================================================================\\n\\nRegression contract: every Pydantic model that cons"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_payment_terms_canonical"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_payment_terms_canonical.py",
+      "rel_path": "backend/tests/test_payment_terms_canonical.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Phase 1 input-surface finding #3 \u2014 canonical payment_terms enum tests. ====================================================================== Regression contract: every Pydantic model that constrains ",
+      "exports": [
+        "class TestCanonicalSet",
+        "class TestVettingGatesBlockAcceptsCanonical",
+        "class TestPaymentTermToDays",
+        "class TestNormalizePaymentTerm",
+        "class TestFrontendBackendAgree"
+      ],
+      "imports": [
+        "__future__",
+        "load_schema_v2",
+        "load_schema_v2.VettingGatesBlock",
+        "os",
+        "payment_terms",
+        "payment_terms.CANONICAL_PAYMENT_TERMS",
+        "payment_terms.DEFAULT_PAYMENT_TERM",
+        "payment_terms.is_valid_payment_term",
+        "payment_terms.list_canonical_terms",
+        "payment_terms.normalize_payment_term",
+        "payment_terms.payment_term_to_days",
+        "pydantic",
+        "pytest",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 252,
+      "last_modified": "2026-05-10T21:53:08.096013+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nPhase 1 input-surface finding #3 \u2014 canonical payment_terms enum tests.\\n======================================================================\\n\\nRegression contract: every Pydantic model that cons"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_payment_terms_canonical"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_pipeline_walkthrough_router.py",
       "rel_path": "backend/tests/test_pipeline_walkthrough_router.py",
       "type": "python_module",
@@ -44031,6 +46052,104 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_pipeline_walkthrough_router"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_pnl_warning_resolution.py",
+      "rel_path": "backend/tests/test_pnl_warning_resolution.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "P&L Warning Resolution \u2014 unit tests. Covers the Wave 3 verifier-gate fix that added `resolve_pnl_warning()` + `list_pnl_warnings()` helpers + `/api/pnl-warnings/{id}/resolve` and `GET /api/pnl-warning",
+      "exports": [
+        "test_resolve_strategic_decision()",
+        "test_resolve_book_correction_clears_load_flag()",
+        "test_resolve_dismiss_decision()",
+        "test_resolve_idempotent_does_not_overwrite()",
+        "test_resolve_unknown_warning_raises()",
+        "test_resolve_invalid_decision_raises()",
+        "test_list_pnl_warnings_filters_by_status()",
+        "test_list_pnl_warnings_respects_limit()",
+        "test_endpoint_list_default_status_open()",
+        "test_endpoint_list_status_resolved()",
+        "test_endpoint_resolve_strategic()",
+        "test_endpoint_resolve_book_correction_clears_load()",
+        "test_endpoint_resolve_invalid_decision_400()",
+        "test_endpoint_resolve_unknown_warning_404()",
+        "test_endpoint_auth_gate_blocks_non_owner()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "os",
+        "pnl_monitor",
+        "pytest",
+        "starlette",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 450,
+      "last_modified": "2026-05-10T22:20:56.107302+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nP&L Warning Resolution \u2014 unit tests.\\n\\nCovers the Wave 3 verifier-gate fix that added `resolve_pnl_warning()` +\\n`list_pnl_warnings()` helpers + `/api/pnl-warnings/{id}/resolve` and\\n`GET /api/pnl",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-pnl-resolution')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_pnl_warning_resolution"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_pnl_warning_resolution.py",
+      "rel_path": "backend/tests/test_pnl_warning_resolution.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "P&L Warning Resolution \u2014 unit tests. Covers the Wave 3 verifier-gate fix that added `resolve_pnl_warning()` + `list_pnl_warnings()` helpers + `/api/pnl-warnings/{id}/resolve` and `GET /api/pnl-warning",
+      "exports": [
+        "test_resolve_strategic_decision()",
+        "test_resolve_book_correction_clears_load_flag()",
+        "test_resolve_dismiss_decision()",
+        "test_resolve_idempotent_does_not_overwrite()",
+        "test_resolve_unknown_warning_raises()",
+        "test_resolve_invalid_decision_raises()",
+        "test_list_pnl_warnings_filters_by_status()",
+        "test_list_pnl_warnings_respects_limit()",
+        "test_endpoint_list_default_status_open()",
+        "test_endpoint_list_status_resolved()",
+        "test_endpoint_resolve_strategic()",
+        "test_endpoint_resolve_book_correction_clears_load()",
+        "test_endpoint_resolve_invalid_decision_400()",
+        "test_endpoint_resolve_unknown_warning_404()",
+        "test_endpoint_auth_gate_blocks_non_owner()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "os",
+        "pnl_monitor",
+        "pytest",
+        "starlette",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 450,
+      "last_modified": "2026-05-10T22:20:56.107302+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nP&L Warning Resolution \u2014 unit tests.\\n\\nCovers the Wave 3 verifier-gate fix that added `resolve_pnl_warning()` +\\n`list_pnl_warnings()` helpers + `/api/pnl-warnings/{id}/resolve` and\\n`GET /api/pnl",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-pnl-resolution')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_pnl_warning_resolution"
     },
     {
       "path": "C:/CHL/backend/tests/test_pod_red_flag_escalation.py",
@@ -44877,6 +46996,92 @@
       "module_name": "tests.test_renewals_scanner"
     },
     {
+      "path": "C:/CHL/backend/tests/test_restore_validators.py",
+      "rel_path": "backend/tests/test_restore_validators.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_restore_validators.py -- Unit tests for the disaster-recovery restore validator (scripts/test_restore_validators.py). Covers: test_refuses_when_test_mongo_url_equals_live test_refuses_when_test_d",
+      "exports": [
+        "class SafetyGateTests",
+        "class SourceCountTests",
+        "class DecryptTests",
+        "class RunValidationDryRunTests",
+        "class RunValidationFullTests",
+        "class MainEntryTests"
+      ],
+      "imports": [
+        "__future__",
+        "cryptography",
+        "cryptography.fernet",
+        "cryptography.fernet.Fernet",
+        "importlib",
+        "io",
+        "json",
+        "os",
+        "pathlib",
+        "sys",
+        "tempfile",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 522,
+      "last_modified": "2026-05-10T22:57:36.986610+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_restore_validators.py -- Unit tests for the disaster-recovery\\nrestore validator (scripts/test_restore_validators.py).\\n\\nCovers:\\n    test_refuses_when_test_mongo_url_equals_live\\n    test_refu",
+        "_spec.loader.exec_module(validator)"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_restore_validators"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_restore_validators.py",
+      "rel_path": "backend/tests/test_restore_validators.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_restore_validators.py -- Unit tests for the disaster-recovery restore validator (scripts/test_restore_validators.py). Covers: test_refuses_when_test_mongo_url_equals_live test_refuses_when_test_d",
+      "exports": [
+        "class SafetyGateTests",
+        "class SourceCountTests",
+        "class DecryptTests",
+        "class RunValidationDryRunTests",
+        "class RunValidationFullTests",
+        "class MainEntryTests"
+      ],
+      "imports": [
+        "__future__",
+        "cryptography",
+        "cryptography.fernet",
+        "cryptography.fernet.Fernet",
+        "importlib",
+        "io",
+        "json",
+        "os",
+        "pathlib",
+        "sys",
+        "tempfile",
+        "unittest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 522,
+      "last_modified": "2026-05-10T22:57:36.986610+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_restore_validators.py -- Unit tests for the disaster-recovery\\nrestore validator (scripts/test_restore_validators.py).\\n\\nCovers:\\n    test_refuses_when_test_mongo_url_equals_live\\n    test_refu",
+        "_spec.loader.exec_module(validator)"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_restore_validators"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_retention_floor_guards.py",
       "rel_path": "backend/tests/test_retention_floor_guards.py",
       "type": "python_module",
@@ -45203,6 +47408,78 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_rss_parser"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_safety_rating_canonical.py",
+      "rel_path": "backend/tests/test_safety_rating_canonical.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Tests for Phase 1 input-surface finding #2 -- canonical safety_rating. Verifies: * The 3 canonical lowercase values are accepted as-is. * Legacy capitalized forms (\"Satisfactory\"/\"Conditional\") are no",
+      "exports": [
+        "class TestNormalizeSafetyRating",
+        "class TestVettingGatesBlockSafetyRating"
+      ],
+      "imports": [
+        "__future__",
+        "load_schema_v2",
+        "load_schema_v2.VettingGatesBlock",
+        "pathlib",
+        "pydantic",
+        "pytest",
+        "safety_rating_types",
+        "safety_rating_types.SAFETY_RATINGS",
+        "safety_rating_types.normalize_safety_rating",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 138,
+      "last_modified": "2026-05-10T22:19:20.012248+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Tests for Phase 1 input-surface finding #2 -- canonical safety_rating.\\n\\nVerifies:\\n  * The 3 canonical lowercase values are accepted as-is.\\n  * Legacy capitalized forms (\"Satisfactory\"/\"Conditiona"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_safety_rating_canonical"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_safety_rating_canonical.py",
+      "rel_path": "backend/tests/test_safety_rating_canonical.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Tests for Phase 1 input-surface finding #2 -- canonical safety_rating. Verifies: * The 3 canonical lowercase values are accepted as-is. * Legacy capitalized forms (\"Satisfactory\"/\"Conditional\") are no",
+      "exports": [
+        "class TestNormalizeSafetyRating",
+        "class TestVettingGatesBlockSafetyRating"
+      ],
+      "imports": [
+        "__future__",
+        "load_schema_v2",
+        "load_schema_v2.VettingGatesBlock",
+        "pathlib",
+        "pydantic",
+        "pytest",
+        "safety_rating_types",
+        "safety_rating_types.SAFETY_RATINGS",
+        "safety_rating_types.normalize_safety_rating",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 138,
+      "last_modified": "2026-05-10T22:19:20.012248+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Tests for Phase 1 input-surface finding #2 -- canonical safety_rating.\\n\\nVerifies:\\n  * The 3 canonical lowercase values are accepted as-is.\\n  * Legacy capitalized forms (\"Satisfactory\"/\"Conditiona"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_safety_rating_canonical"
     },
     {
       "path": "C:/CHL/backend/tests/test_secret_reader.py",
@@ -47439,6 +49716,70 @@
       "parse_error": null,
       "notes": [],
       "module_name": "test_infrastructure_controller"
+    },
+    {
+      "path": "C:/CHL/scripts/test_restore_from_backup.ps1",
+      "rel_path": "scripts/test_restore_from_backup.ps1",
+      "type": "powershell_script",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "CHL test_restore_from_backup.ps1 Disaster-recovery restore validation -- operator-mandated pre-May-14.  What this proves: 1. The D-drive git bundle (CHL.bundle) is readable + has valid refs. 2. The va",
+      "exports": [],
+      "imports": [],
+      "imported_by": [],
+      "lines_of_code": 296,
+      "last_modified": "2026-05-10T22:58:06.627045+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
+    },
+    {
+      "path": "C:/CHL/scripts/test_restore_validators.py",
+      "rel_path": "scripts/test_restore_validators.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_restore_validators.py -- Disaster-recovery restore validation. Operator-mandated pre-May-14: prove the D-drive backups actually restore. Companion to scripts/test_restore_from_backup.ps1 (the PS ",
+      "exports": [
+        "class SafetyViolation",
+        "assert_test_not_live()",
+        "get_sync_mongo_client()",
+        "load_source_counts()",
+        "restore_collection()",
+        "sample_decrypt_blob()",
+        "run_validation()",
+        "parse_args()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "argparse",
+        "cryptography",
+        "cryptography.fernet",
+        "cryptography.fernet.Fernet",
+        "cryptography.fernet.InvalidToken",
+        "datetime",
+        "json",
+        "os",
+        "pathlib",
+        "pymongo",
+        "sys",
+        "time",
+        "traceback",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 393,
+      "last_modified": "2026-05-10T22:54:41.575924+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_restore_validators.py -- Disaster-recovery restore validation.\\n\\nOperator-mandated pre-May-14: prove the D-drive backups actually restore.\\nCompanion to scripts/test_restore_from_backup.ps1 (th"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "test_restore_validators"
     }
   ]
 }
