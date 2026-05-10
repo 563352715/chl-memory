@@ -1,0 +1,293 @@
+{
+  "window_local": "2026-05-09 20:44:20 - 20:50:00 CDT",
+  "window_utc": "2026-05-10T01:44:20 - 2026-05-10T01:50:30",
+  "sop": {
+    "total": 44,
+    "pass": 25,
+    "fail": 19,
+    "bugs": [
+      {
+        "cycle": 1,
+        "scenario": "happy_van_500mi_30k",
+        "expected_failure": null,
+        "actual_failure": null,
+        "final_stage": "auto_accept",
+        "load_ref": "LD-00369AC9"
+      },
+      {
+        "cycle": 10,
+        "scenario": "fi_geofence_pickup",
+        "expected_failure": "geofence_violation",
+        "actual_failure": null,
+        "final_stage": "expected_geofence_pickup",
+        "load_ref": "LD-72298E8B"
+      },
+      {
+        "cycle": 11,
+        "scenario": "fi_geofence_delivery",
+        "expected_failure": "geofence_violation",
+        "actual_failure": "invalid_transition",
+        "final_stage": "expected_geofence_delivery",
+        "load_ref": "LD-CCAFD84D"
+      },
+      {
+        "cycle": 15,
+        "scenario": "fi_bad_bol_upload",
+        "expected_failure": "image_quality_rejected",
+        "actual_failure": "pod_required",
+        "final_stage": "expected_bad_bol",
+        "load_ref": "LD-5D10C4D8"
+      },
+      {
+        "cycle": 16,
+        "scenario": "fi_pod_missing_on_deliver",
+        "expected_failure": "consignee_confirmation_required",
+        "actual_failure": "pod_required",
+        "final_stage": "expected_pod_missing",
+        "load_ref": "LD-F4BEF329"
+      },
+      {
+        "cycle": 17,
+        "scenario": "fi_wrong_consignee_pin",
+        "expected_failure": "bad_pin",
+        "actual_failure": "conflict",
+        "final_stage": "expected_wrong_pin",
+        "load_ref": "LD-4DDCD4E1"
+      },
+      {
+        "cycle": 18,
+        "scenario": "fi_cancel_load_tonu",
+        "expected_failure": "cancelled",
+        "actual_failure": "server_error",
+        "final_stage": "expected_cancel",
+        "load_ref": "LD-197F4AA3"
+      },
+      {
+        "cycle": 31,
+        "scenario": "fi_geofence_pickup",
+        "expected_failure": "geofence_violation",
+        "actual_failure": null,
+        "final_stage": "expected_geofence_pickup",
+        "load_ref": "LD-DA695267"
+      },
+      {
+        "cycle": 32,
+        "scenario": "fi_geofence_delivery",
+        "expected_failure": "geofence_violation",
+        "actual_failure": "invalid_transition",
+        "final_stage": "expected_geofence_delivery",
+        "load_ref": "LD-33E7B862"
+      },
+      {
+        "cycle": 36,
+        "scenario": "fi_bad_bol_upload",
+        "expected_failure": "image_quality_rejected",
+        "actual_failure": "pod_required",
+        "final_stage": "expected_bad_bol",
+        "load_ref": "LD-63BC4422"
+      },
+      {
+        "cycle": 37,
+        "scenario": "fi_pod_missing_on_deliver",
+        "expected_failure": "consignee_confirmation_required",
+        "actual_failure": "pod_required",
+        "final_stage": "expected_pod_missing",
+        "load_ref": "LD-A86324F3"
+      },
+      {
+        "cycle": 38,
+        "scenario": "fi_wrong_consignee_pin",
+        "expected_failure": "bad_pin",
+        "actual_failure": "conflict",
+        "final_stage": "expected_wrong_pin",
+        "load_ref": "LD-1A06F155"
+      },
+      {
+        "cycle": 39,
+        "scenario": "fi_cancel_load_tonu",
+        "expected_failure": "cancelled",
+        "actual_failure": "server_error",
+        "final_stage": "expected_cancel",
+        "load_ref": "LD-7489D794"
+      }
+    ]
+  },
+  "multi_actor": {
+    "total": 56,
+    "by_outcome": {
+      "pass": 42,
+      "open": 11,
+      "fail": 3
+    },
+    "fails_opens": [
+      {
+        "cycle": 12,
+        "scenario": "shipper_consignee_confirm_pin",
+        "outcome": "open",
+        "http": 409,
+        "reason": "prereq state not met (offer not accepted or load not in_transit/booked)"
+      },
+      {
+        "cycle": 13,
+        "scenario": "shipper_consignee_confirm_signature",
+        "outcome": "open",
+        "http": 409,
+        "reason": "prereq state not met (offer/load status)"
+      },
+      {
+        "cycle": 14,
+        "scenario": "shipper_pay_invoice",
+        "outcome": "open",
+        "http": 401,
+        "reason": "Stripe webhook is signature-locked (correct security posture). Shipper-pay path not reachable from synthesizer without test-only bypass endpoint or real Stripe test event. Proposal: add /api/_test/stripe-webhook-replay (require_owner) that constructs a signed test event."
+      },
+      {
+        "cycle": 15,
+        "scenario": "shipper_dispute_chargeback",
+        "outcome": "open",
+        "http": null,
+        "reason": "no public shipper-dispute endpoint exists. Factor-side dispute resolver is operator-only (POST /api/_factor_disputes/{id}/resolve, require_broker). For shipper-initiated cargo-claim the platform routes via inbound_email -> triage classifier (re-uses shipper_post_load path). Proposal: build POST /api/public/shipper-claim (load_ref + claim_type + amount + narrative)."
+      },
+      {
+        "cycle": 18,
+        "scenario": "factor_send_payment",
+        "outcome": "open",
+        "http": 401,
+        "reason": "factor-pay path uses Stripe webhook same as shipper-pay. 401 = correct security posture. Real factor ACH would land via factor portal polling (factors/reconciler.py) NOT Stripe -- needs separate factor-portal webhook simulator."
+      },
+      {
+        "cycle": 23,
+        "scenario": "factor_dispute_resolve_no_auth",
+        "outcome": "open",
+        "http": 404,
+        "reason": null
+      },
+      {
+        "cycle": 30,
+        "scenario": "full_lifecycle",
+        "outcome": "fail",
+        "http": null,
+        "reason": null
+      },
+      {
+        "cycle": 31,
+        "scenario": "driver_only_happy",
+        "outcome": "fail",
+        "http": 409,
+        "reason": null
+      },
+      {
+        "cycle": 37,
+        "scenario": "driver_pod_upload_only",
+        "outcome": "fail",
+        "http": 400,
+        "reason": null
+      },
+      {
+        "cycle": 43,
+        "scenario": "shipper_consignee_confirm_signature",
+        "outcome": "open",
+        "http": 400,
+        "reason": "prereq state not met (offer/load status)"
+      },
+      {
+        "cycle": 44,
+        "scenario": "shipper_pay_invoice",
+        "outcome": "open",
+        "http": 401,
+        "reason": "Stripe webhook is signature-locked (correct security posture). Shipper-pay path not reachable from synthesizer without test-only bypass endpoint or real Stripe test event. Proposal: add /api/_test/stripe-webhook-replay (require_owner) that constructs a signed test event."
+      },
+      {
+        "cycle": 45,
+        "scenario": "shipper_dispute_chargeback",
+        "outcome": "open",
+        "http": null,
+        "reason": "no public shipper-dispute endpoint exists. Factor-side dispute resolver is operator-only (POST /api/_factor_disputes/{id}/resolve, require_broker). For shipper-initiated cargo-claim the platform routes via inbound_email -> triage classifier (re-uses shipper_post_load path). Proposal: build POST /api/public/shipper-claim (load_ref + claim_type + amount + narrative)."
+      },
+      {
+        "cycle": 48,
+        "scenario": "factor_send_payment",
+        "outcome": "open",
+        "http": 401,
+        "reason": "factor-pay path uses Stripe webhook same as shipper-pay. 401 = correct security posture. Real factor ACH would land via factor portal polling (factors/reconciler.py) NOT Stripe -- needs separate factor-portal webhook simulator."
+      },
+      {
+        "cycle": 53,
+        "scenario": "factor_dispute_resolve_no_auth",
+        "outcome": "open",
+        "http": 404,
+        "reason": null
+      }
+    ]
+  },
+  "rate_calc": {
+    "total": 45,
+    "grades": {
+      "PASS": 41,
+      "FAIL": 4
+    },
+    "fails": [
+      {
+        "scenario": "equipment_stepdeck",
+        "category": "equipment",
+        "notes": [
+          "cost_estimate matched (1766.0).",
+          "rate_calc base_rpm: predicted 2.75, got 3.1"
+        ]
+      },
+      {
+        "scenario": "equipment_rgn",
+        "category": "equipment",
+        "notes": [
+          "cost_estimate matched (1766.0).",
+          "rate_calc base_rpm: predicted 2.75, got 3.5"
+        ]
+      },
+      {
+        "scenario": "equipment_hotshot",
+        "category": "equipment",
+        "notes": [
+          "cost_estimate matched (1766.0).",
+          "rate_calc base_rpm: predicted 2.75, got 2.85"
+        ]
+      },
+      {
+        "scenario": "equipment_power_only",
+        "category": "equipment",
+        "notes": [
+          "cost_estimate matched (1766.0).",
+          "rate_calc base_rpm: predicted 2.75, got 1.95"
+        ]
+      }
+    ]
+  },
+  "loads": {
+    "total": 75,
+    "statuses": {
+      "available": 40,
+      "delivered": 19,
+      "at_pickup": 4,
+      "at_delivery": 2,
+      "booked": 4,
+      "unloaded": 2,
+      "en_route": 4
+    },
+    "sum_carrier_rate": 148075.0,
+    "sum_market_rate": 148075.0,
+    "delivered_count": 21,
+    "delivered_carrier_pay": 39925.0,
+    "delivered_market": 39925.0
+  },
+  "self_heal": {
+    "urgent_alerts": 0,
+    "dev_review_queue": 0,
+    "operator_push_queue": 0,
+    "synthetic_self_heal_routed": 0
+  },
+  "net_profit": {
+    "factor_fee_pct": 0.025,
+    "all_loads_net": -3701.875,
+    "delivered_net": -998.125,
+    "margin_spread_delivered": 0.0
+  }
+}
