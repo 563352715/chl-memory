@@ -22,7 +22,7 @@ The Telnyx thread shows a signed reply confirming all three items will be done. 
 |---|---|---|---|---|
 | 1 | Submit Toll-Free Messaging Use Case at portal.telnyx.com | Operator | UNCONFIRMED | 4 days |
 | 2 | Submit Hosted SMS request (3-4 business day SLA) | Operator | **SUBMITTED 2026-05-10 ~14:35 UTC** — LOA + Bill PDFs uploaded, order submitted | T-3 BD |
-| 3 | Upload v2 LOA with "Port to QIT02" phrase | Operator | UNCONFIRMED | 4 days |
+| 3 | Upload v2 LOA with "Port to QIT02" phrase | Operator | **DONE 2026-05-10 ~15:05 UTC** — Replaced LoA on `sr_edc875` Requirements tab with `CHL_Telnyx_LoA_TollFree_v2_2026_05_08.pdf` (contains "*** Port to QIT02 ***" phrase) | 4 days |
 
 ### Hosted SMS Order (submitted)
 - **Order ID:** `80019e12-4300-4c1f-ad67-f58c71e26380`
