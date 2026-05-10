@@ -75,4 +75,23 @@
 
 ## Fixes applied during this run
 
-(populated as the orchestrators run)
+### 2026-05-10 02:30 UTC · LL_FAILSAFE_GAP_POD · severity=auto-fixable
+
+**Detected by:** SOP orchestrator scenario `fi_pod_missing_on_deliver` — expected `consignee_confirmation_required`, got `actual=None`. Driver advanced to `delivered` without primary_pod upload.
+
+**Bug:** State machine `delivered` transition had no precondition check for POD presence. The platform's existing POD gate at `factor_refusal_guard.py:448` correctly blocks factor submission downstream, but the load could still flip to `delivered` status, generating draft invoices + leaving the load in a "delivered but unfundable" workflow-stuck state.
+
+**Root cause:** `backend/load_state_machine.py` `perform_transition()` validated chain order but had no precondition layer for transition-specific requirements (POD on `delivered`, etc).
+
+**Fix applied:**
+- Added `PreconditionRequiredError` (HTTP 412 `precondition_required`)
+- Added `_check_preconditions(db, load_id, new_status)` async helper
+- For `new_status=='delivered'`: query `db.pod_uploads` for `{load_id, kind: 'primary_pod'}`. If missing, raise 412 with `next_action=upload_pod` hint for the driver UI.
+- Synthetic loads honor the gate same as production (no bypass) — defense-in-depth means test path mirrors prod.
+
+**Verification:** `scripts/smoke_pod_gate.py` end-to-end:
+- Step 5: delivered without POD → 412 `primary_pod` ✅ blocked
+- Step 7: POD uploaded → delivered → 200 ✅ allowed
+
+**Commit:** (next push)
+**Files:** `backend/load_state_machine.py` (+39/-3 lines)
