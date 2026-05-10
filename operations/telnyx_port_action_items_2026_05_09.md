@@ -21,8 +21,16 @@ The Telnyx thread shows a signed reply confirming all three items will be done. 
 | # | Action | Owner | Status | Days to FOC |
 |---|---|---|---|---|
 | 1 | Submit Toll-Free Messaging Use Case at portal.telnyx.com | Operator | UNCONFIRMED | 4 days |
-| 2 | Submit Hosted SMS request (3-4 business day SLA) | Operator | UNCONFIRMED | **CRITICAL — needs to start TODAY to clear FOC** |
+| 2 | Submit Hosted SMS request (3-4 business day SLA) | Operator | **SUBMITTED 2026-05-10 ~14:35 UTC** — LOA + Bill PDFs uploaded, order submitted | T-3 BD |
 | 3 | Upload v2 LOA with "Port to QIT02" phrase | Operator | UNCONFIRMED | 4 days |
+
+### Hosted SMS Order (submitted)
+- **Order ID:** `80019e12-4300-4c1f-ad67-f58c71e26380`
+- **Number:** +1 866 490 6433
+- **Messaging Profile:** CHL Dispatch
+- **Status:** **SUBMITTED 2026-05-10 ~14:35 UTC** — LOA `CHL_Telnyx_HostedSMS_LoA_2026_05_10.pdf` + Bill `Twilio_April_2026_Invoice.pdf` uploaded
+- **Visible on Hosted Messaging Numbers list:** +18664906433 with SMS+MMS features
+- **Expected processing:** 3-4 business days → cleared before 2026-05-14 FOC
 
 ## Risk
 
