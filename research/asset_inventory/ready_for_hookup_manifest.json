@@ -1,0 +1,35 @@
+{
+  "comment": "Operator-mandated 2026-05-10: assets in this list are NOT orphans -- they are finished, smoke-tested code that was built for a real use case but never wired into a live caller. They sit ready for hookup. Re-classify them as READY_FOR_HOOKUP in the inventory views, NOT ORPHAN. Renderer reads this file and overrides the analyzer's status when present.",
+  "ready_for_hookup": [
+    {
+      "path": "backend/voice_operator.py",
+      "intended_use": "Operator-facing voice-call alert wrapper. Sister to text_operator.py. Built iter 141.1 to provide an alert path that survives 10DLC/TFV regulatory failure modes -- voice goes via FCC rules, not TCR/A2P, so it works regardless of SMS campaign status. Single-line call site: `await voice_operator(\"RED throttle\")` -> places voice call to OWNER_SMS_NUMBER. Strategic value: this is the alert path that stays alive when SMS provider is down or the campaign is rejected.",
+      "hookup_blockers": "Need to identify the alert dispatcher that should call this when severity warrants voice over SMS. Likely candidate: throttle_system RED-state handler, sla_monitor critical-breach handler, kill_switch trigger.",
+      "estimated_hookup_effort": "Small (~30 min) -- add `from voice_operator import voice_operator` + call it in the existing alert dispatchers when severity == CRITICAL"
+    },
+    {
+      "path": "backend/text_operator.py",
+      "intended_use": "Operator-facing SMS alert wrapper. NOT for driver/carrier comms (that lives in notification_service.py and is gated on A2P 10DLC APPROVED). text_operator targets OWNER_SMS_NUMBER with a single-line call site for internal alerts: throttle trips, SLA breaches, auto-bid wins, FMCSA-gate signals. Routes via TWILIO_MESSAGING_SERVICE_SID with TWILIO_PHONE_NUMBER fallback.",
+      "hookup_blockers": "Same as voice_operator -- needs to be wired into the alert dispatchers. Currently the alert system probably uses notification_service.py which is gated on A2P approval and could fail silently.",
+      "estimated_hookup_effort": "Small (~30 min) -- pair with voice_operator hookup; severity == HIGH triggers text, severity == CRITICAL triggers voice"
+    },
+    {
+      "path": "backend/fmcsa_sms_scores.py",
+      "intended_use": "FMCSA SMS BASIC Safety Score per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2). Pulls Behavior Analysis & Safety Improvement Categories percentile scores: UnsafeDriving, CrashIndicator, HOSCompliance, VehicleMaint, ControlledSubstances, HMCompliance, DriverFitness. Each carrier's enriched sub-document upserts to db.carriers.sms.* keyed on dot_number. Real fraud-prevention layer: a carrier with brand-new authority + bad SMS scores is the classic shell-company pattern. CLI batch mode + per-carrier on-demand mode.",
+      "hookup_blockers": "Need to register POST /api/carriers/{dot}/sms/refresh endpoint in server.py + extend backend/vetting_checks.py to call refresh_sms_batch() during carrier-intake. Also need a monthly cron for the bulk SMS CSV download path.",
+      "estimated_hookup_effort": "Medium (~2-3 hours) -- wire the endpoint, integrate the BASIC scores into the run_full_vetting() function in vetting_checks.py, add a cron for batch refresh"
+    },
+    {
+      "path": "frontend/src/components/DeliveryReceipt.jsx",
+      "intended_use": "Vertical timeline component showing a driver's full notification lifecycle for ONE load -- dispatch sent/skipped/blocked + engagement events (link opened, voice answered, tracking confirmed). Color-coded dots (green/yellow/red). 45-second auto-refresh. Iter 100. Useful for: per-load dispatch diagnostic view, carrier-relations support workflow, troubleshooting why a driver didn't pick up.",
+      "hookup_blockers": "Just needs to be composed into the load detail page or carrier-hub page. No backend changes -- it polls existing /api/notification-events endpoints.",
+      "estimated_hookup_effort": "Small (~15 min) -- add `<DeliveryReceipt phone={load.assigned_driver_phone} />` to LoadDetail or CarrierHub"
+    },
+    {
+      "path": "frontend/src/components/ShadowModePill.jsx",
+      "intended_use": "UI badge showing whether the platform is running in shadow mode (running operations but not actually firing real outbound). Visible safety indicator while in pre-launch testing or during incident-response shutdowns. Color + label change with mode state.",
+      "hookup_blockers": "Needs the shadow-mode flag concept defined in the platform. If the operator has decided shadow-mode isn't a thing they want to track visibly, this can be deleted instead.",
+      "estimated_hookup_effort": "TBD -- depends on whether operator wants shadow-mode visibility. If yes: ~1h to define the flag in business_settings + render the pill in the top bar. If no: delete."
+    }
+  ]
+}

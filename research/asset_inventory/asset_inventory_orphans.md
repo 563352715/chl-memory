@@ -1,6 +1,6 @@
 # CHL Asset Inventory -- Orphans + Broken
 
-_Generated: 2026-05-10T06:49:11.810158+00:00_
+_Generated: 2026-05-10T07:27:30.068402+00:00_
 
 > **Triage focus.** These files are present in the codebase but
 > are NOT reachable from `backend/server.py` or `frontend/src/App.js`,
@@ -12,41 +12,11 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 > - **Delete it** -- abandoned or superseded by another module
 > - **Keep silent** -- legitimate dev-only utility (mark as DEV-TOOL)
 
-## BROKEN (1)
+## BROKEN (0)
 
-### `backend/tonu_calculator.py` (248 LOC)
+_None — no parse errors or unresolved internal imports detected._
 
-- **Subsystem:** Misc
-- **Last modified:** 2026-05-04T22:18:38.672528+00:00
-- **Issue:** Parse failure: SyntaxError: invalid non-printable character U+FEFF at line 1
-
-## ORPHAN (63)
-
-### `backend/fmcsa_sms_scores.py` (621 LOC)
-
-- **Subsystem:** Communications
-- **Type:** python_module
-- **Last modified:** 2026-05-07T18:58:27.934759+00:00
-- **Docstring:** FMCSA SMS BASIC Safety Scores per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2). Fetches Behavior Analysis & Safety Improvement Categories (BASIC) percentile scores, inspections, a
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `fetch_sms_overview_html(), fetch_basic_detail_html(), parse_sms_overview(), parse_basic_detail(), fetch_full_sms_for_carrier(), update_carrier_sms_in_db(), refresh_sms_batch()`
-
-### `backend/scripts/purge_test_data.py` (221 LOC)
-
-- **Subsystem:** Synthetic Test
-- **Type:** python_module
-- **Last modified:** 2026-05-04T22:04:39.900731+00:00
-- **Docstring:** Legacy Seed-Data Purge Script ============================== Clears test accounts, $0 loads, stale hunt events, and orphaned artifacts from production MongoDB so the God-View / Live Board / Market Rad
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `is_test_reference(), is_test_email(), is_test_shipper(), run()`
-
-### `frontend/src/views/BankerDigestPage.jsx` (212 LOC)
-
-- **Subsystem:** Frontend UI
-- **Type:** jsx_component
-- **Last modified:** 2026-05-04T22:04:40.012722+00:00
-- **Note:** Not reachable from frontend/src/App.js
-- **Exports:** `BankerDigestPage`
+## ORPHAN (50)
 
 ### `frontend/src/lib/manualOverrideFields.js` (211 LOC)
 
@@ -57,24 +27,6 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - **Note:** Not reachable from frontend/src/App.js
 - **Exports:** `BCA_FIELDS, BROKER_INVOICE_FIELDS, CARRIER_VET_FIELDS, QUOTE_EMAIL_FIELDS, RATE_CON_FIELDS`
 
-### `backend/self_heal_audit.py` (207 LOC)
-
-- **Subsystem:** Compliance
-- **Type:** python_module
-- **Last modified:** 2026-05-04T22:04:39.901729+00:00
-- **Docstring:** self_heal_audit.py — Iteration 80.1. Parses /app/logs/telemetry.json (one JSON object per line — append-only from the Sentinel Sentry endpoint) and produces a clustered Fix-Suggestion report at /app/l
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `parse_log(), cluster(), suggest_fix(), render(), main()`
-
-### `frontend/src/views/SyntheticDocsCarousel.jsx` (204 LOC)
-
-- **Subsystem:** Synthetic Test
-- **Type:** jsx_component
-- **Last modified:** 2026-05-09T22:28:27.315617+00:00
-- **Docstring:** Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
-- **Note:** Not reachable from frontend/src/App.js
-- **Exports:** `SyntheticDocsCarousel`
-
 ### `frontend/src/components/ui/menubar.jsx` (198 LOC)
 
 - **Subsystem:** Frontend UI
@@ -82,48 +34,12 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - **Last modified:** 2026-05-04T22:04:39.998909+00:00
 - **Note:** Not reachable from frontend/src/App.js
 
-### `backend/.smoke_141_3_1b.py` (197 LOC)
-
-- **Subsystem:** Communications
-- **Type:** python_module
-- **Last modified:** 2026-05-07T05:23:55.970328+00:00
-- **Docstring:** .smoke_141_3_1b.py — iter 141.3 stage 1b smoke harness for plivo_client.py. Pre-written 2026-05-07 alongside plivo_client.py. Runs without the Plivo SDK installed (uses unittest.mock to stub out the p
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `test_1_empty_body(), test_2_dry_run(), test_3_no_credentials(), test_4_no_phone_number(), test_5_successful_send(), test_6_plivo_not_installed(), main()`
-
 ### `frontend/src/components/ui/carousel.jsx` (193 LOC)
 
 - **Subsystem:** Frontend UI
 - **Type:** jsx_component
 - **Last modified:** 2026-05-04T22:04:39.994428+00:00
 - **Note:** Not reachable from frontend/src/App.js
-
-### `frontend/src/views/QuickEmailButton.jsx` (173 LOC)
-
-- **Subsystem:** Frontend UI
-- **Type:** jsx_component
-- **Last modified:** 2026-05-04T22:04:40.051254+00:00
-- **Docstring:** Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
-- **Note:** Not reachable from frontend/src/App.js
-- **Exports:** `QuickEmailButton`
-
-### `frontend/src/components/DeliveryReceipt.jsx` (169 LOC)
-
-- **Subsystem:** Frontend UI
-- **Type:** jsx_component
-- **Last modified:** 2026-05-04T22:04:39.989777+00:00
-- **Docstring:** Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
-- **Note:** Not reachable from frontend/src/App.js
-- **Exports:** `DeliveryReceipt`
-
-### `frontend/src/components/ShadowModePill.jsx` (167 LOC)
-
-- **Subsystem:** Frontend UI
-- **Type:** jsx_component
-- **Last modified:** 2026-05-04T22:04:39.990209+00:00
-- **Docstring:** Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
-- **Note:** Not reachable from frontend/src/App.js
-- **Exports:** `ShadowModePill`
 
 ### `frontend/src/components/ui/context-menu.jsx` (156 LOC)
 
@@ -138,24 +54,6 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - **Type:** jsx_component
 - **Last modified:** 2026-05-04T22:04:39.996423+00:00
 - **Note:** Not reachable from frontend/src/App.js
-
-### `backend/paperwork_autopilot.py` (155 LOC)
-
-- **Subsystem:** Communications
-- **Type:** python_module
-- **Last modified:** 2026-05-04T22:04:39.889800+00:00
-- **Docstring:** Paperwork Autopilot — when a load flips to `delivered`, automatically: 1. Generate an invoice record (if not already created). 2. Email it to the shipper with a pay-now link + attached PDF link. 3. Lo
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `on_load_delivered()`
-
-### `backend/security/secrets_cli.py` (153 LOC)
-
-- **Subsystem:** Misc
-- **Type:** python_module
-- **Last modified:** 2026-05-08T21:01:53.322670+00:00
-- **Docstring:** Operator CLI for the DPAPI-encrypted secrets store. Usage: python -m backend.security.secrets_cli set <KEY> python -m backend.security.secrets_cli get <KEY> python -m backend.security.secrets_cli dele
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `build_parser(), main()`
 
 ### `frontend/src/views/MarginFloorModal.jsx` (152 LOC)
 
@@ -191,15 +89,6 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - **Note:** Not reachable from frontend/src/App.js
 - **Exports:** `RateMargin`
 
-### `backend/voice_operator.py` (124 LOC)
-
-- **Subsystem:** Communications
-- **Type:** python_module
-- **Last modified:** 2026-05-07T02:51:51.116978+00:00
-- **Docstring:** voice_operator.py — operator-facing Voice (robo-call) alert wrapper (iter 141.1). Sister module to text_operator.py. Same role (alert the platform owner) but uses Twilio Voice instead of SMS. Voice is
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `voice_operator()`
-
 ### `frontend/src/components/ui/select.jsx` (119 LOC)
 
 - **Subsystem:** Frontend UI
@@ -229,15 +118,6 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - **Type:** jsx_component
 - **Last modified:** 2026-05-04T22:04:40.001904+00:00
 - **Note:** Not reachable from frontend/src/App.js
-
-### `backend/text_operator.py` (107 LOC)
-
-- **Subsystem:** Communications
-- **Type:** python_module
-- **Last modified:** 2026-05-07T02:34:13.388360+00:00
-- **Docstring:** text_operator.py — operator-facing SMS alert wrapper (iter 141.1). NOT for driver/carrier comms — that path lives in notification_service.py and is gated on A2P 10DLC APPROVED. This module is for *int
-- **Note:** No imports, no smoke test, not in LIVE chain
-- **Exports:** `text_operator()`
 
 ### `frontend/src/components/ui/navigation-menu.jsx` (104 LOC)
 

@@ -1,26 +1,25 @@
 {
-  "generated_at": "2026-05-10T06:49:11.810158+00:00",
+  "generated_at": "2026-05-10T07:27:30.068402+00:00",
   "scan_dirs": [
     "C:\\CHL\\backend",
     "C:\\CHL\\backend\\tests",
     "C:\\CHL\\frontend\\src",
     "C:\\CHL\\scripts"
   ],
-  "total_assets": 1172,
+  "total_assets": 1162,
   "by_status": {
-    "ORPHAN": 63,
-    "LIVE": 521,
+    "LIVE": 522,
     "LIBRARY": 21,
     "CODE-READY": 9,
-    "BROKEN": 1,
-    "DEV-TOOL": 557
+    "ORPHAN": 55,
+    "DEV-TOOL": 555
   },
   "by_subsystem": {
-    "Communications": 119,
     "Self-Healing": 74,
-    "Misc": 169,
+    "Misc": 168,
+    "Communications": 117,
     "Continuity Layer": 4,
-    "Compliance": 82,
+    "Compliance": 79,
     "Carrier Operations": 44,
     "Load Lifecycle": 29,
     "Owner Tooling": 6,
@@ -31,8 +30,8 @@
     "Dev-Ops Scripts": 17,
     "Public-Facing": 19,
     "Manual Override": 1,
-    "Synthetic Test": 284,
-    "Frontend UI": 174,
+    "Synthetic Test": 282,
+    "Frontend UI": 172,
     "Scripts / Tooling": 43
   },
   "live_python_modules": 772,
@@ -1992,45 +1991,6 @@
       "module_name": "vetting_checks"
     },
     {
-      "path": "C:/CHL/backend/.smoke_141_3_1b.py",
-      "rel_path": "backend/.smoke_141_3_1b.py",
-      "type": "python_module",
-      "subsystem": "Communications",
-      "status": "ORPHAN",
-      "description": ".smoke_141_3_1b.py \u2014 iter 141.3 stage 1b smoke harness for plivo_client.py. Pre-written 2026-05-07 alongside plivo_client.py. Runs without the Plivo SDK installed (uses unittest.mock to stub out the p",
-      "exports": [
-        "test_1_empty_body()",
-        "test_2_dry_run()",
-        "test_3_no_credentials()",
-        "test_4_no_phone_number()",
-        "test_5_successful_send()",
-        "test_6_plivo_not_installed()",
-        "main()"
-      ],
-      "imports": [
-        "__future__",
-        "asyncio",
-        "os",
-        "plivo_client",
-        "plivo_client.text_operator",
-        "sys",
-        "unittest"
-      ],
-      "imported_by": [],
-      "lines_of_code": 197,
-      "last_modified": "2026-05-07T05:23:55.970328+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'\\n.smoke_141_3_1b.py \u2014 iter 141.3 stage 1b smoke harness for plivo_client.py.\\n\\nPre-written 2026-05-07 alongside plivo_client.py. Runs without the Plivo SDK\\ninstalled (uses unittest.mock to stub ou",
-        "sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))"
-      ],
-      "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
-      "module_name": ".smoke_141_3_1b"
-    },
-    {
       "path": "C:/CHL/backend/aged_ar.py",
       "rel_path": "backend/aged_ar.py",
       "type": "python_module",
@@ -2348,8 +2308,8 @@
       "imported_by": [
         "backend/server.py"
       ],
-      "lines_of_code": 1646,
-      "last_modified": "2026-05-09T23:12:23.329638+00:00",
+      "lines_of_code": 1659,
+      "last_modified": "2026-05-10T07:11:24.817866+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nCold-Carrier Outreach & Acceptance Funnel.\\n\\nFlow:\\n 1. Broker initiates outreach on a specific load \u2192 we generate a short-lived token\\n 2. SMS fires to carrier\\'s phone: \"CHL: Dallas\u2192Atlanta Van "
@@ -4473,37 +4433,6 @@
       "module_name": "outreach.orchestrator"
     },
     {
-      "path": "C:/CHL/backend/paperwork_autopilot.py",
-      "rel_path": "backend/paperwork_autopilot.py",
-      "type": "python_module",
-      "subsystem": "Communications",
-      "status": "ORPHAN",
-      "description": "Paperwork Autopilot \u2014 when a load flips to `delivered`, automatically: 1. Generate an invoice record (if not already created). 2. Email it to the shipper with a pay-now link + attached PDF link. 3. Lo",
-      "exports": [
-        "on_load_delivered()"
-      ],
-      "imports": [
-        "__future__",
-        "datetime",
-        "logging",
-        "os",
-        "typing",
-        "uuid"
-      ],
-      "imported_by": [],
-      "lines_of_code": 155,
-      "last_modified": "2026-05-04T22:04:39.889800+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"\\nPaperwork Autopilot \u2014 when a load flips to `delivered`, automatically:\\n\\n  1. Generate an invoice record (if not already created).\\n  2. Email it to the shipper with a pay-now link + attached PDF "
-      ],
-      "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
-      "module_name": "paperwork_autopilot"
-    },
-    {
       "path": "C:/CHL/backend/pdf_stapler.py",
       "rel_path": "backend/pdf_stapler.py",
       "type": "python_module",
@@ -4560,7 +4489,6 @@
         "typing"
       ],
       "imported_by": [
-        "backend/.smoke_141_3_1b.py",
         "backend/auto_dispatch_send.py"
       ],
       "lines_of_code": 130,
@@ -8135,44 +8063,6 @@
       "module_name": "renewals.boc3_tracker"
     },
     {
-      "path": "C:/CHL/backend/self_heal_audit.py",
-      "rel_path": "backend/self_heal_audit.py",
-      "type": "python_module",
-      "subsystem": "Compliance",
-      "status": "ORPHAN",
-      "description": "self_heal_audit.py \u2014 Iteration 80.1. Parses /app/logs/telemetry.json (one JSON object per line \u2014 append-only from the Sentinel Sentry endpoint) and produces a clustered Fix-Suggestion report at /app/l",
-      "exports": [
-        "parse_log()",
-        "cluster()",
-        "suggest_fix()",
-        "render()",
-        "main()"
-      ],
-      "imports": [
-        "__future__",
-        "argparse",
-        "collections",
-        "datetime",
-        "json",
-        "pathlib",
-        "re",
-        "sys",
-        "typing"
-      ],
-      "imported_by": [],
-      "lines_of_code": 207,
-      "last_modified": "2026-05-04T22:04:39.901729+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'\\nself_heal_audit.py \u2014 Iteration 80.1.\\n\\nParses /app/logs/telemetry.json (one JSON object per line \u2014 append-only\\nfrom the Sentinel Sentry endpoint) and produces a clustered Fix-Suggestion\\nreport a"
-      ],
-      "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
-      "module_name": "self_heal_audit"
-    },
-    {
       "path": "C:/CHL/backend/synthetic_audit.py",
       "rel_path": "backend/synthetic_audit.py",
       "type": "python_module",
@@ -10016,94 +9906,6 @@
       "module_name": "tests.test_iteration_79_compliance_armor"
     },
     {
-      "path": "C:/CHL/backend/tests/test_iteration_80_telemetry_compliance.py",
-      "rel_path": "backend/tests/test_iteration_80_telemetry_compliance.py",
-      "type": "python_module",
-      "subsystem": "Compliance",
-      "status": "DEV-TOOL",
-      "description": "Iteration 80.1/80.3 \u2014 Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14 Tests: 1. POST /api/telemetry/error \u2014 un-authed, persists to db + file, returns critical flag 2. GET /api/telemetry/criti",
-      "exports": [
-        "owner_session()",
-        "carrier_session()",
-        "class TestTelemetryErrorEndpoint",
-        "class TestTelemetryCriticalActive",
-        "class TestTelemetryResolve",
-        "class TestComplianceDocumentAcknowledge",
-        "class TestRedCarpetRun",
-        "class TestPendingReview",
-        "class TestBankersProofAuditExport",
-        "class TestSelfHealAuditCLI",
-        "class TestTelemetryLogFile",
-        "class TestTelemetryRecent"
-      ],
-      "imports": [
-        "datetime",
-        "json",
-        "os",
-        "pytest",
-        "requests",
-        "subprocess"
-      ],
-      "imported_by": [],
-      "lines_of_code": 471,
-      "last_modified": "2026-05-04T22:04:39.950032+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'\\nIteration 80.1/80.3 \u2014 Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14\\n\\nTests:\\n1. POST /api/telemetry/error \u2014 un-authed, persists to db + file, returns critical flag\\n2. GET /api/telemet",
-        "pytest.fixture(scope='module')",
-        "pytest.fixture(scope='module')"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_iteration_80_telemetry_compliance"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_iteration_80_telemetry_compliance.py",
-      "rel_path": "backend/tests/test_iteration_80_telemetry_compliance.py",
-      "type": "python_module",
-      "subsystem": "Compliance",
-      "status": "DEV-TOOL",
-      "description": "Iteration 80.1/80.3 \u2014 Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14 Tests: 1. POST /api/telemetry/error \u2014 un-authed, persists to db + file, returns critical flag 2. GET /api/telemetry/criti",
-      "exports": [
-        "owner_session()",
-        "carrier_session()",
-        "class TestTelemetryErrorEndpoint",
-        "class TestTelemetryCriticalActive",
-        "class TestTelemetryResolve",
-        "class TestComplianceDocumentAcknowledge",
-        "class TestRedCarpetRun",
-        "class TestPendingReview",
-        "class TestBankersProofAuditExport",
-        "class TestSelfHealAuditCLI",
-        "class TestTelemetryLogFile",
-        "class TestTelemetryRecent"
-      ],
-      "imports": [
-        "datetime",
-        "json",
-        "os",
-        "pytest",
-        "requests",
-        "subprocess"
-      ],
-      "imported_by": [],
-      "lines_of_code": 471,
-      "last_modified": "2026-05-04T22:04:39.950032+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'\\nIteration 80.1/80.3 \u2014 Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14\\n\\nTests:\\n1. POST /api/telemetry/error \u2014 un-authed, persists to db + file, returns critical flag\\n2. GET /api/telemet",
-        "pytest.fixture(scope='module')",
-        "pytest.fixture(scope='module')"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_iteration_80_telemetry_compliance"
-    },
-    {
       "path": "C:/CHL/backend/tests/test_payments_compliance.py",
       "rel_path": "backend/tests/test_payments_compliance.py",
       "type": "python_module",
@@ -11142,8 +10944,8 @@
         "sys"
       ],
       "imported_by": [],
-      "lines_of_code": 282,
-      "last_modified": "2026-05-10T05:56:38.659708+00:00",
+      "lines_of_code": 285,
+      "last_modified": "2026-05-10T06:52:53.954866+00:00",
       "smoke_test": null,
       "decorators": [
         "'overnight_supervisor.py -- Watchdog + periodic snapshotter + bug ledger.\\n\\nOperator-mandated 2026-05-10 EOD-17:\\n> \"Keep going through the night ... continue saving\"\\n> \"do not fix issues unless tho",
@@ -15435,30 +15237,6 @@
       "module_name": ""
     },
     {
-      "path": "C:/CHL/frontend/src/views/BankerDigestPage.jsx",
-      "rel_path": "frontend/src/views/BankerDigestPage.jsx",
-      "type": "jsx_component",
-      "subsystem": "Frontend UI",
-      "status": "ORPHAN",
-      "description": "",
-      "exports": [
-        "BankerDigestPage"
-      ],
-      "imports": [
-        "react"
-      ],
-      "imported_by": [],
-      "lines_of_code": 212,
-      "last_modified": "2026-05-04T22:04:40.012722+00:00",
-      "smoke_test": null,
-      "decorators": [],
-      "parse_error": null,
-      "notes": [
-        "Not reachable from frontend/src/App.js"
-      ],
-      "module_name": ""
-    },
-    {
       "path": "C:/CHL/frontend/src/views/BankerMode.jsx",
       "rel_path": "frontend/src/views/BankerMode.jsx",
       "type": "jsx_component",
@@ -17820,32 +17598,6 @@
       "decorators": [],
       "parse_error": null,
       "notes": [],
-      "module_name": ""
-    },
-    {
-      "path": "C:/CHL/frontend/src/views/QuickEmailButton.jsx",
-      "rel_path": "frontend/src/views/QuickEmailButton.jsx",
-      "type": "jsx_component",
-      "subsystem": "Frontend UI",
-      "status": "ORPHAN",
-      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
-      "exports": [
-        "QuickEmailButton"
-      ],
-      "imports": [
-        "../lib/api",
-        "@phosphor-icons/react",
-        "react"
-      ],
-      "imported_by": [],
-      "lines_of_code": 173,
-      "last_modified": "2026-05-04T22:04:40.051254+00:00",
-      "smoke_test": null,
-      "decorators": [],
-      "parse_error": null,
-      "notes": [
-        "Not reachable from frontend/src/App.js"
-      ],
       "module_name": ""
     },
     {
@@ -26707,7 +26459,6 @@
         "backend/inbound_email/imap_poller.py",
         "backend/noa_detector.py",
         "backend/security/secret_reader.py",
-        "backend/security/secrets_cli.py",
         "backend/self_healing/_llm_client_anthropic.py",
         "backend/server.py",
         "backend/stripe_health_router.py",
@@ -26789,41 +26540,6 @@
       "module_name": "security.secret_reader"
     },
     {
-      "path": "C:/CHL/backend/security/secrets_cli.py",
-      "rel_path": "backend/security/secrets_cli.py",
-      "type": "python_module",
-      "subsystem": "Misc",
-      "status": "ORPHAN",
-      "description": "Operator CLI for the DPAPI-encrypted secrets store. Usage: python -m backend.security.secrets_cli set <KEY> python -m backend.security.secrets_cli get <KEY> python -m backend.security.secrets_cli dele",
-      "exports": [
-        "build_parser()",
-        "main()"
-      ],
-      "imports": [
-        "__future__",
-        "argparse",
-        "backend",
-        "backend.security",
-        "backend.security.secrets_store",
-        "getpass",
-        "json",
-        "os",
-        "sys"
-      ],
-      "imported_by": [],
-      "lines_of_code": 153,
-      "last_modified": "2026-05-08T21:01:53.322670+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'Operator CLI for the DPAPI-encrypted secrets store.\\n\\nUsage:\\n    python -m backend.security.secrets_cli set <KEY>\\n    python -m backend.security.secrets_cli get <KEY>\\n    python -m backend.securi"
-      ],
-      "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
-      "module_name": "security.secrets_cli"
-    },
-    {
       "path": "C:/CHL/backend/security/secrets_store.py",
       "rel_path": "backend/security/secrets_store.py",
       "type": "python_module",
@@ -26859,7 +26575,6 @@
       "imported_by": [
         "backend/noa_detector.py",
         "backend/security/secret_reader.py",
-        "backend/security/secrets_cli.py",
         "backend/tests/test_env_prune.py",
         "backend/tests/test_master_key_rotation.py",
         "backend/tests/test_secret_reader.py",
@@ -28017,23 +27732,31 @@
       "rel_path": "backend/tonu_calculator.py",
       "type": "python_module",
       "subsystem": "Misc",
-      "status": "BROKEN",
-      "description": "",
-      "exports": [],
-      "imports": [],
+      "status": "LIVE",
+      "description": "tonu_calculator.py \u00e2\u20ac\u201d Auto-TONU calculator (Iter 139.25, OPERATING_MANUAL Card 10 GAP closure). TONU = \"Truck Order Not Used\" \u00e2\u20ac\u201d the cancel-fee owed to the carrier when CHL cancels a load AFTER the ",
+      "exports": [
+        "compute_tonu()"
+      ],
+      "imports": [
+        "__future__",
+        "datetime",
+        "logging",
+        "math",
+        "typing"
+      ],
       "imported_by": [
         "backend/state_lock.py",
         "backend/tests/synthetic_load_walkthrough.py",
         "backend/tests/test_tonu_integration.py"
       ],
       "lines_of_code": 248,
-      "last_modified": "2026-05-04T22:18:38.672528+00:00",
+      "last_modified": "2026-05-10T07:16:36.940151+00:00",
       "smoke_test": null,
-      "decorators": [],
-      "parse_error": "SyntaxError: invalid non-printable character U+FEFF at line 1",
-      "notes": [
-        "Parse failure: SyntaxError: invalid non-printable character U+FEFF at line 1"
+      "decorators": [
+        "'\\ntonu_calculator.py \u00e2\u20ac\u201d Auto-TONU calculator (Iter 139.25, OPERATING_MANUAL Card 10 GAP closure).\\n\\nTONU = \"Truck Order Not Used\" \u00e2\u20ac\u201d the cancel-fee owed to the carrier when CHL\\ncancels a load AFT"
       ],
+      "parse_error": null,
+      "notes": [],
       "module_name": "tonu_calculator"
     },
     {
@@ -29962,6 +29685,7 @@
         "render_orphans_md()",
         "render_mermaid()",
         "render_html()",
+        "apply_ready_for_hookup_manifest()",
         "main()"
       ],
       "imports": [
@@ -29973,8 +29697,8 @@
         "sys"
       ],
       "imported_by": [],
-      "lines_of_code": 517,
-      "last_modified": "2026-05-10T06:48:36.299448+00:00",
+      "lines_of_code": 557,
+      "last_modified": "2026-05-10T07:27:17.305147+00:00",
       "smoke_test": null,
       "decorators": [
         "'asset_inventory_render.py -- Read asset_inventory.json and emit:\\n  - asset_inventory.md           (subsystem-grouped markdown)\\n  - asset_inventory_orphans.md   (focused orphan + broken list)\\n  - a"
@@ -34946,42 +34670,6 @@
       "parse_error": null,
       "notes": [],
       "module_name": "credit_override_revoker.__init__"
-    },
-    {
-      "path": "C:/CHL/backend/scripts/purge_test_data.py",
-      "rel_path": "backend/scripts/purge_test_data.py",
-      "type": "python_module",
-      "subsystem": "Synthetic Test",
-      "status": "ORPHAN",
-      "description": "Legacy Seed-Data Purge Script ============================== Clears test accounts, $0 loads, stale hunt events, and orphaned artifacts from production MongoDB so the God-View / Live Board / Market Rad",
-      "exports": [
-        "is_test_reference()",
-        "is_test_email()",
-        "is_test_shipper()",
-        "run()"
-      ],
-      "imports": [
-        "__future__",
-        "argparse",
-        "asyncio",
-        "datetime",
-        "motor",
-        "os",
-        "sys",
-        "typing"
-      ],
-      "imported_by": [],
-      "lines_of_code": 221,
-      "last_modified": "2026-05-04T22:04:39.900731+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"\\nLegacy Seed-Data Purge Script\\n==============================\\nClears test accounts, $0 loads, stale hunt events, and orphaned artifacts\\nfrom production MongoDB so the God-View / Live Board / Mark"
-      ],
-      "parse_error": null,
-      "notes": [
-        "No imports, no smoke test, not in LIVE chain"
-      ],
-      "module_name": "scripts.purge_test_data"
     },
     {
       "path": "C:/CHL/backend/stress_test.py",
@@ -46037,32 +45725,6 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_weight_tuning_proposer"
-    },
-    {
-      "path": "C:/CHL/frontend/src/views/SyntheticDocsCarousel.jsx",
-      "rel_path": "frontend/src/views/SyntheticDocsCarousel.jsx",
-      "type": "jsx_component",
-      "subsystem": "Synthetic Test",
-      "status": "ORPHAN",
-      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
-      "exports": [
-        "SyntheticDocsCarousel"
-      ],
-      "imports": [
-        "../lib/api",
-        "@phosphor-icons/react",
-        "react"
-      ],
-      "imported_by": [],
-      "lines_of_code": 204,
-      "last_modified": "2026-05-09T22:28:27.315617+00:00",
-      "smoke_test": null,
-      "decorators": [],
-      "parse_error": null,
-      "notes": [
-        "Not reachable from frontend/src/App.js"
-      ],
-      "module_name": ""
     },
     {
       "path": "C:/CHL/frontend/src/views/SyntheticLoadReplayWidget.jsx",

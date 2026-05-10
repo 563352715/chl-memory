@@ -1,29 +1,30 @@
 # CHL Software Asset Inventory
 
-_Generated: 2026-05-10T06:49:11.810158+00:00_
+_Generated: 2026-05-10T07:27:30.068402+00:00_
 
-**Total assets:** 1172
+**Total assets:** 1162
 
 **Status counts:**
 
 | Status | Count | Meaning |
 |---|---:|---|
-| [LIVE] LIVE | 521 | Reachable from `backend/server.py` or `frontend/src/App.js` |
+| [LIVE] LIVE | 522 | Reachable from `backend/server.py` or `frontend/src/App.js` |
 | [CODE-READY] CODE-READY | 9 | Built + smoke-tested but not yet wired into the live chain |
+| [READY-FOR-HOOKUP] READY_FOR_HOOKUP | 5 | Operator-tagged: finished work for a real use case, awaiting wire-up decision (see ready_for_hookup_manifest.json) |
 | [LIBRARY] LIBRARY | 21 | Imported only by other modules (utility / helper) |
-| [DEV-TOOL] DEV-TOOL | 557 | Test, smoke, install, snapshot, or operator-run script |
-| [ORPHAN] ORPHAN | 63 | No imports detected anywhere — review for removal or wiring |
-| [BROKEN] BROKEN | 1 | Parse error or imports an unknown internal module |
+| [DEV-TOOL] DEV-TOOL | 555 | Test, smoke, install, snapshot, or operator-run script |
+| [ORPHAN] ORPHAN | 50 | No imports detected anywhere — review for removal or wiring |
+| [BROKEN] BROKEN | 0 | Parse error or imports an unknown internal module |
 
 **Subsystem distribution:**
 
 | Subsystem | Count |
 |---|---:|
 | Continuity Layer | 4 |
-| Communications | 119 |
+| Communications | 117 |
 | Load Lifecycle | 29 |
 | Carrier Operations | 44 |
-| Compliance | 82 |
+| Compliance | 79 |
 | Financial | 53 |
 | Intelligence | 35 |
 | Manual Override | 1 |
@@ -32,11 +33,11 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 | Public-Facing | 19 |
 | Owner Tooling | 6 |
 | LLL14-19 Recent Build | 5 |
-| Frontend UI | 174 |
-| Synthetic Test | 284 |
+| Frontend UI | 172 |
+| Synthetic Test | 282 |
 | Scripts / Tooling | 43 |
 | Dev-Ops Scripts | 17 |
-| Misc | 169 |
+| Misc | 168 |
 
 ---
 
@@ -51,23 +52,8 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - [LIVE] **`backend/system_clock.py`** (425 LOC)
   - system_clock.py — Canonical time + calendar source for the CHL platform. Purpose: Single source of truth for "now", business days, holidays, and milestone events used by every document generator, audi
 
-## Communications (119)
+## Communications (117)
 
-- [ORPHAN] **`backend/.smoke_141_3_1b.py`** (197 LOC)
-  - .smoke_141_3_1b.py — iter 141.3 stage 1b smoke harness for plivo_client.py. Pre-written 2026-05-07 alongside plivo_client.py. Runs without the Plivo SDK installed (uses unittest.mock to stub out the p
-  - _Note:_ No imports, no smoke test, not in LIVE chain
-- [ORPHAN] **`backend/fmcsa_sms_scores.py`** (621 LOC)
-  - FMCSA SMS BASIC Safety Scores per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2). Fetches Behavior Analysis & Safety Improvement Categories (BASIC) percentile scores, inspections, a
-  - _Note:_ No imports, no smoke test, not in LIVE chain
-- [ORPHAN] **`backend/paperwork_autopilot.py`** (155 LOC)
-  - Paperwork Autopilot — when a load flips to `delivered`, automatically: 1. Generate an invoice record (if not already created). 2. Email it to the shipper with a pay-now link + attached PDF link. 3. Lo
-  - _Note:_ No imports, no smoke test, not in LIVE chain
-- [ORPHAN] **`backend/text_operator.py`** (107 LOC)
-  - text_operator.py — operator-facing SMS alert wrapper (iter 141.1). NOT for driver/carrier comms — that path lives in notification_service.py and is gated on A2P 10DLC APPROVED. This module is for *int
-  - _Note:_ No imports, no smoke test, not in LIVE chain
-- [ORPHAN] **`backend/voice_operator.py`** (124 LOC)
-  - voice_operator.py — operator-facing Voice (robo-call) alert wrapper (iter 141.1). Sister module to text_operator.py. Same role (alert the platform owner) but uses Twilio Voice instead of SMS. Voice is
-  - _Note:_ No imports, no smoke test, not in LIVE chain
 - [LIVE] **`backend/aged_ar.py`** (120 LOC)
   - Aged AR — Iter 139.15 ===================== Reads `db.broker_invoices`, buckets every unpaid invoice by days outstanding, and exposes: • GET /api/admin/aged-ar/buckets → { current, days_31_60, days_61
 - [LIVE] **`backend/assignment/confirm_handler.py`** (322 LOC)
@@ -82,7 +68,7 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
   - broker_invoice.py — Broker Invoice + Notice of Assignment (NOA). Per /app/memory/SOP_AUDIT.md Gap 2 and /app/memory/DUAL_MODE_PLAN.md Phase 2. Two coupled documents: 1. Broker Invoice — CHL (the broke
 - [LIVE] **`backend/browser_phone.py`** (309 LOC)
   - browser_phone.py — Twilio Voice SDK softphone for CHL. (Iter 134.16, 2026-04-29) Purpose: Turn /command-phone into a standalone softphone. The browser's mic/speaker ARE the phone. Cell stays armed as 
-- [LIVE] **`backend/carrier_outreach.py`** (1646 LOC)
+- [LIVE] **`backend/carrier_outreach.py`** (1659 LOC)
   - Cold-Carrier Outreach & Acceptance Funnel. Flow: 1. Broker initiates outreach on a specific load → we generate a short-lived token 2. SMS fires to carrier's phone: "CHL: Dallas→Atlanta Van $2,400 — ta
 - [LIVE] **`backend/cash_valve.py`** (143 LOC)
   - Cash Valve — Pillar 4 — Invoice Follow-Up Sequencer Scans `invoices` collection and auto-sends follow-up emails: Day 25: "Invoice due soon — friendly reminder" (courteous) Day 31: "Invoice past due" (
@@ -296,6 +282,12 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
   - Check if Twilio exposes invoice PDFs / billing docs via API.
 - [DEV-TOOL] **`scripts/twilio_port_prereqs.py`** (75 LOC)
   - Pull what we can from Twilio for the Telnyx port. Account SID is the public account identifier (not a secret). Auth Token stays in os.environ and is never printed. Reads .env via dotenv.
+- [READY-FOR-HOOKUP] **`backend/fmcsa_sms_scores.py`** (621 LOC)
+  - FMCSA SMS BASIC Safety Scores per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2). Fetches Behavior Analysis & Safety Improvement Categories (BASIC) percentile scores, inspections, a
+- [READY-FOR-HOOKUP] **`backend/text_operator.py`** (107 LOC)
+  - text_operator.py — operator-facing SMS alert wrapper (iter 141.1). NOT for driver/carrier comms — that path lives in notification_service.py and is gated on A2P 10DLC APPROVED. This module is for *int
+- [READY-FOR-HOOKUP] **`backend/voice_operator.py`** (124 LOC)
+  - voice_operator.py — operator-facing Voice (robo-call) alert wrapper (iter 141.1). Sister module to text_operator.py. Same role (alert the platform owner) but uses Twilio Voice instead of SMS. Voice is
 
 ## Load Lifecycle (29)
 
@@ -449,11 +441,8 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - [DEV-TOOL] **`backend/tests/test_redispatch_workflow.py`** (464 LOC)
   - test_redispatch_workflow.py -- EE2 follow-up orchestrator tests. Covers carrier_redispatch.redispatch_workflow: * test_redispatch_finds_unassigned_after_ghost_loads * test_redispatch_appends_prior_car
 
-## Compliance (82)
+## Compliance (79)
 
-- [ORPHAN] **`backend/self_heal_audit.py`** (207 LOC)
-  - self_heal_audit.py — Iteration 80.1. Parses /app/logs/telemetry.json (one JSON object per line — append-only from the Sentinel Sentry endpoint) and produces a clustered Fix-Suggestion report at /app/l
-  - _Note:_ No imports, no smoke test, not in LIVE chain
 - [LIVE] **`backend/anomaly_sniffer.py`** (328 LOC)
   - Anomaly Sniffer — Iteration 51 Watchdog. Runs every 5 minutes, scans the last 10 minutes of `db.api_audit_log` for: 1. 5xx error spikes (>5% error rate OR >20 5xx in window for any path) 2. Brute-forc
 - [LIVE] **`backend/api_interceptor.py`** (159 LOC)
@@ -594,10 +583,6 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
   - Iteration 79.1 — Compliance Armor Tests Tests for: 1. POST /api/compliance/drivers/{carrier_id}/documents — Document upload to vault 2. GET /api/compliance/drivers/{carrier_id}/status — Driver complia
 - [DEV-TOOL] **`backend/tests/test_iteration_79_compliance_armor.py`** (720 LOC)
   - Iteration 79.1 — Compliance Armor Tests Tests for: 1. POST /api/compliance/drivers/{carrier_id}/documents — Document upload to vault 2. GET /api/compliance/drivers/{carrier_id}/status — Driver complia
-- [DEV-TOOL] **`backend/tests/test_iteration_80_telemetry_compliance.py`** (471 LOC)
-  - Iteration 80.1/80.3 — Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14 Tests: 1. POST /api/telemetry/error — un-authed, persists to db + file, returns critical flag 2. GET /api/telemetry/criti
-- [DEV-TOOL] **`backend/tests/test_iteration_80_telemetry_compliance.py`** (471 LOC)
-  - Iteration 80.1/80.3 — Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14 Tests: 1. POST /api/telemetry/error — un-authed, persists to db + file, returns critical flag 2. GET /api/telemetry/criti
 - [DEV-TOOL] **`backend/tests/test_payments_compliance.py`** (591 LOC)
   - Backend API Tests for Payment and Compliance Features Tests: Payment terms, Payment CRUD, Stripe checkout, Compliance checklist & resources
 - [DEV-TOOL] **`backend/tests/test_payments_compliance.py`** (591 LOC)
@@ -1055,12 +1040,9 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - [DEV-TOOL] **`scripts/smoke_vetting_checks.py`** (174 LOC)
   - Smoke test the standalone vetting checks (Phase B.1 #4 + #5). Inserts a synthetic FMCSA cache row, runs both checks against it, asserts expected flags, then cleans up. Run: C:\CHL\.venv-local\Scripts\
 
-## Frontend UI (174)
+## Frontend UI (172)
 
 - [ORPHAN] **`frontend/src/components/A2PStatusBanner.jsx`** (126 LOC)
-  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
-  - _Note:_ Not reachable from frontend/src/App.js
-- [ORPHAN] **`frontend/src/components/DeliveryReceipt.jsx`** (169 LOC)
   - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
   - _Note:_ Not reachable from frontend/src/App.js
 - [ORPHAN] **`frontend/src/components/NotificationStatusDot.jsx`** (90 LOC)
@@ -1068,9 +1050,6 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
   - _Note:_ Not reachable from frontend/src/App.js
 - [ORPHAN] **`frontend/src/components/RateMargin.jsx`** (126 LOC)
   - * RateMargin.jsx — Inline rate display with CHL margin attached. * (Iter 134.22 — per Jason: "I want to see the calculation of CHL take at a glance.") * * Variants: * <RateMargin load={l} /> — full in
-  - _Note:_ Not reachable from frontend/src/App.js
-- [ORPHAN] **`frontend/src/components/ShadowModePill.jsx`** (167 LOC)
-  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
   - _Note:_ Not reachable from frontend/src/App.js
 - [ORPHAN] **`frontend/src/components/ui/accordion.jsx`** (41 LOC)
   - (no docstring)
@@ -1195,14 +1174,8 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 - [ORPHAN] **`frontend/src/components/ui/tooltip.jsx`** (26 LOC)
   - (no docstring)
   - _Note:_ Not reachable from frontend/src/App.js
-- [ORPHAN] **`frontend/src/views/BankerDigestPage.jsx`** (212 LOC)
-  - (no docstring)
-  - _Note:_ Not reachable from frontend/src/App.js
 - [ORPHAN] **`frontend/src/views/MarginFloorModal.jsx`** (152 LOC)
   - * MarginFloorModal.jsx — Iter 139.37 * * Two-mode modal that renders either: * • HARD BLOCK — no override possible, "Got it, change rate" close button only * • SOFT WARN — explicit "Yes, dispatch anyw
-  - _Note:_ Not reachable from frontend/src/App.js
-- [ORPHAN] **`frontend/src/views/QuickEmailButton.jsx`** (173 LOC)
-  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
   - _Note:_ Not reachable from frontend/src/App.js
 - [LIVE] **`frontend/src/views/ARHealthChip.jsx`** (140 LOC)
   - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
@@ -1454,15 +1427,13 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
   - (no docstring)
 - [LIBRARY] **`frontend/src/components/ui/toggle.jsx`** (40 LOC)
   - (no docstring)
+- [READY-FOR-HOOKUP] **`frontend/src/components/DeliveryReceipt.jsx`** (169 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [READY-FOR-HOOKUP] **`frontend/src/components/ShadowModePill.jsx`** (167 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
 
-## Synthetic Test (284)
+## Synthetic Test (282)
 
-- [ORPHAN] **`backend/scripts/purge_test_data.py`** (221 LOC)
-  - Legacy Seed-Data Purge Script ============================== Clears test accounts, $0 loads, stale hunt events, and orphaned artifacts from production MongoDB so the God-View / Live Board / Market Rad
-  - _Note:_ No imports, no smoke test, not in LIVE chain
-- [ORPHAN] **`frontend/src/views/SyntheticDocsCarousel.jsx`** (204 LOC)
-  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
-  - _Note:_ Not reachable from frontend/src/App.js
 - [LIVE] **`backend/credit_override_revoker/__init__.py`** (35 LOC)
   - backend/credit_override_revoker/ -- Credit-override auto-revoker (RR1, 2026-05-08). Productionizes synthetic_load_walkthrough.py stage 23. Watches the db.payment_events collection for event_type=payme
 - [LIVE] **`backend/stress_test.py`** (193 LOC)
@@ -2032,7 +2003,7 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
 
 - [DEV-TOOL] **`scripts/asset_inventory.py`** (918 LOC)
   - asset_inventory.py — Static analysis of every CHL software asset. Walks backend/, backend/tests/, frontend/src/, scripts/ and classifies each file as LIVE / CODE-READY / DEV-TOOL / ORPHAN / LIBRARY / 
-- [DEV-TOOL] **`scripts/asset_inventory_render.py`** (517 LOC)
+- [DEV-TOOL] **`scripts/asset_inventory_render.py`** (557 LOC)
   - asset_inventory_render.py -- Read asset_inventory.json and emit: - asset_inventory.md (subsystem-grouped markdown) - asset_inventory_orphans.md (focused orphan + broken list) - asset_dependency_graph.
 - [DEV-TOOL] **`scripts/burst4_profit.py`** (62 LOC)
   - Burst-4 net profit, no unicode.
@@ -2149,19 +2120,13 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
   - maintain_5_copies.ps1 -- Operator-mandated 2026-05-10 EOD-17.  Maintains a FLOOR of 5 current full copies of the CHL platform on D:. Companion to snapshot_to_d.ps1 (lightweight rolling) and backup_to_
 - [DEV-TOOL] **`scripts/offsite_weekly_snapshot.ps1`** (170 LOC)
   - offsite_weekly_snapshot.ps1 Component C Tier 3 -- weekly off-machine snapshot of the latest D-drive rolling backup to an external drive (USB / NAS / second internal HDD).  What it does: 1. Locates the
-- [DEV-TOOL] **`scripts/overnight_supervisor.py`** (282 LOC)
+- [DEV-TOOL] **`scripts/overnight_supervisor.py`** (285 LOC)
   - overnight_supervisor.py -- Watchdog + periodic snapshotter + bug ledger. Operator-mandated 2026-05-10 EOD-17: > "Keep going through the night ... continue saving" > "do not fix issues unless those iss
 - [DEV-TOOL] **`scripts/snapshot_to_d.ps1`** (81 LOC)
   - CHL Rolling Snapshot to D: (Seagate Expansion) Lightweight backup that fires at every commit/save point — NOT the full iter-close ceremony (use backup_to_d.ps1 for that, which adds mongo export + .env
 
-## Misc (169)
+## Misc (168)
 
-- [BROKEN] **`backend/tonu_calculator.py`** (248 LOC)
-  - (no docstring)
-  - _Note:_ Parse failure: SyntaxError: invalid non-printable character U+FEFF at line 1
-- [ORPHAN] **`backend/security/secrets_cli.py`** (153 LOC)
-  - Operator CLI for the DPAPI-encrypted secrets store. Usage: python -m backend.security.secrets_cli set <KEY> python -m backend.security.secrets_cli get <KEY> python -m backend.security.secrets_cli dele
-  - _Note:_ No imports, no smoke test, not in LIVE chain
 - [ORPHAN] **`frontend/src/lib/api.js`** (19 LOC)
   - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
   - _Note:_ Not reachable from frontend/src/App.js
@@ -2463,6 +2428,8 @@ _Generated: 2026-05-10T06:49:11.810158+00:00_
   - throttle_models.py — Pydantic data models for throttle / health / SLA system. iter 140.1 stage 1b–1d shared types. Task 7 (Emergent scaffolding). All models are JSON-serializable, OpenAPI-compatible, 
 - [LIVE] **`backend/throughput_governor.py`** (436 LOC)
   - Project Æther — Throughput Governor (Metered Flow Control) Iteration 82 (Apr 23 2026) The "Throttle Valve" that sits ABOVE all execution logic. Every load opportunity or Home-Run match must pass the G
+- [LIVE] **`backend/tonu_calculator.py`** (248 LOC)
+  - tonu_calculator.py â€” Auto-TONU calculator (Iter 139.25, OPERATING_MANUAL Card 10 GAP closure). TONU = "Truck Order Not Used" â€” the cancel-fee owed to the carrier when CHL cancels a load AFTER the 
 - [LIVE] **`backend/tracking/__init__.py`** (33 LOC)
   - backend.tracking -- iter 142.2 phase 4 stage 1a foundation. GPS-backed load-tracking event ingestion + retrieval. Carrier-side mobile-app-default at v1: there is NO live GPS provider client in this st
 - [LIVE] **`backend/tracking/checkin_cron.py`** (338 LOC)
