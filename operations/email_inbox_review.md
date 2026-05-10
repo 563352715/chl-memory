@@ -6592,3 +6592,27 @@ _(none this window)_
 _(none this window)_
 
 ---
+
+## Hourly review 2026-05-10 15:25 UTC
+
+Total ingested last 75min: 0
+By category: {}
+By verdict: {}
+
+### URGENT (require operator attention) (0)
+
+_(none this window)_
+
+### OPERATOR_REVIEW (next session) (0)
+
+_(none this window)_
+
+### AUTO_ACK_OK (0)
+
+_(none this window)_
+
+### INFORMATIONAL (0)
+
+_(none this window)_
+
+---
