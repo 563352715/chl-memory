@@ -63,7 +63,7 @@ Buy the KIT (not 4 individual sticks). Pull existing 2 × 8 GB before install (d
 ## Operator-confirmed actions
 
 1. Enable XMP in BIOS (free, tonight)
-2. Order G.Skill F4-3200C16Q-64GTZR (~$170, Newegg or Amazon-sold-by-Amazon)
-3. Replace all 4 DIMM slots with new kit, re-enable XMP, verify 64 GB at 3200 MHz
-4. Sell existing 2 × 8 GB on eBay (~$30-40 recovered)
+2. ✅ **ORDERED 2026-05-10:** G.Skill Ripjaws V 64 GB (4×16 GB) DDR4-3200 CL16 Black — Part `F4-3200C16Q-64GVK` — arriving **2026-05-16** (2 days post-Telnyx FOC). QVL-validated, $140 retail, same DDR4-3200 CL16 spec as Trident Z RGB.
+3. Swap on 2026-05-16 (post-FOC stabilization). Re-enable XMP after install.
+4. Sell existing 2 × 8 GB Trident Z RGB on eBay (~$30-40 recovered)
 5. Plan Hetzner/AWS review for July-September 2026
