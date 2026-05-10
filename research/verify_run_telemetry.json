@@ -1,0 +1,103 @@
+{
+  "window_local": "2026-05-09 21:05:02 - 21:10:43 CDT",
+  "window_utc": "2026-05-10T02:05:02 - 2026-05-10T02:10:50",
+  "sop": {
+    "total": 39,
+    "pass": 29,
+    "bugs": [
+      {
+        "cycle": 11,
+        "scenario": "fi_geofence_delivery",
+        "expected_failure": "geofence_violation",
+        "actual_failure": "invalid_transition",
+        "final_stage": "expected_geofence_delivery",
+        "load_ref": "LD-775983D6"
+      },
+      {
+        "cycle": 15,
+        "scenario": "fi_bad_bol_upload",
+        "expected_failure": "image_quality_rejected",
+        "actual_failure": "image_too_small",
+        "final_stage": "expected_bad_bol",
+        "load_ref": "LD-D1D14BC5"
+      },
+      {
+        "cycle": 17,
+        "scenario": "fi_wrong_consignee_pin",
+        "expected_failure": "bad_pin",
+        "actual_failure": "conflict",
+        "final_stage": "expected_wrong_pin",
+        "load_ref": "LD-640698FF"
+      },
+      {
+        "cycle": 24,
+        "scenario": "happy_flatbed_tarp",
+        "expected_failure": null,
+        "actual_failure": null,
+        "final_stage": "auto_accept",
+        "load_ref": "LD-A5C1864E"
+      },
+      {
+        "cycle": 32,
+        "scenario": "fi_geofence_delivery",
+        "expected_failure": "geofence_violation",
+        "actual_failure": "invalid_transition",
+        "final_stage": "expected_geofence_delivery",
+        "load_ref": "LD-01EB6A32"
+      },
+      {
+        "cycle": 36,
+        "scenario": "fi_bad_bol_upload",
+        "expected_failure": "image_quality_rejected",
+        "actual_failure": "image_too_small",
+        "final_stage": "expected_bad_bol",
+        "load_ref": "LD-A0AB9D85"
+      },
+      {
+        "cycle": 38,
+        "scenario": "fi_wrong_consignee_pin",
+        "expected_failure": "bad_pin",
+        "actual_failure": "conflict",
+        "final_stage": "expected_wrong_pin",
+        "load_ref": "LD-A16A593D"
+      }
+    ]
+  },
+  "multi_actor": {
+    "total": 52,
+    "by_outcome": {
+      "fail": 2,
+      "pass": 39,
+      "open": 11
+    }
+  },
+  "rate_calc": {
+    "total": 45,
+    "grades": {
+      "PASS": 45
+    }
+  },
+  "loads": {
+    "total": 74,
+    "statuses": {
+      "delivered": 18,
+      "available": 40,
+      "booked": 6,
+      "at_delivery": 2,
+      "at_pickup": 2,
+      "unloaded": 2,
+      "en_route": 2,
+      "cancelled": 2
+    },
+    "rate_total": 143075.0,
+    "market_total": 146437.5,
+    "margin_spread": 3362.5,
+    "delivered_count": 20,
+    "delivered_carrier_pay": 41950.0,
+    "delivered_market": 44047.5
+  },
+  "net_profit": {
+    "delivered_profit_after_factor": 996.3125,
+    "factor_fee_pct": 0.025
+  }
+}
