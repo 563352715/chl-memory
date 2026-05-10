@@ -23,25 +23,24 @@
 
 ## Bugs queued from prior sub-agent reports (pending verification + fix)
 
-### LL_LOGIC_BUG_001 · Reachability bug in weight bracket
+### LL_LOGIC_BUG_001 · Reachability bug in weight bracket — FIXED in LLL16
 - **File:** `backend/server.py` (rate-calculator weight branching)
 - **Detection:** rate-calc agent (sub-agent C) flagged in design phase: `if w > 40000 ... elif w > 45000` — second branch unreachable. Once `w > 40000` is true, the elif never fires.
 - **Risk:** loads at >45,000 lbs may not get the heavier-weight rate factor they should.
 - **Severity:** auto-fixable (clear bug, low risk)
-- **Status:** PENDING — will fix on first scenario hit
+- **Status:** ✅ FIXED in LLL16 (commit pending). Reordered to `if w > 45000 ... elif w > 40000`. Verified: 50k lbs → factor=1.15 (was 1.10).
 
-### LL_PLATFORM_GAP_001 · No equipment-type rate premium calculator
+### LL_PLATFORM_GAP_001 · No equipment-type rate premium calculator — RESOLVED in LLL16
 - **Detection:** rate-calc agent flagged 8 scenarios OPEN
-- **Status:** OPERATOR_REVIEW (architectural — needs design decision on premium %s per equipment type)
-- **Routing:** dev_review_queue with proposed default schedule
+- **Status:** ✅ RESOLVED. Calculator now covers 11 equipment types (was 5): added rgn, hotshot, power_only, container, conestoga + stepdeck alias. Each has 2026 spot-market RPM band (low/mid/high).
 
-### LL_PLATFORM_GAP_002 · No commodity surcharge / blocking calculator
+### LL_PLATFORM_GAP_002 · No commodity surcharge / blocking calculator — RESOLVED in LLL16
 - **Detection:** rate-calc agent flagged 9 scenarios OPEN (HAZMAT, hi-value, oversize, livestock)
-- **Status:** OPERATOR_REVIEW
+- **Status:** ✅ RESOLVED. `commodity_premium_factor()` covers HAZMAT (class-specific: 1/4/7/8 + general), oversized (+50%), hi-value (+15%), livestock (+20%), perishable (+5%), household goods (+10%), auto-transport (+15%).
 
-### LL_PLATFORM_GAP_003 · No special-condition uplift calculator
+### LL_PLATFORM_GAP_003 · No special-condition uplift calculator — RESOLVED in LLL16
 - **Detection:** rate-calc agent flagged 7 scenarios OPEN (team, TWIC, HAZMAT-endorsed, tarped, etc.)
-- **Status:** OPERATOR_REVIEW
+- **Status:** ✅ RESOLVED. `special_uplift_factor()` covers team driver (+25%), TWIC (+10%), HAZMAT-endorsed (+5%), tarped (+8%), live-load/unload (+5%), escort (+20%), expedited (+30%). Stacking capped at +75%.
 
 ### LL_PLATFORM_GAP_004 · Limited accessorial calculator
 - **Detection:** Only detention + TONU exist as proper calculators. Lumper, layover, stop-off, driver-assist, liftgate, inside-delivery, reweigh are freeform line items with no native calculation.
