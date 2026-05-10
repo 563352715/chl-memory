@@ -1,0 +1,2503 @@
+# CHL Software Asset Inventory
+
+_Generated: 2026-05-10T06:49:11.810158+00:00_
+
+**Total assets:** 1172
+
+**Status counts:**
+
+| Status | Count | Meaning |
+|---|---:|---|
+| [LIVE] LIVE | 521 | Reachable from `backend/server.py` or `frontend/src/App.js` |
+| [CODE-READY] CODE-READY | 9 | Built + smoke-tested but not yet wired into the live chain |
+| [LIBRARY] LIBRARY | 21 | Imported only by other modules (utility / helper) |
+| [DEV-TOOL] DEV-TOOL | 557 | Test, smoke, install, snapshot, or operator-run script |
+| [ORPHAN] ORPHAN | 63 | No imports detected anywhere — review for removal or wiring |
+| [BROKEN] BROKEN | 1 | Parse error or imports an unknown internal module |
+
+**Subsystem distribution:**
+
+| Subsystem | Count |
+|---|---:|
+| Continuity Layer | 4 |
+| Communications | 119 |
+| Load Lifecycle | 29 |
+| Carrier Operations | 44 |
+| Compliance | 82 |
+| Financial | 53 |
+| Intelligence | 35 |
+| Manual Override | 1 |
+| Documents | 14 |
+| Self-Healing | 74 |
+| Public-Facing | 19 |
+| Owner Tooling | 6 |
+| LLL14-19 Recent Build | 5 |
+| Frontend UI | 174 |
+| Synthetic Test | 284 |
+| Scripts / Tooling | 43 |
+| Dev-Ops Scripts | 17 |
+| Misc | 169 |
+
+---
+
+## Continuity Layer (4)
+
+- [LIVE] **`backend/agent_journal.py`** (238 LOC)
+  - agent_journal.py — Continuity Layer for stateless AI agents. Why this file exists (per Jason 2026-04-29): Every agent session forks cold. Without a structured persistent journal, context drifts and on
+- [LIVE] **`backend/boot_briefing.py`** (457 LOC)
+  - boot_briefing.py — One-tap morning briefing for the operator. Per Jason 2026-04-29: "Day 1 morning, the platform should brief me in 30 seconds — not make me click through 8 dashboard panels." How it w
+- [LIVE] **`backend/ops_state.py`** (280 LOC)
+  - ops_state.py — Single-payload "live state of the brokerage" endpoint. (Distinct from system_health.py which monitors infra vitals like CPU/mem.) Why: Day 1 of live ops, neither Jason nor any agent for
+- [LIVE] **`backend/system_clock.py`** (425 LOC)
+  - system_clock.py — Canonical time + calendar source for the CHL platform. Purpose: Single source of truth for "now", business days, holidays, and milestone events used by every document generator, audi
+
+## Communications (119)
+
+- [ORPHAN] **`backend/.smoke_141_3_1b.py`** (197 LOC)
+  - .smoke_141_3_1b.py — iter 141.3 stage 1b smoke harness for plivo_client.py. Pre-written 2026-05-07 alongside plivo_client.py. Runs without the Plivo SDK installed (uses unittest.mock to stub out the p
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [ORPHAN] **`backend/fmcsa_sms_scores.py`** (621 LOC)
+  - FMCSA SMS BASIC Safety Scores per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2). Fetches Behavior Analysis & Safety Improvement Categories (BASIC) percentile scores, inspections, a
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [ORPHAN] **`backend/paperwork_autopilot.py`** (155 LOC)
+  - Paperwork Autopilot — when a load flips to `delivered`, automatically: 1. Generate an invoice record (if not already created). 2. Email it to the shipper with a pay-now link + attached PDF link. 3. Lo
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [ORPHAN] **`backend/text_operator.py`** (107 LOC)
+  - text_operator.py — operator-facing SMS alert wrapper (iter 141.1). NOT for driver/carrier comms — that path lives in notification_service.py and is gated on A2P 10DLC APPROVED. This module is for *int
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [ORPHAN] **`backend/voice_operator.py`** (124 LOC)
+  - voice_operator.py — operator-facing Voice (robo-call) alert wrapper (iter 141.1). Sister module to text_operator.py. Same role (alert the platform owner) but uses Twilio Voice instead of SMS. Voice is
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [LIVE] **`backend/aged_ar.py`** (120 LOC)
+  - Aged AR — Iter 139.15 ===================== Reads `db.broker_invoices`, buckets every unpaid invoice by days outstanding, and exposes: • GET /api/admin/aged-ar/buckets → { current, days_31_60, days_61
+- [LIVE] **`backend/assignment/confirm_handler.py`** (322 LOC)
+  - confirm_handler.py -- iter 142.1 stage 1e CONFIRM-reply hook. When a carrier replies "CONFIRM" (or equivalent) to the booking-confirmation SMS/voice prompt sent at assignment time, this handler: 1. Fl
+- [LIVE] **`backend/auto_settlement_trigger.py`** (266 LOC)
+  - auto_settlement_trigger.py -- DDD6 / NORTH_STAR_BUILD_PLAN PHASE B.1 #2. Removes the last manual broker chore in the Funding -> Carrier Payment loop: once the factor advance for an invoice has landed 
+- [LIVE] **`backend/billing_automation.py`** (510 LOC)
+  - Auto-Detention + Auto-Invoice + Variance — billing automation suite. Three intertwined billing automations that share data flow: 1. **Auto-Detention** — compute detention dollars automatically from dr
+- [LIVE] **`backend/bmc84_watcher.py`** (209 LOC)
+  - bmc84_watcher.py — Auto-poll FMCSA for CHL's broker authority + BMC-84 bond status. Per /app/memory/PRD.md P1. Why: Every legal document the platform generates (BCA, broker invoice, NOA, rate- con) ca
+- [LIVE] **`backend/broker_invoice.py`** (876 LOC)
+  - broker_invoice.py — Broker Invoice + Notice of Assignment (NOA). Per /app/memory/SOP_AUDIT.md Gap 2 and /app/memory/DUAL_MODE_PLAN.md Phase 2. Two coupled documents: 1. Broker Invoice — CHL (the broke
+- [LIVE] **`backend/browser_phone.py`** (309 LOC)
+  - browser_phone.py — Twilio Voice SDK softphone for CHL. (Iter 134.16, 2026-04-29) Purpose: Turn /command-phone into a standalone softphone. The browser's mic/speaker ARE the phone. Cell stays armed as 
+- [LIVE] **`backend/carrier_outreach.py`** (1646 LOC)
+  - Cold-Carrier Outreach & Acceptance Funnel. Flow: 1. Broker initiates outreach on a specific load → we generate a short-lived token 2. SMS fires to carrier's phone: "CHL: Dallas→Atlanta Van $2,400 — ta
+- [LIVE] **`backend/cash_valve.py`** (143 LOC)
+  - Cash Valve — Pillar 4 — Invoice Follow-Up Sequencer Scans `invoices` collection and auto-sends follow-up emails: Day 25: "Invoice due soon — friendly reminder" (courteous) Day 31: "Invoice past due" (
+- [LIVE] **`backend/circuit_breaker.py`** (218 LOC)
+  - Circuit Breaker — Iteration 54. In-memory circuit breakers for external APIs (DAT, Truckstop, 123Loadboard, Mercury, SAM.gov, Twilio, Resend, etc.). Any call path can wrap its outbound request with `a
+- [LIVE] **`backend/collections_packets.py`** (367 LOC)
+  - collections_packets.py — Iter 139.32 Two HTML/text packet generators for the collections + cargo-claims path: 1. demand_letter(invoice_id) — generates a formal demand-letter packet for unpaid invoices
+- [LIVE] **`backend/compliance_watcher.py`** (194 LOC)
+  - compliance_watcher.py — Auto-alert when Twilio A2P/TFV gates flip. (Iter 138.8, 2026-05-04) Polls A2P 10DLC and TFV statuses every 15 minutes. When either flips from PENDING/IN_REVIEW → APPROVED (or t
+- [LIVE] **`backend/consent_capture.py`** (333 LOC)
+  - TCPA Consent Capture for Cold-Outreach (Iter 116) ================================================= Director's request: legally tap the 3.2M FMCSA Census carrier pool for load-offer outreach without e
+- [LIVE] **`backend/delivered_load_autofire.py`** (602 LOC)
+  - delivered_load_autofire.py — Auto-fire Broker Invoice + NOA on `delivered`. Per /app/memory/PRD.md P1 (Iter 134.8, 2026-04-29). Lifecycle hook fired by server.update_load_status when a load transition
+- [LIVE] **`backend/dial_search.py`** (222 LOC)
+  - dial_search.py — Name/MC/DOT → phone number autocomplete for the softphone. Why: Jason wants a Rolodex. Type "ACM" or "MC-12345" in the dialer and get suggestions with the carrier's phone ready to dia
+- [LIVE] **`backend/email_ingestion.py`** (437 LOC)
+  - Email Load Ingestion Engine. Poll an IMAP inbox, extract shipper/broker load blasts using the LLM email parser (automations.llm_parse_load_from_email), apply red-flag scrubbing, normalize to GlobalLoa
+- [LIVE] **`backend/factor_decline_handler/__init__.py`** (31 LOC)
+  - backend/factor_decline_handler/ -- QQ3 stage 25 missing-hook #4. Top-level orchestrator for factor invoice DECLINES. The walkthrough stage 25 already exercises both the approval path (handled by the e
+- [LIVE] **`backend/factor_decline_handler/decline_handler.py`** (1121 LOC)
+  - factor_decline_handler.decline_handler -- production orchestrator for declined factor invoice submissions. QQ3 stage 25 missing hook #4. The synthetic walkthrough already covers both branches of the a
+- [LIVE] **`backend/factor_refusal_guard.py`** (710 LOC)
+  - factor_refusal_guard.py — Prevent factor refusals before they happen. Three guards that run automatically against every load before invoice submission to the factor: A. PROOF-REQUIRED guard If the rat
+- [LIVE] **`backend/factors/__init__.py`** (40 LOC)
+  - backend/factors/ -- Per-factor invoice-submission clients (iter 144.x Phase 6). Stage 1a scope: complete the stub integrations for RTS Capital + OTR Capital that exist (as registry entries only) in `b
+- [LIVE] **`backend/factors/reconciler.py`** (1084 LOC)
+  - factors/reconciler.py -- Iter 144.x Phase 6 stage 1c reconciliation pipeline. Closing-the-loop pair to stage 1b's auto_submitter. Watches three input streams + auto-flips db.invoices.{load_id}.status:
+- [LIVE] **`backend/factors/reconciler_cron.py`** (267 LOC)
+  - factors/reconciler_cron.py -- Iter 144.x Phase 6 stage 1c 30-min cron loop. Mirrors backend/inbound_email/classifier_cron.py (init / start_loop / register_health / @track_sla wrap pattern). Runs every
+- [LIVE] **`backend/fast_lane.py`** (214 LOC)
+  - Carrier Fast-Lane — Iteration 54. Public, unauthenticated 30-second onboarding for cold-SMS carriers. The flow: 1. SMS contains a link like `https://continentalhaul.com/onboard?ref=<token>` 2. Carrier
+- [LIVE] **`backend/finance_strategy.py`** (329 LOC)
+  - Project Æther — Hybrid Liquidity Schema (Iteration 91, Apr 23 2026) Two financing pipes per shipper/load: FACTOR — invoice sold to a 3rd-party factor for immediate liquidity. CHL pays ~3% fee. Remit-T
+- [LIVE] **`backend/first_live_load.py`** (147 LOC)
+  - First Live Load celebration — Iteration 52. When the owner's regulatory identity is armed (`live_mode=true`) and the *first* real booking event fires, fan out a multi-channel celebration: • Owner SMS 
+- [LIVE] **`backend/fmcsa_sms_bulk_csv.py`** (738 LOC)
+  - FMCSA SMS BASIC Scores BULK monthly CSV ingest (iter 142.1 nationwide-vetted-carrier-DB Phase 2-bulk). Avoids the per-carrier 75-day scrape problem by importing the SAME SMS data (BASIC measure / perc
+- [LIVE] **`backend/fmcsa_sms_refresh_cron.py`** (335 LOC)
+  - fmcsa_sms_refresh_cron.py — Background loop to monthly-refresh SMS BASIC scores into db.carriers.sms.* using FMCSA's bulk CSV download. Iter 142.1 nationwide-vetted-carrier-DB Phase 2-bulk. Every 30 d
+- [LIVE] **`backend/graceful_exit.py`** (262 LOC)
+  - Graceful Exit — Iteration 60. Lets a booked carrier hand a load back without drama. When invoked: 1. Load status flips back to `available`. 2. Hunter + Cold SMS workers re-fire immediately (async, non
+- [LIVE] **`backend/inbound_email/__init__.py`** (61 LOC)
+  - inbound_email -- Zoho IMAP inbound-email ingestion package. Iter 143.1 stage 1a -- ingestion-only substrate. Polls the operator's Zoho mailbox via IMAP every 5 minutes, dedup-by-Message-ID against db.
+- [LIVE] **`backend/inbound_email/action_dispatcher.py`** (1117 LOC)
+  - action_dispatcher.py -- Iter 143.1 stage 1d action-surface for the inbound-email pipeline. Consumer side of the Tier-1 (regex) and Tier-2 (LLM) classification stages. Responsibility -------------- db.
+- [LIVE] **`backend/inbound_email/action_dispatcher_cron.py`** (293 LOC)
+  - action_dispatcher_cron.py -- 5-minute loop that calls inbound_email.action_dispatcher.dispatch_pending_actions. Mirrors the cron-loop + health-register pattern from imap_poller.py / classifier_cron.py
+- [LIVE] **`backend/inbound_email/action_wrappers.py`** (469 LOC)
+  - action_wrappers.py -- iter 143.1 stage 1d production wiring for the inbound-email action_dispatcher. The dispatcher (action_dispatcher.py) ships with three module-level callable seams that default to 
+- [LIVE] **`backend/inbound_email/allowlist_loader.py`** (274 LOC)
+  - allowlist_loader.py -- ZZ3 (operator-mandated 2026-05-08): MD-driven loader for the vendor/partner allow-list. Externalizes the previously hard-coded ``_VENDOR_PARTNER_DOMAINS`` constant in ``sender_c
+- [LIVE] **`backend/inbound_email/classifier_cron.py`** (268 LOC)
+  - classifier_cron.py -- 5-minute loop that backfills Tier 1 classifications for any db.inbound_emails rows lacking a db.inbound_email_events row. Mirrors the cron-loop + health-register pattern from ima
+- [LIVE] **`backend/inbound_email/handled_folder_mover.py`** (1321 LOC)
+  - handled_folder_mover.py -- Stream V (EOD-14, operator-mandated 2026-05-08). Once the action_dispatcher (iter 143.1 stage 1d, EOD-8) has stamped ``action_status=dispatched`` on a db.inbound_email_event
+- [LIVE] **`backend/inbound_email/imap_poller.py`** (1022 LOC)
+  - imap_poller.py -- Zoho IMAP inbound-email poll cron (iter 143.1 stage 1a; EOD-16 multi-folder extension). Mirrors the cron-loop + health-register pattern from backend/fmcsa_census_refresh_cron.py and 
+- [LIVE] **`backend/inbound_email/inbox_router.py`** (669 LOC)
+  - inbound_email/inbox_router.py -- EOD-16-late stream NN1 operator endpoints for the dispatch@continentalhaul.com inbox surface. Surface ------- - GET /api/_inbox/list?folder=&since_hours=&limit=&classi
+- [LIVE] **`backend/inbound_email/partner_notifier.py`** (288 LOC)
+  - partner_notifier.py -- Iter EOD-12 sub-agent U: notification side of the sender classifier. Reads db.inbound_email_events rows where sender_type in {partner, prospect} AND notified_at is null, writes 
+- [LIVE] **`backend/inbound_email/sender_classifier.py`** (1090 LOC)
+  - sender_classifier.py -- Iter EOD-12 sub-agent U: SENDER-TYPE classifier. This module is a SEPARATE classification dimension on top of the existing Tier-1 (5-lane) and Tier-2 (LLM) lane classifiers. Wh
+- [LIVE] **`backend/inbound_email/sender_classifier_cron.py`** (398 LOC)
+  - sender_classifier_cron.py -- Iter EOD-12 sub-agent U: 10-minute background loop that orchestrates the sender-classification pipeline. Pipeline order (tight, idempotent, all three stages safe to re-run
+- [LIVE] **`backend/inbound_email/sender_router.py`** (429 LOC)
+  - inbound_email/sender_router.py -- Iter EOD-12 sub-agent U operator endpoints for the sender-type classifier substrate. Surface ------- - GET /api/_inbox/recent?sender_type=partner\|prospect&limit=50 Op
+- [LIVE] **`backend/inbound_email/spam_blocker.py`** (654 LOC)
+  - spam_blocker.py -- Iter EOD-12 sub-agent U: IMAP-MOVE-to-spam side of the sender classifier. Reads db.inbound_email_events rows where sender_type=="spam" AND blocked is not yet True, opens an IMAP con
+- [LIVE] **`backend/inbound_email/tier1_classifier.py`** (434 LOC)
+  - tier1_classifier.py -- Rule-based regex / from-domain classifier for the Zoho IMAP inbound-email substrate (iter 143.1 stage 1b). Mirrors the cron-loop + health-register pattern from imap_poller.py an
+- [LIVE] **`backend/inbound_email/tier2_classifier.py`** (644 LOC)
+  - tier2_classifier.py -- LLM-based fall-through classifier for the iter 143.1 stage 1c inbound-email substrate. This is the second tier in the 2-tier classifier pipeline: - tier1_classifier (stage 1b, L
+- [LIVE] **`backend/inbound_email/tier2_cron.py`** (308 LOC)
+  - tier2_cron.py -- 15-minute loop that calls Tier-2 (gpt-4o LLM) on the Tier-1 fall-through pile. Mirrors the cron-loop + health-register pattern from imap_poller.py / classifier_cron.py / fmcsa_census_
+- [LIVE] **`backend/inbox_triage/triage_classifier.py`** (623 LOC)
+  - inbox_triage/triage_classifier.py -- Pure-Python email triage classifier (Iter 145.x Stream LL2, 2026-05-08 EOD-16-late). Categorizes inbound emails by SOURCE (TELNYX / TWILIO / STRIPE / REGULATORY / 
+- [LIVE] **`backend/inbox_triage/triage_scanner.py`** (668 LOC)
+  - inbox_triage/triage_scanner.py -- Hourly inbox triage scanner (Iter 145.x Stream LL2, 2026-05-08 EOD-16-late). Scans db.inbound_emails over the last N minutes, runs each through triage_classifier.cate
+- [LIVE] **`backend/integrity/circuit_breakers.py`** (423 LOC)
+  - integrity/circuit_breakers.py -- Per-vendor circuit breakers (EOD-11 Component B mitigation #1). Each external-integration vendor (stripe, mercury, plivo, twilio, dat, fmcsa, openai, anthropic, resend
+- [LIVE] **`backend/notification_service.py`** (990 LOC)
+  - Project Æther — Multi-Channel Notification Service (Iteration 99, Apr 23 2026) Solves the A2P 10DLC driver-contact crisis. SMS is blocked until TCR approves the Continental Haul campaign. This module 
+- [LIVE] **`backend/outreach/orchestrator.py`** (422 LOC)
+  - OutreachOrchestrator -- iter 142.1 stage 1d. Multi-carrier rate-con outreach against the top-N carriers returned by CarrierEvaluator.select_top_n_for_lane (stage 1c). Twilio Voice TTS is the v1 outrea
+- [LIVE] **`backend/pdf_stapler.py`** (505 LOC)
+  - PDF Digital Stapler — merges Rate Con + POD + Invoice into a single PDF ready for factor-company submission. Uses `pypdf.PdfWriter` (pypdf 5+ API; PdfMerger was deprecated). Generates professional-loo
+- [LIVE] **`backend/plivo_client.py`** (130 LOC)
+  - plivo_client.py — Plivo SMS wrapper (iter 141.3 stage 1b prep). Sister module to text_operator.py. Same shape, different vendor. Pre-written overnight 2026-05-07 so iter 141.3 stage 1b (notification_s
+- [LIVE] **`backend/renewals/renewals_notifier.py`** (666 LOC)
+  - renewals/renewals_notifier.py -- Cron-driven dispatcher that consumes db.renewal_reminders rows and fires email + (optionally) SMS to the operator (Iter 145.x Stream LL1, 2026-05-08). The renewals sca
+- [LIVE] **`backend/rfq_imap_poller.py`** (295 LOC)
+  - RFQ Inbound IMAP Poller — Plan B for inbound shipper RFQs. Watches a Zoho (or any IMAP) folder, e.g. `RFQs`, for new emails sent to `quotes@continentalhaul.com`. For each new email: 1. Extract body te
+- [LIVE] **`backend/tcr_status.py`** (295 LOC)
+  - TCR Status Widget — A2P 10DLC campaign vetting status. Polls Twilio's Messaging API to fetch the current vetting status of our A2P 10DLC campaign and exposes it as a small dashboard widget so the user
+- [LIVE] **`backend/telnyx_webrtc.py`** (1003 LOC)
+  - telnyx_webrtc.py -- Telnyx WebRTC browser softphone for CHL. (Stream KKK1, 2026-05-09) Purpose: Telnyx-native replacement for the Twilio-era browser_phone.py softphone (Iter 134.16). Built ahead of th
+- [LIVE] **`backend/tollfree_compliance.py`** (432 LOC)
+  - tollfree_compliance.py — Toll-Free Verification resubmission packet. Background: Twilio rejected toll-free verification HHa930323b3e82c4e17e3a68ed066b1c1b for +1-866-490-6433 with codes: 30445 — Busin
+- [LIVE] **`backend/tracking/checkin_scheduler.py`** (1079 LOC)
+  - checkin_scheduler.py -- iter 142.2 stage 1c automated carrier check-in scheduler. When a load flips to in_transit (set when the carrier confirms pickup), this module schedules a series of SMS check-in
+- [LIVE] **`frontend/src/views/InvoicePreview.jsx`** (292 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/PendingDocsView.jsx`** (215 LOC)
+  - * PendingDocsView.jsx — Pending Documents tray (Iter 134.8 frontend). * * Surfaces /api/broker-invoice/pending as a clickable list. For each draft: * • Preview PDF in new tab * • Send (emails to shipp
+- [LIVE] **`frontend/src/views/RFQInboxView.jsx`** (384 LOC)
+  - * RFQInboxView.jsx — Iter 139.28 * * Operator surface for inbound RFQ emails (Zoho IMAP poller output). * Two-column layout: * LEFT: list of recent RFQs with parsed-lane count + drafted-at badge * RIG
+- [LIVE] **`frontend/src/views/TelnyxBrowserPhoneView.jsx`** (1111 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/TollFreeCompliancePage.jsx`** (327 LOC)
+  - * TollFreeCompliancePage.jsx — Toll-Free SMS verification resubmission console. * * Powers /twilio-tollfree (legacy route path; kept for bookmark stability). * Lets the Director: * • Preview the canon
+- [LIBRARY] **`backend/inbound_email/source_folder_backfill.py`** (228 LOC)
+  - source_folder_backfill.py -- One-shot backfill for source_folder field on existing db.inbound_emails rows (EOD-16 multi-folder extension). Context ------- The EOD-16 multi-folder polling extension add
+- [DEV-TOOL] **`backend/tests/test_action_wrappers.py`** (326 LOC)
+  - test_action_wrappers.py -- Unit tests for iter 143.1 stage 1d production wiring (backend/inbound_email/action_wrappers.py). Covers the five mandatory contracts: 1. fmcsa_authority returns ok=False wit
+- [DEV-TOOL] **`backend/tests/test_action_wrappers.py`** (326 LOC)
+  - test_action_wrappers.py -- Unit tests for iter 143.1 stage 1d production wiring (backend/inbound_email/action_wrappers.py). Covers the five mandatory contracts: 1. fmcsa_authority returns ok=False wit
+- [DEV-TOOL] **`backend/tests/test_business_plan_and_prefill.py`** (321 LOC)
+  - Test suite for Business Plan PDF generation and existing document endpoints. Tests the new /api/business-plan endpoint (GET and POST) and verifies existing invoice/rate-confirmation endpoints still wo
+- [DEV-TOOL] **`backend/tests/test_business_plan_and_prefill.py`** (321 LOC)
+  - Test suite for Business Plan PDF generation and existing document endpoints. Tests the new /api/business-plan endpoint (GET and POST) and verifies existing invoice/rate-confirmation endpoints still wo
+- [DEV-TOOL] **`backend/tests/test_email_poller.py`** (362 LOC)
+  - test_email_poller.py -- Unit tests for the iter 143.1 stage 1a Zoho IMAP inbound-email poller (backend/inbound_email/imap_poller.py). Covers the four contracts called out in the stage-1a brief: 1. tes
+- [DEV-TOOL] **`backend/tests/test_email_poller.py`** (362 LOC)
+  - test_email_poller.py -- Unit tests for the iter 143.1 stage 1a Zoho IMAP inbound-email poller (backend/inbound_email/imap_poller.py). Covers the four contracts called out in the stage-1a brief: 1. tes
+- [DEV-TOOL] **`backend/tests/test_imap_multi_folder.py`** (664 LOC)
+  - test_imap_multi_folder.py -- VV3 EOD-16 spec-contract tests. Covers the operator-mandated extensions layered on top of the existing multi-folder polling / handled-folder-mover / sender-classifier stac
+- [DEV-TOOL] **`backend/tests/test_imap_multi_folder.py`** (664 LOC)
+  - test_imap_multi_folder.py -- VV3 EOD-16 spec-contract tests. Covers the operator-mandated extensions layered on top of the existing multi-folder polling / handled-folder-mover / sender-classifier stac
+- [DEV-TOOL] **`backend/tests/test_imap_poller_multi_folder.py`** (545 LOC)
+  - test_imap_poller_multi_folder.py -- EOD-16 multi-folder polling extension tests for backend/inbound_email/imap_poller.py. Validates the contract operator-mandated 2026-05-08 EOD-12 then surfaced EOD-1
+- [DEV-TOOL] **`backend/tests/test_imap_poller_multi_folder.py`** (545 LOC)
+  - test_imap_poller_multi_folder.py -- EOD-16 multi-folder polling extension tests for backend/inbound_email/imap_poller.py. Validates the contract operator-mandated 2026-05-08 EOD-12 then surfaced EOD-1
+- [DEV-TOOL] **`backend/tests/test_inbox_triage_classifier.py`** (219 LOC)
+  - test_inbox_triage_classifier.py -- Iter 145.x Stream LL2 unit tests for the pure-Python inbox triage classifier. LL2 classifier (6): test_telnyx_port_rejected_is_urgent test_stripe_payment_failed_unre
+- [DEV-TOOL] **`backend/tests/test_inbox_triage_classifier.py`** (219 LOC)
+  - test_inbox_triage_classifier.py -- Iter 145.x Stream LL2 unit tests for the pure-Python inbox triage classifier. LL2 classifier (6): test_telnyx_port_rejected_is_urgent test_stripe_payment_failed_unre
+- [DEV-TOOL] **`backend/tests/test_iteration16_phone.py`** (393 LOC)
+  - Iteration 16 Tests: Twilio Phone Integration Tests for SMS, Click-to-Call, Call Log, Voicemails, and Public Webhooks All Twilio envs are intentionally empty → all endpoints should return mocked/placeh
+- [DEV-TOOL] **`backend/tests/test_iteration16_phone.py`** (393 LOC)
+  - Iteration 16 Tests: Twilio Phone Integration Tests for SMS, Click-to-Call, Call Log, Voicemails, and Public Webhooks All Twilio envs are intentionally empty → all endpoints should return mocked/placeh
+- [DEV-TOOL] **`backend/tests/test_iteration17_autosms_broadcast.py`** (345 LOC)
+  - Iteration 17 Tests: Auto-SMS Triggers, SMS Broadcast, Monthly P&L Scheduler Tests new features: - GET /api/phone/auto-sms-settings - PUT /api/phone/auto-sms-settings - POST /api/phone/sms/broadcast - 
+- [DEV-TOOL] **`backend/tests/test_iteration17_autosms_broadcast.py`** (345 LOC)
+  - Iteration 17 Tests: Auto-SMS Triggers, SMS Broadcast, Monthly P&L Scheduler Tests new features: - GET /api/phone/auto-sms-settings - PUT /api/phone/auto-sms-settings - POST /api/phone/sms/broadcast - 
+- [DEV-TOOL] **`backend/tests/test_iteration23_activity_feed.py`** (340 LOC)
+  - Iteration 23 - Broker Activity Feed / Mission Control Tests Tests the unified real-time timeline aggregating events from multiple sources: - broker_notifications, call_logs, voicemails, bookings, paym
+- [DEV-TOOL] **`backend/tests/test_iteration23_activity_feed.py`** (340 LOC)
+  - Iteration 23 - Broker Activity Feed / Mission Control Tests Tests the unified real-time timeline aggregating events from multiple sources: - broker_notifications, call_logs, voicemails, bookings, paym
+- [DEV-TOOL] **`backend/tests/test_iteration32_automations.py`** (540 LOC)
+  - Iteration 32 — Full Automation Suite Tests ========================================== Tests for the 8 automations: a) Carrier Invoice Auto-Generator b) Shipper Auto-Quote Pipeline Status c) Rate Confi
+- [DEV-TOOL] **`backend/tests/test_iteration32_automations.py`** (540 LOC)
+  - Iteration 32 — Full Automation Suite Tests ========================================== Tests for the 8 automations: a) Carrier Invoice Auto-Generator b) Shipper Auto-Quote Pipeline Status c) Rate Confi
+- [DEV-TOOL] **`backend/tests/test_iteration_100_engagement_telemetry.py`** (338 LOC)
+  - Iteration 100 — Engagement Telemetry + Admin Notification Log + Twilio voice-capability check + Hardware semaphore guardrail Tests: - GET /api/notifications/track-open.gif (tracking pixel) - POST /api
+- [DEV-TOOL] **`backend/tests/test_iteration_100_engagement_telemetry.py`** (338 LOC)
+  - Iteration 100 — Engagement Telemetry + Admin Notification Log + Twilio voice-capability check + Hardware semaphore guardrail Tests: - GET /api/notifications/track-open.gif (tracking pixel) - POST /api
+- [DEV-TOOL] **`backend/tests/test_iteration_132_billing_rfq.py`** (794 LOC)
+  - Iteration 132 — Billing Automation + RFQ Inbound Parser Testing Tests for two new backend-only modules: 1. BILLING AUTOMATION — Auto-Detention + Auto-Invoice + Variance Required Task 2. INBOUND RFQ PA
+- [DEV-TOOL] **`backend/tests/test_iteration_132_billing_rfq.py`** (794 LOC)
+  - Iteration 132 — Billing Automation + RFQ Inbound Parser Testing Tests for two new backend-only modules: 1. BILLING AUTOMATION — Auto-Detention + Auto-Invoice + Variance Required Task 2. INBOUND RFQ PA
+- [DEV-TOOL] **`backend/tests/test_iteration_133.py`** (504 LOC)
+  - test_iteration_133.py — Backend API tests for Iteration 133/134 features: 1. Broker Invoice + NOA module (Phase 2 Dual-Mode P0) 2. BMC-84 / FMCSA Authority watcher with auto-poll 3. Smart cross-post a
+- [DEV-TOOL] **`backend/tests/test_iteration_133.py`** (504 LOC)
+  - test_iteration_133.py — Backend API tests for Iteration 133/134 features: 1. Broker Invoice + NOA module (Phase 2 Dual-Mode P0) 2. BMC-84 / FMCSA Authority watcher with auto-poll 3. Smart cross-post a
+- [DEV-TOOL] **`backend/tests/test_iteration_99_notification_failover.py`** (519 LOC)
+  - Iteration 99 — Multi-Channel Notification Failover Tests Tests for Email-First + Voice-Backup notification loop with A2P 10DLC gating. Features tested: - GET /api/notifications/10dlc/status - POST /ap
+- [DEV-TOOL] **`backend/tests/test_iteration_99_notification_failover.py`** (519 LOC)
+  - Iteration 99 — Multi-Channel Notification Failover Tests Tests for Email-First + Voice-Backup notification loop with A2P 10DLC gating. Features tested: - GET /api/notifications/10dlc/status - POST /ap
+- [DEV-TOOL] **`backend/tests/test_noa_detector.py`** (559 LOC)
+  - DDD4 -- NOA detector unit tests. Covers backend/noa_detector.py: * 6 vendor-specific NOA bodies (OTR / Apex / Triumph / RTS / TBS / Mercury) -> all detected at confidence >= 0.85 * carrier invoice wit
+- [DEV-TOOL] **`backend/tests/test_noa_detector.py`** (559 LOC)
+  - DDD4 -- NOA detector unit tests. Covers backend/noa_detector.py: * 6 vendor-specific NOA bodies (OTR / Apex / Triumph / RTS / TBS / Mercury) -> all detected at confidence >= 0.85 * carrier invoice wit
+- [DEV-TOOL] **`backend/tests/test_schedule_of_accounts.py`** (433 LOC)
+  - test_schedule_of_accounts.py -- DDD5 / PHASE B.1 #7 tests. Covers backend/factor_schedule_of_accounts.py: * test_assemble_pulls_factor_ready_invoices_total_usd * test_assemble_empty_queue * test_submi
+- [DEV-TOOL] **`backend/tests/test_schedule_of_accounts.py`** (433 LOC)
+  - test_schedule_of_accounts.py -- DDD5 / PHASE B.1 #7 tests. Covers backend/factor_schedule_of_accounts.py: * test_assemble_pulls_factor_ready_invoices_total_usd * test_assemble_empty_queue * test_submi
+- [DEV-TOOL] **`backend/tests/test_soa_packet_completeness.py`** (594 LOC)
+  - test_soa_packet_completeness.py -- GGG4 (DDD5 closure) tests. Covers backend/factor_schedule_of_accounts.py: * Complete 4-doc packet -> invoice included in batch * Missing broker invoice (not stamped)
+- [DEV-TOOL] **`backend/tests/test_soa_packet_completeness.py`** (594 LOC)
+  - test_soa_packet_completeness.py -- GGG4 (DDD5 closure) tests. Covers backend/factor_schedule_of_accounts.py: * Complete 4-doc packet -> invoice included in batch * Missing broker invoice (not stamped)
+- [DEV-TOOL] **`backend/tests/test_source_folder_backfill.py`** (217 LOC)
+  - test_source_folder_backfill.py -- EOD-16 multi-folder rollout backfill tests for backend/inbound_email/source_folder_backfill.py. Verifies: * Existing rows missing source_folder get source_folder="INB
+- [DEV-TOOL] **`backend/tests/test_source_folder_backfill.py`** (217 LOC)
+  - test_source_folder_backfill.py -- EOD-16 multi-folder rollout backfill tests for backend/inbound_email/source_folder_backfill.py. Verifies: * Existing rows missing source_folder get source_folder="INB
+- [DEV-TOOL] **`backend/tests/test_telnyx_webrtc.py`** (801 LOC)
+  - test_telnyx_webrtc.py -- Stream KKK1 unit tests for the Telnyx WebRTC softphone router. Coverage -------- 1. /browser-token returns 200 with login_token shape when env configured 2. /browser-token ret
+- [DEV-TOOL] **`backend/tests/test_telnyx_webrtc.py`** (801 LOC)
+  - test_telnyx_webrtc.py -- Stream KKK1 unit tests for the Telnyx WebRTC softphone router. Coverage -------- 1. /browser-token returns 200 with login_token shape when env configured 2. /browser-token ret
+- [DEV-TOOL] **`scripts/check_telnyx_emails.py`** (66 LOC)
+  - Pull recent emails ingested by the IMAP poller.
+- [DEV-TOOL] **`scripts/dispatch_three_test_loads.py`** (237 LOC)
+  - dispatch_three_test_loads.py — Send 3 distinct test loads to the Director's inbox via the upgraded cold-outreach pipeline, so he can validate the new industry-standard email/SMS templates end-to-end. 
+- [DEV-TOOL] **`scripts/extract_telnyx_status.py`** (46 LOC)
+  - Extract status from Telnyx port-status emails.
+- [DEV-TOOL] **`scripts/hourly_inbox_triage.py`** (246 LOC)
+  - hourly_inbox_triage.py — operator-mandated hourly CHL inbox triage. Pulls db.inbound_emails for the last 75 min, strips CSS, categorizes, verdicts, appends to chl-memory/operations/email_inbox_review.
+- [DEV-TOOL] **`scripts/inbox_triage_hourly.py`** (284 LOC)
+  - Hourly CHL inbox triage -- operator-mandated 2026-05-08 EOD-16. Pulls db.inbound_emails rows fetched in last 75min, classifies, derives action verdicts, appends to chl-memory/operations/email_inbox_re
+- [DEV-TOOL] **`scripts/parse_telnyx_email_body.py`** (89 LOC)
+  - Parse the most recent Telnyx port-status emails to extract actual status text.
+- [DEV-TOOL] **`scripts/plivo_cutover.py`** (327 LOC)
+  - plivo_cutover.py — iter 141.3 stage 1d cutover orchestrator. Pre-written 2026-05-07 overnight. Handles the Twilio->Plivo cutover ceremony: 1. Backup .env to .env.pre-plivo-cutover (timestamped) 2. Com
+- [DEV-TOOL] **`scripts/plivo_port_status.py`** (199 LOC)
+  - plivo_port_status.py — iter 141.3 stage 1c port-status helper. Pre-written 2026-05-07 overnight. Runnable by operator while waiting on a Plivo Port-In to complete. Saves the click-through-the-Plivo-co
+- [DEV-TOOL] **`scripts/telnyx_create_messaging_profile.py`** (56 LOC)
+  - Create the CHL Dispatch messaging profile via Telnyx API.
+- [DEV-TOOL] **`scripts/test_zoho_smtp.py`** (49 LOC)
+  - Test Zoho SMTP outbound to jasonandpugee@gmail.com.
+- [DEV-TOOL] **`scripts/twilio_billing_check.py`** (61 LOC)
+  - Check if Twilio exposes invoice PDFs / billing docs via API.
+- [DEV-TOOL] **`scripts/twilio_port_prereqs.py`** (75 LOC)
+  - Pull what we can from Twilio for the Telnyx port. Account SID is the public account identifier (not a secret). Auth Token stays in os.environ and is never printed. Reads .env via dotenv.
+
+## Load Lifecycle (29)
+
+- [LIVE] **`backend/auto_repost_cron.py`** (391 LOC)
+  - auto_repost_cron.py — Card 3 Line 4 (price escalator). Every 15 minutes, scan loads with status=available + auto_repost_enabled that haven't booked within their wait window. For each match: 1. Bump th
+- [LIVE] **`backend/auto_repost_routes.py`** (119 LOC)
+  - auto_repost_routes.py — Per-load override + history endpoints. Powers the Auto-Repost panel in the Load Detail modal. GET /api/loads/{load_id}/auto-repost — current settings + history PUT /api/loads/{
+- [LIVE] **`backend/auto_repost_scheduler.py`** (271 LOC)
+  - Auto-Repost Scheduler — Iter 117 ================================= Director's pre-launch defect: when a load goes stale (posted >2h, no acceptances), the system was silent — no rate bump, no re-outrea
+- [LIVE] **`backend/factors/auto_submitter.py`** (424 LOC)
+  - factors/auto_submitter.py -- Iter 144.x Phase 6 stage 1b auto-submission pipeline. Bridges `delivered_load_autofire` and the per-factor clients (rts_client/otr_client + apex/triumph SFTP). Public surf
+- [LIVE] **`backend/load_completion_workflow.py`** (1291 LOC)
+  - Load Completion Workflow — Digital POD ingestion + Billing Packet assembly. Iter 109 — Implements the Director's spec: 1. Multi-part document ingestion via driver Magic Link / public token: * Primary 
+- [LIVE] **`backend/load_dossier.py`** (367 LOC)
+  - Load Dossier — the "shipper-just-called-me" all-in-one panel. ================================================================ Director's spec: when you search a BOL or load reference, you should land
+- [LIVE] **`backend/load_evaluator.py`** (211 LOC)
+  - LoadEvaluator — micro-scale FractalEvaluator for individual loads. Iter 141.1 stage 1a. Mirrors the gate set used by `auto_dispatch.try_auto_accept` so that LoadEvaluator.decide() can run SHADOW-MODE 
+- [LIVE] **`backend/load_intake.py`** (516 LOC)
+  - Load Intake Engine — Iteration 71. text → parsed load dict → margin decision → priority queue Capabilities: 1. parse_load_text(raw) Regex-first, heuristic fallback. <1 ms/load on typical 6-line DAT/Tr
+- [LIVE] **`backend/load_state_machine.py`** (447 LOC)
+  - Load State Machine — driver-side status transition engine. Owned by Stream A of the driver-experience build (2026-05-09 contract: `chl-memory/research/driver_experience_contracts_2026_05_09.md`). The 
+- [LIVE] **`backend/multi_leg.py`** (207 LOC)
+  - Multi-Leg Shipments — Iteration 60. Handles Truck → Rail → Truck style moves under one Master BOL. Each leg carries its own carrier, equipment, and Rate Con; the master load ties them together for POD
+- [LIVE] **`backend/multimodal.py`** (302 LOC)
+  - Multimodal + North American Integration — Iteration 51. Foundation module that unlocks: • Rail, Air, Ocean + Intermodal equipment types • Multi-Leg loads (parent + legs, one Master BOL) • Canadian pos
+- [LIVE] **`backend/multimodal_override.py`** (601 LOC)
+  - Multimodal Override Engine — Iteration 69. Triggers when a load's in-flight transit time exceeds the corridor's incentive-SLA threshold. Bolts onto Iter 67 (Ghost Visibility / ETA) and Iter 68 (Visibi
+- [LIVE] **`backend/state_lock.py`** (581 LOC)
+  - State-Lock — the canonical load-status mutator. Hardening · Phase 1.3 — prevents automated processes from reverting a `delivered` load to any other status. The Director may override via the `sovereign
+- [LIVE] **`frontend/src/views/MultimodalOverrideTile.jsx`** (138 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [DEV-TOOL] **`backend/tests/test_direct_auto_repost.py`** (499 LOC)
+  - Direct Python invocation test for _fire_repost and _refresh_external_postings. This script directly calls the auto_repost_cron functions to verify: 1. _refresh_external_postings marks old postings as 
+- [DEV-TOOL] **`backend/tests/test_direct_auto_repost.py`** (499 LOC)
+  - Direct Python invocation test for _fire_repost and _refresh_external_postings. This script directly calls the auto_repost_cron functions to verify: 1. _refresh_external_postings marks old postings as 
+- [DEV-TOOL] **`backend/tests/test_iteration51_watchdog_multimodal.py`** (523 LOC)
+  - Iteration 51 — Watchdog + Multimodal Foundation Tests Tests: 1. Sniffer endpoints (owner-only): /api/sniffer/alerts, /api/sniffer/summary, /api/sniffer/run-now, /api/sniffer/alerts/{id}/ack 2. Privile
+- [DEV-TOOL] **`backend/tests/test_iteration51_watchdog_multimodal.py`** (523 LOC)
+  - Iteration 51 — Watchdog + Multimodal Foundation Tests Tests: 1. Sniffer endpoints (owner-only): /api/sniffer/alerts, /api/sniffer/summary, /api/sniffer/run-now, /api/sniffer/alerts/{id}/ack 2. Privile
+- [DEV-TOOL] **`backend/tests/test_iteration_126_auto_repost_external_refresh.py`** (614 LOC)
+  - Iteration 126 — Auto-Repost External Posting Refresh (Card 3 Line 4 Enhancement) ================================================================================ Tests for the _refresh_external_postin
+- [DEV-TOOL] **`backend/tests/test_iteration_126_auto_repost_external_refresh.py`** (614 LOC)
+  - Iteration 126 — Auto-Repost External Posting Refresh (Card 3 Line 4 Enhancement) ================================================================================ Tests for the _refresh_external_postin
+- [DEV-TOOL] **`backend/tests/test_noa_outbound.py`** (598 LOC)
+  - GGG3 -- broker-side NOA outbound framework unit tests. Covers backend/noa_outbound.py + the surgical edits to backend/load_completion_workflow.py::assemble_billing_packet: * get_template returns UCC §
+- [DEV-TOOL] **`backend/tests/test_noa_outbound.py`** (598 LOC)
+  - GGG3 -- broker-side NOA outbound framework unit tests. Covers backend/noa_outbound.py + the surgical edits to backend/load_completion_workflow.py::assemble_billing_packet: * get_template returns UCC §
+- [DEV-TOOL] **`backend/tests/test_state_lock_audit_completeness.py`** (376 LOC)
+  - test_state_lock_audit_completeness.py -- Iter EOD-15 stream FF1. Closes the gap EE2 (21-stage synthetic walkthrough) flagged: production status-flip routes did not write rows to the canonical db.audit
+- [DEV-TOOL] **`backend/tests/test_state_lock_audit_completeness.py`** (376 LOC)
+  - test_state_lock_audit_completeness.py -- Iter EOD-15 stream FF1. Closes the gap EE2 (21-stage synthetic walkthrough) flagged: production status-flip routes did not write rows to the canonical db.audit
+- [DEV-TOOL] **`backend/tests/test_state_lock_audit_domain_expansion.py`** (653 LOC)
+  - test_state_lock_audit_domain_expansion.py -- Iter EOD-15 stream GG1. Domain-expansion follow-up to FF1 (test_state_lock_audit_completeness.py). Closes audit_trail-completeness gaps identified by FF1 f
+- [DEV-TOOL] **`backend/tests/test_state_lock_audit_domain_expansion.py`** (653 LOC)
+  - test_state_lock_audit_domain_expansion.py -- Iter EOD-15 stream GG1. Domain-expansion follow-up to FF1 (test_state_lock_audit_completeness.py). Closes audit_trail-completeness gaps identified by FF1 f
+- [DEV-TOOL] **`backend/tests/test_tonu_integration.py`** (202 LOC)
+  - test_tonu_integration.py - Iter 139.30 unit tests for state_lock._maybe_offer_tonu. Verifies the helper now delegates fee computation to tonu_calculator.compute_tonu (tier-based) instead of the legacy
+- [DEV-TOOL] **`backend/tests/test_tonu_integration.py`** (202 LOC)
+  - test_tonu_integration.py - Iter 139.30 unit tests for state_lock._maybe_offer_tonu. Verifies the helper now delegates fee computation to tonu_calculator.compute_tonu (tier-based) instead of the legacy
+- [DEV-TOOL] **`scripts/cron_multimodal_override.sh`** (68 LOC)
+  - !/usr/bin/env bash Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Iteration 69 — Multimodal Override sweeper ------------------------------------------------------------------
+
+## Carrier Operations (44)
+
+- [CODE-READY] **`backend/vetting_checks.py`** (393 LOC) -- smoke: `scripts/smoke_vetting_checks.py`
+  - Standalone carrier-vetting fraud-signal checks (Phase B.1 #4 + #5). Two TIER-2 fraud-exempt checks lifted out of `carrier_vetting.py` so they can be called independently of the full vet flow (e.g. lig
+- [LIVE] **`backend/auto_dispatch.py`** (404 LOC)
+  - Auto-Dispatch Rule Engine for Continental Haul Logistics. - Global master toggle (owner-flipped, off by default — safe default) - Per-carrier vetted_trusted flag (only these trigger auto-accept) - Per
+- [LIVE] **`backend/auto_dispatch_send.py`** (509 LOC)
+  - auto_dispatch_send.py -- DDD2 / NORTH_STAR_BUILD_PLAN PHASE B.1 fix #1. When `auto_dispatch.try_auto_accept()` books a carrier on a load, this module fires the rendered dispatch packet (rate-con + car
+- [LIVE] **`backend/bulk_carrier_hunter.py`** (263 LOC)
+  - Bulk-Freight Carrier Hunter — Iter 117 ======================================= Director's request: scan FMCSA Census for hopper / livestock / tanker carriers operating in the Missouri region, build a 
+- [LIVE] **`backend/carrier_contacts/__init__.py`** (34 LOC)
+  - carrier_contacts -- Per-carrier contact-info enrichment surface (iter 142.1+ EOD-12 stage). Goal ---- For each carrier in db.carriers, surface as much contact info (email + phone + physical address) a
+- [LIVE] **`backend/carrier_contacts/contact_router.py`** (301 LOC)
+  - carrier_contacts.contact_router -- FastAPI sub-router for the contact-enrichment surface (iter 142.1+ EOD-12 stage). Endpoints (all gated by require_broker): GET /api/carriers/{dot_number}/contact_enr
+- [LIVE] **`backend/carrier_contacts/contact_store.py`** (733 LOC)
+  - carrier_contacts.contact_store -- Persistence layer for the carrier contact-enrichment surface. Schema (db.carrier_contacts, _id == dot_number) ----------------------------------------------- { "_id":
+- [LIVE] **`backend/carrier_contacts/enricher.py`** (950 LOC)
+  - carrier_contacts.enricher -- Per-carrier contact-info enrichment orchestrator (iter 142.1+ EOD-12 stage). Pipeline -------- For each carrier in db.carriers identified by dot_number, locate the 9 conta
+- [LIVE] **`backend/carrier_contacts/enrichment_cron.py`** (404 LOC)
+  - carrier_contacts.enrichment_cron -- 24h cron loop for the carrier- contact enrichment surface (iter 142.1+ EOD-12 stage). Every CHECK_INTERVAL_SEC (default 24 hours) the loop picks N carriers whose en
+- [LIVE] **`backend/carrier_docs/__init__.py`** (70 LOC)
+  - carrier_docs -- Carrier compliance/contract document storage. Peer companion to backend/carrier_vetting_workflow.py (Phase 4 vetting state machine). Where the workflow tracks WHICH steps are done, thi
+- [LIVE] **`backend/carrier_hub.py`** (500 LOC)
+  - Continental Haul Logistics — Carrier Hub module. Implements the 5 platform upgrades identified in Strategy Room: 1. Carrier-type flag on onboarding (owner_operator \| company_fleet) 2. Master Carrier A
+- [LIVE] **`backend/carrier_matcher.py`** (384 LOC)
+  - Match & Notify worker + dynamic rate pricing (auto-erosion). Fires when a broker posts a new load: 1. Rank all active, non-unsubscribed carriers by a match score: - preferred_origin_states / destinati
+- [LIVE] **`backend/carrier_preferences.py`** (109 LOC)
+  - Carrier match preferences + per-carrier notification settings. Powers the Match & Notify worker: - preferred_origin_states / preferred_destination_states (rectangle filters) - preferred_equipment (dry
+- [LIVE] **`backend/carrier_redispatch/__init__.py`** (28 LOC)
+  - carrier_redispatch -- Re-dispatch orchestrator for ghosted loads. Wraps the split logic that previously lived in: * backend/assignment/failure_detector.py (ghost detection + state flip) * backend/auto
+- [LIVE] **`backend/carrier_redispatch/redispatch_router.py`** (141 LOC)
+  - carrier_redispatch.redispatch_router -- read-only operator surface for the re-dispatch orchestrator. Endpoints (all gated by require_broker) --------------------------------------- GET /api/_carrier_r
+- [LIVE] **`backend/carrier_redispatch/redispatch_workflow.py`** (620 LOC)
+  - carrier_redispatch.redispatch_workflow -- orchestrator for ghosted loads. EE2 stage 14 follow-up. The pre-existing implementation of carrier-failure re-dispatch was split across two modules: * backend
+- [LIVE] **`backend/carrier_tier_promoter/__init__.py`** (32 LOC)
+  - backend/carrier_tier_promoter/ -- Carrier-tier auto-promoter (RR1, 2026-05-08). Productionizes synthetic_load_walkthrough.py stage 22. Watches the db.carriers collection for documents whose successful
+- [LIVE] **`backend/carrier_tier_promoter/promoter_router.py`** (110 LOC)
+  - carrier_tier_promoter/promoter_router.py -- Operator-facing read-only endpoints for the carrier-tier auto-promoter (Iter 145.x Stream RR1). Surfaces -------- GET /api/_carrier_tier/recent_promotions -
+- [LIVE] **`backend/carrier_tier_promoter/tier_promoter.py`** (420 LOC)
+  - carrier_tier_promoter/tier_promoter.py -- Carrier auto tier-promotion service. (Iter 145.x Stream RR1, 2026-05-08) QQ3's 25-stage walkthrough flagged stage 22 (carrier-tier promotion) as a "FLAG: no p
+- [LIVE] **`backend/carrier_vetting.py`** (505 LOC)
+  - Carrier vetting — gatekeeper for load acceptance. Runs synchronously BEFORE booking a load (cold-offer accept, manual bid, or auto-dispatch). Checks: 1. FMCSA authority active + not revoked 2. FMCSA s
+- [LIVE] **`backend/carrier_vetting_completion.py`** (258 LOC)
+  - carrier_vetting_completion.py — Card 5 closure module. Per /app/memory/SOP_AUDIT.md (Card 5 — Carrier Vetting & Onboarding): Goal: the moment a carrier passes vetting (FMCSA authority active, safety r
+- [LIVE] **`backend/carrier_vetting_workflow.py`** (435 LOC)
+  - Carrier vetting WORKFLOW module (iter 142.1 nationwide-vetted-carrier-DB Phase 4). Distinct from `backend/carrier_vetting.py` which is the synchronous pre-load gatekeeper (authority/safety/blocklist c
+- [LIVE] **`backend/enrichment/__init__.py`** (38 LOC)
+  - backend.enrichment -- Carrier contact enrichment adapter framework (GGG9, FFF5-validated). Spec: chl-memory/research/fff5_carrier_contact_enrichment_sources_2026_05_09.md (sections 7 + 8). Architectur
+- [LIVE] **`backend/fmcsa_census.py`** (374 LOC)
+  - FMCSA Company Census File Ingester + Carrier Discovery. Data source: https://data.transportation.gov/Trucking-and-Motorcoaches/Company-Census-File/az4n-8mr2 (Socrata API — free, public domain, refresh
+- [LIVE] **`backend/fmcsa_census_ingest.py`** (432 LOC)
+  - FMCSA Motor Carrier Census bulk ingest (iter 142.1 nationwide-vetted-carrier-DB Phase 1). Pulls all active for-hire freight carriers from FMCSA's public Motor Carrier Census file (via Socrata SoQL end
+- [LIVE] **`backend/fmcsa_census_refresh_cron.py`** (311 LOC)
+  - fmcsa_census_refresh_cron.py — Background loop to weekly-refresh FMCSA Motor Carrier Census data into db.carriers. Iter 142.1 nationwide-vetted-carrier-DB Phase 1b. Every 7 days (after a brief boot-se
+- [LIVE] **`backend/hauler_types/__init__.py`** (22 LOC)
+  - backend.hauler_types -- Specialty-hauler category mapping + nationwide list endpoints. Iter 142.1 EOD-13 (2026-05-08): operator-mandated rebuild of the "Call Lists" tab on the Carriers Dashboard. Repl
+- [LIVE] **`backend/hauler_types/category_mapping.py`** (260 LOC)
+  - hauler_types/category_mapping.py -- 4 specialty hauler categories <-> SAFER tokens. Iter 142.1 EOD-13 (2026-05-08). Maps the operator's 4 outreach categories to the SAFER cargo-classification + UI equ
+- [LIVE] **`backend/hauler_types/hauler_lists_router.py`** (400 LOC)
+  - hauler_types/hauler_lists_router.py -- Nationwide carrier-list endpoints for the 4 specialty hauler categories. Iter 142.1 EOD-13 (2026-05-08). Powers the rebuilt "Call Lists" tab on the Carriers Dash
+- [LIVE] **`backend/hauler_types/list_metrics_cron.py`** (309 LOC)
+  - hauler_types/list_metrics_cron.py -- Per-category carrier-count pre-aggregator. Iter 142.1 EOD-13 (2026-05-08). Pre-computes the count of carriers per specialty hauler category and upserts the result 
+- [LIVE] **`backend/night_watchman.py`** (376 LOC)
+  - Night Watchman — Nightly FMCSA Compliance Re-Validation Cron Iteration 80 (Apr 23 2026) At 2:00 AM America/New_York every night, sweeps every carrier registered in db.carrier_hub, re-validates via FMC
+- [LIVE] **`backend/self_healing/context_bundler_cron.py`** (205 LOC)
+  - context_bundler_cron.py -- Iter 145.1 stage 1b cron loop wrapper. Drives `context_bundler.bundle_pending_anomalies` every 5 minutes after an INITIAL_DELAY_SEC settle. Mirrors the fmcsa_census_refresh_
+- [DEV-TOOL] **`backend/tests/test_auto_dispatch_send.py`** (324 LOC)
+  - test_auto_dispatch_send.py -- DDD2 / NORTH_STAR PHASE B.1 #1 smoke battery. Covers: - happy path: booking -> packet fires -> log row + dispatch_packet_sent_at - idempotency: 2nd invocation -> noop, no
+- [DEV-TOOL] **`backend/tests/test_auto_dispatch_send.py`** (324 LOC)
+  - test_auto_dispatch_send.py -- DDD2 / NORTH_STAR PHASE B.1 #1 smoke battery. Covers: - happy path: booking -> packet fires -> log row + dispatch_packet_sent_at - idempotency: 2nd invocation -> noop, no
+- [DEV-TOOL] **`backend/tests/test_carrier_contact_enricher.py`** (600 LOC)
+  - test_carrier_contact_enricher.py -- Unit tests for the carrier-contact enrichment surface (iter 142.1+ EOD-12 stage). Mandatory tests (per spec): - test_enrich_uses_fmcsa_qcmobile_when_available - tes
+- [DEV-TOOL] **`backend/tests/test_carrier_contact_enricher.py`** (600 LOC)
+  - test_carrier_contact_enricher.py -- Unit tests for the carrier-contact enrichment surface (iter 142.1+ EOD-12 stage). Mandatory tests (per spec): - test_enrich_uses_fmcsa_qcmobile_when_available - tes
+- [DEV-TOOL] **`backend/tests/test_carrier_tier_promoter.py`** (426 LOC)
+  - test_carrier_tier_promoter.py -- RR1 unit tests for the carrier-tier auto-promoter service. Tests: test_promote_only_when_threshold_met test_promote_writes_audit_trail test_promote_idempotent_skips_al
+- [DEV-TOOL] **`backend/tests/test_carrier_tier_promoter.py`** (426 LOC)
+  - test_carrier_tier_promoter.py -- RR1 unit tests for the carrier-tier auto-promoter service. Tests: test_promote_only_when_threshold_met test_promote_writes_audit_trail test_promote_idempotent_skips_al
+- [DEV-TOOL] **`backend/tests/test_carrier_vetting_hardening.py`** (396 LOC)
+  - test_carrier_vetting_hardening.py — DDD1 (PHASE B.1 #4 + #5). Coverage: - authority < 90d → authority_age_under_90d warn flag + manual_review_queue insert - authority >= 90d → no warn flag, no manual 
+- [DEV-TOOL] **`backend/tests/test_carrier_vetting_hardening.py`** (396 LOC)
+  - test_carrier_vetting_hardening.py — DDD1 (PHASE B.1 #4 + #5). Coverage: - authority < 90d → authority_age_under_90d warn flag + manual_review_queue insert - authority >= 90d → no warn flag, no manual 
+- [DEV-TOOL] **`backend/tests/test_hauler_types.py`** (674 LOC)
+  - test_hauler_types.py -- Iter 142.1 EOD-13 (2026-05-08) regression tests for the 4-specialty-hauler category mapping + nationwide list endpoints. Mandatory cases: 1. test_category_mapping_hopper_grain_
+- [DEV-TOOL] **`backend/tests/test_hauler_types.py`** (674 LOC)
+  - test_hauler_types.py -- Iter 142.1 EOD-13 (2026-05-08) regression tests for the 4-specialty-hauler category mapping + nationwide list endpoints. Mandatory cases: 1. test_category_mapping_hopper_grain_
+- [DEV-TOOL] **`backend/tests/test_redispatch_workflow.py`** (464 LOC)
+  - test_redispatch_workflow.py -- EE2 follow-up orchestrator tests. Covers carrier_redispatch.redispatch_workflow: * test_redispatch_finds_unassigned_after_ghost_loads * test_redispatch_appends_prior_car
+- [DEV-TOOL] **`backend/tests/test_redispatch_workflow.py`** (464 LOC)
+  - test_redispatch_workflow.py -- EE2 follow-up orchestrator tests. Covers carrier_redispatch.redispatch_workflow: * test_redispatch_finds_unassigned_after_ghost_loads * test_redispatch_appends_prior_car
+
+## Compliance (82)
+
+- [ORPHAN] **`backend/self_heal_audit.py`** (207 LOC)
+  - self_heal_audit.py — Iteration 80.1. Parses /app/logs/telemetry.json (one JSON object per line — append-only from the Sentinel Sentry endpoint) and produces a clustered Fix-Suggestion report at /app/l
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [LIVE] **`backend/anomaly_sniffer.py`** (328 LOC)
+  - Anomaly Sniffer — Iteration 51 Watchdog. Runs every 5 minutes, scans the last 10 minutes of `db.api_audit_log` for: 1. 5xx error spikes (>5% error rate OR >20 5xx in window for any path) 2. Brute-forc
+- [LIVE] **`backend/api_interceptor.py`** (159 LOC)
+  - Global Interceptor Middleware — Iteration 50 Enterprise Refactor. Logs EVERY API call to db.api_audit_log with: • user_id (when authenticated; anonymous for public routes) • user_email • role • action
+- [LIVE] **`backend/auth/client_ip.py`** (154 LOC)
+  - Trust-gated client IP resolution (CC3 audit follow-up; iter 145.x DD1). The login + auth endpoints used to read the client IP via: ip = request.client.host if request.client else "unknown" That return
+- [LIVE] **`backend/broker_authority.py`** (366 LOC)
+  - Broker Authority — Iter 119.5 ============================== Classifies every load by the regulatory authority required to legally broker it, and gates the load board / aggregator so the dispatcher on
+- [LIVE] **`backend/broker_carrier_agreement.py`** (473 LOC)
+  - broker_carrier_agreement.py — Standalone Broker-Carrier Master Agreement (BCA). Per /app/memory/SOP_AUDIT.md Gap 1 (HIGHEST priority). Per /app/memory/DOC_STANDARDS_AUDIT.md Section 2. Purpose: CHL si
+- [LIVE] **`backend/carrier_docs/doc_extractor.py`** (908 LOC)
+  - carrier_docs.doc_extractor -- OCR + structured-field extraction for carrier compliance documents (iter 145.1 EOD-10 stage). Pipeline -------- db.carrier_documents row exists (uploaded by operator OR a
+- [LIVE] **`backend/carrier_docs/document_store.py`** (407 LOC)
+  - carrier_docs.document_store -- Storage layer for carrier compliance documents. Schema (db.carrier_documents): id : str (uuid hex; also the public document_id) carrier_dot_number : int doc_type : str (
+- [LIVE] **`backend/carrier_docs/expiry_tracker.py`** (625 LOC)
+  - carrier_docs.expiry_tracker -- 4-tier expiration alarm + carrier notification engine for compliance docs (iter 145.1 EOD-10 stage). Notification tier ladder (per (carrier_dot, doc_type, document_id)) 
+- [LIVE] **`backend/carrier_docs/extraction_store.py`** (528 LOC)
+  - carrier_docs.extraction_store -- Persistence layer for OCR-extracted structured fields from compliance documents (iter 145.1 EOD-10 stage). Schema (db.carrier_doc_extractions): _id : str (== document_
+- [LIVE] **`backend/carrier_docs/router.py`** (211 LOC)
+  - carrier_docs.router -- FastAPI sub-router for carrier compliance documents. Mirror of backend/milestones.py shape: pure factory `build_router(db, require_broker)` returning an APIRouter that the main 
+- [LIVE] **`backend/compliance.py`** (797 LOC)
+  - Compliance Armor — Iteration 79.1. Responsibilities: 1. Document Vault: persistent disk storage at `/app/storage/compliance/{carrier_id}/{doc_type}_{timestamp}.{ext}` Every upload is timestamped; cont
+- [LIVE] **`backend/enrichment/audit.py`** (195 LOC)
+  - backend.enrichment.audit -- write-only audit trail for enrichment fetches. Every adapter call (success or error) writes one row to db.enrichment_audit with: carrier_id -- str source -- confidence-labe
+- [LIVE] **`backend/enrichment/orchestrator.py`** (158 LOC)
+  - backend.enrichment.orchestrator -- run adapters + write audit rows. Two entry points: refresh_carrier(db, *, carrier_id, mc_or_dot, sources=None) Fan out adapter.enrich() calls in parallel, write audi
+- [LIVE] **`backend/integrity/audit_trail.py`** (441 LOC)
+  - integrity/audit_trail.py -- Bounded-retention before/after audit log for write paths (EOD-11 Component B mitigation #4). Public surface -------------- await record_audit(db, *, collection, doc_id, act
+- [LIVE] **`backend/load_schema_v2.py`** (735 LOC)
+  - Load Schema v2 — Industry-Standard Compliance Blocks ===================================================== Adds four conditional compliance blocks to every load: A. ComplianceBlock — 49 CFR §371.3 bro
+- [LIVE] **`backend/maintenance/__init__.py`** (7 LOC)
+  - backend.maintenance -- background data-retention + housekeeping helpers. Modules in this package implement bounded-retention prunes, index audits, and other periodic data-shape maintenance routines in
+- [LIVE] **`backend/maintenance/api_audit_log_prune.py`** (302 LOC)
+  - api_audit_log_prune.py -- 365-day retention prune for db.api_audit_log. Stream ZZ1 (XX3 follow-up #1, 2026-05-08). Background ---------- XX2 (commit 3bc2fd4) added a 90-day prune for db.sla_metrics. X
+- [LIVE] **`backend/manual_coverage.py`** (353 LOC)
+  - Manual Coverage Service — Iter 139.8 ===================================== Parses /app/memory/OPERATING_MANUAL.md and the codebase audit doc into structured JSON so the /admin/manual-coverage dashboar
+- [LIVE] **`backend/manual_override.py`** (92 LOC)
+  - Pilot Override — Iteration 68. Owner-only manual control over automated flows. Every action writes an audit row with a required reason so the paper trail never breaks. Endpoints: POST /api/override/lo
+- [LIVE] **`backend/market_sentinel.py`** (278 LOC)
+  - Market Sentinel — Iteration 63 ("The Brain"). Two live guardians: 1. Fall-off-pattern auditor — every 15 minutes, scans db.load_returns for lanes (origin_state → destination_state) with ≥ 3 returns in
+- [LIVE] **`backend/pii_scrubber.py`** (91 LOC)
+  - PII Scrubber — Iteration 58. Regex-based auto-redaction of Personally Identifiable Information before it hits any durable log (api_audit_log, playback_events, anomaly_sniffer, etc.). Catches: • SSN — 
+- [LIVE] **`backend/pre_authority.py`** (277 LOC)
+  - Pre-Authority Mode · Iteration 107. Gate and status API for the window between FMCSA MC number assignment (April 21, 2026) and the actual grant of broker operating authority (~May 13-27, 2026, after t
+- [LIVE] **`backend/prevet_audit.py`** (315 LOC)
+  - prevet_audit.py — Pre-pickup re-verification cron + post-delivery audit gate. (Iter 135.5, 2026-05-03) Two complementary safeguards on the load lifecycle: 1. PRE-PICKUP RE-VERIFY (proactive) ---------
+- [LIVE] **`backend/privacy_consent_logger.py`** (115 LOC)
+  - backend.privacy_consent_logger -- audit trail for driver consent events. JJJ1' (2026-05-09) -- CCPA hardening prerequisite. Every consent grant or revocation by a driver in the QR Onboard PWA produces
+- [LIVE] **`backend/records_request_router.py`** (639 LOC)
+  - records_request_router.py -- 49 CFR Part 371 § 371.3(c) party right-to-review self-service endpoint + owner queue + response audit trail. Stream HHH2 (HHH1 follow-up #1, 2026-05-09). Background ------
+- [LIVE] **`backend/renewals/boc3_tracker.py`** (411 LOC)
+  - renewals/boc3_tracker.py -- BOC-3 process agent designation tracking. Stream GGG6 (2026-05-09), addressing EEE1 finding D2: 49 CFR Part 366 requires every broker to designate a process agent (file For
+- [LIVE] **`backend/synthetic_audit.py`** (208 LOC)
+  - Synthetic Audit / Drift Detector — Iter 139.36 close-out hardening. Read-only audit that answers two questions: 1. Which Mongo collections currently contain `synthetic:true` rows? (And how many — so J
+- [LIVE] **`backend/weekend_reset_cron.py`** (189 LOC)
+  - Project Æther — Weekend Reset Cron (Telemetry #3 real-data feed) Iteration 82 (Apr 23 2026) Eliminates the graceful-degradation fallback for the `weekend_compliance` sub-signal of the NetworkEntropySc
+- [LIVE] **`frontend/src/views/CompliancePages.jsx`** (595 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/ComplianceTab.jsx`** (291 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [DEV-TOOL] **`backend/tests/chaos_iron_cage.py`** (249 LOC)
+  - Operation Iron Cage — Chaos Audit on the MarginCalculator. 100-cycle adversarial simulation. Each cycle injects extreme variables: * Fuel spikes to $7.00/gal (vs normal $4.03) * Deadhead > 500 mi (vs 
+- [DEV-TOOL] **`backend/tests/chaos_iron_cage.py`** (249 LOC)
+  - Operation Iron Cage — Chaos Audit on the MarginCalculator. 100-cycle adversarial simulation. Each cycle injects extreme variables: * Fuel spikes to $7.00/gal (vs normal $4.03) * Deadhead > 500 mi (vs 
+- [DEV-TOOL] **`backend/tests/test_371_7_audit.py`** (244 LOC)
+  - test_371_7_audit.py -- coverage for scripts/check_371_7_misrepresentation.py. Closes EEE1 finding D1 (49 CFR § 371.7 misrepresentation rule audit). Tests ----- 1. Pure-fixture audit: scan a tmpdir of 
+- [DEV-TOOL] **`backend/tests/test_371_7_audit.py`** (244 LOC)
+  - test_371_7_audit.py -- coverage for scripts/check_371_7_misrepresentation.py. Closes EEE1 finding D1 (49 CFR § 371.7 misrepresentation rule audit). Tests ----- 1. Pure-fixture audit: scan a tmpdir of 
+- [DEV-TOOL] **`backend/tests/test_api_audit_log_prune.py`** (529 LOC)
+  - test_api_audit_log_prune.py -- Unit tests for backend.maintenance.api_audit_log_prune (Stream ZZ1 / XX3 follow-up #1). Coverage: - test_happy_path 50 old + 50 new -> 50 deleted. Mix of `timestamp` and
+- [DEV-TOOL] **`backend/tests/test_api_audit_log_prune.py`** (529 LOC)
+  - test_api_audit_log_prune.py -- Unit tests for backend.maintenance.api_audit_log_prune (Stream ZZ1 / XX3 follow-up #1). Coverage: - test_happy_path 50 old + 50 new -> 50 deleted. Mix of `timestamp` and
+- [DEV-TOOL] **`backend/tests/test_boc3_tracker.py`** (501 LOC)
+  - test_boc3_tracker.py -- Stream GGG6 unit tests for the BOC-3 process agent designation tracker (49 CFR Part 366). Tests: test_list_active_designations_returns_only_non_expired test_list_active_designa
+- [DEV-TOOL] **`backend/tests/test_boc3_tracker.py`** (501 LOC)
+  - test_boc3_tracker.py -- Stream GGG6 unit tests for the BOC-3 process agent designation tracker (49 CFR Part 366). Tests: test_list_active_designations_returns_only_non_expired test_list_active_designa
+- [DEV-TOOL] **`backend/tests/test_carrier_docs.py`** (271 LOC)
+  - test_carrier_docs.py -- Unit tests for backend/carrier_docs. Covers: - test_list_returns_pending_for_uncreated_doc_types - test_upload_writes_file_and_audit_row - test_upload_idempotent_on_same_sha256
+- [DEV-TOOL] **`backend/tests/test_carrier_docs.py`** (271 LOC)
+  - test_carrier_docs.py -- Unit tests for backend/carrier_docs. Covers: - test_list_returns_pending_for_uncreated_doc_types - test_upload_writes_file_and_audit_row - test_upload_idempotent_on_same_sha256
+- [DEV-TOOL] **`backend/tests/test_credit_override_revoker.py`** (412 LOC)
+  - test_credit_override_revoker.py -- RR1 unit tests for the shipper credit-override auto-revoker service. Tests: test_revoke_only_on_payment_failed_with_override test_revoke_writes_audit_trail test_revo
+- [DEV-TOOL] **`backend/tests/test_credit_override_revoker.py`** (412 LOC)
+  - test_credit_override_revoker.py -- RR1 unit tests for the shipper credit-override auto-revoker service. Tests: test_revoke_only_on_payment_failed_with_override test_revoke_writes_audit_trail test_revo
+- [DEV-TOOL] **`backend/tests/test_cve_scan_daily.py`** (322 LOC)
+  - test_cve_scan_daily.py -- Unit tests for the daily CVE scanner. Verifies: 1. pip-audit JSON parsing extracts HIGH severity findings, drops LOW. 2. npm audit JSON parsing extracts CRITICAL findings, dr
+- [DEV-TOOL] **`backend/tests/test_cve_scan_daily.py`** (322 LOC)
+  - test_cve_scan_daily.py -- Unit tests for the daily CVE scanner. Verifies: 1. pip-audit JSON parsing extracts HIGH severity findings, drops LOW. 2. npm audit JSON parsing extracts CRITICAL findings, dr
+- [DEV-TOOL] **`backend/tests/test_dispatch_packet.py`** (219 LOC)
+  - test_dispatch_packet.py -- Iter 142.1 stage 1f smoke battery. Covers the four assertions the spec calls out (render path, audit row, idempotency, auto-bid handoff). reportlab/pypdf are monkeypatched o
+- [DEV-TOOL] **`backend/tests/test_dispatch_packet.py`** (219 LOC)
+  - test_dispatch_packet.py -- Iter 142.1 stage 1f smoke battery. Covers the four assertions the spec calls out (render path, audit row, idempotency, auto-bid handoff). reportlab/pypdf are monkeypatched o
+- [DEV-TOOL] **`backend/tests/test_doc_extractor.py`** (761 LOC)
+  - test_doc_extractor.py -- Unit tests for the carrier-doc autonomous compliance loop (iter 145.1 EOD-10): - doc_extractor.extract_fields_from_document - extraction_store.record_extraction / list_expirin
+- [DEV-TOOL] **`backend/tests/test_doc_extractor.py`** (761 LOC)
+  - test_doc_extractor.py -- Unit tests for the carrier-doc autonomous compliance loop (iter 145.1 EOD-10): - doc_extractor.extract_fields_from_document - extraction_store.record_extraction / list_expirin
+- [DEV-TOOL] **`backend/tests/test_enrichment_adapters.py`** (351 LOC)
+  - test_enrichment_adapters -- unit tests for the adapter scaffolds in backend/enrichment/adapters/ (GGG9). Covers: * OperatorAdapter.set_field writes operator-entered audit row with high confidence and 
+- [DEV-TOOL] **`backend/tests/test_enrichment_adapters.py`** (351 LOC)
+  - test_enrichment_adapters -- unit tests for the adapter scaffolds in backend/enrichment/adapters/ (GGG9). Covers: * OperatorAdapter.set_field writes operator-entered audit row with high confidence and 
+- [DEV-TOOL] **`backend/tests/test_enrichment_audit.py`** (319 LOC)
+  - test_enrichment_audit -- audit + privacy-request tests for GGG9. Covers: * write_audit_row inserts a row per adapter call (success + error paths). * request_sha256 / response_sha256 are stable 16-hex-
+- [DEV-TOOL] **`backend/tests/test_enrichment_audit.py`** (319 LOC)
+  - test_enrichment_audit -- audit + privacy-request tests for GGG9. Covers: * write_audit_row inserts a row per adapter call (success + error paths). * request_sha256 / response_sha256 are stable 16-hex-
+- [DEV-TOOL] **`backend/tests/test_integrity.py`** (789 LOC)
+  - test_integrity.py -- Unit tests for the EOD-11 Component B platform-integrity mitigations. Covers all 5 modules in backend/integrity/: - circuit_breakers - budget_caps - operational_state - audit_trai
+- [DEV-TOOL] **`backend/tests/test_integrity.py`** (789 LOC)
+  - test_integrity.py -- Unit tests for the EOD-11 Component B platform-integrity mitigations. Covers all 5 modules in backend/integrity/: - circuit_breakers - budget_caps - operational_state - audit_trai
+- [DEV-TOOL] **`backend/tests/test_iteration50_enterprise_refactor.py`** (463 LOC)
+  - Iteration 50 Enterprise Refactor Tests ====================================== Tests for: 1. Global Interceptor middleware (api_audit_log) 2. System Health endpoints (/api/system/health, /api/system/au
+- [DEV-TOOL] **`backend/tests/test_iteration50_enterprise_refactor.py`** (463 LOC)
+  - Iteration 50 Enterprise Refactor Tests ====================================== Tests for: 1. Global Interceptor middleware (api_audit_log) 2. System Health endpoints (/api/system/health, /api/system/au
+- [DEV-TOOL] **`backend/tests/test_iteration_119_5_broker_authority.py`** (697 LOC)
+  - Iteration 119.5 — Broker Authority Gate Tests ============================================= Tests the broker authority classification and load filtering system. Features tested: - GET /api/broker-auth
+- [DEV-TOOL] **`backend/tests/test_iteration_119_5_broker_authority.py`** (697 LOC)
+  - Iteration 119.5 — Broker Authority Gate Tests ============================================= Tests the broker authority classification and load filtering system. Features tested: - GET /api/broker-auth
+- [DEV-TOOL] **`backend/tests/test_iteration_120_load_schema_v2.py`** (574 LOC)
+  - Iteration 120 — Load Schema v2 Backend Tests ============================================= Tests for the new Load Schema v2 module (load_schema_v2.py) which adds industry-standard compliance blocks to
+- [DEV-TOOL] **`backend/tests/test_iteration_120_load_schema_v2.py`** (574 LOC)
+  - Iteration 120 — Load Schema v2 Backend Tests ============================================= Tests for the new Load Schema v2 module (load_schema_v2.py) which adds industry-standard compliance blocks to
+- [DEV-TOOL] **`backend/tests/test_iteration_122_compliance_defaults.py`** (607 LOC)
+  - Iteration 122 — Apply Compliance Defaults from Last Load Tests ============================================================== Tests for the new "Apply Compliance Defaults" feature in Load Schema v2: G
+- [DEV-TOOL] **`backend/tests/test_iteration_122_compliance_defaults.py`** (607 LOC)
+  - Iteration 122 — Apply Compliance Defaults from Last Load Tests ============================================================== Tests for the new "Apply Compliance Defaults" feature in Load Schema v2: G
+- [DEV-TOOL] **`backend/tests/test_iteration_123_bulk_apply_defaults.py`** (566 LOC)
+  - Iteration 123 — Bulk Apply Compliance Defaults Tests ===================================================== Tests for the new "Bulk Apply Compliance Defaults" feature in Load Schema v2: GET /api/loads/
+- [DEV-TOOL] **`backend/tests/test_iteration_123_bulk_apply_defaults.py`** (566 LOC)
+  - Iteration 123 — Bulk Apply Compliance Defaults Tests ===================================================== Tests for the new "Bulk Apply Compliance Defaults" feature in Load Schema v2: GET /api/loads/
+- [DEV-TOOL] **`backend/tests/test_iteration_131_tcr_status.py`** (273 LOC)
+  - Iteration 131 — TCR Status Widget Backend Tests Tests for: - GET /api/tcr/status (broker-only, 1hr cache) - POST /api/tcr/refresh (owner-only, force fresh) - GET /api/notifications/10dlc/status (regre
+- [DEV-TOOL] **`backend/tests/test_iteration_131_tcr_status.py`** (273 LOC)
+  - Iteration 131 — TCR Status Widget Backend Tests Tests for: - GET /api/tcr/status (broker-only, 1hr cache) - POST /api/tcr/refresh (owner-only, force fresh) - GET /api/notifications/10dlc/status (regre
+- [DEV-TOOL] **`backend/tests/test_iteration_135_4_6_sop_prevet.py`** (514 LOC)
+  - test_iteration_135_4_6_sop_prevet.py — Iter 135.4-135.6 Backend Tests Tests for: 1. SOP Flow stage advance endpoint (POST /api/sop/load/{id}/advance) 2. Pre-pickup re-verify cron + post-delivery audit
+- [DEV-TOOL] **`backend/tests/test_iteration_135_4_6_sop_prevet.py`** (514 LOC)
+  - test_iteration_135_4_6_sop_prevet.py — Iter 135.4-135.6 Backend Tests Tests for: 1. SOP Flow stage advance endpoint (POST /api/sop/load/{id}/advance) 2. Pre-pickup re-verify cron + post-delivery audit
+- [DEV-TOOL] **`backend/tests/test_iteration_79_compliance_armor.py`** (720 LOC)
+  - Iteration 79.1 — Compliance Armor Tests Tests for: 1. POST /api/compliance/drivers/{carrier_id}/documents — Document upload to vault 2. GET /api/compliance/drivers/{carrier_id}/status — Driver complia
+- [DEV-TOOL] **`backend/tests/test_iteration_79_compliance_armor.py`** (720 LOC)
+  - Iteration 79.1 — Compliance Armor Tests Tests for: 1. POST /api/compliance/drivers/{carrier_id}/documents — Document upload to vault 2. GET /api/compliance/drivers/{carrier_id}/status — Driver complia
+- [DEV-TOOL] **`backend/tests/test_iteration_80_telemetry_compliance.py`** (471 LOC)
+  - Iteration 80.1/80.3 — Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14 Tests: 1. POST /api/telemetry/error — un-authed, persists to db + file, returns critical flag 2. GET /api/telemetry/criti
+- [DEV-TOOL] **`backend/tests/test_iteration_80_telemetry_compliance.py`** (471 LOC)
+  - Iteration 80.1/80.3 — Sentinel Sentry Telemetry + Doc Review + Red-Carpet T-14 Tests: 1. POST /api/telemetry/error — un-authed, persists to db + file, returns critical flag 2. GET /api/telemetry/criti
+- [DEV-TOOL] **`backend/tests/test_payments_compliance.py`** (591 LOC)
+  - Backend API Tests for Payment and Compliance Features Tests: Payment terms, Payment CRUD, Stripe checkout, Compliance checklist & resources
+- [DEV-TOOL] **`backend/tests/test_payments_compliance.py`** (591 LOC)
+  - Backend API Tests for Payment and Compliance Features Tests: Payment terms, Payment CRUD, Stripe checkout, Compliance checklist & resources
+- [DEV-TOOL] **`backend/tests/test_renewals_scanner_boc3.py`** (198 LOC)
+  - test_renewals_scanner_boc3.py -- Stream GGG6 regression tests confirming the renewals scanner picks up `boc3_designation` as a renewal item type AND that existing renewal categories (BMC-84, MCS-150) 
+- [DEV-TOOL] **`backend/tests/test_renewals_scanner_boc3.py`** (198 LOC)
+  - test_renewals_scanner_boc3.py -- Stream GGG6 regression tests confirming the renewals scanner picks up `boc3_designation` as a renewal item type AND that existing renewal categories (BMC-84, MCS-150) 
+- [DEV-TOOL] **`backend/tests/test_stripe_webhook_hardening.py`** (601 LOC)
+  - test_stripe_webhook_hardening.py -- Iter EOD-16 stream VV2. Hardening on top of the EOD-15 II1 fail-closed signature verification: 4. Body size cap (1 MiB) -- HTTP 413 on oversize, audit-logged. 5. Pe
+- [DEV-TOOL] **`backend/tests/test_stripe_webhook_hardening.py`** (601 LOC)
+  - test_stripe_webhook_hardening.py -- Iter EOD-16 stream VV2. Hardening on top of the EOD-15 II1 fail-closed signature verification: 4. Body size cap (1 MiB) -- HTTP 413 on oversize, audit-logged. 5. Pe
+- [DEV-TOOL] **`scripts/audit_load_lifecycle.py`** (165 LOC)
+  - Full audit: every storage path touched during a load's lifecycle. Used as a per-load post-walkthrough verification.
+- [DEV-TOOL] **`scripts/check_371_7_misrepresentation.py`** (816 LOC)
+  - check_371_7_misrepresentation.py -- 49 CFR § 371.7 misrepresentation auditor. Closes EEE1 finding D1 (commit ba83990; chl-memory/research/ eee1_regulatory_authority_validation_2026_05_09.md). Regulato
+- [DEV-TOOL] **`scripts/seed_boc3_starter.py`** (405 LOC)
+  - seed_boc3_starter.py -- One-shot helper to populate db.boc3_designations with a blanket BOC-3 designation and stamp broker_settings.boc3_filed. Stream GGG6 (2026-05-09) follow-up to boc3_tracker.py ad
+
+## Financial (53)
+
+- [LIVE] **`backend/_stripe_webhook_rate_limiter.py`** (136 LOC)
+  - In-memory per-IP token-bucket rate limiter for /api/webhook/stripe. VV2 (autonomous-continue): added 2026-05-08 alongside the Stripe webhook hardening pass. Stripe's own delivery rate is bounded; anyt
+- [LIVE] **`backend/cron_settlement_24h.py`** (475 LOC)
+  - cron_settlement_24h.py -- NORTH_STAR_BUILD_PLAN PHASE B.1 #2 (loads-table variant). Closes the carrier-payment trigger loop for the LOADS-TABLE flow: loads that have been flipped to status='funded' (o
+- [LIVE] **`backend/factor_api_integration.py`** (669 LOC)
+  - Factor API Integration — Iter 118 ================================== Wires actual factoring-company APIs (Apex, Triumph, RTS, OTR, etc.) into the broker workflow so a load can be auto-submitted to its
+- [LIVE] **`backend/factor_autopair.py`** (670 LOC)
+  - Iter 113.2 — Factor Matrix Auto-Pair. When a carrier signs up (or is viewed in the dispatcher console), match their business state to a US census region and surface the top-N factoring providers from 
+- [LIVE] **`backend/factor_credit_lookup.py`** (193 LOC)
+  - factor_credit_lookup.py — Run a poster's MC number through the broker's configured factor's Credit Lookup tool and cache the result. Most broker-factors expose a Credit Lookup tool (Apex Blynk, RTS PR
+- [LIVE] **`backend/factor_matrix.py`** (1493 LOC)
+  - Project Æther — Factoring Provider Registry (Iteration 102, Apr 23 2026) Schema for the "Factor Matrix" — the canonical list of 3rd-party factoring firms CHL may route receivables to when the load is 
+- [LIVE] **`backend/factor_schedule_of_accounts.py`** (904 LOC)
+  - factor_schedule_of_accounts.py -- Daily Schedule-of-Accounts batch submission to factoring providers (DDD5 / NORTH_STAR_BUILD_PLAN PHASE B.1 #7). Why this module exists ---------------------- Factor p
+- [LIVE] **`backend/factors/otr_client.py`** (330 LOC)
+  - factors/otr_client.py -- OTR Capital REST submission client. Iter 144.x Phase 6 stage 1a. Mirrors the Apex/Triumph httpx adapter shape from factor_api_integration.py. OTR exposes a JSON REST endpoint 
+- [LIVE] **`backend/factors/rts_client.py`** (277 LOC)
+  - factors/rts_client.py -- RTS Capital (RTS Financial) SFTP submission client. Iter 144.x Phase 6 stage 1a. Mirrors the Apex/Triumph submission shape from factor_matrix.py / factor_api_integration.py. R
+- [LIVE] **`backend/liquidity_provider.py`** (582 LOC)
+  - Project Æther — Factoring Entity Vault (Iteration 92, Apr 23 2026) The **Factoring Entity Vault** is the canonical registry of every party that can fund a CHL receivable: - 3rd-party factors (Apex Cap
+- [LIVE] **`backend/mercury_client.py`** (227 LOC)
+  - Mercury Bank Developer API integration -------------------------------------- Read-only pull of account balances + recent transactions for Continental Haul Logistics. Auto-fails-soft to 'placeholder' 
+- [LIVE] **`backend/mercury_payouts.py`** (281 LOC)
+  - Mercury Auto-Payout Engine (Iteration 49) ========================================= Fires when a load flips to `status='delivered'` AND the carrier has uploaded a BOL (proof-of-delivery). Schedules an
+- [LIVE] **`backend/payment_rails.py`** (452 LOC)
+  - Payment Rails — Iteration 77.1. Three responsibilities: 1. Settlement queue — GET /api/broker/settlements/pending 2. Integrity-gated funding — POST /api/broker/settlements/{payment_id}/fund Preconditi
+- [LIVE] **`backend/payment_switchboard.py`** (380 LOC)
+  - Payment Switchboard — Iteration 53 (Payment Orchestration Layer). Routes carrier payouts to the rail the carrier prefers: • Mercury ACH (real — via mercury_payouts / Stripe Connect) • TriumphPay Quick
+- [LIVE] **`backend/profit_first_cron.py`** (243 LOC)
+  - Profit-First Nightly Reconciliation Cron. Runs once per day (configurable hour UTC). Pulls the last 24h of incoming deposits from Mercury Checking accounts and records pending Profit-First sweeps for 
+- [LIVE] **`backend/profit_split.py`** (512 LOC)
+  - Iter 113.10 — Profit Split Auto-Router for Mercury accounts. When a factor payment lands in the operating account, this module reads the configured split rules and queues internal Mercury transfers to
+- [LIVE] **`backend/shipper_credit_headroom.py`** (359 LOC)
+  - shipper_credit_headroom.py — per-shipper factor credit limit + outstanding exposure tracking. Per /app/memory/PRD.md P1 (Iter 134.9, 2026-04-29). Why: HaulPay (and most factors) underwrite the SHIPPER
+- [LIVE] **`backend/stripe_connect.py`** (554 LOC)
+  - Stripe Connect for Continental Haul Logistics --------------------------------------------- Express account onboarding for carriers + next-day ACH payouts from the platform's Mercury-linked Stripe bal
+- [LIVE] **`backend/stripe_dedup_first_seen_migration.py`** (167 LOC)
+  - stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up. ZZ2 (commit fd86989) provisioned a 7-day TTL index on db.stripe_event_dedup.first_seen_at, but flagged a caveat: The webhook handle
+- [LIVE] **`backend/stripe_dedup_ttl_provisioner.py`** (192 LOC)
+  - stripe_dedup_ttl_provisioner.py -- ZZ2 / closes YY3 follow-up #1. YY3 (commit a07e32d) shipped /healthz/stripe which checks (among other things) that db.stripe_event_dedup has a TTL index. The follow-
+- [LIVE] **`backend/stripe_health_router.py`** (338 LOC)
+  - stripe_health_router.py -- /healthz/stripe readiness probe (YY3, VV2 #1). VV2 (commit ce5cb40) hardened the Stripe webhook with signature verification, replay-dedup, body-size cap, per-IP rate limit, 
+- [LIVE] **`frontend/src/views/SettlementsView.jsx`** (276 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/StripeConnectCard.jsx`** (368 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [DEV-TOOL] **`backend/tests/test_auto_settlement_trigger.py`** (584 LOC)
+  - test_auto_settlement_trigger.py -- DDD6 / PHASE B.1 #2 tests. Covers backend/auto_settlement_trigger.py: * test_happy_path_three_funded_submissions_trigger * test_settlement_held_due_to_claim_skipped 
+- [DEV-TOOL] **`backend/tests/test_auto_settlement_trigger.py`** (584 LOC)
+  - test_auto_settlement_trigger.py -- DDD6 / PHASE B.1 #2 tests. Covers backend/auto_settlement_trigger.py: * test_happy_path_three_funded_submissions_trigger * test_settlement_held_due_to_claim_skipped 
+- [DEV-TOOL] **`backend/tests/test_iteration15_features.py`** (520 LOC)
+  - Iteration 15 Tests — Team Management, P&L Email, Stripe Connect, Business Settings Extensions Features tested: 1. GET /api/team - list broker team members 2. POST /api/team/invite - invite new broker/
+- [DEV-TOOL] **`backend/tests/test_iteration15_features.py`** (520 LOC)
+  - Iteration 15 Tests — Team Management, P&L Email, Stripe Connect, Business Settings Extensions Features tested: 1. GET /api/team - list broker team members 2. POST /api/team/invite - invite new broker/
+- [DEV-TOOL] **`backend/tests/test_iteration25_mercury_banking.py`** (509 LOC)
+  - Iteration 25: Mercury Banking Integration Tests Tests for business-settings bank fields, masking, and Stripe payouts UI. Features tested: - GET /api/business-settings returns masked bank data (bank_li
+- [DEV-TOOL] **`backend/tests/test_iteration25_mercury_banking.py`** (509 LOC)
+  - Iteration 25: Mercury Banking Integration Tests Tests for business-settings bank fields, masking, and Stripe payouts UI. Features tested: - GET /api/business-settings returns masked bank data (bank_li
+- [DEV-TOOL] **`backend/tests/test_iteration30_stripe_connect_mercury.py`** (423 LOC)
+  - Iteration 30 - Stripe Connect + Mercury Developer API Integration Tests ------------------------------------------------------------------------ Tests for: 1. Mercury API endpoints (placeholder mode w
+- [DEV-TOOL] **`backend/tests/test_iteration30_stripe_connect_mercury.py`** (423 LOC)
+  - Iteration 30 - Stripe Connect + Mercury Developer API Integration Tests ------------------------------------------------------------------------ Tests for: 1. Mercury API endpoints (placeholder mode w
+- [DEV-TOOL] **`backend/tests/test_iteration_102_factor_matrix.py`** (494 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`backend/tests/test_iteration_102_factor_matrix.py`** (494 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`backend/tests/test_iteration_118_factor_api_conversion.py`** (861 LOC)
+  - Iteration 118 — Factor API Wiring + Conversion Dashboard Tests ================================================================ Tests for: P0 — GET /api/factor-api/factors (broker auth) → returns fact
+- [DEV-TOOL] **`backend/tests/test_iteration_118_factor_api_conversion.py`** (861 LOC)
+  - Iteration 118 — Factor API Wiring + Conversion Dashboard Tests ================================================================ Tests for: P0 — GET /api/factor-api/factors (broker auth) → returns fact
+- [DEV-TOOL] **`backend/tests/test_iteration_92_liquidity_vault.py`** (428 LOC)
+  - Iteration 92 — Factoring Entity Vault Backend Tests Tests for: - LiquidityProvider CRUD (seed, list, create, update) - Funding Status state machine (draft→sent_to_factor→factor_funded_97→carrier_paid→
+- [DEV-TOOL] **`backend/tests/test_iteration_92_liquidity_vault.py`** (428 LOC)
+  - Iteration 92 — Factoring Entity Vault Backend Tests Tests for: - LiquidityProvider CRUD (seed, list, create, update) - Funding Status state machine (draft→sent_to_factor→factor_funded_97→carrier_paid→
+- [DEV-TOOL] **`backend/tests/test_payment_switchboard_noa_routing.py`** (271 LOC)
+  - DDD4 -- payment_switchboard NOA-routing integration tests. Covers the hook in `payment_switchboard.route_delivered_load` that consults `noa_detector.resolve_payout_routing` BEFORE dispatching to the c
+- [DEV-TOOL] **`backend/tests/test_payment_switchboard_noa_routing.py`** (271 LOC)
+  - DDD4 -- payment_switchboard NOA-routing integration tests. Covers the hook in `payment_switchboard.route_delivered_load` that consults `noa_detector.resolve_payout_routing` BEFORE dispatching to the c
+- [DEV-TOOL] **`backend/tests/test_payments_status_migration.py`** (466 LOC)
+  - test_payments_status_migration.py -- Iter EOD-15 stream HH1. Verifies that the three payments-status scatter sites in backend/server.py (checkout-init, checkout-poll-paid, stripe-webhook-paid) have be
+- [DEV-TOOL] **`backend/tests/test_payments_status_migration.py`** (466 LOC)
+  - test_payments_status_migration.py -- Iter EOD-15 stream HH1. Verifies that the three payments-status scatter sites in backend/server.py (checkout-init, checkout-poll-paid, stripe-webhook-paid) have be
+- [DEV-TOOL] **`backend/tests/test_stripe_dedup_first_seen_migration.py`** (517 LOC)
+  - test_stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up. Boundary-only tests for the one-shot migration that upgrades legacy string-typed `first_seen_at` rows in db.stripe_event_dedup
+- [DEV-TOOL] **`backend/tests/test_stripe_dedup_first_seen_migration.py`** (517 LOC)
+  - test_stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up. Boundary-only tests for the one-shot migration that upgrades legacy string-typed `first_seen_at` rows in db.stripe_event_dedup
+- [DEV-TOOL] **`backend/tests/test_stripe_dedup_ttl_provisioning.py`** (354 LOC)
+  - test_stripe_dedup_ttl_provisioning.py -- ZZ2 / closes YY3 follow-up #1. Boundary-only tests for the stripe_event_dedup TTL index provisioner. Covers: 1. After provision_stripe_dedup_ttl_index runs, th
+- [DEV-TOOL] **`backend/tests/test_stripe_dedup_ttl_provisioning.py`** (354 LOC)
+  - test_stripe_dedup_ttl_provisioning.py -- ZZ2 / closes YY3 follow-up #1. Boundary-only tests for the stripe_event_dedup TTL index provisioner. Covers: 1. After provision_stripe_dedup_ttl_index runs, th
+- [DEV-TOOL] **`backend/tests/test_stripe_health_router.py`** (446 LOC)
+  - test_stripe_health_router.py -- YY3 / VV2 follow-up #1. Boundary-only tests for the /healthz/stripe readiness probe. The probe checks five things: 1. STRIPE_WEBHOOK_SECRET resolves via vault or .env 2
+- [DEV-TOOL] **`backend/tests/test_stripe_health_router.py`** (446 LOC)
+  - test_stripe_health_router.py -- YY3 / VV2 follow-up #1. Boundary-only tests for the /healthz/stripe readiness probe. The probe checks five things: 1. STRIPE_WEBHOOK_SECRET resolves via vault or .env 2
+- [DEV-TOOL] **`backend/tests/test_stripe_webhook_security.py`** (572 LOC)
+  - test_stripe_webhook_security.py -- Iter EOD-15 stream II1. Locks in three Stripe-layer security guarantees that HH1's payment-status scatter migration surfaced as follow-up findings: 1. /api/webhook/s
+- [DEV-TOOL] **`backend/tests/test_stripe_webhook_security.py`** (572 LOC)
+  - test_stripe_webhook_security.py -- Iter EOD-15 stream II1. Locks in three Stripe-layer security guarantees that HH1's payment-status scatter migration surfaced as follow-up findings: 1. /api/webhook/s
+- [DEV-TOOL] **`scripts/multi_actor_synthesizer.py`** (1736 LOC)
+  - multi_actor_synthesizer.py -- 3-actor input synthesizer (driver / shipper / factor). PURPOSE Operator-mandated 2026-05-09: "Synthesize driver, shipper, and factoring inputs. Run all their synthesized 
+- [DEV-TOOL] **`scripts/smoke_settlement_cron.py`** (225 LOC)
+  - smoke_settlement_cron.py -- end-to-end smoke for cron_settlement_24h. Verifies: 1. A funded load older than 24h is picked up + a carrier_settlements row is inserted with status='initiated'. 2. The loa
+- [DEV-TOOL] **`scripts/sop_flow_orchestrator.py`** (1344 LOC)
+  - sop_flow_orchestrator.py -- Continuous SOP-flow comprehensive test runner. PURPOSE Drive synthetic loads through the FULL platform pipeline (load board -> factoring payment) AND deliberately inject fa
+- [DEV-TOOL] **`scripts/test_stripe_webhook_e2e.py`** (139 LOC)
+  - End-to-end test for /api/webhook/stripe (II1 verification). Reads STRIPE_WEBHOOK_SECRET from C:\CHL\backend\.env at runtime via python-dotenv. The secret value NEVER appears in stdout -- only the requ
+
+## Intelligence (35)
+
+- [CODE-READY] **`backend/lane_entry_targeting.py`** (588 LOC) -- smoke: `scripts/smoke_lane_entry_targeting.py`
+  - lane_entry_targeting.py -- NCS-11 Lane-Entry Targeting Engine. Network Control Strategy item 11 (see project_network_control_strategy_2026_05_09.md): > Identify under-served lanes CHL doesn't run toda
+- [CODE-READY] **`backend/lane_intelligence.py`** (509 LOC) -- smoke: `scripts/smoke_lane_intelligence.py`
+  - lane_intelligence.py - Lane-by-lane Model A/B/C/D classifier + premium cache. Operator decision 2026-05-09: CHL operates as Model C (12% generalist) evolving to Model D (12% default + 18-25% premium o
+- [CODE-READY] **`backend/market_loads_observed.py`** (517 LOC) -- smoke: `scripts/smoke_market_loads_observed.py`
+  - market_loads_observed.py -- NCS-1 universal load-board observation engine (foundation). NCS-1 is the data foundation for the network-control roadmap. See `chl-memory/research/network_control_strategy_
+- [CODE-READY] **`backend/model_calculators.py`** (677 LOC) -- smoke: `scripts/smoke_model_calculators.py`
+  - model_calculators.py -- Operating-model rate calculators (LIBRARY ONLY). Operator-mandated 2026-05-09 EOD-17 (verbatim): "Please begin building it and the varying rate calculators using the models you
+- [CODE-READY] **`backend/model_selector.py`** (685 LOC) -- smoke: `scripts/smoke_model_selector.py`
+  - model_selector.py -- Routing logic that picks (operating_model, pricing_mode) for a given lane + shipper. OPERATOR-MANDATED 2026-05-09: CHL must support multiple operating models (A volume / B special
+- [CODE-READY] **`backend/negotiation_engine.py`** (589 LOC) -- smoke: `scripts/smoke_negotiation_engine.py`
+  - negotiation_engine.py -- Counter-offer evaluation for the rate calculator. Operator-mandated 2026-05-09 (project_business_model_decision_2026_05_09): "I want a multi functional rate calculator that ca
+- [CODE-READY] **`backend/pricing_modes.py`** (418 LOC) -- smoke: `scripts/smoke_pricing_modes.py`
+  - pricing_modes.py -- Mode-aware pricing strategies for CHL's rate calculator. Implements the six pricing modes from the market-dominance strategy doc (`chl-memory/research/market_dominance_undercut_str
+- [LIVE] **`backend/lane_evaluator.py`** (311 LOC)
+  - LaneEvaluator — meso-scale FractalEvaluator for origin-destination lanes. Iter 141.1 stage 1b. Aggregates 90 days of delivered loads on a given origin-destination pair to produce four-parameter lane s
+- [LIVE] **`backend/lane_rate_history.py`** (218 LOC)
+  - lane_rate_history.py — Aggregate historical pricing per origin→destination lane. Reads from the existing `loads` collection (no separate write path needed, since every delivered load already records o
+- [LIVE] **`backend/lane_scoring_cron.py`** (237 LOC)
+  - lane_scoring_cron.py — Background loop to refresh active-lane scores. Iter 141.1 stage 1c. Every 6 hours (after a brief boot-settle delay), iterate distinct "active" lanes (lanes with load activity in
+- [LIVE] **`backend/margin_config.py`** (317 LOC) -- smoke: `scripts/smoke_margin_config.py`
+  - margin_config.py -- Config-driven broker-margin lookup with floor enforcement. Operator-authorized 2026-05-09 (project_business_model_decision_2026_05_09): CHL operates as Model C (12% generalist) evo
+- [LIVE] **`backend/market_intel.py`** (311 LOC)
+  - CHL Weekly Market Intel Email ----------------------------- Every Monday at 7 AM local time, sends the broker a branded HTML digest: • Top new CHL Direct loads • Top federal freight RFPs (SAM.gov, if 
+- [LIVE] **`backend/market_radar.py`** (178 LOC)
+  - Market Radar & Map-Centric Execution endpoints (Iteration 47). Two small additions on top of the existing Live Board / Capacity Hunter: • GET /api/market-radar/sources — unique source buckets + per-bu
+- [LIVE] **`backend/rate_calc_engine.py`** (397 LOC)
+  - rate_calc_engine.py — Real-world 2026 freight market rate calculator. Operator-authorized 2026-05-10 rebuild of `/api/rate-calculator` to cover: - Equipment-type RPM bands for ALL 9 common equipment t
+- [LIVE] **`backend/rfq_concierge.py`** (195 LOC)
+  - RFQ Concierge — AI-drafted sales replies to public quote requests. When a prospect hits `continentalhaul.com/quote`, we instantly: 1. Compute the quote (already happens). 2. Fire a *personalized* AI-d
+- [LIVE] **`backend/shipper_scorecard.py`** (584 LOC)
+  - shipper_scorecard.py — Forward-looking shipper decision surface. Per /app/memory/PRD.md (Iter 134.10, 2026-04-29). Why: HaulPay scores shippers for *credit* (will they pay?). That's table stakes. CHL'
+- [LIBRARY] **`backend/board_adapter_normalizer.py`** (446 LOC)
+  - board_adapter_normalizer.py -- NCS-1 normalization layer. Maps each load board's native response shape to the universal `ObservedLoad` dataclass used by `market_loads_observed.py`. The existing `loadb
+- [LIBRARY] **`backend/lane_evaluator_eta_accuracy.py`** (612 LOC)
+  - lane_evaluator_eta_accuracy.py -- ETA-accuracy metric for LaneEvaluator. QQ3 stage 24 wrote ETA-slip reconciliation rows to a parallel db.lane_eta_accuracy collection because the FractalEvaluator's ge
+- [DEV-TOOL] **`backend/tests/test_iteration35_market_intel.py`** (324 LOC)
+  - Iteration 35 - Weekly Market Intel Email Feature Tests Tests the Market Intel digest endpoints: - GET /api/reports/market-intel/config - PUT /api/reports/market-intel/config - GET /api/reports/market-
+- [DEV-TOOL] **`backend/tests/test_iteration35_market_intel.py`** (324 LOC)
+  - Iteration 35 - Weekly Market Intel Email Feature Tests Tests the Market Intel digest endpoints: - GET /api/reports/market-intel/config - PUT /api/reports/market-intel/config - GET /api/reports/market-
+- [DEV-TOOL] **`backend/tests/test_iteration47_market_radar_ghost_pins.py`** (333 LOC)
+  - Iteration 47 — Market Radar & Ghost Pins Testing Tests for: 1. GET /api/market-radar/sources — returns sources + trust_histogram for broker auth 2. GET /api/live-map/ghost-pins — returns ghost pins wi
+- [DEV-TOOL] **`backend/tests/test_iteration47_market_radar_ghost_pins.py`** (333 LOC)
+  - Iteration 47 — Market Radar & Ghost Pins Testing Tests for: 1. GET /api/market-radar/sources — returns sources + trust_histogram for broker auth 2. GET /api/live-map/ghost-pins — returns ghost pins wi
+- [DEV-TOOL] **`backend/tests/test_lane_eta_accuracy.py`** (481 LOC)
+  - test_lane_eta_accuracy.py -- Unit tests for the new lane_evaluator ETA-accuracy extension (Stream X eta_accuracy hook). Six tests: 1. test_compute_eta_accuracy_returns_signed_delta 2. test_compute_eta
+- [DEV-TOOL] **`backend/tests/test_lane_eta_accuracy.py`** (481 LOC)
+  - test_lane_eta_accuracy.py -- Unit tests for the new lane_evaluator ETA-accuracy extension (Stream X eta_accuracy hook). Six tests: 1. test_compute_eta_accuracy_returns_signed_delta 2. test_compute_eta
+- [DEV-TOOL] **`scripts/rate_calc_scenarios.py`** (1308 LOC)
+  - rate_calc_scenarios.py -- HTTP-only rate-calculator scenario runner. Operator brief 2026-05-09 (REDIRECT, replaces direct-import approach): "Do not synthesize fixes. Synthesize driver, shipper, and fa
+- [DEV-TOOL] **`scripts/smoke_lane_entry_targeting.py`** (299 LOC)
+  - smoke_lane_entry_targeting.py -- Smoke test for NCS-11 lane-entry targeting. Five tests: 1. Empty observation collection -> returns empty list with no error 2. Seed db.market_loads_observed with 30 TX
+- [DEV-TOOL] **`scripts/smoke_lane_intelligence.py`** (206 LOC)
+  - smoke_lane_intelligence.py - Real-data smoke test for the lane classifier. Runs against the live local Mongo (db.loads has ~290+ synth loads as of 2026-05-09): 1. Calls recompute_all_lanes() and asser
+- [DEV-TOOL] **`scripts/smoke_margin_config.py`** (249 LOC)
+  - smoke_margin_config.py -- Smoke test for the config-driven broker premium. Validates four behaviors: 1. default premium read path -- write 1.15 -> calculate_with_config sees 1.15 2. shipper override -
+- [DEV-TOOL] **`scripts/smoke_market_loads_observed.py`** (460 LOC)
+  - smoke_market_loads_observed.py -- NCS-1 foundation smoke test. Verifies: 1. Insert 10 synthetic ObservedLoad rows across 3 lanes / 2 boards (some duplicates). Dedup collapses to ~5 distinct observatio
+- [DEV-TOOL] **`scripts/smoke_model_calculators.py`** (464 LOC)
+  - smoke_model_calculators.py -- Smoke tests for backend/model_calculators.py. Runs a baseline scenario against each of the four operating models and verifies the produced PricingDecision sits in the exp
+- [DEV-TOOL] **`scripts/smoke_model_selector.py`** (350 LOC)
+  - smoke_model_selector.py -- DB-backed smoke test for the model selector. Validates the precedence chain end-to-end against a live mongo: 1. Empty DB -> Model C / survival / source="default" 2. Lane ove
+- [DEV-TOOL] **`scripts/smoke_negotiation_engine.py`** (429 LOC)
+  - smoke_negotiation_engine.py -- Smoke tests for backend/negotiation_engine.py. Pure / standalone. Run with: python C:\CHL\scripts\smoke_negotiation_engine.py Exit code 0 = all tests passed, 1 = at leas
+- [DEV-TOOL] **`scripts/smoke_pricing_modes.py`** (249 LOC)
+  - Smoke-test all 6 pricing modes (LLL18b). These are pure functions -- no DB needed. Just exercise each mode against the same baseline carrier rate and verify the output behaves as designed. Run: python
+- [DEV-TOOL] **`scripts/smoke_rate_calc_v2.py`** (90 LOC)
+  - Smoke test the v2 rate calculator.
+- [DEV-TOOL] **`scripts/smoke_rate_calc_wire.py`** (55 LOC)
+  - Smoke: simulate one rate-calc call exactly the way the synthesizer will, to confirm the wire-through behaves before the 5-min burst.
+
+## Manual Override (1)
+
+- [LIVE] **`backend/manual_override_router.py`** (155 LOC)
+  - manual_override_router.py — Backend submission endpoint for the universal ManualOverrideModal. Per /app/memory/DUAL_MODE_PLAN.md (Mandate 2). Design contract: - Manual fills land in the SAME downstrea
+
+## Documents (14)
+
+- [LIVE] **`backend/carrier_docs/expiry_cron.py`** (237 LOC)
+  - carrier_docs.expiry_cron -- 12-hour cron loop wrapping the carrier-doc expiration tracker (iter 145.1 EOD-10 stage). Drives `expiry_tracker.check_expiring_docs` every CHECK_INTERVAL_SEC (default 12 ho
+- [LIVE] **`backend/carrier_docs/extraction_router.py`** (289 LOC)
+  - carrier_docs.extraction_router -- FastAPI sub-router for the OCR extraction layer (iter 145.1 EOD-10 stage). Endpoints (all gated by require_broker): GET /api/carriers/{dot_number}/documents/{doc_type
+- [LIVE] **`backend/consignee_confirmation.py`** (347 LOC)
+  - Iter 113 — Consignee Delivery Confirmation. Bulletproofs the final mile of the Driver Handshake. Before a driver can flip a load to ``delivered`` from the public dashboard, the consignee must prove re
+- [LIVE] **`backend/enrichment/adapters/carrier_packet.py`** (99 LOC)
+  - backend.enrichment.adapters.carrier_packet -- carrier-onboarding-platform adapter. Tier 2 (partner-gated). Wraps three competing platforms: * MyCarrierPackets (https://mycarrierpackets.com/Integration
+- [LIVE] **`backend/rate_con.py`** (693 LOC)
+  - Rate Confirmation PDF generator + digital signature endpoints. On carrier acceptance (cold-offer or direct booking), this module: 1. Generates a professional Rate Con PDF with CHL branding (reportlab)
+- [LIVE] **`backend/rate_conf_tracker.py`** (448 LOC)
+  - rate_conf_tracker.py -- GGG1 / validated-truth Tier 1 #2. Tracks carrier signed-return acknowledgment of the broker's Rate Confirmation BEFORE the driver is allowed to load. Validated mainstream TMS p
+- [DEV-TOOL] **`backend/tests/test_dispatch_release_gate.py`** (361 LOC)
+  - test_dispatch_release_gate.py -- GGG11 / GGG1 follow-up #1 smoke battery. Covers: - Booking writes dispatch_release_status='pending_rate_conf_signature' - CRON 32 tick: signed rate-conf flips status t
+- [DEV-TOOL] **`backend/tests/test_dispatch_release_gate.py`** (361 LOC)
+  - test_dispatch_release_gate.py -- GGG11 / GGG1 follow-up #1 smoke battery. Covers: - Booking writes dispatch_release_status='pending_rate_conf_signature' - CRON 32 tick: signed rate-conf flips status t
+- [DEV-TOOL] **`backend/tests/test_iteration46_rate_con_closer.py`** (476 LOC)
+  - Iteration 46 — The Closer: Rate Confirmation E2E Tests Tests: 1. POST /api/public/carrier-offer/{token}/accept returns rate_con_id + rate_con_ref 2. GET /api/rate-cons/{rc_id} returns metadata JSON (e
+- [DEV-TOOL] **`backend/tests/test_iteration46_rate_con_closer.py`** (476 LOC)
+  - Iteration 46 — The Closer: Rate Confirmation E2E Tests Tests: 1. POST /api/public/carrier-offer/{token}/accept returns rate_con_id + rate_con_ref 2. GET /api/rate-cons/{rc_id} returns metadata JSON (e
+- [DEV-TOOL] **`backend/tests/test_iteration_129_rate_con_auto_generate.py`** (619 LOC)
+  - Iteration 129 — Rate Confirmation Auto-Generate & Email Tests ============================================================= Tests for the new rate-con auto-generation feature: - POST /api/inquiries/{i
+- [DEV-TOOL] **`backend/tests/test_iteration_129_rate_con_auto_generate.py`** (619 LOC)
+  - Iteration 129 — Rate Confirmation Auto-Generate & Email Tests ============================================================= Tests for the new rate-con auto-generation feature: - POST /api/inquiries/{i
+- [DEV-TOOL] **`backend/tests/test_rate_conf_tracker.py`** (498 LOC)
+  - test_rate_conf_tracker.py -- GGG1 / validated-truth Tier 1 #2 smoke battery. Covers: - request_rate_conf_signature creates a pending row + returns token + URL - record_signed_return updates status='si
+- [DEV-TOOL] **`backend/tests/test_rate_conf_tracker.py`** (498 LOC)
+  - test_rate_conf_tracker.py -- GGG1 / validated-truth Tier 1 #2 smoke battery. Covers: - request_rate_conf_signature creates a pending row + returns token + URL - record_signed_return updates status='si
+
+## Self-Healing (74)
+
+- [LIVE] **`backend/aether_governor.py`** (461 LOC)
+  - Project Æther — Governor (Decision Machine) + StabilityGuard (Safety Interlock) Iteration 81 (Apr 23 2026) The Governor is a PID control loop: error = setpoint - process_variable # entropy gap integra
+- [LIVE] **`backend/failover/__init__.py`** (51 LOC)
+  - failover package -- Component C Tier 2 Pattern A. Provides in-process hot-spare role management (primary \| standby) plus a FastAPI sub-router for operator-triggered promote/demote. The standby role au
+- [LIVE] **`backend/failover/failover_router.py`** (141 LOC)
+  - failover_router.py -- FastAPI sub-router for hot-spare role management. Endpoints: GET /api/_failover/status (no auth -- machine-facing) Returns current role + read_only state + uptime. POST /api/_fai
+- [LIVE] **`backend/failover/hot_spare.py`** (373 LOC)
+  - hot_spare.py -- Component C Tier 2 Pattern A in-process hot-spare role. Reads env CHL_FAILOVER_ROLE (primary \| standby; default "primary"). When role="standby": - auto-enables process-local read-only 
+- [LIVE] **`backend/failover/mongo_replica_health.py`** (338 LOC)
+  - mongo_replica_health.py -- Component C Tier 3 health surface. Polls the local Mongo via admin.command('replSetGetStatus') and publishes a per-node state + replication-lag report into a `mongo_replica_
+- [LIVE] **`backend/field_test_monitor.py`** (128 LOC)
+  - Field-Test Monitor — Iteration 69 (Nebraska Test). Single endpoint to give the owner 100 % visibility into one load's ping-to-dashboard pipeline in real time. No surprises in front of the bank. GET /a
+- [LIVE] **`backend/health_monitor.py`** (177 LOC)
+  - Health monitoring framework for autonomous throttle system (iter 140.1 stage 1a). Every critical backend module registers a health check function via register_health_check(). The aggregator at /api/he
+- [LIVE] **`backend/integrity/__init__.py`** (33 LOC)
+  - backend.integrity -- Component B platform-integrity mitigations (EOD-11 sub-agent P, iter 142.1+). Five additive infrastructure modules to harden the platform against external-vendor failure cascades,
+- [LIVE] **`backend/integrity/budget_caps.py`** (329 LOC)
+  - integrity/budget_caps.py -- Unified daily LLM budget caps (EOD-11 Component B mitigation #2). Replaces the per-module ad-hoc daily counters used by: - self_healing/sub_agent_dispatcher ($15/day, anoma
+- [LIVE] **`backend/integrity/integrity_router.py`** (170 LOC)
+  - integrity/integrity_router.py -- Operator-facing endpoints for the Component B mitigations (EOD-11). All endpoints are mounted at /api/_integrity/* and require_broker -- internal observability + opera
+- [LIVE] **`backend/integrity/operational_state.py`** (243 LOC)
+  - integrity/operational_state.py -- Master operational-state switches (EOD-11 Component B mitigation #3). Three operator-emergency switches, all env-flag driven: CHL_READ_ONLY=true -> platform refuses a
+- [LIVE] **`backend/kill_switch.py`** (133 LOC)
+  - Kill-Switch — Iteration 54. Single source of truth for "is automation allowed right now?" flags. Workers (capacity_hunter.scan_cycle, outbound_autobid.maybe_fire_autobid, future market intel, etc.) co
+- [LIVE] **`backend/maintenance/sla_prune.py`** (230 LOC)
+  - sla_prune.py -- 90-day retention prune for db.sla_metrics. Stream XX2 (TT2 follow-up #2, 2026-05-08). Background ---------- TT2 (commit f3e1c88) added `_persist_sla_sample` in backend/sla_monitor.py w
+- [LIVE] **`backend/self_healing/__init__.py`** (94 LOC)
+  - backend.self_healing -- Iter 145.1 self-healing infrastructure package. Per chl-memory/research/phase_6_self_healing_roadmap.md, self-healing is the detect -> diagnose -> patch -> verify -> learn loop
+- [LIVE] **`backend/self_healing/agentdm_push.py`** (363 LOC)
+  - agentdm_push.py -- Phase 3 RED-tier push-notification queue (TT3, 2026-05-08 EOD). Background ---------- RED-tier urgent_alerts inserts (and URGENT inbox-triage findings) need to reach the operator pr
+- [LIVE] **`backend/self_healing/anomaly_digest_router.py`** (47 LOC)
+  - anomaly_digest_router.py -- Operator-only digest endpoint for the self- healing anomaly queue. Single GET endpoint returning the top-N queued anomalies seen in the last `hours` window, sorted severity
+- [LIVE] **`backend/self_healing/anomaly_dispatcher.py`** (895 LOC)
+  - anomaly_dispatcher.py -- Iter 145.1 stage 1a anomaly-routing dispatcher. Layer 2 (Diagnosis) of the self-healing loop per chl-memory/research/phase_6_self_healing_roadmap.md. This module is the substr
+- [LIVE] **`backend/self_healing/auto_merge_harness.py`** (1230 LOC)
+  - auto_merge_harness.py -- Phase 2 SCAFFOLD (QQ2, 2026-05-08 EOD). Worktree-isolated apply + targeted-pytest verify + commit-with-prefix flow for AI-generated GREEN-tier patches per the MM4 advisory at 
+- [LIVE] **`backend/self_healing/context_bundler.py`** (758 LOC)
+  - context_bundler.py -- Iter 145.1 stage 1b context bundler. Layer 2 (Diagnosis: bundle) of the self-healing loop per chl-memory/research/phase_6_self_healing_roadmap.md. Stage 1a (anomaly_dispatcher.py
+- [LIVE] **`backend/self_healing/cron_supervisor.py`** (577 LOC)
+  - cron_supervisor.py -- Phase 1 SCAFFOLD (2026-05-08 EOD-16-late). Tier D of the MM4 self-healing advisory at chl-memory/research/self_healing_ai_architecture_advisory_2026_05_08.md. Detects failed cron
+- [LIVE] **`backend/self_healing/dev_review_alerts_router.py`** (1034 LOC)
+  - dev_review_alerts_router.py -- Phase 3 visibility surfaces (SS3, 2026-05-08 EOD). Sub-router that exposes the Phase 3 LLM-reasoning-loop's two persisted queues as operator-actionable HTTP surfaces: GE
+- [LIVE] **`backend/self_healing/outcome_router.py`** (244 LOC)
+  - outcome_router.py -- Operator-facing endpoints for self-healing patch outcome-feedback (iter 145.1 stage 1d). Four endpoints, all behind require_broker (internal observability + operator override; not
+- [LIVE] **`backend/self_healing/outcome_tracker.py`** (698 LOC)
+  - outcome_tracker.py -- Iter 145.1 stage 1d outcome-feedback schema + storage. Layer 4 (Outcome-Feedback layer) of the self-healing loop. After an operator approves a patch proposal in stage 1c (sub_age
+- [LIVE] **`backend/self_healing/patch_classifier.py`** (720 LOC)
+  - patch_classifier.py -- Phase 2 SCAFFOLD (QQ2, 2026-05-08 EOD). Pure-function classifier that maps an AI-generated unified-diff patch onto a trust tier (GREEN \| YELLOW \| RED) per the MM4 advisory at ch
+- [LIVE] **`backend/self_healing/patch_proposal_router.py`** (301 LOC)
+  - patch_proposal_router.py -- Operator-facing endpoints for self-healing patch proposals (iter 145.1 stage 1c). Three endpoints, all behind require_broker (internal observability + operator override; no
+- [LIVE] **`backend/self_healing/rollback_watcher.py`** (1083 LOC)
+  - rollback_watcher.py -- Phase 4 SCAFFOLD (SS1, 2026-05-08 EOD-14-late). Tier B of the MM4 self-healing advisory at chl-memory/research/self_healing_ai_architecture_advisory_2026_05_08.md section 4 Tier
+- [LIVE] **`backend/self_healing/self_heal_log.py`** (386 LOC)
+  - self_heal_log.py -- Phase 1 SCAFFOLD (2026-05-08 EOD-16-late). Implements the `db.self_heal_actions` action-log per the MM4 advisory at chl-memory/research/self_healing_ai_architecture_advisory_2026_0
+- [LIVE] **`backend/self_healing/self_heal_router.py`** (137 LOC)
+  - self_heal_router.py -- Phase 1 SCAFFOLD (2026-05-08 EOD-16-late). Three GET endpoints behind require_owner / require_broker. Read-only; Phase 1 does not surface any operator-action surfaces. GET /api/
+- [LIVE] **`backend/self_healing/sub_agent_dispatcher.py`** (1082 LOC)
+  - sub_agent_dispatcher.py -- Iter 145.1 stage 1c sub-agent dispatcher. Layer 3 (Patch-Proposal layer) of the self-healing loop per chl-memory/research/phase_6_self_healing_roadmap.md. Stage 1a (anomaly_
+- [LIVE] **`backend/self_healing/sub_agent_dispatcher_cron.py`** (259 LOC)
+  - sub_agent_dispatcher_cron.py -- Iter 145.1 stage 1c cron loop wrapper. Drives `sub_agent_dispatcher.dispatch_pending_anomalies` every 15 minutes after an INITIAL_DELAY_SEC settle. Mirrors the context_
+- [LIVE] **`backend/self_healing/weight_tuning_cron.py`** (266 LOC)
+  - weight_tuning_cron.py -- Iter 145.1 stage 3 cron loop wrapper. Drives weight_tuning_proposer.compute_and_record every 24h after a 6h INITIAL_DELAY_SEC settle. Mirrors the sub_agent_dispatcher_cron / c
+- [LIVE] **`backend/self_healing/weight_tuning_proposer.py`** (986 LOC)
+  - weight_tuning_proposer.py -- Iter 145.1 stage 3 outcome-driven weight tuning. Layer 5 (Re-Tuning layer) of the self-healing loop. Reads the db.evaluator_outcomes corpus populated by iter 142.1 stages 
+- [LIVE] **`backend/self_healing/weight_tuning_router.py`** (319 LOC)
+  - weight_tuning_router.py -- Operator-facing endpoints for self-healing weight-tuning proposals (iter 145.1 stage 3). Five endpoints, all behind require_broker (internal observability + operator overrid
+- [LIVE] **`backend/sla_monitor.py`** (444 LOC)
+  - sla_monitor.py — Performance-target tracking + alerting. iter 140.1 stage 1c. Task 3 (Emergent scaffolding). Tracks per-operation latencies against playbook targets. Persists each timing into `db.sla_
+- [LIVE] **`backend/system_health_monitor.py`** (489 LOC)
+  - system_health_monitor.py -- Self-monitoring poller over /api/health/system. Third leg of the CHL observability triad (joining health_monitor + client_error_analyzer). Every LOOP_INTERVAL_SEC, calls th
+- [LIVE] **`backend/throttle_system.py`** (581 LOC)
+  - throttle_system.py — Autonomous throttle state machine. Iter 140.1 stage 1b. Adapted from emergent scaffolding (Task 2) with the following production refinements: - dict-or-SystemHealth get_health ada
+- [LIVE] **`backend/volume_throttle.py`** (311 LOC)
+  - Project Æther — Hard Volume Throttle (Iteration 97, Apr 23 2026) A deliberate, human-controlled rate-limiter for the AI Dispatcher. This is not governance (the Æther PID governor handles that). This i
+- [LIBRARY] **`backend/integrity/promotional_items_log.py`** (330 LOC)
+  - integrity/promotional_items_log.py -- 49 CFR Part 371 sec 371.9(b) anti- rebating policy enforcement. Stream HHH2 (HHH1 follow-up #4, 2026-05-09). Background ---------- 49 CFR sec 371.9(b) prohibits b
+- [LIBRARY] **`backend/self_healing/_llm_client_anthropic.py`** (647 LOC)
+  - _llm_client_anthropic.py -- Real Anthropic client wrapper for Phase 3 self-healing LLM reasoning loop (TT1, 2026-05-08 EOD-14, RR3 follow-up). RR3's `llm_reasoning_loop.py` ships a stub `factory=None`
+- [LIBRARY] **`backend/self_healing/llm_reasoning_loop.py`** (1362 LOC)
+  - llm_reasoning_loop.py -- Phase 3 SCAFFOLD (RR3, 2026-05-08 EOD). Tier C of the MM4 self-healing advisory at chl-memory/research/self_healing_ai_architecture_advisory_2026_05_08.md section 4 + section 
+- [LIBRARY] **`scripts/cve_scan_daily.py`** (432 LOC)
+  - cve_scan_daily.py -- Daily CVE scanner for backend Python deps + frontend npm deps. Priority-1 item 1.3 from chl-memory/research/security_and_stability_gap_analysis.md. Run nightly via Windows Task Sc
+- [LIBRARY] **`scripts/llm_client_smoke.py`** (507 LOC)
+  - llm_client_smoke.py -- One-shot LIVE Anthropic API smoke test for the TT1 wrapper at backend/self_healing/_llm_client_anthropic.py. This is the WW5 follow-up to TT1: the wrapper's unit tests at backen
+- [LIBRARY] **`scripts/operator_push_consumer.py`** (386 LOC)
+  - operator_push_consumer.py -- WW1 (TT3 closure, 2026-05-08 EOD). Drains `db.operator_push_queue` rows produced by `backend/self_healing/agentdm_push.queue_push_notification` into a file-based handoff t
+- [DEV-TOOL] **`backend/tests/test_anomaly_dispatcher.py`** (486 LOC)
+  - test_anomaly_dispatcher.py -- Unit tests for the iter 145.1 stage 1a anomaly-routing dispatcher. Verifies: 1. Novel-degraded client error -> queue row written with correct shape 2. Per-fingerprint coo
+- [DEV-TOOL] **`backend/tests/test_anomaly_dispatcher.py`** (486 LOC)
+  - test_anomaly_dispatcher.py -- Unit tests for the iter 145.1 stage 1a anomaly-routing dispatcher. Verifies: 1. Novel-degraded client error -> queue row written with correct shape 2. Per-fingerprint coo
+- [DEV-TOOL] **`backend/tests/test_dev_review_and_alerts_router.py`** (596 LOC)
+  - test_dev_review_and_alerts_router.py -- Phase 3 visibility-surface unit tests for backend/self_healing/dev_review_alerts_router.py (SS3, 2026-05-08). Six tests: test_list_dev_review_queue_filters_by_s
+- [DEV-TOOL] **`backend/tests/test_dev_review_and_alerts_router.py`** (596 LOC)
+  - test_dev_review_and_alerts_router.py -- Phase 3 visibility-surface unit tests for backend/self_healing/dev_review_alerts_router.py (SS3, 2026-05-08). Six tests: test_list_dev_review_queue_filters_by_s
+- [DEV-TOOL] **`backend/tests/test_failover.py`** (474 LOC)
+  - test_failover.py -- Component C Tier 2 Pattern A unit tests. Verifies the 6 mandatory contracts for the in-process hot-spare: 1. test_role_defaults_to_primary init_from_env with no CHL_FAILOVER_ROLE s
+- [DEV-TOOL] **`backend/tests/test_failover.py`** (474 LOC)
+  - test_failover.py -- Component C Tier 2 Pattern A unit tests. Verifies the 6 mandatory contracts for the in-process hot-spare: 1. test_role_defaults_to_primary init_from_env with no CHL_FAILOVER_ROLE s
+- [DEV-TOOL] **`backend/tests/test_iteration54_self_healing.py`** (518 LOC)
+  - Iteration 54 — Self-Healing Engine, Kill-Switch, Circuit Breakers, Reconciliation, Stress Test, Fast-Lane Tests: - Kill-switch GET/PUT/disarm-all/rearm-all (owner-only) - Kill-switch integration with 
+- [DEV-TOOL] **`backend/tests/test_iteration54_self_healing.py`** (518 LOC)
+  - Iteration 54 — Self-Healing Engine, Kill-Switch, Circuit Breakers, Reconciliation, Stress Test, Fast-Lane Tests: - Kill-switch GET/PUT/disarm-all/rearm-all (owner-only) - Kill-switch integration with 
+- [DEV-TOOL] **`backend/tests/test_iteration_97_auth_volume_throttle.py`** (519 LOC)
+  - Iteration 97 — Auth Hardening + Hard Volume Throttle Tests ========================================================== Tests for: A) P0 Login Reliability: - Owner lockout immunity (OWNER_EMAILS bypass 
+- [DEV-TOOL] **`backend/tests/test_iteration_97_auth_volume_throttle.py`** (519 LOC)
+  - Iteration 97 — Auth Hardening + Hard Volume Throttle Tests ========================================================== Tests for: A) P0 Login Reliability: - Owner lockout immunity (OWNER_EMAILS bypass 
+- [DEV-TOOL] **`backend/tests/test_kill_switch_integration.py`** (458 LOC)
+  - test_kill_switch_integration.py -- EOD-14 Stream Y verification tests for the operational-state kill-switch wire-up sweep. These tests verify that: 1. The CHL_READ_ONLY env flag, when set, causes a `@
+- [DEV-TOOL] **`backend/tests/test_kill_switch_integration.py`** (458 LOC)
+  - test_kill_switch_integration.py -- EOD-14 Stream Y verification tests for the operational-state kill-switch wire-up sweep. These tests verify that: 1. The CHL_READ_ONLY env flag, when set, causes a `@
+- [DEV-TOOL] **`backend/tests/test_llm_client_anthropic.py`** (528 LOC)
+  - test_llm_client_anthropic.py -- TT1 unit tests for the real Anthropic client wrapper at backend/self_healing/_llm_client_anthropic.py. Tests: test_factory_returns_callable_when_key_present test_factor
+- [DEV-TOOL] **`backend/tests/test_llm_client_anthropic.py`** (528 LOC)
+  - test_llm_client_anthropic.py -- TT1 unit tests for the real Anthropic client wrapper at backend/self_healing/_llm_client_anthropic.py. Tests: test_factory_returns_callable_when_key_present test_factor
+- [DEV-TOOL] **`backend/tests/test_operator_push_queue_stats.py`** (381 LOC)
+  - test_operator_push_queue_stats.py -- YY2 (2026-05-08 EOD) unit tests for the GET /api/_self_heal/operator_push_queue/stats endpoint added to backend/self_healing/dev_review_alerts_router.py. The endpo
+- [DEV-TOOL] **`backend/tests/test_operator_push_queue_stats.py`** (381 LOC)
+  - test_operator_push_queue_stats.py -- YY2 (2026-05-08 EOD) unit tests for the GET /api/_self_heal/operator_push_queue/stats endpoint added to backend/self_healing/dev_review_alerts_router.py. The endpo
+- [DEV-TOOL] **`backend/tests/test_promotional_items_log.py`** (387 LOC)
+  - test_promotional_items_log.py -- Unit tests for backend.integrity.promotional_items_log (Stream HHH2 / HHH1 follow-up #4). Coverage -------- 1. test_log_item_writes_row_with_all_required_fields 2. tes
+- [DEV-TOOL] **`backend/tests/test_promotional_items_log.py`** (387 LOC)
+  - test_promotional_items_log.py -- Unit tests for backend.integrity.promotional_items_log (Stream HHH2 / HHH1 follow-up #4). Coverage -------- 1. test_log_item_writes_row_with_all_required_fields 2. tes
+- [DEV-TOOL] **`backend/tests/test_self_heal_log.py`** (335 LOC)
+  - test_self_heal_log.py -- Phase 1 SCAFFOLD unit tests for self_heal_log. Tests: test_record_action_inserts_row_with_required_fields test_list_recent_filters_by_since_hours test_list_recent_filters_by_t
+- [DEV-TOOL] **`backend/tests/test_self_heal_log.py`** (335 LOC)
+  - test_self_heal_log.py -- Phase 1 SCAFFOLD unit tests for self_heal_log. Tests: test_record_action_inserts_row_with_required_fields test_list_recent_filters_by_since_hours test_list_recent_filters_by_t
+- [DEV-TOOL] **`backend/tests/test_self_heal_router.py`** (306 LOC)
+  - test_self_heal_router.py -- Phase 1 SCAFFOLD unit tests for the self-heal router (read-only operator-facing surfaces over db.self_heal_actions). Tests: test_recent_returns_actions_with_filter test_get
+- [DEV-TOOL] **`backend/tests/test_self_heal_router.py`** (306 LOC)
+  - test_self_heal_router.py -- Phase 1 SCAFFOLD unit tests for the self-heal router (read-only operator-facing surfaces over db.self_heal_actions). Tests: test_recent_returns_actions_with_filter test_get
+- [DEV-TOOL] **`backend/tests/test_sla_persistence.py`** (218 LOC)
+  - test_sla_persistence.py -- TT2 follow-up #1 unit tests for the sla_monitor `_persist_sla_sample` helper + @track_sla decorator persistence wiring. Tests: test_persist_sla_sample_inserts_row test_track
+- [DEV-TOOL] **`backend/tests/test_sla_persistence.py`** (218 LOC)
+  - test_sla_persistence.py -- TT2 follow-up #1 unit tests for the sla_monitor `_persist_sla_sample` helper + @track_sla decorator persistence wiring. Tests: test_persist_sla_sample_inserts_row test_track
+- [DEV-TOOL] **`backend/tests/test_system_health_monitor.py`** (395 LOC)
+  - test_system_health_monitor.py -- Unit tests for the system-health fingerprint algorithm + recovery semantics. Verifies (1) fingerprint collapses high-cardinality timestamp/count noise, (2) different m
+- [DEV-TOOL] **`backend/tests/test_system_health_monitor.py`** (395 LOC)
+  - test_system_health_monitor.py -- Unit tests for the system-health fingerprint algorithm + recovery semantics. Verifies (1) fingerprint collapses high-cardinality timestamp/count noise, (2) different m
+- [DEV-TOOL] **`backend/tests/test_tier3_scripts.py`** (352 LOC)
+  - test_tier3_scripts.py -- Component C Tier 3 Python tests. Covers: - failover/mongo_replica_health.py: get_replica_status + classification + kill-switch + lag-threshold semantics - scripts/cloud_backup
+- [DEV-TOOL] **`backend/tests/test_tier3_scripts.py`** (352 LOC)
+  - test_tier3_scripts.py -- Component C Tier 3 Python tests. Covers: - failover/mongo_replica_health.py: get_replica_status + classification + kill-switch + lag-threshold semantics - scripts/cloud_backup
+- [DEV-TOOL] **`scripts/failover_promote.ps1`** (190 LOC)
+  - failover_promote.ps1 Component C Tier 2 Pattern A: operator-driven failover from primary (port 8001) to standby (port 8002).  Steps: 1. POST primary  /api/_failover/demote?confirm=true   (read-only fl
+- [DEV-TOOL] **`scripts/install_cve_scan_cron.ps1`** (120 LOC)
+  - install_cve_scan_cron.ps1 Priority-1 item 1.3 -- register a Windows Task Scheduler job that runs cve_scan_daily.py at 3:45 AM Chicago time daily.  Idempotent: replaces an existing schedule with the sa
+- [DEV-TOOL] **`scripts/self_heal_bridge.py`** (211 LOC)
+  - self_heal_bridge.py — periodic sweeper that turns synthetic-test failures into self-heal queue items. Operator-mandated 2026-05-09: continuous synthetic testing should feed the existing self-heal pipe
+
+## Public-Facing (19)
+
+- [LIVE] **`backend/ghost_visibility.py`** (450 LOC)
+  - Ghost Visibility — Iteration 67. Zero-touch shipper/consignee tracking. A signed token unlocks a public read-only map page at /track/:token. No login. No personal data leaked. Auto-expires 2 h post-de
+- [LIVE] **`backend/magic_link.py`** (199 LOC)
+  - Magic-link / passwordless authentication for CHL. Flow: 1. Server issues a short-lived (15 min) one-time token (tokenized URL param) 2. We store ONLY a SHA-256 hash of the token at rest + TTL-expiring
+- [LIVE] **`backend/public_lanes.py`** (129 LOC)
+  - Public Lane QR Onboarding endpoint — Iteration 76.3. `GET /api/public/lanes/{lane_id}` Lane id format: "{origin_state}-{dest_state}-{equipment_type}" e.g., "OK-AR-DRY_VAN", "TX-CA-REEFER", "GA-FL-FLAT
+- [LIVE] **`backend/scorecard.py`** (113 LOC)
+  - CHL Public Carrier Scorecard ---------------------------- Public, no-auth endpoints + page that let a carrier share their CHL reputation score externally (signature, marketing, other brokers' onboardi
+- [LIVE] **`backend/seo_landers.py`** (196 LOC)
+  - SEO Lane Landing Pages — Pillar 1 Generates data for lane-specific public marketing pages like: /freight/flatbed/missouri /freight/reefer/texas /freight/dry-van/california Each page is a lightweight S
+- [LIVE] **`backend/share_packet.py`** (361 LOC)
+  - Project Æther — Banker Share Packet (Iteration 93, Apr 23 2026) One-click institutional delivery: Director taps "Send Share Packet" → backend re-renders the latest digest PDF from `banker_digest_sends
+- [LIVE] **`backend/shipper_magic.py`** (289 LOC)
+  - Shipper Magic Link + Per-Shipper Learning ----------------------------------------- • Public endpoint POST /api/public/shipper/magic-link → generates a 30-minute signed token and emails (or returns) t
+- [LIVE] **`frontend/src/views/CarrierScorecard.jsx`** (170 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/ShipperScorecardView.jsx`** (626 LOC)
+  - * ShipperScorecardView.jsx — Forward-looking shipper decision surface. * (Iter 134.10 frontend — 2026-04-29) * * Top: search + master list of every shipper we've ever touched, each with * a grade pill
+- [DEV-TOOL] **`backend/tests/test_iteration34_loadboards_scorecard.py`** (259 LOC)
+  - Iteration 34 — Load Board Aggregator + Public Carrier Scorecard Tests Tests for: 1. GET /api/loadboards/sources — broker auth — returns 7 adapters 2. GET /api/loadboards/aggregate — broker auth — retu
+- [DEV-TOOL] **`backend/tests/test_iteration34_loadboards_scorecard.py`** (259 LOC)
+  - Iteration 34 — Load Board Aggregator + Public Carrier Scorecard Tests Tests for: 1. GET /api/loadboards/sources — broker auth — returns 7 adapters 2. GET /api/loadboards/aggregate — broker auth — retu
+- [DEV-TOOL] **`backend/tests/test_iteration42_magic_link_vetting_match.py`** (651 LOC)
+  - Iteration 42 Tests — Magic-Link Auth, Integrated Vetting, Carrier Preferences, Match & Notify, Dynamic Pricing Test Coverage: 1. Magic Link Auth — consume, request, single-use, expiry 2. Cold Outreach
+- [DEV-TOOL] **`backend/tests/test_iteration42_magic_link_vetting_match.py`** (651 LOC)
+  - Iteration 42 Tests — Magic-Link Auth, Integrated Vetting, Carrier Preferences, Match & Notify, Dynamic Pricing Test Coverage: 1. Magic Link Auth — consume, request, single-use, expiry 2. Cold Outreach
+- [DEV-TOOL] **`backend/tests/test_iteration_134_scorecard_journal_ops.py`** (482 LOC)
+  - test_iteration_134_scorecard_journal_ops.py — Tests for Iteration 134 features: 1. Shipper Scorecard module (credit/ops/strategic grading, notes, credit override) 2. Agent Journal (append-only continu
+- [DEV-TOOL] **`backend/tests/test_iteration_134_scorecard_journal_ops.py`** (482 LOC)
+  - test_iteration_134_scorecard_journal_ops.py — Tests for Iteration 134 features: 1. Shipper Scorecard module (credit/ops/strategic grading, notes, credit override) 2. Agent Journal (append-only continu
+- [DEV-TOOL] **`backend/tests/test_iteration_67_ghost_visibility.py`** (545 LOC)
+  - Iteration 67 — Ghost Visibility Tests Tests for magic tokenized tracking links, milestone auto-triggers, 50-mile auto-fire, and exception detection.
+- [DEV-TOOL] **`backend/tests/test_iteration_67_ghost_visibility.py`** (545 LOC)
+  - Iteration 67 — Ghost Visibility Tests Tests for magic tokenized tracking links, milestone auto-triggers, 50-mile auto-fire, and exception detection.
+- [DEV-TOOL] **`backend/tests/test_iteration_93_share_packet.py`** (205 LOC)
+  - Iteration 93 — Banker Share Packet API Tests Tests the one-click institutional delivery feature: - GET /api/orchestration/share-packet/preview (owner-only) - POST /api/orchestration/share-packet (send
+- [DEV-TOOL] **`backend/tests/test_iteration_93_share_packet.py`** (205 LOC)
+  - Iteration 93 — Banker Share Packet API Tests Tests the one-click institutional delivery feature: - GET /api/orchestration/share-packet/preview (owner-only) - POST /api/orchestration/share-packet (send
+
+## Owner Tooling (6)
+
+- [LIVE] **`backend/banker_digest.py`** (1571 LOC)
+  - Project Æther — Friday Banker Digest (Iteration 83, Apr 23 2026) Weekly "Operational Transparency Report" sent to institutional stakeholders. Aggregates data from: - banker_digest_queue (Night Watchma
+- [LIVE] **`backend/business_plan.py`** (288 LOC)
+  - Bank-Ready Business Plan PDF Generator — Iteration 60. Generates a concise investor-grade PDF with updated North-American projections (35% revenue bump for cross-border + intermodal), lane-specific ma
+- [LIVE] **`backend/investor_one_pager.py`** (880 LOC)
+  - Project Æther — Investor One-Pager (Iteration 96, Apr 23 2026) A confidential investor memorandum generator tuned for the pivot from "Banker-Led" to "Investor-Led Leverage" strategy. Where `banker_dig
+- [LIVE] **`backend/live_wire_diary.py`** (225 LOC)
+  - Live-Wire Diary — Iteration 60. At 18:00 America/Chicago (configurable via LIVEWIRE_DIARY_HOUR_UTC env var) every day, aggregate the day's activity, compose a 30-second narration, run it through OpenA
+- [LIVE] **`backend/morning_brief.py`** (170 LOC)
+  - Morning Brief — Iteration 63. Every morning at 06:00 America/Chicago (configurable via MORNING_BRIEF_HOUR_UTC), compile a one-page Owner Brief with: • Loads monitored in last 24 h • Auto-bids fired • 
+- [LIVE] **`backend/owner_resume.py`** (247 LOC)
+  - Resume / CV PDF generator for the CHL owner. Generates a 1-page professional resume PDF and emails it to the owner. Used for BMC-84 bond applications, shipper pitch packets, LinkedIn profile cross-ref
+
+## LLL14-19 Recent Build (5)
+
+- [CODE-READY] **`backend/driver_mode_toggle.py`** (455 LOC) -- smoke: `scripts/smoke_driver_mode_toggle.py`
+  - driver_mode_toggle.py -- NCS-2 foundation: driver-mode preferences + single-load fit scoring. Implements the storage + simple-mode-aware suggester piece of the NCS-2 (Driver-Mode Toggle) capability ca
+- [LIVE] **`backend/pnl_monitor.py`** (329 LOC) -- smoke: `scripts/smoke_pnl_monitor.py`
+  - pnl_monitor.py -- Platform-wide P&L surveillance. Operator-mandated 2026-05-09 EOD-17: > "Our platform need to know when we are losing money overall. I don't ever > want to book loads at a loss" Two l
+- [DEV-TOOL] **`scripts/smoke_driver_mode_toggle.py`** (339 LOC)
+  - Smoke-test the NCS-2 driver-mode toggle (storage + scoring + ranking). Exercises: 1. default prefs -> BALANCED, no home. 2. HOME_ARRIVAL with MO home + Friday target: MO load > CA load. 3. REVENUE_MAX
+- [DEV-TOOL] **`scripts/smoke_pnl_monitor.py`** (122 LOC)
+  - Smoke-test the P&L monitor (Layer 1 + Layer 2).
+- [DEV-TOOL] **`scripts/smoke_vetting_checks.py`** (174 LOC)
+  - Smoke test the standalone vetting checks (Phase B.1 #4 + #5). Inserts a synthetic FMCSA cache row, runs both checks against it, asserts expected flags, then cleans up. Run: C:\CHL\.venv-local\Scripts\
+
+## Frontend UI (174)
+
+- [ORPHAN] **`frontend/src/components/A2PStatusBanner.jsx`** (126 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/DeliveryReceipt.jsx`** (169 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/NotificationStatusDot.jsx`** (90 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/RateMargin.jsx`** (126 LOC)
+  - * RateMargin.jsx — Inline rate display with CHL margin attached. * (Iter 134.22 — per Jason: "I want to see the calculation of CHL take at a glance.") * * Variants: * <RateMargin load={l} /> — full in
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ShadowModePill.jsx`** (167 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/accordion.jsx`** (41 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/alert-dialog.jsx`** (97 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/alert.jsx`** (47 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/aspect-ratio.jsx`** (5 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/avatar.jsx`** (33 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/badge.jsx`** (34 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/breadcrumb.jsx`** (92 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/calendar.jsx`** (71 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/card.jsx`** (50 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/carousel.jsx`** (193 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/checkbox.jsx`** (22 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/collapsible.jsx`** (9 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/command.jsx`** (116 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/context-menu.jsx`** (156 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/drawer.jsx`** (90 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/dropdown-menu.jsx`** (156 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/form.jsx`** (133 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/hover-card.jsx`** (23 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/input-otp.jsx`** (53 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/input.jsx`** (19 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/menubar.jsx`** (198 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/navigation-menu.jsx`** (104 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/pagination.jsx`** (100 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/popover.jsx`** (27 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/progress.jsx`** (21 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/radio-group.jsx`** (29 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/resizable.jsx`** (40 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/scroll-area.jsx`** (38 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/select.jsx`** (119 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/separator.jsx`** (23 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/sheet.jsx`** (108 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/skeleton.jsx`** (14 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/slider.jsx`** (21 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/switch.jsx`** (22 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/table.jsx`** (86 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/tabs.jsx`** (41 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/textarea.jsx`** (18 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/toast.jsx`** (85 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/toaster.jsx`** (33 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/toggle-group.jsx`** (43 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/components/ui/tooltip.jsx`** (26 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/views/BankerDigestPage.jsx`** (212 LOC)
+  - (no docstring)
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/views/MarginFloorModal.jsx`** (152 LOC)
+  - * MarginFloorModal.jsx — Iter 139.37 * * Two-mode modal that renders either: * • HARD BLOCK — no override possible, "Got it, change rate" close button only * • SOFT WARN — explicit "Yes, dispatch anyw
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/views/QuickEmailButton.jsx`** (173 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [LIVE] **`frontend/src/views/ARHealthChip.jsx`** (140 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/AccessorialConfirmModal.jsx`** (222 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/AgedARView.jsx`** (161 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/AutoDispatchSettings.jsx`** (509 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/AutoRepostPanel.jsx`** (255 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/AutomationCandidatesView.jsx`** (246 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/AutomationsDashboard.jsx`** (433 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/BankerMode.jsx`** (142 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/BrowserPhoneView.jsx`** (636 LOC)
+  - * BrowserPhoneView.jsx — Full browser softphone (Iter 134.16, 2026-04-29). * * Per Jason: "Turn the platform into a standalone phone. Cell as fallback." * * How it works: * - Fetches an access token f
+- [LIVE] **`frontend/src/views/BulkCarrierHunter.jsx`** (1017 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/BusinessMilestones.jsx`** (146 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CargoClaimsView.jsx`** (205 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/CarrierFastLane.jsx`** (214 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CarrierHub.jsx`** (1041 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/CarrierInquiryModal.jsx`** (362 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/CarrierLeaderboard.jsx`** (155 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CarrierOfferPage.jsx`** (916 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CarrierPortal.jsx`** (415 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CarrierPreferences.jsx`** (253 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CarrierPrevetView.jsx`** (301 LOC)
+  - * CarrierPrevetView.jsx — Pre-grant carrier vetting pipeline. * (Iter 135.6 frontend — 2026-05-03) * * Why: * FMCSA broker authority pending until 2026-05-13. This view lets Jason * pre-vet 25–100 tar
+- [LIVE] **`frontend/src/views/CashFlowForecast.jsx`** (162 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CommandCenterTV.jsx`** (417 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CommandPhoneView.jsx`** (376 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/CommandSearchBar.jsx`** (579 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/ConsigneeConfirmModal.jsx`** (344 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Iter 113 — Consignee Delivery Confirmation modal. Driver hands their phone to the receiver who either signs on the canvas or typ
+- [LIVE] **`frontend/src/views/CostMonitorWidget.jsx`** (327 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DashboardView.jsx`** (146 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/Day1Walkthrough.jsx`** (361 LOC)
+  - * Day1Walkthrough.jsx — Day-1 Single Load Walkthrough wizard. * (Iter 135.8 frontend — 2026-05-03) * * Why: * Per Jason: "the moment authority grants on 5/13 and cap=1, walk me * click-by-click throug
+- [LIVE] **`frontend/src/views/DeckSlide1.jsx`** (422 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DeckSlide2.jsx`** (659 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DeckSlide3.jsx`** (562 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DeckSlide4.jsx`** (568 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DeckSlide5.jsx`** (702 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DeckSlide6.jsx`** (714 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DeckSlide7.jsx`** (604 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DeckSlide8.jsx`** (426 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DepositAllocator.jsx`** (124 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DetentionReviewView.jsx`** (195 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/DirectorsRedAlert.jsx`** (156 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/DriverOnboardingQuestionnaire.jsx`** (334 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/DriverToastReceiver.jsx`** (238 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/ETASlipWidget.jsx`** (158 LOC)
+  - * ETASlipWidget.jsx — Iter 139.27 * * Compact /ops widget showing open ETA-slip flags from the Iter 139.21 * detector (`failure_detectors_part2._eta_slip_tick`). Each slip is a * load whose scheduled 
+- [LIVE] **`frontend/src/views/EmailIngestionAdmin.jsx`** (266 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/EmergencyDisarm.jsx`** (166 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/EmptyTruckPostForm.jsx`** (270 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/ExternalPostingsDashboardWidget.jsx`** (168 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/FMCSACensusAdmin.jsx`** (228 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/FacilityPlan.jsx`** (493 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/FactorAPIWiringView.jsx`** (395 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/FactorMatrixView.jsx`** (975 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/FailureModeConsole.jsx`** (190 LOC)
+  - * FailureModeConsole.jsx — Single dashboard for active failure flags. * (Iter 135.13 — 2026-05-03) * * Why: * Iter 135.12 wired 4 failure-mode detectors (authority lost, GPS silent, * no-show, factor 
+- [LIVE] **`frontend/src/views/FinalLaunchModal.jsx`** (256 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/FindTruckModal.jsx`** (507 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Iter 113.7 — "Find a Truck" unified search modal. Aggregates carrier capacity from CHL Direct + FMCSA Census + any wired paid lo
+- [LIVE] **`frontend/src/views/FraudConsoleView.jsx`** (228 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/GhostTrackPage.jsx`** (251 LOC)
+  - Ghost Visibility — Iteration 67 public read-only tracking page.
+- [LIVE] **`frontend/src/views/HotPostersWidget.jsx`** (111 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/ImGoodHeartbeat.jsx`** (129 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/InstallPWAPrompt.jsx`** (299 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/Iter60Panels.jsx`** (232 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/Iter63Panels.jsx`** (200 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/Iter70StabilityCards.jsx`** (267 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/LandingPage.jsx`** (837 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LaneRatePerformance.jsx`** (131 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LiveBoard.jsx`** (508 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LiveFireBanner.jsx`** (121 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LiveLoadView.jsx`** (604 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LiveMapView.jsx`** (277 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LiveWireTimeline.jsx`** (121 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LoadBoardAggregator.jsx`** (768 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LoadDossier.jsx`** (894 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/LoadDossierPage.jsx`** (361 LOC)
+  - * LoadDossierPage.jsx — Iter 139.38 * * Full-screen page wrapper around `LoadDossierDrawer` for direct navigation * via `/loads/:id`. Adds: * • "← Back to Operator Console" header (no drawer slide-in)
+- [LIVE] **`frontend/src/views/LoadHealthBadge.jsx`** (117 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/LoadSchemaCompletenessPanel.jsx`** (533 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/MagicLinkPanel.jsx`** (135 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/ManualCoverageDashboard.jsx`** (335 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/ManualCoverageWidget.jsx`** (122 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/ManualOverrideModal.jsx`** (344 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/MarketIntelPanel.jsx`** (223 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/MarketRadar.jsx`** (979 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/MatchCard.jsx`** (99 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/MercuryBalanceCard.jsx`** (197 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/NextLoadCard.jsx`** (128 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/NotificationLogView.jsx`** (322 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/OperatorConsoleView.jsx`** (733 LOC)
+  - * OperatorConsoleView.jsx — Day-1 single-pane-of-glass for live ops. * (Iter 134.11 frontend — 2026-04-29) * * Why this exists (per Jason 2026-04-29): * "When we start operating, your memory of events
+- [LIVE] **`frontend/src/views/OwnerDashboard.jsx`** (544 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/PendingCarrierPayouts.jsx`** (292 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/PendingCarrierRequests.jsx`** (194 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/PilotOverridePanel.jsx`** (270 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/PlatformCalendarView.jsx`** (360 LOC)
+  - * PlatformCalendarView.jsx — CHL operator calendar (Iter 134.2). * * Surfaces /api/system/calendar/month + /events as a 6×7 grid that the * Director can scan at a glance: * • US federal holidays (grey
+- [LIVE] **`frontend/src/views/PostDeliveryView.jsx`** (541 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/PostingBlobWidget.jsx`** (228 LOC)
+  - * PostingBlobWidget.jsx — Iter 139.34 * * Generates paste-ready broker-identity + load-posting blobs for manual-only * loadboards (Sylectus, NextLoadBoard, regional boards without APIs). * * Two tabs:
+- [LIVE] **`frontend/src/views/PreAuthorityBanner.jsx`** (266 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/PrivacySuite.jsx`** (246 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/ProtestCountdownCard.jsx`** (226 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/QROnboard.jsx`** (286 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/QROnboardLoad.jsx`** (572 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/QuoteView.jsx`** (460 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/RFQFactorPickerModal.jsx`** (229 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/RateConSignPage.jsx`** (1188 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/RateOptimizerWidget.jsx`** (136 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/RequiredTasksTray.jsx`** (278 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/ReturnLoadModal.jsx`** (150 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/SEOLanderPage.jsx`** (225 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/SOPPlaybookView.jsx`** (882 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/SavingsSweepCard.jsx`** (335 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/SchemaDefaultsProfileModal.jsx`** (385 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/SchemaHealthWidget.jsx`** (322 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/SelfHealingPanel.jsx`** (265 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/ShipperIntakeModal.jsx`** (285 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/ShipperPortal.jsx`** (246 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/SopFlowView.jsx`** (416 LOC)
+  - * SopFlowView.jsx — Load Lifecycle State Machine · Live Visualizer. * (Iter 135.2 frontend — 2026-05-03) * * Why this exists (per FACTS.md Polestar): * "Automate the freight brokerage business model w
+- [LIVE] **`frontend/src/views/SovereignPulseMonitor.jsx`** (2058 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/StatusPills.jsx`** (106 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/SystemHealthWidget.jsx`** (199 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/SystemVitalityWidget.jsx`** (195 LOC)
+  - (no docstring)
+- [LIVE] **`frontend/src/views/TCRStatusWidget.jsx`** (236 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+- [LIVE] **`frontend/src/views/TaxEstimator.jsx`** (164 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/TrustFootprintWidget.jsx`** (254 LOC)
+  - * TrustFootprintWidget.jsx — Iter 139.33 * * One-click push of CHL's regulatory identity (EIN/DUNS/MC#/DOT/BMC-84/ * business address) to every loadboard & factor partner. Mounted on /ops. * * Each pa
+- [LIVE] **`frontend/src/views/VaultView.jsx`** (307 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/views/VerifyPage.jsx`** (395 LOC)
+  - (no docstring)
+- [LIBRARY] **`frontend/src/components/ui/button.jsx`** (48 LOC)
+  - (no docstring)
+- [LIBRARY] **`frontend/src/components/ui/dialog.jsx`** (94 LOC)
+  - (no docstring)
+- [LIBRARY] **`frontend/src/components/ui/label.jsx`** (16 LOC)
+  - (no docstring)
+- [LIBRARY] **`frontend/src/components/ui/sonner.jsx`** (28 LOC)
+  - (no docstring)
+- [LIBRARY] **`frontend/src/components/ui/toggle.jsx`** (40 LOC)
+  - (no docstring)
+
+## Synthetic Test (284)
+
+- [ORPHAN] **`backend/scripts/purge_test_data.py`** (221 LOC)
+  - Legacy Seed-Data Purge Script ============================== Clears test accounts, $0 loads, stale hunt events, and orphaned artifacts from production MongoDB so the God-View / Live Board / Market Rad
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [ORPHAN] **`frontend/src/views/SyntheticDocsCarousel.jsx`** (204 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [LIVE] **`backend/credit_override_revoker/__init__.py`** (35 LOC)
+  - backend/credit_override_revoker/ -- Credit-override auto-revoker (RR1, 2026-05-08). Productionizes synthetic_load_walkthrough.py stage 23. Watches the db.payment_events collection for event_type=payme
+- [LIVE] **`backend/stress_test.py`** (193 LOC)
+  - Stress Test & Bottleneck Report — Iteration 54. POST /api/stress-test/run (owner-only, synthetic data tagged with `_stress_test=true` so purge scripts can wipe it cleanly). Scenarios executed in paral
+- [LIVE] **`backend/synthetic_auto_wipe.py`** (157 LOC)
+  - Synthetic Auto-Wipe Cron — Iter 139.36 close-out. Runs every 60 minutes. Deletes any row tagged `synthetic:true` whose `created_at` is older than 24 hours. This guarantees Jason's test data never blee
+- [LIVE] **`backend/synthetic_filter.py`** (50 LOC)
+  - Synthetic-row exclusion helper — Iter 139.36 close-out. Synthetic data must NEVER affect production metrics, alarms, or readiness gates. Every DB query that drives an alarm, a gate, a readiness email,
+- [LIVE] **`backend/synthetic_load_replay.py`** (737 LOC)
+  - Synthetic Load Replay — Iter 139.36 ==================================== Operator superpower: instantly spawn a complete fake load + quote + carrier pre-populated to any SOP stage so downstream behavi
+- [LIVE] **`frontend/src/views/SyntheticLoadReplayWidget.jsx`** (371 LOC)
+  - * SyntheticLoadReplayWidget.jsx — Iter 139.36 * * Owner superpower on /ops: spawn a complete fake load + quote + carrier * pre-populated to any SOP stage so downstream behavior can be tested * without
+- [LIBRARY] **`scripts/preflight_server_smoke.py`** (463 LOC)
+  - Pre-flight wire-up validator for backend/server.py. Catches the two most common dev-side regressions before commit: 1. build_router signature mismatch (positional call where signature is keyword-only,
+- [LIBRARY] **`scripts/synthetic_doc_generator.py`** (885 LOC)
+  - Synthetic doc generator -- builds + persists per-load BOL / Rate-Con / POD-template HTML cards into db.synthetic_load_docs so the carrier offer page can render them in a slideshow. Layout reused / ada
+- [LIBRARY] **`scripts/synthetic_pipeline_runner.py`** (985 LOC)
+  - synthetic_pipeline_runner.py -- Phase 1 plug-and-play synthetic load runner. OPERATOR USAGE python C:\CHL\scripts\synthetic_pipeline_runner.py --single python C:\CHL\scripts\synthetic_pipeline_runner.
+- [DEV-TOOL] **`backend/tests/fixtures/loadboard/__init__.py`** (2 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`backend/tests/fixtures/loadboard/__init__.py`** (2 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`backend/tests/synthetic_load_walkthrough.py`** (2340 LOC)
+  - synthetic_load_walkthrough.py -- 25-stage end-to-end ship-readiness gate. PURPOSE Drive a single synthetic freight load through every stage of the CHL load-handling spine -- from RFQ intake through fi
+- [DEV-TOOL] **`backend/tests/synthetic_load_walkthrough.py`** (2340 LOC)
+  - synthetic_load_walkthrough.py -- 25-stage end-to-end ship-readiness gate. PURPOSE Drive a single synthetic freight load through every stage of the CHL load-handling spine -- from RFQ intake through fi
+- [DEV-TOOL] **`backend/tests/test_action_dispatcher.py`** (670 LOC)
+  - test_action_dispatcher.py -- Pure unit tests for the iter 143.1 stage 1d action-surface wiring. Verifies the 6 mandatory contracts: 1. fmcsa_authority lane dispatches to the FMCSA authority-lookup cal
+- [DEV-TOOL] **`backend/tests/test_action_dispatcher.py`** (670 LOC)
+  - test_action_dispatcher.py -- Pure unit tests for the iter 143.1 stage 1d action-surface wiring. Verifies the 6 mandatory contracts: 1. fmcsa_authority lane dispatches to the FMCSA authority-lookup cal
+- [DEV-TOOL] **`backend/tests/test_agentdm_push.py`** (649 LOC)
+  - test_agentdm_push.py -- Phase 3 TT3 (2026-05-08 EOD) unit tests for the RED-tier push-notification queue and the bulk-action endpoints on dev_review_alerts_router. Six tests: push (3): test_queue_push
+- [DEV-TOOL] **`backend/tests/test_agentdm_push.py`** (649 LOC)
+  - test_agentdm_push.py -- Phase 3 TT3 (2026-05-08 EOD) unit tests for the RED-tier push-notification queue and the bulk-action endpoints on dev_review_alerts_router. Six tests: push (3): test_queue_push
+- [DEV-TOOL] **`backend/tests/test_allowlist_loader.py`** (303 LOC)
+  - test_allowlist_loader.py -- ZZ3 (operator-mandated 2026-05-08): unit tests for the vendor/partner allow-list MD loader. Coverage: 1. happy_path_parses_real_chl_memory_md (or test fixture mirror) 2. su
+- [DEV-TOOL] **`backend/tests/test_allowlist_loader.py`** (303 LOC)
+  - test_allowlist_loader.py -- ZZ3 (operator-mandated 2026-05-08): unit tests for the vendor/partner allow-list MD loader. Coverage: 1. happy_path_parses_real_chl_memory_md (or test fixture mirror) 2. su
+- [DEV-TOOL] **`backend/tests/test_assignment.py`** (453 LOC)
+  - test_assignment.py -- iter 142.1 stage 1e tests. Covers: - test_auto_assign_idempotent - test_failure_detector_marks_ghoster_after_2h - test_confirm_flips_state_and_records_outcome - test_failure_dete
+- [DEV-TOOL] **`backend/tests/test_assignment.py`** (453 LOC)
+  - test_assignment.py -- iter 142.1 stage 1e tests. Covers: - test_auto_assign_idempotent - test_failure_detector_marks_ghoster_after_2h - test_confirm_flips_state_and_records_outcome - test_failure_dete
+- [DEV-TOOL] **`backend/tests/test_auth_and_carrier_portal.py`** (556 LOC)
+  - Test Suite for Heartland Haul Logistics - Auth & Carrier Portal (Iteration 8) Tests JWT authentication, role-based access, carrier portal endpoints, and branding.
+- [DEV-TOOL] **`backend/tests/test_auth_and_carrier_portal.py`** (556 LOC)
+  - Test Suite for Heartland Haul Logistics - Auth & Carrier Portal (Iteration 8) Tests JWT authentication, role-based access, carrier portal endpoints, and branding.
+- [DEV-TOOL] **`backend/tests/test_auto_merge_harness.py`** (432 LOC)
+  - test_auto_merge_harness.py -- Phase 2 SCAFFOLD unit tests for auto_merge_harness. Tests: test_harness_aborts_on_test_failure_in_isolated_worktree test_harness_commits_with_selfheal_GREEN_prefix test_h
+- [DEV-TOOL] **`backend/tests/test_auto_merge_harness.py`** (432 LOC)
+  - test_auto_merge_harness.py -- Phase 2 SCAFFOLD unit tests for auto_merge_harness. Tests: test_harness_aborts_on_test_failure_in_isolated_worktree test_harness_commits_with_selfheal_GREEN_prefix test_h
+- [DEV-TOOL] **`backend/tests/test_auto_submitter.py`** (413 LOC)
+  - test_auto_submitter.py -- Iter 144.x Phase 6 stage 1b unit tests. Required (5+): test_auto_submit_dispatches_to_rts_when_factor_provider_is_rts test_auto_submit_idempotent_per_load_id test_auto_submit
+- [DEV-TOOL] **`backend/tests/test_auto_submitter.py`** (413 LOC)
+  - test_auto_submitter.py -- Iter 144.x Phase 6 stage 1b unit tests. Required (5+): test_auto_submit_dispatches_to_rts_when_factor_provider_is_rts test_auto_submit_idempotent_per_load_id test_auto_submit
+- [DEV-TOOL] **`backend/tests/test_carrier_continuous_monitor.py`** (504 LOC)
+  - test_carrier_continuous_monitor.py -- GGG2 unit tests. Coverage: - Snapshot writes + reads round-trip - Diff returns [] on first-ever snapshot - Diff detects per-field changes correctly - Severity rul
+- [DEV-TOOL] **`backend/tests/test_carrier_continuous_monitor.py`** (504 LOC)
+  - test_carrier_continuous_monitor.py -- GGG2 unit tests. Coverage: - Snapshot writes + reads round-trip - Diff returns [] on first-ever snapshot - Diff detects per-field changes correctly - Severity rul
+- [DEV-TOOL] **`backend/tests/test_carrier_evaluator.py`** (265 LOC)
+  - test_carrier_evaluator.py -- Unit tests for iter 142.1 stage 1c CarrierEvaluator (meso-scale FractalEvaluator). Covers: - test_evaluator_returns_zero_for_unvetted_carrier - test_evaluator_returns_zero
+- [DEV-TOOL] **`backend/tests/test_carrier_evaluator.py`** (265 LOC)
+  - test_carrier_evaluator.py -- Unit tests for iter 142.1 stage 1c CarrierEvaluator (meso-scale FractalEvaluator). Covers: - test_evaluator_returns_zero_for_unvetted_carrier - test_evaluator_returns_zero
+- [DEV-TOOL] **`backend/tests/test_check_agentdm_recipient.py`** (143 LOC)
+  - test_check_agentdm_recipient.py -- CCC2 / closes WW1 follow-up #2. Boundary-only tests for `scripts/check_agentdm_recipient.py`. Covers: 1. Handle present in agent list -> EXISTS + recommendation does
+- [DEV-TOOL] **`backend/tests/test_check_agentdm_recipient.py`** (143 LOC)
+  - test_check_agentdm_recipient.py -- CCC2 / closes WW1 follow-up #2. Boundary-only tests for `scripts/check_agentdm_recipient.py`. Covers: 1. Handle present in agent list -> EXISTS + recommendation does
+- [DEV-TOOL] **`backend/tests/test_checkin_scheduler.py`** (735 LOC)
+  - test_checkin_scheduler.py -- iter 142.2 stage 1c tests. Covers the mandatory 5+1 cases laid out in the stage-1c brief: - test_schedule_creates_first_checkin_at_pickup_plus_4h - test_schedule_creates_s
+- [DEV-TOOL] **`backend/tests/test_checkin_scheduler.py`** (735 LOC)
+  - test_checkin_scheduler.py -- iter 142.2 stage 1c tests. Covers the mandatory 5+1 cases laid out in the stage-1c brief: - test_schedule_creates_first_checkin_at_pickup_plus_4h - test_schedule_creates_s
+- [DEV-TOOL] **`backend/tests/test_ci_intake.py`** (566 LOC)
+  - test_ci_intake.py -- Unit tests for backend.ci_intake.github_actions_router + the BBB4 _sample_test_pass_rate real-query path. Stream BBB4 (TT2 follow-up #1, 2026-05-08). Coverage: - test_valid_signat
+- [DEV-TOOL] **`backend/tests/test_ci_intake.py`** (566 LOC)
+  - test_ci_intake.py -- Unit tests for backend.ci_intake.github_actions_router + the BBB4 _sample_test_pass_rate real-query path. Stream BBB4 (TT2 follow-up #1, 2026-05-08). Coverage: - test_valid_signat
+- [DEV-TOOL] **`backend/tests/test_ci_runs_index_provisioner.py`** (318 LOC)
+  - test_ci_runs_index_provisioner.py -- CCC2 / closes BBB4 follow-up #1. Boundary-only tests for the ci_runs index provisioner. Covers: 1. happy path: both indexes created with correct keys + unique flag
+- [DEV-TOOL] **`backend/tests/test_ci_runs_index_provisioner.py`** (318 LOC)
+  - test_ci_runs_index_provisioner.py -- CCC2 / closes BBB4 follow-up #1. Boundary-only tests for the ci_runs index provisioner. Covers: 1. happy path: both indexes created with correct keys + unique flag
+- [DEV-TOOL] **`backend/tests/test_ci_runs_prune.py`** (342 LOC)
+  - test_ci_runs_prune.py -- Unit tests for backend.maintenance.ci_runs_prune (Stream BBB4 / TT2 follow-up #1). Coverage: - test_happy_path 50 old + 50 new -> 50 deleted. - test_empty_collection deleted=0
+- [DEV-TOOL] **`backend/tests/test_ci_runs_prune.py`** (342 LOC)
+  - test_ci_runs_prune.py -- Unit tests for backend.maintenance.ci_runs_prune (Stream BBB4 / TT2 follow-up #1). Coverage: - test_happy_path 50 old + 50 new -> 50 deleted. - test_empty_collection deleted=0
+- [DEV-TOOL] **`backend/tests/test_client_error_analyzer.py`** (187 LOC)
+  - test_client_error_analyzer.py -- Pure unit tests for the fingerprint algorithm. Verifies (1) line/col variations collapse, (2) query-string variations collapse, (3) real differences (function names) s
+- [DEV-TOOL] **`backend/tests/test_client_error_analyzer.py`** (187 LOC)
+  - test_client_error_analyzer.py -- Pure unit tests for the fingerprint algorithm. Verifies (1) line/col variations collapse, (2) query-string variations collapse, (3) real differences (function names) s
+- [DEV-TOOL] **`backend/tests/test_client_ip.py`** (180 LOC)
+  - Unit tests for backend/auth/client_ip.py (iter 145.x DD1). Synchronous; no Mongo, no FastAPI TestClient -- we exercise the helper directly with hand-rolled stub Request objects since the resolution pa
+- [DEV-TOOL] **`backend/tests/test_client_ip.py`** (180 LOC)
+  - Unit tests for backend/auth/client_ip.py (iter 145.x DD1). Synchronous; no Mongo, no FastAPI TestClient -- we exercise the helper directly with hand-rolled stub Request objects since the resolution pa
+- [DEV-TOOL] **`backend/tests/test_context_bundler.py`** (493 LOC)
+  - test_context_bundler.py -- Unit tests for the iter 145.1 stage 1b context bundler. Covers: 1. test_bundle_extracts_files_from_stack_trace -- stack-trace heuristic yields ranked affected_files 2. test_
+- [DEV-TOOL] **`backend/tests/test_context_bundler.py`** (493 LOC)
+  - test_context_bundler.py -- Unit tests for the iter 145.1 stage 1b context bundler. Covers: 1. test_bundle_extracts_files_from_stack_trace -- stack-trace heuristic yields ranked affected_files 2. test_
+- [DEV-TOOL] **`backend/tests/test_cost_forecaster.py`** (474 LOC)
+  - test_cost_forecaster.py -- Unit tests for the BBB3 spend-forecasting module (cost_monitor/forecaster.py + cost_router /forecast endpoint; UU1 follow-up #2, 2026-05-08 EOD). Eight tests: test_linear_fi
+- [DEV-TOOL] **`backend/tests/test_cost_forecaster.py`** (474 LOC)
+  - test_cost_forecaster.py -- Unit tests for the BBB3 spend-forecasting module (cost_monitor/forecaster.py + cost_router /forecast endpoint; UU1 follow-up #2, 2026-05-08 EOD). Eight tests: test_linear_fi
+- [DEV-TOOL] **`backend/tests/test_cost_monitor.py`** (600 LOC)
+  - test_cost_monitor.py -- Unit tests for the UU1 cost-monitoring dashboard package (2026-05-08 EOD). Eight tests: test_pricing_computation_correctness test_spend_recorder_idempotent_on_request_id test_a
+- [DEV-TOOL] **`backend/tests/test_cost_monitor.py`** (600 LOC)
+  - test_cost_monitor.py -- Unit tests for the UU1 cost-monitoring dashboard package (2026-05-08 EOD). Eight tests: test_pricing_computation_correctness test_spend_recorder_idempotent_on_request_id test_a
+- [DEV-TOOL] **`backend/tests/test_cron_health_prune.py`** (436 LOC)
+  - test_cron_health_prune.py -- Unit tests for backend.maintenance.cron_health_prune (Stream XX3 / XX2 follow-up #1). Coverage: - test_happy_path 50 old + 50 new -> 50 deleted. Includes a mix of `ts_utc`
+- [DEV-TOOL] **`backend/tests/test_cron_health_prune.py`** (436 LOC)
+  - test_cron_health_prune.py -- Unit tests for backend.maintenance.cron_health_prune (Stream XX3 / XX2 follow-up #1). Coverage: - test_happy_path 50 old + 50 new -> 50 deleted. Includes a mix of `ts_utc`
+- [DEV-TOOL] **`backend/tests/test_cron_supervisor.py`** (336 LOC)
+  - test_cron_supervisor.py -- Phase 1 SCAFFOLD unit tests for cron_supervisor. Tests: test_supervisor_skips_when_all_crons_healthy test_supervisor_logs_restart_action_on_failed_cron test_supervisor_escal
+- [DEV-TOOL] **`backend/tests/test_cron_supervisor.py`** (336 LOC)
+  - test_cron_supervisor.py -- Phase 1 SCAFFOLD unit tests for cron_supervisor. Tests: test_supervisor_skips_when_all_crons_healthy test_supervisor_logs_restart_action_on_failed_cron test_supervisor_escal
+- [DEV-TOOL] **`backend/tests/test_detention_calculator.py`** (902 LOC)
+  - test_detention_calculator.py -- Iter 145.x Stream FF2 + GG2 unit tests. FF2 (8 baseline): test_calculate_hours_clamps_to_zero_when_under_free_time test_calculate_hours_rounds_down_to_15min test_calcul
+- [DEV-TOOL] **`backend/tests/test_detention_calculator.py`** (902 LOC)
+  - test_detention_calculator.py -- Iter 145.x Stream FF2 + GG2 unit tests. FF2 (8 baseline): test_calculate_hours_clamps_to_zero_when_under_free_time test_calculate_hours_rounds_down_to_15min test_calcul
+- [DEV-TOOL] **`backend/tests/test_dispute_handler.py`** (618 LOC)
+  - test_dispute_handler.py -- Iter 144.x Phase 6 stage 1d unit tests. Required (5): test_disputed_status_in_portal_creates_dispute_row test_chargeback_status_in_portal_creates_dispute_row test_dispute_id
+- [DEV-TOOL] **`backend/tests/test_dispute_handler.py`** (618 LOC)
+  - test_dispute_handler.py -- Iter 144.x Phase 6 stage 1d unit tests. Required (5): test_disputed_status_in_portal_creates_dispute_row test_chargeback_status_in_portal_creates_dispute_row test_dispute_id
+- [DEV-TOOL] **`backend/tests/test_eld_fleet_size_check.py`** (550 LOC)
+  - test_eld_fleet_size_check -- unit tests for GGG7 module. Covers: * Severity classification at every band (high / medium / ok / info / fleet_grown / no_eld_data). * Adapter dispatch picks the first con
+- [DEV-TOOL] **`backend/tests/test_eld_fleet_size_check.py`** (550 LOC)
+  - test_eld_fleet_size_check -- unit tests for GGG7 module. Covers: * Severity classification at every band (high / medium / ok / info / fleet_grown / no_eld_data). * Adapter dispatch picks the first con
+- [DEV-TOOL] **`backend/tests/test_enrichment_resolver.py`** (268 LOC)
+  - test_enrichment_resolver -- unit tests for the per-field source-priority resolver in backend/enrichment/resolver.py (GGG9, FFF5-validated). Covers: * operator-entered wins over every other source. * T
+- [DEV-TOOL] **`backend/tests/test_enrichment_resolver.py`** (268 LOC)
+  - test_enrichment_resolver -- unit tests for the per-field source-priority resolver in backend/enrichment/resolver.py (GGG9, FFF5-validated). Covers: * operator-entered wins over every other source. * T
+- [DEV-TOOL] **`backend/tests/test_env_prune.py`** (268 LOC)
+  - Tests for scripts/prune_env_after_vault_migration.py. Exercises the four hardening contracts of the prune flow: 1. Dry-run leaves .env on disk untouched. 2. Pre-flight refuses to proceed when the vaul
+- [DEV-TOOL] **`backend/tests/test_env_prune.py`** (268 LOC)
+  - Tests for scripts/prune_env_after_vault_migration.py. Exercises the four hardening contracts of the prune flow: 1. Dry-run leaves .env on disk untouched. 2. Pre-flight refuses to proceed when the vaul
+- [DEV-TOOL] **`backend/tests/test_exception_detector.py`** (538 LOC)
+  - test_exception_detector.py -- iter 142.2 phase 4 stage 1b tests. Covers: - test_late_detection_when_past_scheduled_pickup - test_off_route_detection_via_distance_threshold - test_stopped_detection_whe
+- [DEV-TOOL] **`backend/tests/test_exception_detector.py`** (538 LOC)
+  - test_exception_detector.py -- iter 142.2 phase 4 stage 1b tests. Covers: - test_late_detection_when_past_scheduled_pickup - test_off_route_detection_via_distance_threshold - test_stopped_detection_whe
+- [DEV-TOOL] **`backend/tests/test_factor_clients.py`** (462 LOC)
+  - test_factor_clients.py -- Iter 144.x Phase 6 stage 1a unit tests. Covers: test_rts_submit_idempotent test_rts_submit_handles_sftp_error test_otr_submit_returns_submission_id test_factor_clients_gracef
+- [DEV-TOOL] **`backend/tests/test_factor_clients.py`** (462 LOC)
+  - test_factor_clients.py -- Iter 144.x Phase 6 stage 1a unit tests. Covers: test_rts_submit_idempotent test_rts_submit_handles_sftp_error test_otr_submit_returns_submission_id test_factor_clients_gracef
+- [DEV-TOOL] **`backend/tests/test_factor_decline_handler.py`** (512 LOC)
+  - test_factor_decline_handler.py -- QQ3 stage 25 hook #4 (RR2) tests. Covers backend/factor_decline_handler/decline_handler.py: * test_classify_decline_reason_shipper_credit_risk * test_classify_decline
+- [DEV-TOOL] **`backend/tests/test_factor_decline_handler.py`** (512 LOC)
+  - test_factor_decline_handler.py -- QQ3 stage 25 hook #4 (RR2) tests. Covers backend/factor_decline_handler/decline_handler.py: * test_classify_decline_reason_shipper_credit_risk * test_classify_decline
+- [DEV-TOOL] **`backend/tests/test_factor_decline_reroute.py`** (449 LOC)
+  - test_factor_decline_reroute.py -- DDD5 / PHASE B.1 #8 tests. Covers the production-wired decline reroute logic in backend/factor_refusal_guard.py: * test_decline_routes_to_next_factor_in_priority * te
+- [DEV-TOOL] **`backend/tests/test_factor_decline_reroute.py`** (449 LOC)
+  - test_factor_decline_reroute.py -- DDD5 / PHASE B.1 #8 tests. Covers the production-wired decline reroute logic in backend/factor_refusal_guard.py: * test_decline_routes_to_next_factor_in_priority * te
+- [DEV-TOOL] **`backend/tests/test_freight_api.py`** (388 LOC)
+  - Pytest Backend API Tests for FreightFlow Pro Tests all CRUD operations, matching, rate calculator, and bookings
+- [DEV-TOOL] **`backend/tests/test_freight_api.py`** (388 LOC)
+  - Pytest Backend API Tests for FreightFlow Pro Tests all CRUD operations, matching, rate calculator, and bookings
+- [DEV-TOOL] **`backend/tests/test_handled_folder_mover.py`** (832 LOC)
+  - test_handled_folder_mover.py -- Stream V (EOD-14, operator-mandated 2026-05-08). Verifies the 5 mandatory contracts for handled_folder_mover.move_handled_to_folder: 1. derive_target_folder maps the pa
+- [DEV-TOOL] **`backend/tests/test_handled_folder_mover.py`** (832 LOC)
+  - test_handled_folder_mover.py -- Stream V (EOD-14, operator-mandated 2026-05-08). Verifies the 5 mandatory contracts for handled_folder_mover.move_handled_to_folder: 1. derive_target_folder maps the pa
+- [DEV-TOOL] **`backend/tests/test_healthz_all.py`** (228 LOC)
+  - test_healthz_all.py -- CCC2 / /healthz/all aggregator (May-14 readiness). Boundary-only tests for the /healthz/all endpoint. Covers: 1. all-green: every component returns GREEN -> overall GREEN. 2. on
+- [DEV-TOOL] **`backend/tests/test_healthz_all.py`** (228 LOC)
+  - test_healthz_all.py -- CCC2 / /healthz/all aggregator (May-14 readiness). Boundary-only tests for the /healthz/all endpoint. Covers: 1. all-green: every component returns GREEN -> overall GREEN. 2. on
+- [DEV-TOOL] **`backend/tests/test_inbox_endpoint.py`** (469 LOC)
+  - test_inbox_endpoint.py -- EOD-16-late stream NN1: unit tests for the inbox_router operator surface (/api/_inbox/list + /api/_inbox/email/{id} + /api/_inbox/folders). Mandatory contracts (4 tests): 1. 
+- [DEV-TOOL] **`backend/tests/test_inbox_endpoint.py`** (469 LOC)
+  - test_inbox_endpoint.py -- EOD-16-late stream NN1: unit tests for the inbox_router operator surface (/api/_inbox/list + /api/_inbox/email/{id} + /api/_inbox/folders). Mandatory contracts (4 tests): 1. 
+- [DEV-TOOL] **`backend/tests/test_inbox_search_and_seen.py`** (470 LOC)
+  - test_inbox_search_and_seen.py -- PP3 follow-up tests for stream NN1. Covers: 1. test_list_filters_by_q_substring_in_subject -- /list?q=foo restricts to rows whose subject contains 'foo' case-insensiti
+- [DEV-TOOL] **`backend/tests/test_inbox_search_and_seen.py`** (470 LOC)
+  - test_inbox_search_and_seen.py -- PP3 follow-up tests for stream NN1. Covers: 1. test_list_filters_by_q_substring_in_subject -- /list?q=foo restricts to rows whose subject contains 'foo' case-insensiti
+- [DEV-TOOL] **`backend/tests/test_inbox_triage_scanner.py`** (462 LOC)
+  - test_inbox_triage_scanner.py -- Iter 145.x Stream LL2 unit tests for the hourly inbox triage scanner. LL2 scanner (4): test_scan_picks_emails_within_window test_scan_writes_triage_log_row_per_email te
+- [DEV-TOOL] **`backend/tests/test_inbox_triage_scanner.py`** (462 LOC)
+  - test_inbox_triage_scanner.py -- Iter 145.x Stream LL2 unit tests for the hourly inbox triage scanner. LL2 scanner (4): test_scan_picks_emails_within_window test_scan_writes_triage_log_row_per_email te
+- [DEV-TOOL] **`backend/tests/test_iteration10_mission_pdf.py`** (124 LOC)
+  - Iteration 10 Tests: Mission Statement in Business Plan PDF Tests that the business plan PDF contains the exact mission statement and OUR MISSION header.
+- [DEV-TOOL] **`backend/tests/test_iteration10_mission_pdf.py`** (124 LOC)
+  - Iteration 10 Tests: Mission Statement in Business Plan PDF Tests that the business plan PDF contains the exact mission statement and OUR MISSION header.
+- [DEV-TOOL] **`backend/tests/test_iteration11_employees_payroll_gps.py`** (490 LOC)
+  - Iteration 11 Tests: Employees, Timecards, Payroll, and GPS Tracking Tests for: - Employee CRUD with optional login creation - Timecards clock-in/clock-out - Payroll run with tax calculations - GPS pin
+- [DEV-TOOL] **`backend/tests/test_iteration11_employees_payroll_gps.py`** (490 LOC)
+  - Iteration 11 Tests: Employees, Timecards, Payroll, and GPS Tracking Tests for: - Employee CRUD with optional login creation - Timecards clock-in/clock-out - Payroll run with tax calculations - GPS pin
+- [DEV-TOOL] **`backend/tests/test_iteration12_features.py`** (558 LOC)
+  - Iteration 12 Backend Tests ========================== Tests for: 1. Shipper Portal - registration, load posting, tracking 2. Commission pay type for employees 3. Full bank_routing/bank_account fields 
+- [DEV-TOOL] **`backend/tests/test_iteration12_features.py`** (558 LOC)
+  - Iteration 12 Backend Tests ========================== Tests for: 1. Shipper Portal - registration, load posting, tracking 2. Commission pay type for employees 3. Full bank_routing/bank_account fields 
+- [DEV-TOOL] **`backend/tests/test_iteration13_features.py`** (517 LOC)
+  - Iteration 13 Backend Tests - Business Settings, vCard, Track Events, Notifications, Outbound Messaging Tests for: - GET/PUT /api/business-settings (broker only) - GET /api/carrier/business-contact.vcf
+- [DEV-TOOL] **`backend/tests/test_iteration13_features.py`** (517 LOC)
+  - Iteration 13 Backend Tests - Business Settings, vCard, Track Events, Notifications, Outbound Messaging Tests for: - GET/PUT /api/business-settings (broker only) - GET /api/carrier/business-contact.vcf
+- [DEV-TOOL] **`backend/tests/test_iteration18_speed_trifecta.py`** (533 LOC)
+  - Iteration 18 - Speed Trifecta Testing ===================================== Tests for: 1. POST /api/quote/instant — Instant Auto-Quote engine (broker auth) 2. POST /api/public/quote/instant — Public i
+- [DEV-TOOL] **`backend/tests/test_iteration18_speed_trifecta.py`** (533 LOC)
+  - Iteration 18 - Speed Trifecta Testing ===================================== Tests for: 1. POST /api/quote/instant — Instant Auto-Quote engine (broker auth) 2. POST /api/public/quote/instant — Public i
+- [DEV-TOOL] **`backend/tests/test_iteration19_refactor_regression.py`** (339 LOC)
+  - Iteration 19 - Refactor Regression Testing ========================================== Tests to verify the refactor (extracting QuoteView, ResourcesView, CommandPhoneView, ParkingView) did not break an
+- [DEV-TOOL] **`backend/tests/test_iteration19_refactor_regression.py`** (339 LOC)
+  - Iteration 19 - Refactor Regression Testing ========================================== Tests to verify the refactor (extracting QuoteView, ResourcesView, CommandPhoneView, ParkingView) did not break an
+- [DEV-TOOL] **`backend/tests/test_iteration21_public_quickbook.py`** (632 LOC)
+  - Iteration 21 - Public Quick-Book Feature Tests Tests for POST /api/public/quote/book endpoint and related functionality. Features tested: 1. POST /api/public/quote/book - creates shipper user + load (
+- [DEV-TOOL] **`backend/tests/test_iteration21_public_quickbook.py`** (632 LOC)
+  - Iteration 21 - Public Quick-Book Feature Tests Tests for POST /api/public/quote/book endpoint and related functionality. Features tested: 1. POST /api/public/quote/book - creates shipper user + load (
+- [DEV-TOOL] **`backend/tests/test_iteration22_quote_recovery.py`** (444 LOC)
+  - Iteration 22: Quote Recovery Email Feature Tests Tests for: - GET /api/public/quote/{quote_id} - public quote lookup for recovery deep links - POST /api/public/quote/instant - now returns quote_id - P
+- [DEV-TOOL] **`backend/tests/test_iteration22_quote_recovery.py`** (444 LOC)
+  - Iteration 22: Quote Recovery Email Feature Tests Tests for: - GET /api/public/quote/{quote_id} - public quote lookup for recovery deep links - POST /api/public/quote/instant - now returns quote_id - P
+- [DEV-TOOL] **`backend/tests/test_iteration24_websocket_feed.py`** (339 LOC)
+  - Iteration 24 - WebSocket-push Activity Feed Tests Tests the WebSocket real-time push functionality for the Activity Feed: - CommandPhoneView accepts socketRef prop and subscribes to 'update' events - 
+- [DEV-TOOL] **`backend/tests/test_iteration24_websocket_feed.py`** (339 LOC)
+  - Iteration 24 - WebSocket-push Activity Feed Tests Tests the WebSocket real-time push functionality for the Activity Feed: - CommandPhoneView accepts socketRef prop and subscribes to 'update' events - 
+- [DEV-TOOL] **`backend/tests/test_iteration26_savings_sweep.py`** (462 LOC)
+  - Iteration 26: Savings Auto-Sweep (Profit First methodology) Tests Tests for: - GET /api/business-settings returns savings_linked, savings_routing_last4, savings_account_last4, savings_sweep_enabled, s
+- [DEV-TOOL] **`backend/tests/test_iteration26_savings_sweep.py`** (462 LOC)
+  - Iteration 26: Savings Auto-Sweep (Profit First methodology) Tests Tests for: - GET /api/business-settings returns savings_linked, savings_routing_last4, savings_account_last4, savings_sweep_enabled, s
+- [DEV-TOOL] **`backend/tests/test_iteration27_tax_and_forecast.py`** (497 LOC)
+  - Iteration 27 Tests: Tax Reserves Bucket + Cash Flow Forecast Widget ===================================================================== Tests for: 1. GET /api/business-settings returns tax_* fields 
+- [DEV-TOOL] **`backend/tests/test_iteration27_tax_and_forecast.py`** (497 LOC)
+  - Iteration 27 Tests: Tax Reserves Bucket + Cash Flow Forecast Widget ===================================================================== Tests for: 1. GET /api/business-settings returns tax_* fields 
+- [DEV-TOOL] **`backend/tests/test_iteration28_owner_pay.py`** (460 LOC)
+  - Iteration 28 Tests: Owner Pay Bucket (Profit First 4-bucket system) ===================================================================== Tests for: 1. GET /api/business-settings returns owner_linked,
+- [DEV-TOOL] **`backend/tests/test_iteration28_owner_pay.py`** (460 LOC)
+  - Iteration 28 Tests: Owner Pay Bucket (Profit First 4-bucket system) ===================================================================== Tests for: 1. GET /api/business-settings returns owner_linked,
+- [DEV-TOOL] **`backend/tests/test_iteration29_tax_estimator.py`** (311 LOC)
+  - Iteration 29 - Quarterly Tax Estimator + Smart Deposit Allocator Tests Tests: 1. GET /api/accounting/tax-estimator - default 25% rate 2. GET /api/accounting/tax-estimator?combined_rate=30 - custom rat
+- [DEV-TOOL] **`backend/tests/test_iteration29_tax_estimator.py`** (311 LOC)
+  - Iteration 29 - Quarterly Tax Estimator + Smart Deposit Allocator Tests Tests: 1. GET /api/accounting/tax-estimator - default 25% rate 2. GET /api/accounting/tax-estimator?combined_rate=30 - custom rat
+- [DEV-TOOL] **`backend/tests/test_iteration31_instant_carrier_pay.py`** (561 LOC)
+  - Iteration 31 - Instant Carrier Pay on Delivery Tests ===================================================== Tests for automatic pending carrier payouts when loads hit 'delivered' status, with optional 
+- [DEV-TOOL] **`backend/tests/test_iteration31_instant_carrier_pay.py`** (561 LOC)
+  - Iteration 31 - Instant Carrier Pay on Delivery Tests ===================================================== Tests for automatic pending carrier payouts when loads hit 'delivered' status, with optional 
+- [DEV-TOOL] **`backend/tests/test_iteration32_autopilot_phase1.py`** (536 LOC)
+  - Iteration 32 - CHL Autopilot Phase-1 Backend Tests =================================================== Tests for: 1. AI Rate Optimizer - /api/rate-optimizer/suggest, /signal, /summary 2. W-9 Auto-Coll
+- [DEV-TOOL] **`backend/tests/test_iteration32_autopilot_phase1.py`** (536 LOC)
+  - Iteration 32 - CHL Autopilot Phase-1 Backend Tests =================================================== Tests for: 1. AI Rate Optimizer - /api/rate-optimizer/suggest, /signal, /summary 2. W-9 Auto-Coll
+- [DEV-TOOL] **`backend/tests/test_iteration33_loyalty_leaderboard.py`** (422 LOC)
+  - Iteration 33 - Shipper Loyalty Auto-Discount + Carrier Leaderboard + Rate Signal Auto-Fire Tests for: 1. Auto-fire rate_signal from carrier bid accept/decline flow 2. Shipper loyalty auto-discount (St
+- [DEV-TOOL] **`backend/tests/test_iteration33_loyalty_leaderboard.py`** (422 LOC)
+  - Iteration 33 - Shipper Loyalty Auto-Discount + Carrier Leaderboard + Rate Signal Auto-Fire Tests for: 1. Auto-fire rate_signal from carrier bid accept/decline flow 2. Shipper loyalty auto-discount (St
+- [DEV-TOOL] **`backend/tests/test_iteration36_full_regression.py`** (646 LOC)
+  - Iteration 36 — Full Regression Test Suite Continental Haul Logistics — Freight Brokerage Platform Tests: - Auth (owner, non-owner broker, carrier) - Owner-lock (Mercury, Vault) - Mercury endpoints - V
+- [DEV-TOOL] **`backend/tests/test_iteration36_full_regression.py`** (646 LOC)
+  - Iteration 36 — Full Regression Test Suite Continental Haul Logistics — Freight Brokerage Platform Tests: - Auth (owner, non-owner broker, carrier) - Owner-lock (Mercury, Vault) - Mercury endpoints - V
+- [DEV-TOOL] **`backend/tests/test_iteration37_cold_carrier_funnel.py`** (486 LOC)
+  - Iteration 37 - Cold-Carrier Outreach Funnel + Auto-Dispatch + PWA Regression Tests Tests: 1. Cold-Carrier Funnel - Broker-only initiate outreach 2. Cold-Carrier Funnel - Public view offer (no auth) 3.
+- [DEV-TOOL] **`backend/tests/test_iteration37_cold_carrier_funnel.py`** (486 LOC)
+  - Iteration 37 - Cold-Carrier Outreach Funnel + Auto-Dispatch + PWA Regression Tests Tests: 1. Cold-Carrier Funnel - Broker-only initiate outreach 2. Cold-Carrier Funnel - Public view offer (no auth) 3.
+- [DEV-TOOL] **`backend/tests/test_iteration43_email_ingestion_autobid.py`** (826 LOC)
+  - Iteration 43 Tests — Multi-Source Ingestion Engine + Global Normalization Layer Tests: 1. Email Ingestion Config (GET/PUT) - owner-only, non-owner 403 2. Email Ingestion Status - returns config, pendi
+- [DEV-TOOL] **`backend/tests/test_iteration43_email_ingestion_autobid.py`** (826 LOC)
+  - Iteration 43 Tests — Multi-Source Ingestion Engine + Global Normalization Layer Tests: 1. Email Ingestion Config (GET/PUT) - owner-only, non-owner 403 2. Email Ingestion Status - returns config, pendi
+- [DEV-TOOL] **`backend/tests/test_iteration48_paper_trail_aggression.py`** (401 LOC)
+  - Iteration 48 — Paper Trail + Aggression Sprint Tests Tests: 1. Margin Erosion config endpoints (GET/PUT /api/margin-erosion/config) — owner-only 2. Margin Erosion run-now endpoint (POST /api/margin-er
+- [DEV-TOOL] **`backend/tests/test_iteration48_paper_trail_aggression.py`** (401 LOC)
+  - Iteration 48 — Paper Trail + Aggression Sprint Tests Tests: 1. Margin Erosion config endpoints (GET/PUT /api/margin-erosion/config) — owner-only 2. Margin Erosion run-now endpoint (POST /api/margin-er
+- [DEV-TOOL] **`backend/tests/test_iteration49_deep_integration.py`** (687 LOC)
+  - Iteration 49 — Deep Integration Sprint Tests ============================================= Tests for: 1. ELD HOS-aware Hunter (Samsara + Motive webhooks, /api/eld/config, /drivers/hos, /drivers/hos/mo
+- [DEV-TOOL] **`backend/tests/test_iteration49_deep_integration.py`** (687 LOC)
+  - Iteration 49 — Deep Integration Sprint Tests ============================================= Tests for: 1. ELD HOS-aware Hunter (Samsara + Motive webhooks, /api/eld/config, /drivers/hos, /drivers/hos/mo
+- [DEV-TOOL] **`backend/tests/test_iteration52_53_livewire_switchboard.py`** (400 LOC)
+  - Iteration 52+53 Tests — Live-Wire Preparation + Payment Switchboard ==================================================================== Tests for: - Company Identity CRUD (MC/DOT/Bond/UCR injection +
+- [DEV-TOOL] **`backend/tests/test_iteration52_53_livewire_switchboard.py`** (400 LOC)
+  - Iteration 52+53 Tests — Live-Wire Preparation + Payment Switchboard ==================================================================== Tests for: - Company Identity CRUD (MC/DOT/Bond/UCR injection +
+- [DEV-TOOL] **`backend/tests/test_iteration5_features.py`** (503 LOC)
+  - Iteration 5 Backend Tests: AI Assistant, Routing Factors, Approval Rules, Monitoring, Driver Messages Tests for new features added in iteration 5 of FreightFlow Pro
+- [DEV-TOOL] **`backend/tests/test_iteration5_features.py`** (503 LOC)
+  - Iteration 5 Backend Tests: AI Assistant, Routing Factors, Approval Rules, Monitoring, Driver Messages Tests for new features added in iteration 5 of FreightFlow Pro
+- [DEV-TOOL] **`backend/tests/test_iteration9_auth_gate.py`** (390 LOC)
+  - Iteration 9 Tests — Continental Haul Logistics Tests for: 1. Global auth gate on /api/* endpoints (require_broker) 2. Public share viewer still works without auth 3. Carrier endpoints still work for c
+- [DEV-TOOL] **`backend/tests/test_iteration9_auth_gate.py`** (390 LOC)
+  - Iteration 9 Tests — Continental Haul Logistics Tests for: 1. Global auth gate on /api/* endpoints (require_broker) 2. Public share viewer still works without auth 3. Carrier endpoints still work for c
+- [DEV-TOOL] **`backend/tests/test_iteration_101_observability.py`** (482 LOC)
+  - Iteration 101 — Observability & Automation Discovery Tests Tests for: - InterventionObserver middleware (PUT/PATCH capture, skip-paths, priority classification) - Zero-impact guarantee (queue_dropped 
+- [DEV-TOOL] **`backend/tests/test_iteration_101_observability.py`** (482 LOC)
+  - Iteration 101 — Observability & Automation Discovery Tests Tests for: - InterventionObserver middleware (PUT/PATCH capture, skip-paths, priority classification) - Zero-impact guarantee (queue_dropped 
+- [DEV-TOOL] **`backend/tests/test_iteration_106_hardening.py`** (502 LOC)
+  - Iteration 106 — Phase 1 Hardening & Validation Tests Tests the THREE validation axes: 1. Driver Handshake — location capture + user-agent on acceptance 2. Digital Stapler — merged PDF generation + dow
+- [DEV-TOOL] **`backend/tests/test_iteration_106_hardening.py`** (502 LOC)
+  - Iteration 106 — Phase 1 Hardening & Validation Tests Tests the THREE validation axes: 1. Driver Handshake — location capture + user-agent on acceptance 2. Digital Stapler — merged PDF generation + dow
+- [DEV-TOOL] **`backend/tests/test_iteration_117_6_engagement_tracking.py`** (443 LOC)
+  - Iteration 117.6 — Email Engagement Tracking Tests ================================================== Tests for: P0 — GET /api/bulk-hunter/blast/funnel?window_days=30 (broker auth) P0 — GET /api/bulk-h
+- [DEV-TOOL] **`backend/tests/test_iteration_117_6_engagement_tracking.py`** (443 LOC)
+  - Iteration 117.6 — Email Engagement Tracking Tests ================================================== Tests for: P0 — GET /api/bulk-hunter/blast/funnel?window_days=30 (broker auth) P0 — GET /api/bulk-h
+- [DEV-TOOL] **`backend/tests/test_iteration_117_7_followup_sequencer.py`** (826 LOC)
+  - Iteration 117.7 — Auto Follow-Up Sequencer Tests ================================================== Tests for the Bulk-Hunter Auto Follow-Up Sequencer: P0 — POST /api/bulk-hunter/follow-up/run-now?for
+- [DEV-TOOL] **`backend/tests/test_iteration_117_7_followup_sequencer.py`** (826 LOC)
+  - Iteration 117.7 — Auto Follow-Up Sequencer Tests ================================================== Tests for the Bulk-Hunter Auto Follow-Up Sequencer: P0 — POST /api/bulk-hunter/follow-up/run-now?for
+- [DEV-TOOL] **`backend/tests/test_iteration_117_bulk_hunter_blast.py`** (539 LOC)
+  - Iteration 117 — Bulk Carrier Hunter + Cold-Outreach Blast Tests ================================================================ Tests for: P0 — Bulk Carrier Hunter endpoints (segments, all, segment f
+- [DEV-TOOL] **`backend/tests/test_iteration_117_bulk_hunter_blast.py`** (539 LOC)
+  - Iteration 117 — Bulk Carrier Hunter + Cold-Outreach Blast Tests ================================================================ Tests for: P0 — Bulk Carrier Hunter endpoints (segments, all, segment f
+- [DEV-TOOL] **`backend/tests/test_iteration_118_5_copy_variants.py`** (1139 LOC)
+  - Iteration 118.5 — A/B Copy Variants for Cold-Outreach Pipeline Tests ===================================================================== Tests for: P0 — Copy Variants CRUD (broker auth) P0 — Variant
+- [DEV-TOOL] **`backend/tests/test_iteration_118_5_copy_variants.py`** (1139 LOC)
+  - Iteration 118.5 — A/B Copy Variants for Cold-Outreach Pipeline Tests ===================================================================== Tests for: P0 — Copy Variants CRUD (broker auth) P0 — Variant
+- [DEV-TOOL] **`backend/tests/test_iteration_119_6_phase2_readiness.py`** (656 LOC)
+  - Iteration 119.6 — Phase 2 (Canadian Operations) Readiness Checklist Tests ========================================================================== Tests for the Phase 2 readiness checklist module th
+- [DEV-TOOL] **`backend/tests/test_iteration_119_6_phase2_readiness.py`** (656 LOC)
+  - Iteration 119.6 — Phase 2 (Canadian Operations) Readiness Checklist Tests ========================================================================== Tests for the Phase 2 readiness checklist module th
+- [DEV-TOOL] **`backend/tests/test_iteration_119_iter119_features.py`** (1347 LOC)
+  - Iteration 119 — Backend Tests ============================== Tests for: P0 — A) Canadian carriers full lifecycle (seed-known, stats, list, ingest-csv) P0 — A) Canada scope on Bulk Hunter integration P
+- [DEV-TOOL] **`backend/tests/test_iteration_119_iter119_features.py`** (1347 LOC)
+  - Iteration 119 — Backend Tests ============================== Tests for: P0 — A) Canadian carriers full lifecycle (seed-known, stats, list, ingest-csv) P0 — A) Canada scope on Bulk Hunter integration P
+- [DEV-TOOL] **`backend/tests/test_iteration_121_batch_health.py`** (429 LOC)
+  - Iteration 121 — Load Health Badge Batch Endpoint Tests ====================================================== Tests for the new batch endpoint added to Load Schema v2: GET /api/loads/schema-completene
+- [DEV-TOOL] **`backend/tests/test_iteration_121_batch_health.py`** (429 LOC)
+  - Iteration 121 — Load Health Badge Batch Endpoint Tests ====================================================== Tests for the new batch endpoint added to Load Schema v2: GET /api/loads/schema-completene
+- [DEV-TOOL] **`backend/tests/test_iteration_124_schema_defaults_profile.py`** (498 LOC)
+  - Iteration 124 — Schema Defaults Profile (Org-Level Cold-Start Template) ======================================================================== Tests for the new Schema Defaults Profile feature: - GE
+- [DEV-TOOL] **`backend/tests/test_iteration_124_schema_defaults_profile.py`** (498 LOC)
+  - Iteration 124 — Schema Defaults Profile (Org-Level Cold-Start Template) ======================================================================== Tests for the new Schema Defaults Profile feature: - GE
+- [DEV-TOOL] **`backend/tests/test_iteration_125_external_post_pipeline.py`** (785 LOC)
+  - Iteration 125 — External Posting Pipeline (Card 4 Activity 2) ============================================================= Tests for the Multi-Channel Cross-Posting Pipeline: - POST /api/loads/{load_
+- [DEV-TOOL] **`backend/tests/test_iteration_125_external_post_pipeline.py`** (785 LOC)
+  - Iteration 125 — External Posting Pipeline (Card 4 Activity 2) ============================================================= Tests for the Multi-Channel Cross-Posting Pipeline: - POST /api/loads/{load_
+- [DEV-TOOL] **`backend/tests/test_iteration_127_inquiry_pipeline.py`** (774 LOC)
+  - Iteration 127 — Inquiry-to-Booking Pipeline Testing ==================================================== Tests for the new inquiry pipeline module (/app/backend/inquiry_pipeline.py): - POST /api/exter
+- [DEV-TOOL] **`backend/tests/test_iteration_127_inquiry_pipeline.py`** (774 LOC)
+  - Iteration 127 — Inquiry-to-Booking Pipeline Testing ==================================================== Tests for the new inquiry pipeline module (/app/backend/inquiry_pipeline.py): - POST /api/exter
+- [DEV-TOOL] **`backend/tests/test_iteration_128_booking_auto_conversion.py`** (662 LOC)
+  - Iteration 128 — Booking-to-Load Auto-Conversion Testing ======================================================== Tests the Iter 81.3 feature: When complete_negotiation runs with outcome='booked', the 
+- [DEV-TOOL] **`backend/tests/test_iteration_128_booking_auto_conversion.py`** (662 LOC)
+  - Iteration 128 — Booking-to-Load Auto-Conversion Testing ======================================================== Tests the Iter 81.3 feature: When complete_negotiation runs with outcome='booked', the 
+- [DEV-TOOL] **`backend/tests/test_iteration_130_email_rc_button.py`** (309 LOC)
+  - Iteration 130 — 1-Click Email RC Button & Vault/Identity Tests ================================================================ Tests for the new inline Email RC button in Required Tasks tray: - Front
+- [DEV-TOOL] **`backend/tests/test_iteration_130_email_rc_button.py`** (309 LOC)
+  - Iteration 130 — 1-Click Email RC Button & Vault/Identity Tests ================================================================ Tests for the new inline Email RC button in Required Tasks tray: - Front
+- [DEV-TOOL] **`backend/tests/test_iteration_135_7_throttle_prevet_seed.py`** (419 LOC)
+  - test_iteration_135_7_throttle_prevet_seed.py — Iteration 135.7 Testing Tests for: 1. Daily Load Throttle endpoints (GET /api/throttle/state, GET /api/throttle/check-can-book, POST /api/throttle/cap) 2
+- [DEV-TOOL] **`backend/tests/test_iteration_135_7_throttle_prevet_seed.py`** (419 LOC)
+  - test_iteration_135_7_throttle_prevet_seed.py — Iteration 135.7 Testing Tests for: 1. Daily Load Throttle endpoints (GET /api/throttle/state, GET /api/throttle/check-can-book, POST /api/throttle/cap) 2
+- [DEV-TOOL] **`backend/tests/test_iteration_135_8_day1_walkthrough.py`** (385 LOC)
+  - test_iteration_135_8_day1_walkthrough.py — Day-1 Single Load Walkthrough wizard tests. Iter 135.8 — Tests for the Day-1 walkthrough wizard that guides operators through the 9 SOP stages: lead → quoted
+- [DEV-TOOL] **`backend/tests/test_iteration_135_8_day1_walkthrough.py`** (385 LOC)
+  - test_iteration_135_8_day1_walkthrough.py — Day-1 Single Load Walkthrough wizard tests. Iter 135.8 — Tests for the Day-1 walkthrough wizard that guides operators through the 9 SOP stages: lead → quoted
+- [DEV-TOOL] **`backend/tests/test_iteration_135_sop_engine_auth.py`** (397 LOC)
+  - Iteration 135 Tests — SOP Workflow Engine + Change Password + Login Regression Tests: 1. SOP Engine endpoints: - GET /api/sop/map — returns active_stages, terminal_stages, SOP_MAP with 10 stages - GET
+- [DEV-TOOL] **`backend/tests/test_iteration_135_sop_engine_auth.py`** (397 LOC)
+  - Iteration 135 Tests — SOP Workflow Engine + Change Password + Login Regression Tests: 1. SOP Engine endpoints: - GET /api/sop/map — returns active_stages, terminal_stages, SOP_MAP with 10 stages - GET
+- [DEV-TOOL] **`backend/tests/test_iteration_56_58.py`** (411 LOC)
+  - Iteration 56 (Day-1 Playback / Origin Story) + Iteration 58 (Data Sanctity & Privacy Sprint) Tests Tests: - Playback endpoints (GET /api/playback/events, GET /api/playback/stats, POST /api/playback/re
+- [DEV-TOOL] **`backend/tests/test_iteration_56_58.py`** (411 LOC)
+  - Iteration 56 (Day-1 Playback / Origin Story) + Iteration 58 (Data Sanctity & Privacy Sprint) Tests Tests: - Playback endpoints (GET /api/playback/events, GET /api/playback/stats, POST /api/playback/re
+- [DEV-TOOL] **`backend/tests/test_iteration_60.py`** (749 LOC)
+  - Iteration 60 Backend Tests — Continental Haul Logistics Tests for: Business Plan PDF, Multi-Leg Shipments, Graceful Exit (Return Load), Live-Wire Diary Test Credentials: - Owner: jasonandpugee@gmail.c
+- [DEV-TOOL] **`backend/tests/test_iteration_60.py`** (749 LOC)
+  - Iteration 60 Backend Tests — Continental Haul Logistics Tests for: Business Plan PDF, Multi-Leg Shipments, Graceful Exit (Return Load), Live-Wire Diary Test Credentials: - Owner: jasonandpugee@gmail.c
+- [DEV-TOOL] **`backend/tests/test_iteration_63.py`** (361 LOC)
+  - Iteration 63 Backend Tests — Market Sentinel + Morning Brief + Login Regression + Zoho + ship_it.sh Tests: 1. LOGIN REGRESSION: owner jasonandpugee@gmail.com / Pugeeod1342# should successfully log in 
+- [DEV-TOOL] **`backend/tests/test_iteration_63.py`** (361 LOC)
+  - Iteration 63 Backend Tests — Market Sentinel + Morning Brief + Login Regression + Zoho + ship_it.sh Tests: 1. LOGIN REGRESSION: owner jasonandpugee@gmail.com / Pugeeod1342# should successfully log in 
+- [DEV-TOOL] **`backend/tests/test_iteration_68_visibility_override.py`** (466 LOC)
+  - Iteration 68 — Visibility Bonus & Pilot Override Tests Tests: 1. Visibility Bonus endpoints (GET /api/visibility-bonus/load/{id}, GET /api/visibility-bonus/carrier/{id}) 2. Mercy approve (POST /api/vi
+- [DEV-TOOL] **`backend/tests/test_iteration_68_visibility_override.py`** (466 LOC)
+  - Iteration 68 — Visibility Bonus & Pilot Override Tests Tests: 1. Visibility Bonus endpoints (GET /api/visibility-bonus/load/{id}, GET /api/visibility-bonus/carrier/{id}) 2. Mercy approve (POST /api/vi
+- [DEV-TOOL] **`backend/tests/test_iteration_78_command_control.py`** (448 LOC)
+  - Iteration 78.1 + 78.3 — Command & Control War Room Tests Tests for: - GET /api/command/loads/{ref} — margin object, lost_warning, phone lookup - POST /api/command/loads/{ref}/dispatcher-message — audi
+- [DEV-TOOL] **`backend/tests/test_iteration_78_command_control.py`** (448 LOC)
+  - Iteration 78.1 + 78.3 — Command & Control War Room Tests Tests for: - GET /api/command/loads/{ref} — margin object, lost_warning, phone lookup - POST /api/command/loads/{ref}/dispatcher-message — audi
+- [DEV-TOOL] **`backend/tests/test_iteration_98_hardware_sentinel.py`** (513 LOC)
+  - Iteration 98 — Hardware Sentinel / Circuit Breaker Tests ========================================================= Tests for: A) Hardware Sentinel State & Config: - GET /api/orchestration/hardware/sta
+- [DEV-TOOL] **`backend/tests/test_iteration_98_hardware_sentinel.py`** (513 LOC)
+  - Iteration 98 — Hardware Sentinel / Circuit Breaker Tests ========================================================= Tests for: A) Hardware Sentinel State & Config: - GET /api/orchestration/hardware/sta
+- [DEV-TOOL] **`backend/tests/test_llm_client_smoke.py`** (318 LOC)
+  - test_llm_client_smoke.py -- WW5 unit tests for scripts/llm_client_smoke.py. Tests: test_no_confirm_live_flag_exits_2 test_confirm_live_but_no_api_key_exits_3 test_confirm_live_with_mocked_factory_pass
+- [DEV-TOOL] **`backend/tests/test_llm_client_smoke.py`** (318 LOC)
+  - test_llm_client_smoke.py -- WW5 unit tests for scripts/llm_client_smoke.py. Tests: test_no_confirm_live_flag_exits_2 test_confirm_live_but_no_api_key_exits_3 test_confirm_live_with_mocked_factory_pass
+- [DEV-TOOL] **`backend/tests/test_llm_reasoning_loop.py`** (693 LOC)
+  - test_llm_reasoning_loop.py -- Phase 3 SCAFFOLD unit tests for llm_reasoning_loop. Tests: test_tick_skips_when_phase3_disabled test_tick_pulls_pending_events_from_4_streams test_route_action_GREEN_high
+- [DEV-TOOL] **`backend/tests/test_llm_reasoning_loop.py`** (693 LOC)
+  - test_llm_reasoning_loop.py -- Phase 3 SCAFFOLD unit tests for llm_reasoning_loop. Tests: test_tick_skips_when_phase3_disabled test_tick_pulls_pending_events_from_4_streams test_route_action_GREEN_high
+- [DEV-TOOL] **`backend/tests/test_load_boards.py`** (430 LOC)
+  - Test Load Board Manager Feature - Iteration 4 Tests for: - GET /api/load-board-sources (returns 6 pre-seeded default sources) - POST /api/load-board-sources (create new load board source) - PUT /api/l
+- [DEV-TOOL] **`backend/tests/test_load_boards.py`** (430 LOC)
+  - Test Load Board Manager Feature - Iteration 4 Tests for: - GET /api/load-board-sources (returns 6 pre-seeded default sources) - POST /api/load-board-sources (create new load board source) - PUT /api/l
+- [DEV-TOOL] **`backend/tests/test_loadboard_scraper.py`** (1229 LOC)
+  - test_loadboard_scraper.py -- Unit tests for the Phase 10.1 load-board scraper scaffold. Mandatory tests (per spec): - test_scrape_disabled_returns_skip_no_network - test_dedup_hash_stable_for_same_lis
+- [DEV-TOOL] **`backend/tests/test_loadboard_scraper.py`** (1229 LOC)
+  - test_loadboard_scraper.py -- Unit tests for the Phase 10.1 load-board scraper scaffold. Mandatory tests (per spec): - test_scrape_disabled_returns_skip_no_network - test_dedup_hash_stable_for_same_lis
+- [DEV-TOOL] **`backend/tests/test_login_rate_limiter.py`** (202 LOC)
+  - Unit tests for backend/auth/login_rate_limiter.py. Synchronous; no Mongo, no pytest-asyncio. Time is controlled by monkeypatching the module-level _utcnow() helper instead of pulling in freezegun (no 
+- [DEV-TOOL] **`backend/tests/test_login_rate_limiter.py`** (202 LOC)
+  - Unit tests for backend/auth/login_rate_limiter.py. Synchronous; no Mongo, no pytest-asyncio. Time is controlled by monkeypatching the module-level _utcnow() helper instead of pulling in freezegun (no 
+- [DEV-TOOL] **`backend/tests/test_master_key_rotation.py`** (235 LOC)
+  - Tests for scripts/rotate_master_key.py. Exercises the four hardening contracts of the rotation flow: 1. Rotation re-encrypts every vault entry with the new key (and the plaintext round-trips identical
+- [DEV-TOOL] **`backend/tests/test_master_key_rotation.py`** (235 LOC)
+  - Tests for scripts/rotate_master_key.py. Exercises the four hardening contracts of the rotation flow: 1. Rotation re-encrypts every vault entry with the new key (and the plaintext round-trips identical
+- [DEV-TOOL] **`backend/tests/test_new_features.py`** (415 LOC)
+  - Test suite for FreightFlow Pro NEW features (iteration 3): - FMCSA Carrier Database (30+ carriers) - Live Driver Tracking (GPS check-in, history) - External Load Board (DAT, Truckstop, 123Loadboard mo
+- [DEV-TOOL] **`backend/tests/test_new_features.py`** (415 LOC)
+  - Test suite for FreightFlow Pro NEW features (iteration 3): - FMCSA Carrier Database (30+ carriers) - Live Driver Tracking (GPS check-in, history) - External Load Board (DAT, Truckstop, 123Loadboard mo
+- [DEV-TOOL] **`backend/tests/test_operator_push_consumer.py`** (453 LOC)
+  - test_operator_push_consumer.py -- WW1 (TT3 closure, 2026-05-08 EOD) unit tests for scripts/operator_push_consumer.py. Covers: test_dry_run_does_not_mutate_or_write_files test_real_drain_writes_tmp_and
+- [DEV-TOOL] **`backend/tests/test_operator_push_consumer.py`** (453 LOC)
+  - test_operator_push_consumer.py -- WW1 (TT3 closure, 2026-05-08 EOD) unit tests for scripts/operator_push_consumer.py. Covers: test_dry_run_does_not_mutate_or_write_files test_real_drain_writes_tmp_and
+- [DEV-TOOL] **`backend/tests/test_outcome_tracker.py`** (662 LOC)
+  - test_outcome_tracker.py -- Unit tests for the iter 145.1 stage 1d outcome-feedback tracker. Covers (5+ mandatory tests + extras): 1. test_record_outcome_persists_with_correct_schema -- a fresh outcome
+- [DEV-TOOL] **`backend/tests/test_outcome_tracker.py`** (662 LOC)
+  - test_outcome_tracker.py -- Unit tests for the iter 145.1 stage 1d outcome-feedback tracker. Covers (5+ mandatory tests + extras): 1. test_record_outcome_persists_with_correct_schema -- a fresh outcome
+- [DEV-TOOL] **`backend/tests/test_outreach_orchestrator.py`** (380 LOC)
+  - iter 142.1 stage 1d -- OutreachOrchestrator + load_board_fallback tests. These tests mock: - the Motor async db (FakeAsyncDB below; supports the small subset the orchestrator actually calls -- find_on
+- [DEV-TOOL] **`backend/tests/test_outreach_orchestrator.py`** (380 LOC)
+  - iter 142.1 stage 1d -- OutreachOrchestrator + load_board_fallback tests. These tests mock: - the Motor async db (FakeAsyncDB below; supports the small subset the orchestrator actually calls -- find_on
+- [DEV-TOOL] **`backend/tests/test_patch_classifier.py`** (214 LOC)
+  - test_patch_classifier.py -- Phase 2 SCAFFOLD unit tests for patch_classifier. Tests: test_test_fixture_change_classified_GREEN test_log_level_adjustment_classified_GREEN test_dependency_pin_minor_bump
+- [DEV-TOOL] **`backend/tests/test_patch_classifier.py`** (214 LOC)
+  - test_patch_classifier.py -- Phase 2 SCAFFOLD unit tests for patch_classifier. Tests: test_test_fixture_change_classified_GREEN test_log_level_adjustment_classified_GREEN test_dependency_pin_minor_bump
+- [DEV-TOOL] **`backend/tests/test_pipeline_walkthrough_router.py`** (634 LOC)
+  - test_pipeline_walkthrough_router.py -- EOD-15 Stream EE1. Covers the 5 mandatory contracts for the Pipeline Walkthrough endpoint: 1. test_walkthrough_summary_active_filter ?status=active returns only 
+- [DEV-TOOL] **`backend/tests/test_pipeline_walkthrough_router.py`** (634 LOC)
+  - test_pipeline_walkthrough_router.py -- EOD-15 Stream EE1. Covers the 5 mandatory contracts for the Pipeline Walkthrough endpoint: 1. test_walkthrough_summary_active_filter ?status=active returns only 
+- [DEV-TOOL] **`backend/tests/test_pod_red_flag_escalation.py`** (478 LOC)
+  - test_pod_red_flag_escalation.py -- DDD3 / NORTH_STAR_BUILD_PLAN PHASE B.1 #6. Validates that `_escalate_pod_red_flags` (and the wire-up inside `ingest_pod_upload`) correctly: 1. Inserts a `db.claims_p
+- [DEV-TOOL] **`backend/tests/test_pod_red_flag_escalation.py`** (478 LOC)
+  - test_pod_red_flag_escalation.py -- DDD3 / NORTH_STAR_BUILD_PLAN PHASE B.1 #6. Validates that `_escalate_pod_red_flags` (and the wire-up inside `ingest_pod_upload`) correctly: 1. Inserts a `db.claims_p
+- [DEV-TOOL] **`backend/tests/test_preflight_server_smoke.py`** (287 LOC)
+  - Tests for scripts/preflight_server_smoke.py. Strategy: build synthetic server.py fixtures + temp module trees in tmp_path. We never touch the real backend/server.py; we never import real backend modul
+- [DEV-TOOL] **`backend/tests/test_preflight_server_smoke.py`** (287 LOC)
+  - Tests for scripts/preflight_server_smoke.py. Strategy: build synthetic server.py fixtures + temp module trees in tmp_path. We never touch the real backend/server.py; we never import real backend modul
+- [DEV-TOOL] **`backend/tests/test_privacy_consent_logger.py`** (326 LOC)
+  - test_privacy_consent_logger -- consent-log + revoke endpoint + gps_ping terminal-status guard tests for JJJ1' (CCPA hardening). Covers: * record_consent_event writes a row with sha256(phone) -- never 
+- [DEV-TOOL] **`backend/tests/test_privacy_consent_logger.py`** (326 LOC)
+  - test_privacy_consent_logger -- consent-log + revoke endpoint + gps_ping terminal-status guard tests for JJJ1' (CCPA hardening). Covers: * record_consent_event writes a row with sha256(phone) -- never 
+- [DEV-TOOL] **`backend/tests/test_real_samplers.py`** (247 LOC)
+  - test_real_samplers.py -- TT2 follow-up #1 unit tests for the real metric samplers in rollback_watcher. Tests: test_sample_p95_latency_uses_nearest_rank test_sample_cron_success_rate_returns_ratio Stra
+- [DEV-TOOL] **`backend/tests/test_real_samplers.py`** (247 LOC)
+  - test_real_samplers.py -- TT2 follow-up #1 unit tests for the real metric samplers in rollback_watcher. Tests: test_sample_p95_latency_uses_nearest_rank test_sample_cron_success_rate_returns_ratio Stra
+- [DEV-TOOL] **`backend/tests/test_reconciler.py`** (470 LOC)
+  - test_reconciler.py -- Iter 144.x Phase 6 stage 1c unit tests. Required (5): test_email_factor_wire_signal_flips_to_funded test_mercury_deposit_amount_match_flips_to_funded test_amount_mismatch_outside
+- [DEV-TOOL] **`backend/tests/test_reconciler.py`** (470 LOC)
+  - test_reconciler.py -- Iter 144.x Phase 6 stage 1c unit tests. Required (5): test_email_factor_wire_signal_flips_to_funded test_mercury_deposit_amount_match_flips_to_funded test_amount_mismatch_outside
+- [DEV-TOOL] **`backend/tests/test_records_request.py`** (572 LOC)
+  - test_records_request.py -- Unit tests for the 49 CFR Part 371 sec 371.3(c) records-request router + the cron 33 SLA escalation tick. Stream HHH2 (HHH1 follow-up #1, 2026-05-09). Coverage -------- 1. t
+- [DEV-TOOL] **`backend/tests/test_records_request.py`** (572 LOC)
+  - test_records_request.py -- Unit tests for the 49 CFR Part 371 sec 371.3(c) records-request router + the cron 33 SLA escalation tick. Stream HHH2 (HHH1 follow-up #1, 2026-05-09). Coverage -------- 1. t
+- [DEV-TOOL] **`backend/tests/test_renewals_calculator.py`** (206 LOC)
+  - test_renewals_calculator.py -- Iter 145.x Stream KK1 unit tests for the renewals pure-math helpers. KK1 (4): test_compute_days_until_clamps_negatives test_thresholds_just_crossed_basic test_thresholds
+- [DEV-TOOL] **`backend/tests/test_renewals_calculator.py`** (206 LOC)
+  - test_renewals_calculator.py -- Iter 145.x Stream KK1 unit tests for the renewals pure-math helpers. KK1 (4): test_compute_days_until_clamps_negatives test_thresholds_just_crossed_basic test_thresholds
+- [DEV-TOOL] **`backend/tests/test_renewals_notifier.py`** (612 LOC)
+  - test_renewals_notifier.py -- Iter 145.x Stream LL1 unit tests for the renewals notifier (the cron consumer). LL1 (6): test_dispatch_picks_pending_reminders_only test_dispatch_composes_email_with_dispa
+- [DEV-TOOL] **`backend/tests/test_renewals_notifier.py`** (612 LOC)
+  - test_renewals_notifier.py -- Iter 145.x Stream LL1 unit tests for the renewals notifier (the cron consumer). LL1 (6): test_dispatch_picks_pending_reminders_only test_dispatch_composes_email_with_dispa
+- [DEV-TOOL] **`backend/tests/test_renewals_router.py`** (746 LOC)
+  - test_renewals_router.py -- Iter 145.x Stream KK1 unit tests for the operator-facing renewals router endpoints. KK1 (4): test_summary_returns_renewals_with_urgency test_summary_filters_by_category_and_
+- [DEV-TOOL] **`backend/tests/test_renewals_router.py`** (746 LOC)
+  - test_renewals_router.py -- Iter 145.x Stream KK1 unit tests for the operator-facing renewals router endpoints. KK1 (4): test_summary_returns_renewals_with_urgency test_summary_filters_by_category_and_
+- [DEV-TOOL] **`backend/tests/test_renewals_scanner.py`** (428 LOC)
+  - test_renewals_scanner.py -- Iter 145.x Stream KK1 unit tests for the renewals scanner (the cron producer). KK1 (4): test_scan_finds_due_renewals_within_threshold test_scan_appends_reminder_row_per_thr
+- [DEV-TOOL] **`backend/tests/test_renewals_scanner.py`** (428 LOC)
+  - test_renewals_scanner.py -- Iter 145.x Stream KK1 unit tests for the renewals scanner (the cron producer). KK1 (4): test_scan_finds_due_renewals_within_threshold test_scan_appends_reminder_row_per_thr
+- [DEV-TOOL] **`backend/tests/test_retention_floor_guards.py`** (268 LOC)
+  - test_retention_floor_guards.py -- 49 CFR Part 371 sec 371.3(b) retention- floor guard test. Stream HHH2 (HHH1 follow-up #2, 2026-05-09). Background ---------- 49 CFR sec 371.3(b) mandates a 3-year min
+- [DEV-TOOL] **`backend/tests/test_retention_floor_guards.py`** (268 LOC)
+  - test_retention_floor_guards.py -- 49 CFR Part 371 sec 371.3(b) retention- floor guard test. Stream HHH2 (HHH1 follow-up #2, 2026-05-09). Background ---------- 49 CFR sec 371.3(b) mandates a 3-year min
+- [DEV-TOOL] **`backend/tests/test_revert_mode.py`** (333 LOC)
+  - test_revert_mode.py -- TT2 follow-up #2 unit tests for auto_merge_harness.revert_commit_isolated. Tests: test_revert_commit_isolated_aborts_on_test_failure test_revert_commit_isolated_commits_with_rol
+- [DEV-TOOL] **`backend/tests/test_revert_mode.py`** (333 LOC)
+  - test_revert_mode.py -- TT2 follow-up #2 unit tests for auto_merge_harness.revert_commit_isolated. Tests: test_revert_commit_isolated_aborts_on_test_failure test_revert_commit_isolated_commits_with_rol
+- [DEV-TOOL] **`backend/tests/test_rollback_watcher.py`** (558 LOC)
+  - test_rollback_watcher.py -- Phase 4 SCAFFOLD unit tests for rollback_watcher. Tests: test_watcher_picks_up_recent_success_with_metric test_watcher_skips_actions_without_metric test_watcher_rolls_back_
+- [DEV-TOOL] **`backend/tests/test_rollback_watcher.py`** (558 LOC)
+  - test_rollback_watcher.py -- Phase 4 SCAFFOLD unit tests for rollback_watcher. Tests: test_watcher_picks_up_recent_success_with_metric test_watcher_skips_actions_without_metric test_watcher_rolls_back_
+- [DEV-TOOL] **`backend/tests/test_rss_parser.py`** (227 LOC)
+  - test_rss_parser.py -- Phase 10.1.1 RSS / Atom parser unit tests. Mandatory tests (per spec): - test_parse_clean_rss_returns_5_listings - test_parse_malformed_rss_skips_invalid_items - test_parse_atom_
+- [DEV-TOOL] **`backend/tests/test_rss_parser.py`** (227 LOC)
+  - test_rss_parser.py -- Phase 10.1.1 RSS / Atom parser unit tests. Mandatory tests (per spec): - test_parse_clean_rss_returns_5_listings - test_parse_malformed_rss_skips_invalid_items - test_parse_atom_
+- [DEV-TOOL] **`backend/tests/test_secret_reader.py`** (242 LOC)
+  - Unit tests for backend.security.secret_reader. The reader's job is to resolve a secret from the DPAPI/Fernet vault, falling back to os.environ, falling back to the caller's default. These tests exerci
+- [DEV-TOOL] **`backend/tests/test_secret_reader.py`** (242 LOC)
+  - Unit tests for backend.security.secret_reader. The reader's job is to resolve a secret from the DPAPI/Fernet vault, falling back to os.environ, falling back to the caller's default. These tests exerci
+- [DEV-TOOL] **`backend/tests/test_secrets_store.py`** (150 LOC)
+  - Unit tests for backend.security.secrets_store. All tests are hermetic: - Use pytest tmp_path to point CHL_SECRETS_STORE_PATH at a throwaway file. - Force Fernet fallback when the test needs determinis
+- [DEV-TOOL] **`backend/tests/test_secrets_store.py`** (150 LOC)
+  - Unit tests for backend.security.secrets_store. All tests are hermetic: - Use pytest tmp_path to point CHL_SECRETS_STORE_PATH at a throwaway file. - Force Fernet fallback when the test needs determinis
+- [DEV-TOOL] **`backend/tests/test_security_headers_middleware.py`** (267 LOC)
+  - test_security_headers_middleware.py -- Iter EOD-16 stream XX1. Locks in the global security-headers middleware contract: 1. HSTS / X-Frame-Options / nosniff / Referrer-Policy / Permissions-Policy / CS
+- [DEV-TOOL] **`backend/tests/test_security_headers_middleware.py`** (267 LOC)
+  - test_security_headers_middleware.py -- Iter EOD-16 stream XX1. Locks in the global security-headers middleware contract: 1. HSTS / X-Frame-Options / nosniff / Referrer-Policy / Permissions-Policy / CS
+- [DEV-TOOL] **`backend/tests/test_seed_renewals.py`** (259 LOC)
+  - test_seed_renewals.py -- Iter 145.x Stream NN3 unit tests for the one-shot db.renewals bulk-seeder script (scripts/seed_renewals.py). NN3 (4): test_seed_idempotent_skips_existing_by_name test_seed_dry
+- [DEV-TOOL] **`backend/tests/test_seed_renewals.py`** (259 LOC)
+  - test_seed_renewals.py -- Iter 145.x Stream NN3 unit tests for the one-shot db.renewals bulk-seeder script (scripts/seed_renewals.py). NN3 (4): test_seed_idempotent_skips_existing_by_name test_seed_dry
+- [DEV-TOOL] **`backend/tests/test_sender_classifier.py`** (855 LOC)
+  - test_sender_classifier.py -- Iter EOD-12 sub-agent U: unit tests for the SENDER-TYPE classifier substrate (sender_classifier + spam_blocker + partner_notifier + sender_router). Mandatory contracts (8 
+- [DEV-TOOL] **`backend/tests/test_sender_classifier.py`** (855 LOC)
+  - test_sender_classifier.py -- Iter EOD-12 sub-agent U: unit tests for the SENDER-TYPE classifier substrate (sender_classifier + spam_blocker + partner_notifier + sender_router). Mandatory contracts (8 
+- [DEV-TOOL] **`backend/tests/test_share_link_feature.py`** (308 LOC)
+  - Test suite for Business Plan Shareable Link Feature (Iteration 7) Tests: - POST /api/business-plan/share - Create shareable link - GET /api/business-plan/shares - List all active share links - GET /ap
+- [DEV-TOOL] **`backend/tests/test_share_link_feature.py`** (308 LOC)
+  - Test suite for Business Plan Shareable Link Feature (Iteration 7) Tests: - POST /api/business-plan/share - Create shareable link - GET /api/business-plan/shares - List all active share links - GET /ap
+- [DEV-TOOL] **`backend/tests/test_sla_prune.py`** (319 LOC)
+  - test_sla_prune.py -- Unit tests for backend.maintenance.sla_prune (Stream XX2 / TT2 follow-up #2). Coverage: - test_happy_path 50/50 split, 50 deleted + 50 kept. - test_empty_collection deleted=0, kep
+- [DEV-TOOL] **`backend/tests/test_sla_prune.py`** (319 LOC)
+  - test_sla_prune.py -- Unit tests for backend.maintenance.sla_prune (Stream XX2 / TT2 follow-up #2). Coverage: - test_happy_path 50/50 split, 50 deleted + 50 kept. - test_empty_collection deleted=0, kep
+- [DEV-TOOL] **`backend/tests/test_sub_agent_dispatcher.py`** (661 LOC)
+  - test_sub_agent_dispatcher.py -- Unit tests for the iter 145.1 stage 1c sub-agent dispatcher. Covers (5 mandatory): 1. test_dispatch_skips_when_budget_exhausted -- daily-budget gate fires a "skipped" o
+- [DEV-TOOL] **`backend/tests/test_sub_agent_dispatcher.py`** (661 LOC)
+  - test_sub_agent_dispatcher.py -- Unit tests for the iter 145.1 stage 1c sub-agent dispatcher. Covers (5 mandatory): 1. test_dispatch_skips_when_budget_exhausted -- daily-budget gate fires a "skipped" o
+- [DEV-TOOL] **`backend/tests/test_suppression_path.py`** (112 LOC)
+  - Test suppression/unsubscribed path for bulk outreach blast. This test: 1. Finds a real MC with email from hunter results 2. Inserts a suppression row in cold_outreach_consent 3. Attempts to blast that
+- [DEV-TOOL] **`backend/tests/test_suppression_path.py`** (112 LOC)
+  - Test suppression/unsubscribed path for bulk outreach blast. This test: 1. Finds a real MC with email from hunter results 2. Inserts a suppression row in cold_outreach_consent 3. Attempts to blast that
+- [DEV-TOOL] **`backend/tests/test_tier1_classifier.py`** (357 LOC)
+  - test_tier1_classifier.py -- Pure unit tests for the iter 143.1 stage 1b Tier 1 rule-based classifier. Verifies (1) each of the 5 v1 lanes matches its target shape; (2) generic emails fall through to "
+- [DEV-TOOL] **`backend/tests/test_tier1_classifier.py`** (357 LOC)
+  - test_tier1_classifier.py -- Pure unit tests for the iter 143.1 stage 1b Tier 1 rule-based classifier. Verifies (1) each of the 5 v1 lanes matches its target shape; (2) generic emails fall through to "
+- [DEV-TOOL] **`backend/tests/test_tier2_classifier.py`** (486 LOC)
+  - test_tier2_classifier.py -- Pure unit tests for the iter 143.1 stage 1c Tier-2 LLM-based classifier. Verifies the 5 critical contracts: 1. Budget gate hard-stops the LLM call when today's projected sp
+- [DEV-TOOL] **`backend/tests/test_tier2_classifier.py`** (486 LOC)
+  - test_tier2_classifier.py -- Pure unit tests for the iter 143.1 stage 1c Tier-2 LLM-based classifier. Verifies the 5 critical contracts: 1. Budget gate hard-stops the LLM call when today's projected sp
+- [DEV-TOOL] **`backend/tests/test_totp_2fa.py`** (170 LOC)
+  - Unit tests for backend/auth/totp_2fa.py. Synchronous; no Mongo. Uses cryptography (already in requirements.txt) for the at-rest encrypt/decrypt round trip.
+- [DEV-TOOL] **`backend/tests/test_totp_2fa.py`** (170 LOC)
+  - Unit tests for backend/auth/totp_2fa.py. Synchronous; no Mongo. Uses cryptography (already in requirements.txt) for the at-rest encrypt/decrypt round trip.
+- [DEV-TOOL] **`backend/tests/test_tracking.py`** (408 LOC)
+  - test_tracking.py -- iter 142.2 phase 4 stage 1a tests. Covers: - test_ingest_event_writes_row_and_updates_load_summary - test_ingest_idempotent_on_sequence_n - test_ingest_rejects_invalid_lat_lng - te
+- [DEV-TOOL] **`backend/tests/test_tracking.py`** (408 LOC)
+  - test_tracking.py -- iter 142.2 phase 4 stage 1a tests. Covers: - test_ingest_event_writes_row_and_updates_load_summary - test_ingest_idempotent_on_sequence_n - test_ingest_rejects_invalid_lat_lng - te
+- [DEV-TOOL] **`backend/tests/test_websocket.py`** (356 LOC)
+  - WebSocket Testing for FreightFlow Pro Tests Socket.IO connection, room management, and real-time updates
+- [DEV-TOOL] **`backend/tests/test_websocket.py`** (356 LOC)
+  - WebSocket Testing for FreightFlow Pro Tests Socket.IO connection, room management, and real-time updates
+- [DEV-TOOL] **`backend/tests/test_websocket_notifications.py`** (129 LOC)
+  - WebSocket Testing for Broker Notifications Tests that when a carrier submits track-event, broker clients receive 'update' event with type='new_notification'
+- [DEV-TOOL] **`backend/tests/test_websocket_notifications.py`** (129 LOC)
+  - WebSocket Testing for Broker Notifications Tests that when a carrier submits track-event, broker clients receive 'update' event with type='new_notification'
+- [DEV-TOOL] **`backend/tests/test_weight_tuning_proposer.py`** (677 LOC)
+  - test_weight_tuning_proposer.py -- Unit tests for the iter 145.1 stage 3 outcome-driven weight-tuning proposer. Covers (6+ mandatory tests): 1. test_compute_proposals_groups_outcomes_by_evaluator_dim -
+- [DEV-TOOL] **`backend/tests/test_weight_tuning_proposer.py`** (677 LOC)
+  - test_weight_tuning_proposer.py -- Unit tests for the iter 145.1 stage 3 outcome-driven weight-tuning proposer. Covers (6+ mandatory tests): 1. test_compute_proposals_groups_outcomes_by_evaluator_dim -
+- [DEV-TOOL] **`scripts/check_inbox_situation.py`** (63 LOC)
+  - Diagnose: status of LD-2EF49A27, count of synthetic loads, recent outbound emails.
+- [DEV-TOOL] **`scripts/check_loadboard_status.py`** (81 LOC)
+  - Quick: list load board sources + status from db, and count synthetic loads from this evening's run window.
+- [DEV-TOOL] **`scripts/check_synthetic_state.py`** (49 LOC)
+  - Inspect end-state of the in-flight synthetic load.
+- [DEV-TOOL] **`scripts/dispatch_live_test_load.py`** (239 LOC)
+  - dispatch_live_test_load.py — Director's Live Handshake Kickoff. Creates a FRESH Springfield, MO → Memphis, TN load (same route as the golden-path script), mints a cold-outreach token, then emails the 
+- [DEV-TOOL] **`scripts/dispatch_test_load_bellavista.py`** (202 LOC)
+  - dispatch_test_load_bellavista.py — One-off test load to Bella Vista, AR. Creates a Kansas City, MO → Bella Vista, AR load and emails the cold-outreach offer link to lindgrenleslie@yahoo.com.
+- [DEV-TOOL] **`scripts/final_test_report.py`** (188 LOC)
+  - Pull telemetry from all synthetic test collections + write final summary.
+- [DEV-TOOL] **`scripts/probe_synthetic_docs.py`** (14 LOC)
+  - Probe synthetic-docs endpoint.
+- [DEV-TOOL] **`scripts/purge_synthetic_full.py`** (67 LOC)
+  - Full sweep: remove every synthetic-test artifact across all collections.
+- [DEV-TOOL] **`scripts/run_walkthrough.ps1`** (73 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. run_walkthrough.ps1 -- Smoke wrapper for the 21-stage synthetic walkthrough.  Sets fresh-test-DB env vars, runs the walkthrough 
+- [DEV-TOOL] **`scripts/send_synthetic_bol.py`** (212 LOC)
+  - Generate + email a synthetic BOL for a synthetic load. Operator photographs it from Gmail to upload as their BOL during pipeline testing.
+- [DEV-TOOL] **`scripts/send_test_ref_email.py`** (100 LOC)
+  - Send the accompanying operator-only test-reference email (BOL+PIN inline) for the most-recently-minted synthetic load.
+- [DEV-TOOL] **`scripts/smoke_driver_experience.py`** (151 LOC)
+  - End-to-end smoke test of the full driver experience. Walks a fresh synthetic load through every status transition + post-delivery.
+- [DEV-TOOL] **`scripts/smoke_pod_gate.py`** (138 LOC)
+  - Smoke test the POD gate fix. Drives a synthetic load through to at_delivery, then tries to advance to delivered WITHOUT uploading POD -> should get 412 pod_required. Then uploads a stub POD and retrie
+- [DEV-TOOL] **`scripts/synthetic_auto_driver.py`** (1019 LOC)
+  - synthetic_auto_driver.py -- Programmatic carrier-side stress-driver. PURPOSE Walk synthetic loads through the full driver flow (accept -> all 6 status transitions -> BOL upload -> POD upload -> delive
+- [DEV-TOOL] **`scripts/synthetic_auto_packet.py`** (321 LOC)
+  - synthetic_auto_packet.py -- email-only synthetic load test loop. Operator-mandated 2026-05-09: one load at a time, one email per load with the BOL + PIN inline, auto-walk the load to delivered program
+- [DEV-TOOL] **`scripts/synthetic_packet_dispatcher.py`** (309 LOC)
+  - synthetic_packet_dispatcher.py -- queue dispatch for operator phone walkthrough. Operator-authorized 2026-05-09. Mints + emails ONE synthetic load at a time, waits for it to reach `delivered` status, 
+- [DEV-TOOL] **`scripts/synthetic_state_watcher.py`** (287 LOC)
+  - synthetic_state_watcher.py -- Stream D of driver-experience build (2026-05-09). Long-running daemon that polls db.loads for documents with synthetic=True + synthetic_run_id, detects status transitions
+- [DEV-TOOL] **`scripts/test_golden_path_e2e.py`** (641 LOC)
+  - test_golden_path_e2e.py — The Director's Bulletproof Script. Walks BOTH the Pull Path (Register → Browse → Interest → Approve → Accept) AND the Push Path (Direct Dispatch via cold-outreach token) thro
+- [DEV-TOOL] **`scripts/test_infrastructure_controller.py`** (253 LOC)
+  - test_infrastructure_controller.py — pluggable on/off for the CHL synthetic test stack. Operator-mandated 2026-05-09: continuous synthetic testing should be a permanent observability + self-heal trigge
+
+## Scripts / Tooling (43)
+
+- [DEV-TOOL] **`scripts/asset_inventory.py`** (918 LOC)
+  - asset_inventory.py — Static analysis of every CHL software asset. Walks backend/, backend/tests/, frontend/src/, scripts/ and classifies each file as LIVE / CODE-READY / DEV-TOOL / ORPHAN / LIBRARY / 
+- [DEV-TOOL] **`scripts/asset_inventory_render.py`** (517 LOC)
+  - asset_inventory_render.py -- Read asset_inventory.json and emit: - asset_inventory.md (subsystem-grouped markdown) - asset_inventory_orphans.md (focused orphan + broken list) - asset_dependency_graph.
+- [DEV-TOOL] **`scripts/burst4_profit.py`** (62 LOC)
+  - Burst-4 net profit, no unicode.
+- [DEV-TOOL] **`scripts/check_agentdm_recipient.py`** (356 LOC)
+  - check_agentdm_recipient.py -- CCC2 / closes WW1 follow-up #2. WW1 (commit 7c89df0) wired the operator-push consumer to deliver alerts via `mcp__agentdm__send_message(to='@operator', ...)`. The follow-
+- [DEV-TOOL] **`scripts/check_gps_for_load.py`** (30 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/check_ld_2ef.py`** (23 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/check_load_coords.py`** (24 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/check_load_status.py`** (27 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/check_loads_api.py`** (24 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/check_low_rate_loads.py`** (45 LOC)
+  - Drill into the 12 loads with rate < $100.
+- [DEV-TOOL] **`scripts/check_synth_docs.py`** (22 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/check_tokens.py`** (26 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/collect_5min_run_telemetry.py`** (212 LOC)
+  - Collect telemetry from the 5-min 50% capacity test run. Run window: Local time: 2026-05-09 20:44:20 to 2026-05-09 20:50:00 (UTC-5) UTC stored: 2026-05-10 01:44:20 to 2026-05-10 01:50:30
+- [DEV-TOOL] **`scripts/collect_burst3_telemetry.py`** (145 LOC)
+  - Collect telemetry from the rate-calc-priced 5-min burst. Window: 2026-05-09 22:06:37 -> 22:11:57 CDT (UTC: 03:06:37 -> 03:12:00) Net-profit math: market_rate * (1 - 2.5% factor) - rate. NO $50 visibil
+- [DEV-TOOL] **`scripts/collect_burst4_telemetry.py`** (92 LOC)
+  - Burst-4 telemetry @ 12% broker premium.
+- [DEV-TOOL] **`scripts/collect_burst5_telemetry.py`** (61 LOC)
+  - Burst-5 telemetry @ 12% Model C with pnl guards live.
+- [DEV-TOOL] **`scripts/collect_verify_telemetry.py`** (145 LOC)
+  - Collect telemetry from the LLL17 verification 5-min run. Window: 2026-05-09 21:05:02 -> 21:10:43 CDT (UTC: 02:05:02 -> 02:10:50)
+- [DEV-TOOL] **`scripts/dump_one_bounce.py`** (42 LOC)
+  - Dump one full bounce body to understand structure.
+- [DEV-TOOL] **`scripts/explain_burst3_profit.py`** (68 LOC)
+  - Per-load breakdown of how the burst-3 net profit ($921.03) was computed.
+- [DEV-TOOL] **`scripts/fire_full_dryrun.py`** (410 LOC)
+  - Full-System Dry Run — Iteration 105. Creates a dummy load → assigns carrier (Jason) with phone → signs rate-con server-side → marks DELIVERED → auto-stage fires → PDF Stapler generates merged packet →
+- [DEV-TOOL] **`scripts/generate_dharma_flow_icons.py`** (205 LOC)
+  - Generate the Dharma-Flow Coin PWA icon pack. Composition: - Pure black circular coin base (#000000) - Emerald Enso ring (brush-stroke circle, #34d399 with slight opacity variance) - Gold 8-spoked Dhar
+- [DEV-TOOL] **`scripts/get_pin_and_inject.py`** (36 LOC)
+  - Pull or generate consignee_secret_pin for in-flight load + display on BOL slide.
+- [DEV-TOOL] **`scripts/get_pin_for_ref.py`** (26 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/health_check_sidecar.py`** (335 LOC)
+  - health_check_sidecar.py -- Component C Tier 1 sidecar. Standalone Python script that polls localhost:8001/api/health/system every 30s. Behavior: - If overall_status="degraded" persists for >5 min, OR 
+- [DEV-TOOL] **`scripts/inspect_bounces.py`** (73 LOC)
+  - Sample 5 mailer-daemon bounces from last 75min and extract failure diagnostics for the URGENT investigation.
+- [DEV-TOOL] **`scripts/inspect_ma_fails.py`** (38 LOC)
+  - Inspect the 3 multi-actor FAIL rows for response detail.
+- [DEV-TOOL] **`scripts/load_noa_templates.py`** (327 LOC)
+  - load_noa_templates.py -- CLI seeder for db.noa_templates. GGG3 broker-side NOA outbound (UCC § 9-406 framework) sister-tooling. Reads `chl-memory/operations/noa_templates_seed_2026_05_09.md`, parses t
+- [DEV-TOOL] **`scripts/migrate_secrets_to_vault.py`** (113 LOC)
+  - One-shot migrate live .env secrets into the DPAPI/Fernet-encrypted secrets store at C:\CHL\data\secrets_store.json. Runs via .venv-local python (which has cryptography for Fernet fallback). Loads back
+- [DEV-TOOL] **`scripts/mongo_replica_health.ps1`** (213 LOC)
+  - mongo_replica_health.ps1 Component C Tier 3 -- read replica-set status + lag from local mongod.  Wraps rs.status() via mongosh. Surfaces: - per-node state (PRIMARY / SECONDARY / ARBITER / DOWN / etc.)
+- [DEV-TOOL] **`scripts/owner_walk_through_session.py`** (201 LOC)
+  - owner_walk_through_session.py — programmatic owner-side platform walk-through. Mints a short-lived JWT for the owner user, hits every protected endpoint referenced in the SOP Playbook + recent build c
+- [DEV-TOOL] **`scripts/probe_sam_gov.py`** (50 LOC)
+  - Probe Sam.gov adapter post-key-provisioning.
+- [DEV-TOOL] **`scripts/probe_sam_gov_direct.py`** (74 LOC)
+  - Direct probe of SAM.gov API — try different auth methods + URL patterns.
+- [DEV-TOOL] **`scripts/prune_env_after_vault_migration.py`** (463 LOC)
+  - Phase 2 of the secrets-vault migration: prune .env plaintext for the 6 secrets that have already been migrated into the DPAPI/Fernet vault at C:\CHL\data\secrets_store.json. Behaviour summary --------
+- [DEV-TOOL] **`scripts/regenerate_pinned_deps.ps1`** (105 LOC)
+  - regenerate_pinned_deps.ps1 Priority-1 item 1.4 -- regenerate backend/requirements.lock from backend/requirements.in via pip-compile (pip-tools).  Run this whenever you ADD/REMOVE a top-level dep in re
+- [DEV-TOOL] **`scripts/rotate_master_key.py`** (445 LOC)
+  - Rotate CHL_SECRETS_MASTER_KEY and re-encrypt every vaulted secret. Operator-rare flow. Use this when: - Annual key rotation (SOC 2 / general hygiene cadence). - Suspected master-key exposure (within 2
+- [DEV-TOOL] **`scripts/sam_gov_freight_check.py`** (65 LOC)
+  - Inspect what Sam.gov is actually returning for freight NAICS codes.
+- [DEV-TOOL] **`scripts/sample_collection_schema.py`** (41 LOC)
+  - Sample latest row from each telemetry collection to see field shapes.
+- [DEV-TOOL] **`scripts/sample_realistic_rates.py`** (15 LOC)
+  - (no docstring)
+- [DEV-TOOL] **`scripts/schedule_sam_renewal.py`** (54 LOC)
+  - Schedule SAM.gov API key 90-day rotation reminder via /api/_renewals.
+- [DEV-TOOL] **`scripts/seed_renewals.py`** (578 LOC)
+  - seed_renewals.py -- One-shot bulk-seeder for db.renewals. Iter 145.x Stream NN3 follow-up to KK1 (renewals platform feature). The operator-mandated renewal calendar (backend/renewals/) is live but db.
+- [DEV-TOOL] **`scripts/set_env_var.ps1`** (188 LOC)
+  - CHL set_env_var.ps1 Friction-free helper to update a single key in C:\CHL\backend\.env (or any specified .env) without manual editing. Built after a 45-min Zoho-password edit session burned on literal
+- [DEV-TOOL] **`scripts/vault_store_login_gov.py`** (52 LOC)
+  - One-shot vault store for login.gov / sam.gov credential.
+- [DEV-TOOL] **`scripts/verify_synth_docs_fix.py`** (13 LOC)
+  - (no docstring)
+
+## Dev-Ops Scripts (17)
+
+- [LIVE] **`backend/fmcsa_safer_cargo.py`** (628 LOC)
+  - FMCSA SAFER Cargo Carried per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 5). Fetches the SAFER Company Snapshot HTML page for any USDOT and parses the "Cargo Carried" 27/29-categor
+- [LIVE] **`backend/system_state_router.py`** (617 LOC)
+  - system_state_router.py — GET /api/admin/system-state (Iter 139.39, 2026-05-05) Single-purpose endpoint: returns a complete operator status snapshot as **raw Markdown** (Content-Type: text/markdown) so
+- [LIBRARY] **`scripts/cloud_backup_nightly.py`** (422 LOC)
+  - cloud_backup_nightly.py -- Component C Tier 3 cold offsite backup. Nightly Mongo dump + upload to S3 OR Backblaze B2 cold storage. Recovers from full-machine-loss scenarios (D-drive snapshots only sur
+- [DEV-TOOL] **`scripts/backup_mongo_export.py`** (92 LOC)
+  - Export all MongoDB collections in the CHL database to JSON-Lines files. Used by backup_to_d.ps1 (and any other backup ceremony). Output format is one document per line, encoded via bson.json_util to p
+- [DEV-TOOL] **`scripts/backup_to_d.ps1`** (173 LOC)
+  - CHL Backup to D: (Seagate Expansion) Run after each iter close. Captures recoverable state to portable drive.  Usage: .\backup_to_d.ps1 -IterId "iter_139_46" .\backup_to_d.ps1 -IterId "iter_139_46_clo
+- [DEV-TOOL] **`scripts/git_hooks/pre-commit.sh`** (90 LOC)
+  - !/usr/bin/env bash CHL pre-commit hook -- runs gitleaks against the staged tree.  This file is the SOURCE-of-truth copy of the hook (since .git/hooks/ is not version-controlled). install_gitleaks_hook
+- [DEV-TOOL] **`scripts/harden_chl_backend_nssm.ps1`** (119 LOC)
+  - harden_chl_backend_nssm.ps1 Component C Tier 1: harden EXISTING CHL-Backend NSSM service config.  Updates the existing CHL-Backend service registration (does NOT install/uninstall) to apply the Tier 1
+- [DEV-TOOL] **`scripts/init_mongo_replica_set.ps1`** (290 LOC)
+  - init_mongo_replica_set.ps1 Component C Tier 3 -- bootstrap a 3-node MongoDB replica set on this host.  Topology: Node 1 (PRIMARY):   existing data dir, port 27017  (already running) Node 2 (SECONDARY)
+- [DEV-TOOL] **`scripts/install_chl_backend_standby_service.ps1`** (151 LOC)
+  - install_chl_backend_standby_service.ps1 Component C Tier 2 Pattern A: install/refresh CHL-Backend-Standby NSSM service.  Registers a SECOND copy of the CHL-Backend process on port 8002 with: CHL_FAILO
+- [DEV-TOOL] **`scripts/install_cloud_backup_cron.ps1`** (120 LOC)
+  - install_cloud_backup_cron.ps1 Component C Tier 3 -- register a Windows Task Scheduler job that runs cloud_backup_nightly.py at 3:30 AM Chicago time daily.  Idempotent: replaces an existing schedule wi
+- [DEV-TOOL] **`scripts/install_gitleaks_hook.ps1`** (153 LOC)
+  - install_gitleaks_hook.ps1 Priority-1 item -- install the gitleaks pre-commit hook.  Behavior: 1. Locate the source hook at scripts/git_hooks/pre-commit.sh (in-repo, version-controlled). 2. Locate the 
+- [DEV-TOOL] **`scripts/install_health_sidecar_service.ps1`** (143 LOC)
+  - install_health_sidecar_service.ps1 Component C Tier 1: install/refresh CHL-Health-Sidecar NSSM service.  Registers a SECOND NSSM service that runs scripts/health_check_sidecar.py under the same Python
+- [DEV-TOOL] **`scripts/install_offsite_snapshot_cron.ps1`** (102 LOC)
+  - install_offsite_snapshot_cron.ps1 Component C Tier 3 -- register a Windows Task Scheduler job that runs offsite_weekly_snapshot.ps1 every Sunday at 4 AM Chicago time.  Idempotent: replaces an existing
+- [DEV-TOOL] **`scripts/maintain_5_copies.ps1`** (121 LOC)
+  - maintain_5_copies.ps1 -- Operator-mandated 2026-05-10 EOD-17.  Maintains a FLOOR of 5 current full copies of the CHL platform on D:. Companion to snapshot_to_d.ps1 (lightweight rolling) and backup_to_
+- [DEV-TOOL] **`scripts/offsite_weekly_snapshot.ps1`** (170 LOC)
+  - offsite_weekly_snapshot.ps1 Component C Tier 3 -- weekly off-machine snapshot of the latest D-drive rolling backup to an external drive (USB / NAS / second internal HDD).  What it does: 1. Locates the
+- [DEV-TOOL] **`scripts/overnight_supervisor.py`** (282 LOC)
+  - overnight_supervisor.py -- Watchdog + periodic snapshotter + bug ledger. Operator-mandated 2026-05-10 EOD-17: > "Keep going through the night ... continue saving" > "do not fix issues unless those iss
+- [DEV-TOOL] **`scripts/snapshot_to_d.ps1`** (81 LOC)
+  - CHL Rolling Snapshot to D: (Seagate Expansion) Lightweight backup that fires at every commit/save point — NOT the full iter-close ceremony (use backup_to_d.ps1 for that, which adds mongo export + .env
+
+## Misc (169)
+
+- [BROKEN] **`backend/tonu_calculator.py`** (248 LOC)
+  - (no docstring)
+  - _Note:_ Parse failure: SyntaxError: invalid non-printable character U+FEFF at line 1
+- [ORPHAN] **`backend/security/secrets_cli.py`** (153 LOC)
+  - Operator CLI for the DPAPI-encrypted secrets store. Usage: python -m backend.security.secrets_cli set <KEY> python -m backend.security.secrets_cli get <KEY> python -m backend.security.secrets_cli dele
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [ORPHAN] **`frontend/src/lib/api.js`** (19 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/lib/constants.js`** (20 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/lib/manualOverrideFields.js`** (211 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/resources.js`** (110 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [ORPHAN] **`frontend/src/setupProxy.js`** (38 LOC)
+  - Local-dev only. CRA picks this up automatically when `yarn start` runs.
+  - _Note:_ Not reachable from frontend/src/App.js
+- [LIVE] **`backend/aether_telemetry.py`** (269 LOC)
+  - Project Æther — Telemetry Service (Observer Layer) Iteration 81 (Apr 23 2026) Computes the NetworkEntropyScore — a single scalar in [0, 1] where: 0.0 = Total Synchronization (every carrier on rhythm, 
+- [LIVE] **`backend/assignment/__init__.py`** (34 LOC)
+  - backend/assignment — iter 142.1 stage 1e (carrier assignment + booking confirmation + 2h failure detector). Three production modules: - auto_assigner.auto_assign_carrier(load_id, mc_number) Idempotent
+- [LIVE] **`backend/assignment/auto_assigner.py`** (327 LOC)
+  - auto_assigner.py -- iter 142.1 stage 1e carrier assignment. Triggered when a db.carrier_offers row flips to "accepted" (stage 1d). Locks in the carrier on the load by flipping the load's assignment_st
+- [LIVE] **`backend/assignment/failure_detector.py`** (700 LOC)
+  - failure_detector.py -- iter 142.1 stage 1e 2-hour assigned-unconfirmed cron. Every 2 hours, scan db.loads for rows in assignment_state="assigned_unconfirmed" whose assigned_at is older than 2h. For ea
+- [LIVE] **`backend/auth/__init__.py`** (31 LOC)
+  - Auth hardening package: failed-login rate limiter + TOTP 2FA scaffolding. Stream CC3 (security/stability gap-analysis item 1.5). New modules live under backend.auth so the existing flat backend layout
+- [LIVE] **`backend/auth/login_rate_limiter.py`** (207 LOC)
+  - In-memory failed-login rate limiter (CC3 / security gap 1.5). Two-tier lockout policy keyed on (lowercased username, source IP): * Soft lockout: 5 failures within a 5-minute rolling window -> 15-minut
+- [LIVE] **`backend/auth/totp_2fa.py`** (205 LOC)
+  - TOTP 2FA scaffolding (CC3 / security gap 1.5). Self-contained RFC 6238 implementation (HOTP-on-time-step, HMAC-SHA1, 6 digits, 30s step). `pyotp` is NOT in `backend/requirements.txt`, and the operator
+- [LIVE] **`backend/auto_credit_check.py`** (191 LOC)
+  - auto_credit_check.py — Iter 139.31 Automated shipper credit check fired on lead creation. Closes Card 1 RACI row "Auto-credit-check shipper on lead creation". Today HaulPay's factor API is MOCKED (wai
+- [LIVE] **`backend/auto_load_pipeline.py`** (482 LOC)
+  - auto_load_pipeline.py — Card 3 automation hub. Two endpoints that turn the manual "Create Load" step into a one-click / zero-click pipeline: 1. POST /api/quotes/{quote_id}/accept The broker (or eventu
+- [LIVE] **`backend/auto_quote_draft.py`** (271 LOC)
+  - auto_quote_draft.py — Iter 139.22 Given a parsed RFQ (`db.rfq_inbound`) with one or more lanes already split into `db.quotes_inbound`, generate an AI-drafted quote email per lane and attach it to the 
+- [LIVE] **`backend/automations.py`** (1187 LOC)
+  - Continental Haul Logistics — Full Automation Suite ================================================== Eight automations that collectively remove ~90% of human labor from a freight brokerage pipeline: 
+- [LIVE] **`backend/autopilot_phase1.py`** (515 LOC)
+  - CHL Priority-1 Autopilot Extensions ----------------------------------- • AI Rate Optimizer — track accepted/rejected bids, learn optimal margins per lane • Resend inbound email webhook — parse real s
+- [LIVE] **`backend/bulk_conversion_dashboard.py`** (235 LOC)
+  - Bulk-Hunter Conversion Dashboard — Iter 118 ============================================ Single-pane "what works" view for the cold-blast pipeline. For each segment + cohort window: Sent → Opened → Cl
+- [LIVE] **`backend/bulk_copy_variants.py`** (113 LOC)
+  - Bulk-Hunter Copy Variants — Iter 118.5 ======================================= A/B testable lane copy for the cold-outreach pipeline. Each "variant" is a named bundle of {subject_override, note_overri
+- [LIVE] **`backend/bulk_followup_sequencer.py`** (481 LOC)
+  - Bulk-Hunter Auto Follow-Up Sequencer — Iter 117.7 ================================================== Self-warming pipeline that fires soft, on-brand follow-up emails to recruit-blast recipients based 
+- [LIVE] **`backend/bulk_outreach_blast.py`** (564 LOC)
+  - Bulk-Hunter Cold-Outreach Blast — Iter 117.5 ============================================ One-click recruit email to FMCSA-listed bulk-freight carriers from the Targeted Call Lists (Tab `bulk_hunter`)
+- [LIVE] **`backend/canadian_carriers.py`** (440 LOC)
+  - Canadian Carrier Registry — Iter 119 ===================================== Ingests Canadian motor carriers (NSC = National Safety Code) into `db.ca_carriers` so the Bulk Carrier Hunter can return real
+- [LIVE] **`backend/capacity_hunter.py`** (408 LOC)
+  - Capacity Hunter — the capacity-first inverse of Match & Notify. Every N minutes: 1. Scan carriers where truck_status == 'empty' AND available_at <= now + 24h AND last_gps_at is recent (last 4h) AND la
+- [LIVE] **`backend/carrier_continuous_monitor.py`** (656 LOC)
+  - carrier_continuous_monitor.py -- Daily continuous carrier monitoring (GGG2). Closes Tier-1 NEW finding from EEE3 / validated_truth_synthesis_2026_05_09.md Section 3, item #13 ("Continuous monitoring (
+- [LIVE] **`backend/carrier_load_match.py`** (246 LOC)
+  - Carrier ⇄ Load Matcher — Iter 139.35 ===================================== Given a carrier (by MC# or user_id), return suggested LoadBoardAggregator filters + matching open CHL-direct loads. Powers th
+- [LIVE] **`backend/carrier_prevet.py`** (491 LOC)
+  - carrier_prevet.py — Carrier Pre-vetting Pipeline. (Iter 135.6, 2026-05-03) Why this exists --------------- FACTS.md: broker authority is `application_pending` until 2026-05-13. The single best use of 
+- [LIVE] **`backend/carriers_freshness_router.py`** (136 LOC)
+  - Carrier-DB Freshness Observability -- Continental Haul Logistics Single endpoint that surfaces how stale or fresh the ~480K-row db.carriers collection is across the four data sources that feed it: cen
+- [LIVE] **`backend/ci_intake/__init__.py`** (11 LOC)
+  - backend.ci_intake -- CI/CD signal ingestion routers. Receives delivery webhooks from external CI/CD providers and persists the resulting run-state into the platform DB so other modules (notably self_h
+- [LIVE] **`backend/ci_intake/github_actions_router.py`** (380 LOC)
+  - github_actions_router.py -- GitHub Actions workflow_run webhook receiver. Stream BBB4 (TT2 follow-up #1, 2026-05-08). Receives `workflow_run` delivery webhooks from a configured GitHub repo, verifies 
+- [LIVE] **`backend/ci_intake/index_provisioner.py`** (244 LOC)
+  - ci_intake/index_provisioner.py -- CCC2 / closes BBB4 follow-up #1. BBB4 (commit 33c55a6) added the `db.ci_runs` collection via the GitHub Actions workflow_run webhook receiver. The follow-up gap: BBB4
+- [LIVE] **`backend/client_error_analyzer.py`** (396 LOC)
+  - client_error_analyzer.py -- Consumer for client_error_logger's JSONL stream. Reads C:/CHL/logs/client_errors.log (+ rotated .1), fingerprints each error, upserts a digest into db.client_error_fingerpr
+- [LIVE] **`backend/client_error_digest_router.py`** (36 LOC)
+  - client_error_digest_router.py -- Operator-only digest endpoint. Single GET endpoint returning the top-N client-error fingerprints seen in the last `hours` window. Mounted behind require_broker (intern
+- [LIVE] **`backend/client_error_logger.py`** (229 LOC)
+  - Client Error Logger — Continental Haul Logistics Captures runtime errors from the frontend (window.onerror, React error boundaries, unhandledrejection) and appends one structured JSON line per error t
+- [LIVE] **`backend/command_control.py`** (531 LOC)
+  - Command & Control — Iteration 78.1. One-stop endpoint for the Owner Dashboard's Global Search: GET /api/command/loads/{load_ref} Returns everything the owner needs in a single call: - Load state (stat
+- [LIVE] **`backend/company_identity.py`** (174 LOC)
+  - Carrier Identity — Iteration 52 Live-Wire Prep. Central registry for the owner's live regulatory IDs: • MC Number (FMCSA Motor Carrier number — awarded after URS approval) • DOT Number (Federal DOT re
+- [LIVE] **`backend/cost_monitor/__init__.py`** (1 LOC)
+  - (no docstring)
+- [LIVE] **`backend/cost_monitor/aggregator.py`** (311 LOC)
+  - cost_monitor/aggregator.py -- Time-windowed aggregations over db.budget_ledger for the Phase 3 cost-monitoring dashboard (UU1, 2026- 05-08 EOD). All functions are READ-ONLY against budget_ledger. The 
+- [LIVE] **`backend/cost_monitor/anthropic_pricing.py`** (152 LOC)
+  - cost_monitor/anthropic_pricing.py -- Per-model pricing lookup for the Phase 3 LLM reasoning loop's cost-monitoring dashboard (UU1, 2026-05-08 EOD). The reasoning loop uses a flat ESTIMATED_LLM_USD_PER
+- [LIVE] **`backend/cost_monitor/cost_alerts.py`** (356 LOC)
+  - cost_monitor/cost_alerts.py -- Threshold checker that emits to db.urgent_alerts when the cost-monitoring dashboard detects a YELLOW or RED state (UU1, 2026-05-08 EOD). Alert conditions ---------------
+- [LIVE] **`backend/cost_monitor/cost_router.py`** (218 LOC)
+  - cost_monitor/cost_router.py -- Operator-facing endpoints for the Phase 3 cost-monitoring dashboard (UU1, 2026-05-08 EOD). Endpoints (mounted at /api/_cost/*; require_owner) ---------------------------
+- [LIVE] **`backend/cost_monitor/forecaster.py`** (518 LOC)
+  - cost_monitor/forecaster.py -- Daily spend forecasting on top of UU1's budget_ledger (BBB3, UU1 follow-up #2, 2026-05-08 EOD). Reads the trailing N days of per-call llm_reasoning rows from db.budget_le
+- [LIVE] **`backend/cost_monitor/spend_recorder.py`** (243 LOC)
+  - cost_monitor/spend_recorder.py -- Per-call LLM spend ledger writer for the Phase 3 cost-monitoring dashboard (UU1, 2026-05-08 EOD). Writes a row per LLM call to db.budget_ledger with category='llm_rea
+- [LIVE] **`backend/credit_override_revoker/revoker.py`** (397 LOC)
+  - credit_override_revoker/revoker.py -- Shipper credit-override auto-revoker. (Iter 145.x Stream RR1, 2026-05-08) QQ3's 25-stage walkthrough flagged stage 23 (shipper credit-override revocation) as a "F
+- [LIVE] **`backend/credit_override_revoker/revoker_router.py`** (103 LOC)
+  - credit_override_revoker/revoker_router.py -- Operator-facing read-only endpoints for the credit-override revoker (Iter 145.x Stream RR1). Surfaces -------- GET /api/_credit_override/recent_revocations
+- [LIVE] **`backend/cron_scheduler.py`** (3651 LOC)
+  - cron_scheduler.py — Consolidated background cron loops. (Iter 135.11, 2026-05-03) Closes 5 silent failure paths from the Operating Manual Chapter 5.3: 1. Pre-pickup re-verify (every 30min) — was: endp
+- [LIVE] **`backend/day1_readiness_email.py`** (485 LOC)
+  - Day-1 Readiness Weekly Email — Iter 139.17 ========================================== Sunday-evening summary email to Jason: where the launch stands, what changed in the past 7 days, what's still bloc
+- [LIVE] **`backend/day1_walkthrough.py`** (333 LOC)
+  - day1_walkthrough.py — Day-1 Single Load Walkthrough wizard. (Iter 135.8, 2026-05-03) Per Jason 2026-05-03: "Day-1 Single Load Walkthrough wizard that, the moment authority grants and cap=1, walks clic
+- [LIVE] **`backend/db_indexes.py`** (152 LOC)
+  - Heavy Database Indexing — Iteration 50 Enterprise Refactor. Creates indexes for all hot collections so Market Radar + Capacity Hunter query paths stay sub-10ms even as we cross 100k+ loads. Run once a
+- [LIVE] **`backend/delivery_completion.py`** (330 LOC)
+  - Delivery Completion Module — Iteration 72. Closes the driver-side loop: 1. GET /api/carrier/loads/{load_id}/delivery-eligibility Reads latest GPS ping, computes miles-to-destination, returns {can_comp
+- [LIVE] **`backend/detention/__init__.py`** (28 LOC)
+  - backend/detention/ -- Detention auto-charge service (Iter 145.x Stream FF2). Production module that watches delivered loads, detects when driver wait time at pickup or delivery exceeds the contracted 
+- [LIVE] **`backend/detention/detention_calculator.py`** (606 LOC)
+  - detention/detention_calculator.py -- Detention auto-charge service. (Iter 145.x Stream FF2, 2026-05-08) EE2's 21-stage walkthrough flagged that detention auto-charging was inline math in tests with no
+- [LIVE] **`backend/detention/detention_router.py`** (125 LOC)
+  - detention/detention_router.py -- Operator-facing read-only endpoints for the detention auto-charge service (Iter 145.x Stream FF2). Surfaces -------- GET /api/_detention/charges -- list detention_char
+- [LIVE] **`backend/dispatch/__init__.py`** (16 LOC)
+  - backend.dispatch -- Iter 142.1 stage 1f: dispatch packet rendering + auto-bid handoff. Submodules ---------- - packet_renderer: render_dispatch_packet(load_id, mc_number) -> local PDF path - auto_bid_
+- [LIVE] **`backend/dispatch/packet_renderer.py`** (282 LOC)
+  - backend/dispatch/packet_renderer.py -- Iter 142.1 stage 1f. Renders a combined dispatch packet PDF (rate-con + carrier-instructions) for a confirmed (load_id, mc_number) pair. Patterns mirrored from t
+- [LIVE] **`backend/driver_preferences.py`** (462 LOC)
+  - Driver Preferences + Lane Statistics — Iter 111 Director's spec (verbatim, paraphrased here for engineers): * Drivers pick their OWN home base when they sign up. Default is editable. * Two driver-elec
+- [LIVE] **`backend/eld_fleet_size_check.py`** (625 LOC)
+  - eld_fleet_size_check -- ELD-vs-claimed-fleet-size discrepancy fraud filter. GGG7 -- Highway-pattern fraud signal (2026-05-09). Validated by EEE3 (chl-memory/research/eee3_tms_and_trade_press_validatio
+- [LIVE] **`backend/eld_integration.py`** (360 LOC)
+  - ELD Integration Hub — Samsara + Motive HOS Webhooks (Iteration 49) =================================================================== Production adapters for the two dominant ELD (Electronic Logging 
+- [LIVE] **`backend/enrichment/adapters/__init__.py`** (76 LOC)
+  - backend.enrichment.adapters -- vendor-specific enrichment adapters. Each adapter is a self-contained module exposing a single class subclass of EnrichmentAdapter. Operator-credentialed Tier 1+3 adapte
+- [LIVE] **`backend/enrichment/adapters/base.py`** (95 LOC)
+  - backend.enrichment.adapters.base -- EnrichmentAdapter ABC. Each vendor-specific adapter subclasses this and: * sets `source_label` to its FFF5-section-4 confidence label * sets `fields_supported` to t
+- [LIVE] **`backend/enrichment/adapters/fmcsa.py`** (190 LOC)
+  - backend.enrichment.adapters.fmcsa -- FMCSA QCMobile enrichment adapter. WRAPS the existing backend.fmcsa_qcmobile module (DO NOT EDIT that module per GGG9 spec constraints). Pulls phone + address fiel
+- [LIVE] **`backend/enrichment/adapters/google_places.py`** (72 LOC)
+  - backend.enrichment.adapters.google_places -- Google Places API adapter. Tier 4 (last-resort). Per FFF5 section 3, defer until Tier 1+3 measured. Carrier might have a Google Business Profile with phone
+- [LIVE] **`backend/enrichment/adapters/hunter.py`** (72 LOC)
+  - backend.enrichment.adapters.hunter -- Hunter.io email-by-domain adapter. Tier 3 (paid SaaS). Email-only. Per FFF5 section 3, recommended Day-1 paid surface at $49/mo Starter for 2k credits. Uses the c
+- [LIVE] **`backend/enrichment/adapters/operator.py`** (124 LOC)
+  - backend.enrichment.adapters.operator -- operator-entered enrichment adapter. The "adapter" of last resort and highest priority. When the operator types a value into the per-field UI Save button, the s
+- [LIVE] **`backend/enrichment/adapters/pdl.py`** (71 LOC)
+  - backend.enrichment.adapters.pdl -- People Data Labs adapter. Tier 3 (paid SaaS, PAYG). Per FFF5 section 3, recommended Day-1 paid surface at $0.01/record (100 free per month + PAYG thereafter; ~$10-20
+- [LIVE] **`backend/enrichment/adapters/state_sos.py`** (77 LOC)
+  - backend.enrichment.adapters.state_sos -- State Secretary of State adapter. Tier 1 ($200/mo aggregator-gated). Targets registered-agent / officer name + business address backfill where FMCSA has none. 
+- [LIVE] **`backend/enrichment/privacy.py`** (133 LOC)
+  - backend.enrichment.privacy -- CCPA / CPRA deletion-request handler. Per FFF5 section 6.2: B2B exemption expired Jan 2023; California carrier employees' work email/phone/title are now CCPA-protected pe
+- [LIVE] **`backend/enrichment/resolver.py`** (259 LOC)
+  - backend.enrichment.resolver -- per-field source-priority resolver. For each of the 9 carrier contact fields the resolver walks a configured priority array (highest priority first) and picks the FIRST 
+- [LIVE] **`backend/enrichment/result.py`** (65 LOC)
+  - backend.enrichment.result -- EnrichmentResult dataclass. Returned by every EnrichmentAdapter.enrich() call. Captures per-field values + per-field confidence + provenance pointers required for CCPA aud
+- [LIVE] **`backend/enrichment/router.py`** (159 LOC)
+  - backend.enrichment.router -- FastAPI router for the enrichment surface. Owner-gated endpoints (mounted from server.py via include_router): GET /api/_enrichment/carrier/{carrier_id} Read-only resolver 
+- [LIVE] **`backend/evaluators/__init__.py`** (11 LOC)
+  - backend.evaluators -- FractalEvaluator subclasses. Iter 142.1 stage 1c+: this package collects FractalEvaluator subclasses that operate at scales beyond the originals (LoadEvaluator @ micro, LaneEvalu
+- [LIVE] **`backend/evaluators/carrier_evaluator.py`** (581 LOC)
+  - CarrierEvaluator -- meso-scale FractalEvaluator for individual carriers. Iter 142.1 stage 1c. Operates against the 480K-carrier production roster (db.carriers) enriched in real-time by the auto-refres
+- [LIVE] **`backend/execution_pilot.py`** (146 LOC)
+  - Execution Pilot — automatic shipper-facing notifications driven by GPS. The carrier's phone pings GPS every ~30s. On each ping we check whether the load has crossed a notification threshold (e.g. 60 m
+- [LIVE] **`backend/external_post_pipeline.py`** (428 LOC)
+  - External Posting Pipeline — Card 4 Activity 2 ============================================= Multi-channel cross-posting fan-out. When a load is ready to be advertised externally, it can be pushed to D
+- [LIVE] **`backend/factor_decline_handler/decline_handler_router.py`** (214 LOC)
+  - factor_decline_handler.decline_handler_router -- operator surface for the factor-decline orchestrator. Endpoints --------- GET /api/_factor_decline/recent ?since_hours=72&class=&status=&limit=100 (req
+- [LIVE] **`backend/factor_performance.py`** (325 LOC)
+  - Factor Reliability Scoreboard — empirical performance tracking. Iteration 104 — turns the industry-estimate `reliability_score` (0-100) on each FactorProvider into an **observed** reliability dial tha
+- [LIVE] **`backend/factors/dispute_cron.py`** (381 LOC)
+  - factors/dispute_cron.py -- Iter 144.x Phase 6 stage 1d 30-min cron loop. Mirrors factors/reconciler_cron.py (init / start_loop / register_health / @track_sla wrap pattern). Polls each factor portal cl
+- [LIVE] **`backend/factors/dispute_handler.py`** (931 LOC)
+  - factors/dispute_handler.py -- Iter 144.x Phase 6 stage 1d dispute / chargeback handler. The reconciler (stage 1c) handles the happy path: a portal/email/Mercury signal flips a submission -> funded + i
+- [LIVE] **`backend/factors/dispute_router.py`** (177 LOC)
+  - factors/dispute_router.py -- Iter 144.x Phase 6 stage 1d operator endpoints. Surfaces the factor_disputes operator queue populated by factors.dispute_handler.detect_disputes_in_portal_payload, plus a 
+- [LIVE] **`backend/factors/factor_submission_router.py`** (156 LOC)
+  - factors/factor_submission_router.py -- Iter 144.x Phase 6 stage 1b operator endpoints for the auto-submission queue. When `auto_submit_on_delivered` lands while the operator is still in the `operator_
+- [LIVE] **`backend/factors/reconciler_router.py`** (109 LOC)
+  - factors/reconciler_router.py -- Iter 144.x Phase 6 stage 1c operator endpoints. Surfaces the orphan-deposit + missing-wire queues populated by factors.reconciler.reconcile_pending_submissions, plus a 
+- [LIVE] **`backend/failure_detectors.py`** (335 LOC)
+  - failure_detectors.py — 4 launch-critical Failure Mode detectors. (Iter 135.12, 2026-05-03) Closes 4 of the 12 named modes from Operating Manual Chapter 7: - 7.11 Authority Lost (NUCLEAR — every 5min) 
+- [LIVE] **`backend/failure_detectors_part2.py`** (934 LOC)
+  - failure_detectors_part2.py — 8 additional Failure Mode detectors. (Iter 138.8, 2026-05-04) Closes the remaining 8 of the 12 named modes from Operating Manual Ch.7: - 7.3 BOL mismatch (post-pickup audi
+- [LIVE] **`backend/fmcsa_qcmobile.py`** (449 LOC)
+  - FMCSA QCMobile JSON API per-carrier insurance ingest (iter 142.1 nationwide-vetted-carrier-DB Phase 3 Tier 1). Fetches carrier insurance status (BIPD / Cargo / Bond on-file flags + required amounts), 
+- [LIVE] **`backend/fmcsa_qcmobile_refresh_cron.py`** (455 LOC)
+  - fmcsa_qcmobile_refresh_cron.py — Background loop to weekly-refresh per-carrier insurance data from FMCSA QCMobile JSON API into db.carriers. Iter 142.1 nationwide-vetted-carrier-DB Phase 3 Tier 1. Eve
+- [LIVE] **`backend/fmcsa_safer_cargo_cron.py`** (329 LOC)
+  - fmcsa_safer_cargo_cron.py — Background loop to refresh SAFER cargo classifications on db.carriers (iter 142.1 nationwide-vetted-carrier-DB Phase 5). Every 30 days (after a brief boot-settle delay), it
+- [LIVE] **`backend/fractal_evaluator.py`** (150 LOC)
+  - Fractal decision evaluation framework (iter 141.1 stage 1a). Abstract base class implementing four-parameter evaluation: 1. Profitability — margin / revenue threshold 2. Reliability — counterparty qua
+- [LIVE] **`backend/gap_close_watcher.py`** (479 LOC)
+  - GAP-Close Watcher — Iter 139.9 ============================== Polls `/app/memory/OPERATING_MANUAL.md` every N minutes, computes the status hash for every doctrine row, and compares against the previou
+- [LIVE] **`backend/global_load.py`** (231 LOC)
+  - GlobalLoad — the unified load schema every ingestion source maps to BEFORE hitting the AI matching engine, dedup pipeline, or carrier-facing views. All adapters (DAT, Truckstop, 123LB, email scrape, s
+- [LIVE] **`backend/hardware_sentinel.py`** (511 LOC)
+  - Project Æther — Hardware Sentinel & Circuit Breaker (Iteration 98, Apr 23 2026) Hardware-Software Synergy guard for the Æther-Core monolith. Architecture ------------ A 5-second-interval sampler (runn
+- [LIVE] **`backend/headers_middleware.py`** (179 LOC)
+  - headers_middleware.py -- Iter EOD-16 stream XX1. Global security-headers middleware (HSTS / CSP / X-Frame-Options / Referrer-Policy / Permissions-Policy / nosniff). VV2's follow-up #2 surfaced that no
+- [LIVE] **`backend/healthz_all_router.py`** (412 LOC)
+  - healthz_all_router.py -- /healthz/all aggregator (CCC2, May-14 readiness). The operator wants ONE URL to verify pre-flip readiness on the May-14 platform-readiness deadline. Existing health probes are
+- [LIVE] **`backend/inbox_triage/__init__.py`** (89 LOC)
+  - inbox_triage -- Backend hourly inbox triage (Iter 145.x Stream LL2, 2026-05-08 EOD-16-late). Operator's verbatim 2026-05-08 EOD-16-late: "Read emails every hour". This package is the BACKEND productio
+- [LIVE] **`backend/inbox_triage/triage_router.py`** (162 LOC)
+  - inbox_triage/triage_router.py -- Operator-facing endpoints over the triage log + scanner health (Iter 145.x Stream LL2, 2026-05-08 EOD-16-late). Surfaces -------- GET /api/_inbox_triage/recent?hours=2
+- [LIVE] **`backend/inquiry_pipeline.py`** (512 LOC)
+  - Inquiry-to-Booking Pipeline — Iter 81.2 ======================================== When an external load board sends an inquiry webhook (or a carrier emails us asking about a posted load), spin up a Neg
+- [LIVE] **`backend/lane_pair_targeting.py`** (209 LOC)
+  - Lane-Pair Targeting — Iter 119 =============================== Surface the broker's most-frequent origin_state → destination_state lanes from booked-load history, then return ranked carriers whose FMC
+- [LIVE] **`backend/live_board.py`** (295 LOC)
+  - Live Board — the unified "God-view" over every load in CHL's network. Aggregates: • Internally-posted loads (db.loads where source = direct or null) • Email-scraper auto-posted loads (source = email_s
+- [LIVE] **`backend/load_dedup.py`** (187 LOC)
+  - Fuzzy Load Deduplication. Two-stage approach: STAGE 1 — cheap exact-hash match Use GlobalLoad.dedup_hash (origin+dest+equipment+pickup+rate_bucket) If another active load has the SAME hash → definite 
+- [LIVE] **`backend/load_dispatch_lock.py`** (388 LOC)
+  - Load Dispatch Lock + Idempotency — Iter 119 ============================================ Fail-safes against double-booking and double-dispatching. Two layers: 1. **Pessimistic dispatch lock** — when a
+- [LIVE] **`backend/load_throttle.py`** (170 LOC)
+  - load_throttle.py — Day-1 daily load cap + incremental ramp. (Iter 135.7, 2026-05-03) Per Jason's Day-1 mandate (2026-05-03): "On day 1 and until we have vetted and tested this system, we will be takin
+- [LIVE] **`backend/loadboards.py`** (1675 LOC)
+  - CHL External Load Boards — Multi-Source Aggregator -------------------------------------------------- Real adapters, no mock data. Each source is modular and honest about its current status (active / 
+- [LIVE] **`backend/maintenance/ci_runs_prune.py`** (243 LOC)
+  - ci_runs_prune.py -- 365-day retention prune for db.ci_runs. Stream BBB4 (TT2 follow-up #1, 2026-05-08). Background ---------- BBB4 (commit pending) added the GitHub Actions webhook + db.ci_runs collec
+- [LIVE] **`backend/maintenance/cron_health_prune.py`** (288 LOC)
+  - cron_health_prune.py -- 180-day retention prune for db.cron_health_events. Stream XX3 (XX2 follow-up #1, 2026-05-08). Background ---------- XX2 (commit 3bc2fd4) added a 90-day prune for db.sla_metrics
+- [LIVE] **`backend/margin_erosion.py`** (226 LOC)
+  - Margin Erosion — The Aggressor (Iteration 47/48) Every available load over 1 hour old automatically drops its margin floor by X% per hour, bottoming out at a hard floor (default 8%). Gives CHL an aggr
+- [LIVE] **`backend/margin_floor.py`** (326 LOC)
+  - Margin Fail-Safe — Iter 139.37 Single source of truth for margin policy evaluation across: • Dispatch-time hard floor + soft warning • Quote acceptance below-market check • Background re-check on rate
+- [LIVE] **`backend/margin_floor_router.py`** (298 LOC)
+  - Margin Fail-Safe Router — Iter 139.37 Endpoints: POST /api/admin/margin-floor/quote-accept-gate body: { quote_id, market_rate_per_mile, soft_warn_acknowledged?, reason? } → enforces market_rate_per_mi
+- [LIVE] **`backend/match_dry_run.py`** (531 LOC)
+  - Match-Only Daily Dry-Run Report (Iter 115) ------------------------------------------- Director's pre-launch test plan: surface as many load↔carrier matches as possible across a 24-hour window WITHOUT
+- [LIVE] **`backend/milestones.py`** (141 LOC)
+  - Business Milestones — Continental Haul Logistics Single at-a-glance timeline of CEO-level wins: LLC → EIN → Bank → USDOT → MC Authority → BOC-3 → Insurance → First Load Posted → First Booking → First 
+- [LIVE] **`backend/noa_detector.py`** (519 LOC)
+  - NOA (Notice of Assignment) detector + carrier-pay routing helpers. DDD4 -- NORTH_STAR_BUILD_PLAN PHASE B.1 fix #3 (fraud-critical). Operator's canonical reference (broker_workflow_canonical_reference_
+- [LIVE] **`backend/noa_outbound.py`** (558 LOC)
+  - noa_outbound.py -- Broker-side Notice of Assignment (NOA) framework. Per validated_truth_synthesis_2026_05_09.md Section 2 (HIGH confidence) and Section 3 NEW finding #10: UCC § 9-406 governs ALL NOAs
+- [LIVE] **`backend/observability.py`** (613 LOC)
+  - Project Æther — Observability & Automation Discovery (Iteration 101, Apr 23 2026) Watches every PUT/PATCH the Director fires during the Cold Start, tags each as an INTERVENTION_EVENT, and after enough
+- [LIVE] **`backend/outbound_autobid.py`** (232 LOC)
+  - Outbound Auto-Bid Engine. When a load comes in (any source) AND it passes our margin+trust filters, automatically fire a bid email to the shipper/broker email on the load. This is the "fastest-finger"
+- [LIVE] **`backend/outreach/__init__.py`** (13 LOC)
+  - backend.outreach — multi-carrier outreach orchestrator + load-board fallback. iter 142.1 stage 1d. See chl-memory/research/iter_142_1_stages_1c_1f_refresh.md for the spec. This package depends on back
+- [LIVE] **`backend/outreach/load_board_fallback.py`** (162 LOC)
+  - Load-board fallback -- iter 142.1 stage 1d. Posts a load to an external load board (default DAT) when the OutreachOrchestrator's top-N selection comes back empty (sparse-lane / sparse-equipment scenar
+- [LIVE] **`backend/performance.py`** (237 LOC)
+  - CHL Performance & Loyalty Module -------------------------------- • Shipper loyalty auto-discount — tiered % off based on loads shipped • Carrier performance leaderboard — on-time %, loads delivered, 
+- [LIVE] **`backend/phase2_readiness.py`** (356 LOC)
+  - Phase 2 (Canadian Operations) Readiness Checklist — Iter 119.6 =============================================================== Walks the broker through standing up an intra-Canadian brokerage practice
+- [LIVE] **`backend/pipeline/__init__.py`** (9 LOC)
+  - pipeline package -- operator surface for the load lifecycle. Currently exposes a single read-only summary endpoint (walkthrough_router) that the Pipeline Walkthrough frontend tab consumes. Read-only b
+- [LIVE] **`backend/pipeline/walkthrough_router.py`** (571 LOC)
+  - walkthrough_router.py -- Pipeline Walkthrough operator-surface endpoint. Single read-only GET endpoint that powers the "Pipeline" tab in the operator dashboard (frontend/src/App.js -> PipelineWalkthro
+- [LIVE] **`backend/playback.py`** (125 LOC)
+  - Playback Recorder — Iteration 56 ("Day 1 Playback / Origin Story"). Durable event log for the owner's future "Year 1" highlight reel. Every significant business event (new booking, rate con signed, Me
+- [LIVE] **`backend/posting_blob.py`** (206 LOC)
+  - Posting Blob Generator — Iter 139.34 ===================================== Manual-only loadboards (Sylectus, NextLoadBoard, Direct Freight, regional boards without APIs) require operators to paste a f
+- [LIVE] **`backend/privacy_hardware.py`** (201 LOC)
+  - Privacy & Hardware Key Enforcement — Iteration 58. Provides: • Privacy Mode toggle — `db.privacy.mode={on\|off}`. When ON, sensitive API responses (business address, EIN, bank last-4, owner phone) get 
+- [LIVE] **`backend/profit_optimizer.py`** (138 LOC)
+  - Profit Optimizer — Pillar 2 Wraps raw match scores with REAL margin math and a risk gate. Problem with naive matching: it ranks by equipment/proximity, not profit. A "great match" that loses you $200 
+- [LIVE] **`backend/reconciliation.py`** (182 LOC)
+  - Reconciliation Worker — Iteration 54. Every 60 minutes (configurable via RECON_INTERVAL_MIN env var), compares Mercury bank transactions against our internal `accounting_transactions` ledger. Any Merc
+- [LIVE] **`backend/renewals/__init__.py`** (50 LOC)
+  - backend/renewals/ -- Renewal calendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08). Operator-mandated platform feature so CHL is never blindsided by expired API keys, missed regulatory ren
+- [LIVE] **`backend/renewals/renewals_calculator.py`** (214 LOC)
+  - renewals/renewals_calculator.py -- Pure-math helpers for the renewal calendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08). Pure functions only -- no DB, no I/O. Imported by the scanner an
+- [LIVE] **`backend/renewals/renewals_router.py`** (791 LOC)
+  - renewals/renewals_router.py -- Operator-facing endpoints for the renewal calendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08). Surfaces -------- GET /api/_renewals/summary -- list with co
+- [LIVE] **`backend/renewals/renewals_scanner.py`** (403 LOC)
+  - renewals/renewals_scanner.py -- Cron-driven scanner that fires reminder rows for renewals approaching expiry (Iter 145.x Stream KK1, 2026-05-08). The scanner is a PRODUCER. For each non-archived row i
+- [LIVE] **`backend/required_tasks.py`** (537 LOC)
+  - required_tasks.py — In-platform "Required Tasks" tray. Generates a live list of in-app to-do items the broker must complete by hand (incomplete shipper profiles, missing W-9s, expired COIs, etc.) and 
+- [LIVE] **`backend/resend_inbound_webhook.py`** (267 LOC)
+  - Resend Inbound Reply Webhook — Iter 119 ======================================== Captures inbound carrier replies to recruit / nudge / closer emails so the engagement log shows full lifecycle (sent → 
+- [LIVE] **`backend/rfq_inbound.py`** (525 LOC)
+  - Inbound RFQ Parser — converts unstructured shipper RFQ emails into structured quote/shipper-profile data using Gemini Vision. Flow: Shipper emails RFQ to quotes@continentalhaul.com → Resend Inbound we
+- [LIVE] **`backend/saved_searches.py`** (303 LOC)
+  - Iter 113.8 — Saved Truck Searches & Daily Digest. Director's mandate: platform should be automation-first, with manual override always available. This module delivers both: * AUTOMATIC: A scheduler ru
+- [LIVE] **`backend/scrapers/__init__.py`** (14 LOC)
+  - backend.scrapers -- external-data ingest substrate. Phase 10.1 (load-board scraper bootstrap) lives here. Per-source parser modules will be added in Phase 10.1.1 once operator authorizes a specific so
+- [LIVE] **`backend/scrapers/html_parser.py`** (125 LOC)
+  - html_parser.py -- Phase 10.1.3 prep scaffold for HTML load-board sources. Status: SCAFFOLD ONLY. No live HTML parsing yet. The actual parser implementation requires a `beautifulsoup4` + `lxml` depende
+- [LIVE] **`backend/scrapers/loadboard_scraper.py`** (1121 LOC)
+  - loadboard_scraper.py -- Phase 10.1.2 load-board ingest module. Status: feature-flag-gated end-to-end pipeline. Live network I/O is gated behind the CHL_LOADBOARD_SCRAPER_ENABLED feature flag and remai
+- [LIVE] **`backend/scrapers/rss_parser.py`** (426 LOC)
+  - rss_parser.py -- Phase 10.1.1 RSS / Atom load-listing parser. Parses generic RSS 2.0 + Atom 1.0 load-listing feed XML into normalized listing dicts that loadboard_scraper._normalize_listing(...) can i
+- [LIVE] **`backend/scrapers/scrapers_router.py`** (143 LOC)
+  - scrapers_router.py -- Phase 10.1.3 prep health endpoint. Surfaces `loadboard_scraper.health()` plus per-source rate-limit state summary at `/api/health/scrapers`. Read-only. Auth: require_broker. Wire
+- [LIVE] **`backend/security/__init__.py`** (5 LOC)
+  - CHL backend security package. Houses at-rest secret encryption (DPAPI on Windows, Fernet fallback) and related security primitives.
+- [LIVE] **`backend/security/secret_reader.py`** (208 LOC)
+  - Vault-first / env-fallback secret reader for CHL backend. Phase 1 of the secrets migration (post-DD3 EOD-16). Backend code reads secret VALUES through this helper instead of directly through `os.envir
+- [LIVE] **`backend/security/secrets_store.py`** (358 LOC)
+  - DPAPI-encrypted secrets store for CHL. Stores secret values encrypted at rest in C:\CHL\data\secrets_store.json. Uses Windows DPAPI (per-user scope) when available; falls back to Fernet symmetric encr
+- [LIVE] **`backend/server.py`** (13453 LOC)
+  - (no docstring)
+- [LIVE] **`backend/silent_shipper_ping.py`** (186 LOC)
+  - silent_shipper_ping.py — Iter 139.30 24h silent-shipper ping cron. Closes Card 1 RACI row "24h silent-shipper ping" and the Card 1 GAP cell line "no cron exists". Logic: Every 30 min, scan `db.quotes`
+- [LIVE] **`backend/sop_engine.py`** (549 LOC)
+  - sop_engine.py — Load Lifecycle State Machine + Live Visualizer backend. (Iter 135.2, 2026-05-03) Why this module exists ---------------------- FACTS.md Polestar: "automate the freight brokerage busine
+- [LIVE] **`backend/system_health.py`** (341 LOC)
+  - System Health Monitor — Iteration 50 Enterprise Refactor. Owner-facing dashboard widget. Surfaces live operational vitals so the operator sees when the engine is healthy vs. when a scraper is rotting 
+- [LIVE] **`backend/system_health_digest_router.py`** (58 LOC)
+  - system_health_digest_router.py -- Operator-only system-health digest endpoint. Single GET endpoint returning the top-N degradation fingerprints seen in the last `hours` window, plus a quick-glance lis
+- [LIVE] **`backend/technical_advantage.py`** (145 LOC)
+  - Technical Advantage one-pager — Iteration 65. A single-page PDF the owner can hand to a loan officer at OakStar Bank. Zero fluff, all proof. GET /api/business-plan/technical-advantage → application/pd
+- [LIVE] **`backend/telemetry.py`** (167 LOC)
+  - Sentinel Sentry Telemetry — Iteration 80.1. Catches every unhandled exception the frontend throws (via window.onerror / unhandledrejection hooks) and persists it in two places: 1. db.telemetry_errors 
+- [LIVE] **`backend/throttle_integration.py`** (206 LOC)
+  - throttle_integration.py — Helper functions for wiring throttle into existing code. iter 140.1 stage 1d. Task 6 (Emergent scaffolding). Why this module exists ---------------------- The throttle state 
+- [LIVE] **`backend/throttle_models.py`** (245 LOC)
+  - throttle_models.py — Pydantic data models for throttle / health / SLA system. iter 140.1 stage 1b–1d shared types. Task 7 (Emergent scaffolding). All models are JSON-serializable, OpenAPI-compatible, 
+- [LIVE] **`backend/throughput_governor.py`** (436 LOC)
+  - Project Æther — Throughput Governor (Metered Flow Control) Iteration 82 (Apr 23 2026) The "Throttle Valve" that sits ABOVE all execution logic. Every load opportunity or Home-Run match must pass the G
+- [LIVE] **`backend/tracking/__init__.py`** (33 LOC)
+  - backend.tracking -- iter 142.2 phase 4 stage 1a foundation. GPS-backed load-tracking event ingestion + retrieval. Carrier-side mobile-app-default at v1: there is NO live GPS provider client in this st
+- [LIVE] **`backend/tracking/checkin_cron.py`** (338 LOC)
+  - checkin_cron.py -- iter 142.2 stage 1c background loop for the carrier check-in scheduler. Runs `tracking.checkin_scheduler.sweep_due(db)` every 15 minutes. Mirrors backend/tracking/exception_detector
+- [LIVE] **`backend/tracking/checkin_router.py`** (223 LOC)
+  - checkin_router.py -- iter 142.2 stage 1c operator-facing API. Endpoints --------- - GET /api/tracking/checkins?load_id=X (require_broker) list scheduled + attempted check-ins for a load, merged into a
+- [LIVE] **`backend/tracking/event_store.py`** (394 LOC)
+  - event_store.py -- iter 142.2 phase 4 stage 1a tracking-event persistence. Schema: db.tracking_events -------------------------- { "id": str (uuid4), "load_id": str, "carrier_mc": str, "lat": float (-9
+- [LIVE] **`backend/tracking/exception_detector.py`** (1004 LOC)
+  - exception_detector.py -- iter 142.2 phase 4 stage 1b tracking-exception detection rule engine. Companion to backend/tracking/event_store.py (the producer; stage 1a). The event_store writes raw GPS eve
+- [LIVE] **`backend/tracking/exception_detector_cron.py`** (326 LOC)
+  - exception_detector_cron.py -- iter 142.2 phase 4 stage 1b background loop. Runs `tracking.exception_detector.scan_for_exceptions(db)` every 5 minutes. Mirrors the boilerplate of backend/assignment/fai
+- [LIVE] **`backend/tracking/exception_router.py`** (230 LOC)
+  - exception_router.py -- iter 142.2 phase 4 stage 1b operator-facing API. Endpoints --------- - GET /api/loads/{load_id}/exceptions (require_broker) list exceptions for a load (most recent first). - GET
+- [LIVE] **`backend/tracking/router.py`** (237 LOC)
+  - tracking.router -- iter 142.2 phase 4 stage 1a FastAPI sub-router. Endpoints --------- - POST /api/tracking/events Public (no auth). Mobile apps / ELD pushers / operator manual entry POST a single pos
+- [LIVE] **`backend/trust_footprint.py`** (391 LOC)
+  - Trust Footprint Updater — Iter 139.33 ====================================== One-click push of CHL's regulatory identity (EIN, DUNS, MC#, DOT, BMC-84, business address/phone/email) to every connected 
+- [LIVE] **`backend/vault.py`** (243 LOC)
+  - Secure Credential Vault — Continental Haul Logistics Owner-only password manager. Every password/token is AES-256 encrypted at rest using a symmetric key stored in `VAULT_ENCRYPTION_KEY` env var (sepa
+- [LIVE] **`backend/vault_config.py`** (56 LOC)
+  - Vault Config Resolver ===================== Unified helper so any module can fetch a sensitive credential from the Credential Vault FIRST (encrypted at rest), then fall back to env. Usage: from vault_
+- [LIVE] **`backend/visibility_bonus.py`** (369 LOC)
+  - Visibility Bonus Engine — Iteration 68. Every load carries a $50 "Green-Light Bonus" payable to the carrier on top of line haul IF the truck stays visible on GPS throughout transit (≥98 % of sampled m
+- [LIVE] **`frontend/src/App.js`** (18183 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/index.js`** (56 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/lib/gpsBuffer.js`** (165 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIVE] **`frontend/src/lib/telemetryClient.js`** (90 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
+- [LIBRARY] **`backend/dispatch/auto_bid_handoff.py`** (68 LOC)
+  - backend/dispatch/auto_bid_handoff.py -- Iter 142.1 stage 1f stub. After the packet renders (stage 1f) the load is ready to flow into iter 141.2's auto-bid pipeline (FMCSA-gated, ~May 13). Until 141.2 
+- [LIBRARY] **`frontend/src/hooks/use-toast.js`** (155 LOC)
+  - Inspired by react-hot-toast library
+- [LIBRARY] **`frontend/src/lib/utils.js`** (7 LOC)
+  - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
