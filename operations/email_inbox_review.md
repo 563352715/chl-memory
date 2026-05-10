@@ -2980,3 +2980,125 @@ _(none this window)_
   - action: No action
 
 ---
+
+## Hourly review 2026-05-10 04:37 UTC
+
+Total ingested last 75min: 33
+By category: {'PROVIDER': 33}
+By verdict: {'INFORMATIONAL': 33}
+
+### URGENT (require operator attention) (0)
+
+_(none this window)_
+
+### OPERATOR_REVIEW (next session) (0)
+
+_(none this window)_
+
+### AUTO_ACK_OK (0)
+
+_(none this window)_
+
+### INFORMATIONAL (33)
+
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+- `mailer-daemon@mail.zoho.com` -- **Undelivered Mail Returned to Sender**
+  - cat=PROVIDER  summary: This message was created automatically by mail delivery software. A message that you sent could not be delivered to one 
+  - action: No action
+
+---
