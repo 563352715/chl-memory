@@ -99,10 +99,10 @@ These BLOCK other work until decided.
 | M9 | **DeliveryReceipt mount in LoadDetailModal** | 15 min | Already mounted in 2 other views; polish |
 | M10 | **ORPHAN module cleanup** (52 orphans flagged by asset inventory) | 2-3 hours | Internal hygiene |
 | M11 | **Operator-tunable settings UI** — wire `db.business_settings` editing into a Settings panel | 1 day | Many flags currently DB-only (e.g., `delivered_autofire_enabled`, `parser_llm_daily_cap_usd`) |
-| M12 | **Cache namespacing in llm_parser** (SHA-256 cache should include source_name) | 30 min | Verifier-gate flagged 2026-05-10 |
-| M13 | **Mongo URL/JWT/basic-auth redaction patterns in operator_alerts** | 30 min | Verifier-gate flagged 2026-05-10 |
-| M14 | **Twilio alerts $5/day budget cap** | 30 min | Verifier-gate flagged 2026-05-10 |
-| M15 | **Rate-con autofire race fix** (unique partial index + atomic find_one_and_update) | 30 min | Verifier-gate flagged 2026-05-10 |
+| ~~M12~~ | **DONE 2026-05-11 — llm_parser cache namespacing.** Cache `_id` now composite `f"{source_name}:{html_hash}"` instead of html_hash alone. Prevents cross-source cache poisoning when two sources produce identical HTML (common template error pages, empty-result pages). Fix at `scrapers/llm_parser.py:_cache_key()` + updated `_cache_lookup` + `_cache_store` + call site at line 716. Verified distinct keys: `boardA:abc123 != boardB:abc123`. |
+| ~~M13~~ | **Already done (pre-2026-05-11) — `operator_alerts._REDACTION_PATTERNS` at lines 110-118 covers Mongo URL / JWT / HTTP basic-auth / Bearer / sk- / Twilio SID / generic 40+ char tokens.** Memory state was stale; verifier-gate fix shipped in prior session. |
+| ~~M14~~ | **Already done (pre-2026-05-11) — `operator_alerts._TWILIO_BUDGET_CATEGORY="twilio_alerts"` with `check_budget` / `record_spend` via `integrity.budget_caps` module.** Per-message SMS/voice costs gated; cap_throttled audit row recorded when budget hit. |
+| ~~M15~~ | **Already done (pre-2026-05-11) — `carrier_outreach.py:740-755` uses atomic `find_one_and_update` + ensures unique partial index on `db.loads.rate_con_id`.** Race-safe rate-con autofire; race loser sees winner's rate_con_id. |
 
 ---
 
