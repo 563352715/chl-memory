@@ -23,7 +23,7 @@ These BLOCK other work until decided.
 | # | Item | Why blocking | Source |
 |---|---|---|---|
 | D1 | **Walk through workflow synthesis with dev-engineer** | Locks the 9-phase canonical workflow that drives all subsequent build | `workflow_study_2026_05_10/00_WORKFLOW_SYNTHESIS_for_operator.md` |
-| D2 | **Pick factor company** (Denim / OTR Solutions / Triumph Business Capital / eCapital) | Shipper-credit-check API integration depends on this. Also Phase 6 invoice submission. | Research file #3 |
+| D2 | **Pick factor company** — **ComFreight Haul Pay application IN-FLIGHT** (PENDING APPROVAL, stuck). Decide: chase ComFreight or pivot to alternative (Denim / OTR Solutions / Triumph Business Capital / eCapital). | Shipper-credit-check API integration depends on this. Also Phase 6 invoice submission. | Research file #3 + ComFreight app screenshot 2026-05-11 |
 | D3 | **Pick entry model** (load-board-first vs shipper-first vs carrier-first) | Drives which build items prioritize | Workflow synthesis |
 | D4 | **TriumphPay opt-in decision** | If yes, integrate payment network; if no, work around it | Research file #3 |
 | D5 | **Real-dollar margin floor** (e.g., "$300 minimum gross per load") | pnl_monitor uses formulas; need a hard number | Workflow synthesis |
@@ -41,7 +41,8 @@ These BLOCK other work until decided.
 | O3 | **Apply for 123Loadboard API credentials** | ~$45/mo | 30 min | Regional coverage |
 | O4 | **Apply for Direct Freight API credentials** | ~$99/mo | 30 min | Specialty + regional |
 | O5 | **SAM.gov API registration verification** | $0 (free tier) | 15 min | Government RFPs — already partially scaffolded |
-| O6 | **Pick + onboard with a factoring company** | per-load fee (1.5-5%) | 1-2 weeks | Required for Phase 6 invoice submission. See D2. |
+| O6 | **Pick + onboard with a factoring company** | per-load fee (1.5-5%) | 1-2 weeks | Required for Phase 6 invoice submission. See D2. **NOTE 2026-05-11: ComFreight Haul Pay application already submitted (status PENDING APPROVAL). Operator needs to follow up via email/phone — see O6b.** |
+| O6b | **Follow up with ComFreight Haul Pay on stuck PENDING APPROVAL** | $0 | 15 min | Operator applied "a while back" + never heard back. ComFreight Haul Pay offers factoring + free load board + invoice management — single solution for both O6 (factoring) and partial O1-O4 (load board access). Their stated SLA is "1-2 business days to process" — overdue. Email: support@comfreight.com OR https://comfreight.com/contact. If approved, ComFreight Haul Pay's load board becomes free + factoring is live. |
 | O7 | **Buy APC Back-UPS Pro 1500** | ~$200 | 15 min install | Prevents mongo journal corruption from power flickers. Single highest-leverage hardware purchase. |
 | O8 | **Enable BIOS XMP** (F2/DEL on boot → AI Tweaker → XMP I → F10) | $0 | 5 min | Free 33% memory bandwidth — DIMMs running at 2133 MT/s vs rated 3200 |
 | O9 | **Install 64GB RAM kit when it arrives 2026-05-16** | $170 (already paid) | 15 min | Resolves the 83% RAM-pressure issue |
