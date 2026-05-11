@@ -68,7 +68,7 @@ Operator (Responsible Party):
 
 | Platform | Status | Account email | Notes |
 |---|---|---|---|
-| DAT | INQUIRY SENT (2026-05-11) | — | Email to developersupport@dat.com awaiting response |
+| DAT | ACCOUNT CREATED + SUBSCRIPTION PURCHASED (2026-05-12) | dispatch@continentalhaul.com | Tier: **DAT One Select Broker $319/mo** ($3,828/yr). Email verification pending; account activation up to 4hr. Subscription includes CarrierWatch (carrier vetting + insurance certs), Market Rate via DAT iQ, TMS & FTP Integration. Credentials + recovery code in vault (ids 8551680a + a07db203). API cert queue request sent to developersupport@dat.com 2026-05-12 — homegrown API requires few-week certification process per DAT integration team. API is free for first 3 users post-certification. |
 | Truckstop.com | ACCOUNT CREATED + INQUIRY SENT (2026-05-11) | dispatch@continentalhaul.com | Credentials in vault (id 83ad7f98-830a-475e-87ba-26a6952bd56a). API inquiry to partnerships@truckstop.com awaiting response. |
 | 123Loadboard | INQUIRY SENT (2026-05-11) | — | SSO blocked w/ AADSTS50020; email to partner-integrations@123loadboard.com awaiting response |
 | Direct Freight | ACCOUNT CREATED + BROKER-VERIFY QUEUED (2026-05-11) | dispatch@continentalhaul.com | Profile filled per canonical block above. Mobile SMS verified to personal cell 816-560-9180 (bridge until Telnyx 2026-05-14, see backlog O18b). Broker-authority verify requested via manual callback at 866-490-6433 — DirectFreight to call (business hours Mon 2026-05-12). FMCSA `Carriers Only` block stays N/A (broker, doesn't apply). **Credentials not yet in vault — operator to add.** |
