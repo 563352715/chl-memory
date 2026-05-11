@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-05-11T06:59:52.849183+00:00",
+  "generated_at": "2026-05-11T07:46:26.317590+00:00",
   "scan_dirs": [
     "C:\\CHL\\backend",
     "C:\\CHL\\backend\\tests",
     "C:\\CHL\\frontend\\src",
     "C:\\CHL\\scripts"
   ],
-  "total_assets": 1273,
+  "total_assets": 1274,
   "by_status": {
-    "ORPHAN": 63,
+    "ORPHAN": 64,
     "LIVE": 542,
     "LIBRARY": 23,
     "CODE-READY": 9,
@@ -16,7 +16,7 @@
   },
   "by_subsystem": {
     "Misc": 188,
-    "Communications": 128,
+    "Communications": 129,
     "Synthetic Test": 336,
     "Self-Healing": 79,
     "Continuity Layer": 4,
@@ -2319,6 +2319,42 @@
         "No imports, no smoke test, not in LIVE chain"
       ],
       "module_name": ".send_comfreight_followup"
+    },
+    {
+      "path": "C:/CHL/backend/.send_nextload_broker_application.py",
+      "rel_path": "backend/.send_nextload_broker_application.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "ORPHAN",
+      "description": "Send NextLOAD broker-access application email. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC'. NextLOAD vets brokers before access \u2014 this is the applicati",
+      "exports": [
+        "send_via_zoho()",
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "email",
+        "motor",
+        "os",
+        "smtplib",
+        "sys",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 132,
+      "last_modified": "2026-05-11T07:09:58.555364+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Send NextLOAD broker-access application email.\\n\\nPer feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC'.\\nNextLOAD vets brokers before access \u2014 this is the appl",
+        "load_dotenv('C:/CHL/backend/.env')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".send_nextload_broker_application"
     },
     {
       "path": "C:/CHL/backend/.send_truckstop_api_inquiry.py",
@@ -26548,6 +26584,7 @@
         "logging",
         "os",
         "pydantic",
+        "re",
         "typing"
       ],
       "imported_by": [
@@ -26555,8 +26592,8 @@
         "backend/server.py",
         "backend/tests/test_equipment_enum_canonical.py"
       ],
-      "lines_of_code": 1698,
-      "last_modified": "2026-05-10T21:53:16.085429+00:00",
+      "lines_of_code": 1736,
+      "last_modified": "2026-05-11T07:04:03.544586+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nCHL External Load Boards \u2014 Multi-Source Aggregator\\n--------------------------------------------------\\nReal adapters, no mock data. Each source is modular and honest about its\\ncurrent status (act"
@@ -27884,8 +27921,8 @@
         "backend/tests/test_renewals_router.py",
         "backend/tests/test_renewals_seed_from_catalog.py"
       ],
-      "lines_of_code": 976,
-      "last_modified": "2026-05-11T00:06:42.931142+00:00",
+      "lines_of_code": 982,
+      "last_modified": "2026-05-11T07:36:49.422449+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nrenewals/renewals_router.py -- Operator-facing endpoints for the renewal\\ncalendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08).\\n\\nSurfaces\\n--------\\nGET    /api/_renewals/summary    "
@@ -28243,8 +28280,8 @@
         "backend/tests/test_llm_parser.py",
         "backend/tests/test_llm_parser_preproc.py"
       ],
-      "lines_of_code": 778,
-      "last_modified": "2026-05-10T23:23:00.295149+00:00",
+      "lines_of_code": 793,
+      "last_modified": "2026-05-11T07:30:23.713510+00:00",
       "smoke_test": null,
       "decorators": [
         "'llm_parser.py -- Layer C parsing fallback (Claude HTML->JSON extraction).\\n\\nPhase 10.1.4: when Layer A (RSS) and Layer B (per-source HTML selectors) miss\\nor break, this module asks Claude (claude-h"
@@ -29288,8 +29325,8 @@
         "scripts/dispatch_test_load_bellavista.py",
         "scripts/fire_full_dryrun.py"
       ],
-      "lines_of_code": 13163,
-      "last_modified": "2026-05-11T06:52:00.755700+00:00",
+      "lines_of_code": 13172,
+      "last_modified": "2026-05-11T07:17:30.711059+00:00",
       "smoke_test": null,
       "decorators": [
         "load_dotenv(ROOT_DIR / '.env')",
@@ -30337,8 +30374,8 @@
       "imported_by": [
         "frontend/src/index.js"
       ],
-      "lines_of_code": 18383,
-      "last_modified": "2026-05-11T05:04:39.988984+00:00",
+      "lines_of_code": 18428,
+      "last_modified": "2026-05-11T07:40:12.518282+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -45875,7 +45912,7 @@
       ],
       "imported_by": [],
       "lines_of_code": 436,
-      "last_modified": "2026-05-11T06:41:13.050131+00:00",
+      "last_modified": "2026-05-11T07:07:20.514069+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nTest Load Board Manager Feature - Iteration 4\\nTests for:\\n- GET /api/load-board-sources (returns 6 pre-seeded default sources)\\n- POST /api/load-board-sources (create new load board source)\\n- PUT"
@@ -45906,7 +45943,7 @@
       ],
       "imported_by": [],
       "lines_of_code": 436,
-      "last_modified": "2026-05-11T06:41:13.050131+00:00",
+      "last_modified": "2026-05-11T07:07:20.514069+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nTest Load Board Manager Feature - Iteration 4\\nTests for:\\n- GET /api/load-board-sources (returns 6 pre-seeded default sources)\\n- POST /api/load-board-sources (create new load board source)\\n- PUT"

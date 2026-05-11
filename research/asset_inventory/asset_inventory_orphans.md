@@ -1,6 +1,6 @@
 # CHL Asset Inventory -- Orphans + Broken
 
-_Generated: 2026-05-11T06:59:52.849183+00:00_
+_Generated: 2026-05-11T07:46:26.317590+00:00_
 
 > **Triage focus.** These files are present in the codebase but
 > are NOT reachable from `backend/server.py` or `frontend/src/App.js`,
@@ -16,7 +16,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
 
 _None — no parse errors or unresolved internal imports detected._
 
-## ORPHAN (61)
+## ORPHAN (62)
 
 ### `frontend/src/lib/manualOverrideFields.js` (211 LOC)
 
@@ -132,6 +132,15 @@ _None — no parse errors or unresolved internal imports detected._
 - **Docstring:** Send factoring application follow-up email to ComFreight Haul Pay. Operator-mandated 2026-05-11. Constraints: - Signed as 'Dispatch' (no AI-reveal, no platform-reveal, matches feedback_outbound_email_
 - **Note:** No imports, no smoke test, not in LIVE chain
 - **Exports:** `send_via_zoho(), log_outbound(), main()`
+
+### `backend/.send_nextload_broker_application.py` (132 LOC)
+
+- **Subsystem:** Communications
+- **Type:** python_module
+- **Last modified:** 2026-05-11T07:09:58.555364+00:00
+- **Docstring:** Send NextLOAD broker-access application email. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC'. NextLOAD vets brokers before access — this is the applicati
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `send_via_zoho(), main()`
 
 ### `frontend/src/components/A2PStatusBanner.jsx` (126 LOC)
 

@@ -1,8 +1,8 @@
 # CHL Software Asset Inventory
 
-_Generated: 2026-05-11T06:59:52.849183+00:00_
+_Generated: 2026-05-11T07:46:26.317590+00:00_
 
-**Total assets:** 1273
+**Total assets:** 1274
 
 **Status counts:**
 
@@ -13,7 +13,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
 | [READY-FOR-HOOKUP] READY_FOR_HOOKUP | 5 | Operator-tagged: finished work for a real use case, awaiting wire-up decision (see ready_for_hookup_manifest.json) |
 | [LIBRARY] LIBRARY | 23 | Imported only by other modules (utility / helper) |
 | [DEV-TOOL] DEV-TOOL | 636 | Test, smoke, install, snapshot, or operator-run script |
-| [ORPHAN] ORPHAN | 61 | No imports detected anywhere — review for removal or wiring |
+| [ORPHAN] ORPHAN | 62 | No imports detected anywhere — review for removal or wiring |
 | [BROKEN] BROKEN | 0 | Parse error or imports an unknown internal module |
 
 **Subsystem distribution:**
@@ -21,7 +21,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
 | Subsystem | Count |
 |---|---:|
 | Continuity Layer | 4 |
-| Communications | 128 |
+| Communications | 129 |
 | Load Lifecycle | 29 |
 | Carrier Operations | 50 |
 | Compliance | 82 |
@@ -52,13 +52,16 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
 - [LIVE] **`backend/system_clock.py`** (425 LOC)
   - system_clock.py — Canonical time + calendar source for the CHL platform. Purpose: Single source of truth for "now", business days, holidays, and milestone events used by every document generator, audi
 
-## Communications (128)
+## Communications (129)
 
 - [ORPHAN] **`backend/.send_123loadboard_api_request.py`** (141 LOC)
   - Send API integration request to 123Loadboard partner-integrations team. Operator-mandated 2026-05-11. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC' (no A
   - _Note:_ No imports, no smoke test, not in LIVE chain
 - [ORPHAN] **`backend/.send_comfreight_followup.py`** (132 LOC)
   - Send factoring application follow-up email to ComFreight Haul Pay. Operator-mandated 2026-05-11. Constraints: - Signed as 'Dispatch' (no AI-reveal, no platform-reveal, matches feedback_outbound_email_
+  - _Note:_ No imports, no smoke test, not in LIVE chain
+- [ORPHAN] **`backend/.send_nextload_broker_application.py`** (132 LOC)
+  - Send NextLOAD broker-access application email. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC'. NextLOAD vets brokers before access — this is the applicati
   - _Note:_ No imports, no smoke test, not in LIVE chain
 - [ORPHAN] **`backend/.send_truckstop_api_inquiry.py`** (180 LOC)
   - Send comprehensive API access inquiry to Truckstop.com. Operator-mandated 2026-05-11. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC' (no AI/tech-company r
@@ -2539,7 +2542,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
   - Load Dispatch Lock + Idempotency — Iter 119 ============================================ Fail-safes against double-booking and double-dispatching. Two layers: 1. **Pessimistic dispatch lock** — when a
 - [LIVE] **`backend/load_throttle.py`** (170 LOC)
   - load_throttle.py — Day-1 daily load cap + incremental ramp. (Iter 135.7, 2026-05-03) Per Jason's Day-1 mandate (2026-05-03): "On day 1 and until we have vetted and tested this system, we will be takin
-- [LIVE] **`backend/loadboards.py`** (1698 LOC)
+- [LIVE] **`backend/loadboards.py`** (1736 LOC)
   - CHL External Load Boards — Multi-Source Aggregator -------------------------------------------------- Real adapters, no mock data. Each source is modular and honest about its current status (active / 
 - [LIVE] **`backend/maintenance/ci_runs_prune.py`** (243 LOC)
   - ci_runs_prune.py -- 365-day retention prune for db.ci_runs. Stream BBB4 (TT2 follow-up #1, 2026-05-08). Background ---------- BBB4 (commit pending) added the GitHub Actions webhook + db.ci_runs collec
@@ -2609,7 +2612,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
   - backend/renewals/ -- Renewal calendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08). Operator-mandated platform feature so CHL is never blindsided by expired API keys, missed regulatory ren
 - [LIVE] **`backend/renewals/renewals_calculator.py`** (214 LOC)
   - renewals/renewals_calculator.py -- Pure-math helpers for the renewal calendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08). Pure functions only -- no DB, no I/O. Imported by the scanner an
-- [LIVE] **`backend/renewals/renewals_router.py`** (976 LOC)
+- [LIVE] **`backend/renewals/renewals_router.py`** (982 LOC)
   - renewals/renewals_router.py -- Operator-facing endpoints for the renewal calendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08). Surfaces -------- GET /api/_renewals/summary -- list with co
 - [LIVE] **`backend/renewals/renewals_scanner.py`** (403 LOC)
   - renewals/renewals_scanner.py -- Cron-driven scanner that fires reminder rows for renewals approaching expiry (Iter 145.x Stream KK1, 2026-05-08). The scanner is a PRODUCER. For each non-archived row i
@@ -2627,7 +2630,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
   - backend.scrapers -- external-data ingest substrate. Phase 10.1 (load-board scraper bootstrap) lives here. Per-source parser modules will be added in Phase 10.1.1 once operator authorizes a specific so
 - [LIVE] **`backend/scrapers/html_parser.py`** (843 LOC)
   - html_parser.py -- Phase 10.1.3 deterministic HTML load-board parser. Layer B of the CHL parsing stack. BeautifulSoup4 + lxml driven extraction with a per-source SELECTOR_MAPS dispatch and a heuristic 
-- [LIVE] **`backend/scrapers/llm_parser.py`** (778 LOC)
+- [LIVE] **`backend/scrapers/llm_parser.py`** (793 LOC)
   - llm_parser.py -- Layer C parsing fallback (Claude HTML->JSON extraction). Phase 10.1.4: when Layer A (RSS) and Layer B (per-source HTML selectors) miss or break, this module asks Claude (claude-haiku-
 - [LIVE] **`backend/scrapers/loadboard_scraper.py`** (1121 LOC)
   - loadboard_scraper.py -- Phase 10.1.2 load-board ingest module. Status: feature-flag-gated end-to-end pipeline. Live network I/O is gated behind the CHL_LOADBOARD_SCRAPER_ENABLED feature flag and remai
@@ -2641,7 +2644,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
   - Vault-first / env-fallback secret reader for CHL backend. Phase 1 of the secrets migration (post-DD3 EOD-16). Backend code reads secret VALUES through this helper instead of directly through `os.envir
 - [LIVE] **`backend/security/secrets_store.py`** (358 LOC)
   - DPAPI-encrypted secrets store for CHL. Stores secret values encrypted at rest in C:\CHL\data\secrets_store.json. Uses Windows DPAPI (per-user scope) when available; falls back to Fernet symmetric encr
-- [LIVE] **`backend/server.py`** (13163 LOC)
+- [LIVE] **`backend/server.py`** (13172 LOC)
   - (no docstring)
 - [LIVE] **`backend/silent_shipper_ping.py`** (186 LOC)
   - silent_shipper_ping.py — Iter 139.30 24h silent-shipper ping cron. Closes Card 1 RACI row "24h silent-shipper ping" and the Card 1 GAP cell line "no cron exists". Logic: Every 30 min, scan `db.quotes`
@@ -2687,7 +2690,7 @@ _Generated: 2026-05-11T06:59:52.849183+00:00_
   - Vault Config Resolver ===================== Unified helper so any module can fetch a sensitive credential from the Credential Vault FIRST (encrypted at rest), then fall back to env. Usage: from vault_
 - [LIVE] **`backend/visibility_bonus.py`** (369 LOC)
   - Visibility Bonus Engine — Iteration 68. Every load carries a $50 "Green-Light Bonus" payable to the carrier on top of line haul IF the truck stays visible on GPS throughout transit (≥98 % of sampled m
-- [LIVE] **`frontend/src/App.js`** (18383 LOC)
+- [LIVE] **`frontend/src/App.js`** (18428 LOC)
   - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
 - [LIVE] **`frontend/src/index.js`** (56 LOC)
   - Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.
