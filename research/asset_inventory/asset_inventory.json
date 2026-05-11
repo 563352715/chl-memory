@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-05-10T23:03:28.335431+00:00",
+  "generated_at": "2026-05-11T06:59:52.849183+00:00",
   "scan_dirs": [
     "C:\\CHL\\backend",
     "C:\\CHL\\backend\\tests",
     "C:\\CHL\\frontend\\src",
     "C:\\CHL\\scripts"
   ],
-  "total_assets": 1233,
+  "total_assets": 1273,
   "by_status": {
-    "ORPHAN": 55,
-    "LIVE": 536,
-    "LIBRARY": 22,
+    "ORPHAN": 63,
+    "LIVE": 542,
+    "LIBRARY": 23,
     "CODE-READY": 9,
-    "DEV-TOOL": 611
+    "DEV-TOOL": 636
   },
   "by_subsystem": {
-    "Synthetic Test": 311,
-    "Self-Healing": 74,
-    "Misc": 176,
-    "Communications": 124,
+    "Misc": 188,
+    "Communications": 128,
+    "Synthetic Test": 336,
+    "Self-Healing": 79,
     "Continuity Layer": 4,
     "Compliance": 82,
     "Carrier Operations": 50,
@@ -26,15 +26,15 @@
     "Owner Tooling": 6,
     "Intelligence": 40,
     "Documents": 14,
-    "Financial": 57,
+    "Financial": 45,
     "LLL14-19 Recent Build": 5,
-    "Dev-Ops Scripts": 18,
+    "Dev-Ops Scripts": 19,
     "Public-Facing": 19,
     "Manual Override": 1,
-    "Frontend UI": 174,
-    "Scripts / Tooling": 49
+    "Frontend UI": 175,
+    "Scripts / Tooling": 53
   },
-  "live_python_modules": 796,
+  "live_python_modules": 808,
   "live_frontend_files": 139,
   "assets": [
     {
@@ -1012,6 +1012,10 @@
         "datetime",
         "fastapi",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_with_breaker",
         "logging",
         "pydantic",
         "re",
@@ -1021,8 +1025,8 @@
       "imported_by": [
         "backend/server.py"
       ],
-      "lines_of_code": 374,
-      "last_modified": "2026-05-04T22:04:39.871276+00:00",
+      "lines_of_code": 393,
+      "last_modified": "2026-05-10T23:20:02.474310+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nFMCSA Company Census File Ingester + Carrier Discovery.\\n\\nData source: https://data.transportation.gov/Trucking-and-Motorcoaches/Company-Census-File/az4n-8mr2\\n(Socrata API \u2014 free, public domain, "
@@ -2244,6 +2248,115 @@
       "module_name": "fill_carrier_contacts_gap"
     },
     {
+      "path": "C:/CHL/backend/.send_123loadboard_api_request.py",
+      "rel_path": "backend/.send_123loadboard_api_request.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "ORPHAN",
+      "description": "Send API integration request to 123Loadboard partner-integrations team. Operator-mandated 2026-05-11. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC' (no A",
+      "exports": [
+        "send_via_zoho()",
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "email",
+        "motor",
+        "os",
+        "smtplib",
+        "sys",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 141,
+      "last_modified": "2026-05-11T05:29:33.928497+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Send API integration request to 123Loadboard partner-integrations team.\\n\\nOperator-mandated 2026-05-11. Per feedback_outbound_email_policy.md:\\nsigned as 'Dispatch / Continental Haul Logistics LLC' ",
+        "load_dotenv('C:/CHL/backend/.env')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".send_123loadboard_api_request"
+    },
+    {
+      "path": "C:/CHL/backend/.send_comfreight_followup.py",
+      "rel_path": "backend/.send_comfreight_followup.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "ORPHAN",
+      "description": "Send factoring application follow-up email to ComFreight Haul Pay. Operator-mandated 2026-05-11. Constraints: - Signed as 'Dispatch' (no AI-reveal, no platform-reveal, matches feedback_outbound_email_",
+      "exports": [
+        "send_via_zoho()",
+        "log_outbound()",
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "email",
+        "motor",
+        "os",
+        "smtplib",
+        "sys",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 132,
+      "last_modified": "2026-05-11T05:19:22.014748+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Send factoring application follow-up email to ComFreight Haul Pay.\\n\\nOperator-mandated 2026-05-11. Constraints:\\n- Signed as 'Dispatch' (no AI-reveal, no platform-reveal, matches\\n  feedback_outboun",
+        "load_dotenv('C:/CHL/backend/.env')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".send_comfreight_followup"
+    },
+    {
+      "path": "C:/CHL/backend/.send_truckstop_api_inquiry.py",
+      "rel_path": "backend/.send_truckstop_api_inquiry.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "ORPHAN",
+      "description": "Send comprehensive API access inquiry to Truckstop.com. Operator-mandated 2026-05-11. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC' (no AI/tech-company r",
+      "exports": [
+        "send_via_zoho()",
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "email",
+        "motor",
+        "os",
+        "smtplib",
+        "sys",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 180,
+      "last_modified": "2026-05-11T05:45:45.203714+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Send comprehensive API access inquiry to Truckstop.com.\\n\\nOperator-mandated 2026-05-11. Per feedback_outbound_email_policy.md:\\nsigned as 'Dispatch / Continental Haul Logistics LLC' (no AI/tech-comp",
+        "load_dotenv('C:/CHL/backend/.env')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".send_truckstop_api_inquiry"
+    },
+    {
       "path": "C:/CHL/backend/aged_ar.py",
       "rel_path": "backend/aged_ar.py",
       "type": "python_module",
@@ -2802,6 +2915,7 @@
       "imported_by": [
         "backend/delivery_completion.py",
         "backend/operator_queues_router.py",
+        "backend/ops_console/ops_console_router.py",
         "backend/server.py"
       ],
       "lines_of_code": 602,
@@ -2843,6 +2957,35 @@
       "parse_error": null,
       "notes": [],
       "module_name": "dial_search"
+    },
+    {
+      "path": "C:/CHL/backend/document_search/__init__.py",
+      "rel_path": "backend/document_search/__init__.py",
+      "type": "python_module",
+      "subsystem": "Communications",
+      "status": "LIVE",
+      "description": "document_search -- BOL-driven aggregate document search. Operator-mandated 2026-05-10: type a BOL number, see EVERY document associated with that load (rate confirmations, BOLs, PODs, broker invoices,",
+      "exports": [],
+      "imports": [
+        "bol_search",
+        "bol_search.search_by_bol",
+        "search_router",
+        "search_router.build_router"
+      ],
+      "imported_by": [
+        "backend/ops_console/ops_console_router.py",
+        "backend/server.py",
+        "backend/tests/test_bol_document_search.py"
+      ],
+      "lines_of_code": 12,
+      "last_modified": "2026-05-11T00:58:54.757484+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'document_search -- BOL-driven aggregate document search.\\n\\nOperator-mandated 2026-05-10: type a BOL number, see EVERY document associated\\nwith that load (rate confirmations, BOLs, PODs, broker invo"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "document_search.__init__"
     },
     {
       "path": "C:/CHL/backend/email_ingestion.py",
@@ -3439,6 +3582,11 @@
         "asyncio",
         "datetime",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.is_breaker_open",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "json",
         "logging",
         "motor",
@@ -3449,10 +3597,11 @@
       ],
       "imported_by": [
         "backend/cron_scheduler.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/vetting_checks.py"
       ],
-      "lines_of_code": 621,
-      "last_modified": "2026-05-07T18:58:27.934759+00:00",
+      "lines_of_code": 642,
+      "last_modified": "2026-05-10T23:19:27.760367+00:00",
       "smoke_test": null,
       "decorators": [
         "\"FMCSA SMS BASIC Safety Scores per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 2).\\n\\nFetches Behavior Analysis & Safety Improvement Categories (BASIC) percentile scores,\\ninspectio"
@@ -3543,6 +3692,7 @@
         "backend/tests/test_action_dispatcher.py",
         "backend/tests/test_action_wrappers.py",
         "backend/tests/test_allowlist_loader.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/tests/test_email_poller.py",
         "backend/tests/test_handled_folder_mover.py",
         "backend/tests/test_imap_multi_folder.py",
@@ -3849,6 +3999,8 @@
         "datetime",
         "imaplib",
         "integrity",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "integrity.operational_state",
         "integrity.operational_state.is_read_only",
         "logging",
@@ -3865,8 +4017,8 @@
         "backend/tests/test_handled_folder_mover.py",
         "backend/tests/test_imap_multi_folder.py"
       ],
-      "lines_of_code": 1321,
-      "last_modified": "2026-05-09T03:50:23.739147+00:00",
+      "lines_of_code": 1352,
+      "last_modified": "2026-05-10T23:24:50.425691+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nhandled_folder_mover.py -- Stream V (EOD-14, operator-mandated 2026-05-08).\\n\\nOnce the action_dispatcher (iter 143.1 stage 1d, EOD-8) has stamped\\n``action_status=dispatched`` on a db.inbound_emai"
@@ -3916,6 +4068,8 @@
         "health_monitor.register_health_check",
         "imaplib",
         "integrity",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "integrity.operational_state",
         "integrity.operational_state.should_skip_tick",
         "logging",
@@ -3937,8 +4091,8 @@
         "backend/tests/test_imap_multi_folder.py",
         "backend/tests/test_imap_poller_multi_folder.py"
       ],
-      "lines_of_code": 1022,
-      "last_modified": "2026-05-09T03:50:23.740144+00:00",
+      "lines_of_code": 1043,
+      "last_modified": "2026-05-10T23:24:23.313020+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nimap_poller.py -- Zoho IMAP inbound-email poll cron (iter 143.1 stage 1a;\\nEOD-16 multi-folder extension).\\n\\nMirrors the cron-loop + health-register pattern from\\nbackend/fmcsa_census_refresh_cron"
@@ -4365,6 +4519,9 @@
       "imports": [
         "__future__",
         "datetime",
+        "integrity",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "json",
         "logging",
         "openai",
@@ -4373,10 +4530,11 @@
       ],
       "imported_by": [
         "backend/inbound_email/tier2_cron.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/tests/test_tier2_classifier.py"
       ],
-      "lines_of_code": 644,
-      "last_modified": "2026-05-08T03:09:12.108305+00:00",
+      "lines_of_code": 660,
+      "last_modified": "2026-05-10T23:23:27.519225+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\ntier2_classifier.py -- LLM-based fall-through classifier for the iter 143.1\\nstage 1c inbound-email substrate.\\n\\nThis is the second tier in the 2-tier classifier pipeline:\\n  - tier1_classifier (s"
@@ -4580,9 +4738,20 @@
       ],
       "imported_by": [
         "backend/carrier_contacts/enricher.py",
+        "backend/carrier_docs/doc_extractor.py",
+        "backend/fmcsa_qcmobile.py",
+        "backend/fmcsa_safer_cargo.py",
+        "backend/fmcsa_sms_scores.py",
+        "backend/inbound_email/handled_folder_mover.py",
+        "backend/inbound_email/imap_poller.py",
         "backend/inbound_email/sender_classifier.py",
+        "backend/inbound_email/tier2_classifier.py",
+        "backend/integrity/breaker_http.py",
         "backend/integrity/integrity_router.py",
+        "backend/load_completion_workflow.py",
+        "backend/scrapers/llm_parser.py",
         "backend/server.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/tests/test_integrity.py"
       ],
       "lines_of_code": 423,
@@ -4622,6 +4791,11 @@
         "datetime",
         "enum",
         "fastapi",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_sync_with_breaker",
+        "integrity.breaker_http.is_breaker_open",
         "logging",
         "os",
         "psutil",
@@ -4639,8 +4813,8 @@
         "backend/server.py",
         "scripts/fire_full_dryrun.py"
       ],
-      "lines_of_code": 990,
-      "last_modified": "2026-05-04T22:04:39.887806+00:00",
+      "lines_of_code": 1044,
+      "last_modified": "2026-05-10T23:21:52.442667+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nProject \u00c6ther \u2014 Multi-Channel Notification Service (Iteration 99, Apr 23 2026)\\n\\nSolves the A2P 10DLC driver-contact crisis.  SMS is blocked until TCR approves\\nthe Continental Haul campaign.  Thi"
@@ -4748,16 +4922,21 @@
       ],
       "imports": [
         "__future__",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_sync_with_breaker",
         "logging",
         "os",
         "plivo",
         "typing"
       ],
       "imported_by": [
-        "backend/auto_dispatch_send.py"
+        "backend/auto_dispatch_send.py",
+        "backend/tests/test_circuit_breaker_coverage.py"
       ],
-      "lines_of_code": 130,
-      "last_modified": "2026-05-07T05:22:38.077270+00:00",
+      "lines_of_code": 149,
+      "last_modified": "2026-05-10T23:22:06.877312+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nplivo_client.py \u2014 Plivo SMS wrapper (iter 141.3 stage 1b prep).\\n\\nSister module to text_operator.py. Same shape, different vendor. Pre-written\\novernight 2026-05-07 so iter 141.3 stage 1b (notific"
@@ -4906,6 +5085,10 @@
         "cryptography.hazmat.primitives.asymmetric.ed25519.Ed25519PublicKey",
         "fastapi",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_with_breaker",
         "logging",
         "os",
         "re",
@@ -4920,8 +5103,8 @@
         "backend/server.py",
         "backend/tests/test_telnyx_webrtc.py"
       ],
-      "lines_of_code": 1003,
-      "last_modified": "2026-05-09T17:31:54.788035+00:00",
+      "lines_of_code": 1023,
+      "last_modified": "2026-05-10T23:20:36.488735+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\ntelnyx_webrtc.py -- Telnyx WebRTC browser softphone for CHL.\\n(Stream KKK1, 2026-05-09)\\n\\nPurpose: Telnyx-native replacement for the Twilio-era browser_phone.py\\nsoftphone (Iter 134.16). Built ahe"
@@ -6872,16 +7055,21 @@
       ],
       "imports": [
         "__future__",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_sync_with_breaker",
         "logging",
         "os",
         "twilio",
         "typing"
       ],
       "imported_by": [
-        "backend/operator_alerts.py"
+        "backend/operator_alerts.py",
+        "backend/tests/test_circuit_breaker_coverage.py"
       ],
-      "lines_of_code": 107,
-      "last_modified": "2026-05-07T02:34:13.388360+00:00",
+      "lines_of_code": 125,
+      "last_modified": "2026-05-10T23:20:49.915414+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\ntext_operator.py \u2014 operator-facing SMS alert wrapper (iter 141.1).\\n\\nNOT for driver/carrier comms \u2014 that path lives in notification_service.py and\\nis gated on A2P 10DLC APPROVED. This module is f"
@@ -6993,16 +7181,21 @@
       ],
       "imports": [
         "__future__",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_sync_with_breaker",
         "logging",
         "os",
         "twilio",
         "typing"
       ],
       "imported_by": [
-        "backend/operator_alerts.py"
+        "backend/operator_alerts.py",
+        "backend/tests/test_circuit_breaker_coverage.py"
       ],
-      "lines_of_code": 124,
-      "last_modified": "2026-05-07T02:51:51.116978+00:00",
+      "lines_of_code": 143,
+      "last_modified": "2026-05-10T23:21:03.982687+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nvoice_operator.py \u2014 operator-facing Voice (robo-call) alert wrapper (iter 141.1).\\n\\nSister module to text_operator.py. Same role (alert the platform owner) but\\nuses Twilio Voice instead of SMS. V"
@@ -7663,6 +7856,9 @@
         "contextvars",
         "fastapi",
         "logging",
+        "middleware",
+        "middleware.request_id",
+        "middleware.request_id.get_current_request_id",
         "pii_scrubber",
         "pii_scrubber.scrub",
         "starlette",
@@ -7673,8 +7869,8 @@
       "imported_by": [
         "backend/server.py"
       ],
-      "lines_of_code": 159,
-      "last_modified": "2026-05-04T22:04:39.840917+00:00",
+      "lines_of_code": 172,
+      "last_modified": "2026-05-10T23:23:15.268340+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nGlobal Interceptor Middleware \u2014 Iteration 50 Enterprise Refactor.\\n\\nLogs EVERY API call to db.api_audit_log with:\\n  \u2022 user_id       (when authenticated; anonymous for public routes)\\n  \u2022 user_ema"
@@ -7703,6 +7899,7 @@
       ],
       "imported_by": [
         "backend/auth/__init__.py",
+        "backend/middleware/public_endpoint_rate_limiter.py",
         "backend/server.py",
         "backend/tests/test_client_ip.py"
       ],
@@ -7841,6 +8038,9 @@
         "hazmat_types.normalize_hazmat_class_list",
         "health_monitor",
         "health_monitor.register_health_check",
+        "integrity",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "json",
         "logging",
         "openai",
@@ -7854,8 +8054,8 @@
         "backend/server.py",
         "backend/tests/test_doc_extractor.py"
       ],
-      "lines_of_code": 921,
-      "last_modified": "2026-05-10T21:52:51.313845+00:00",
+      "lines_of_code": 936,
+      "last_modified": "2026-05-10T23:23:50.882690+00:00",
       "smoke_test": null,
       "decorators": [
         "'carrier_docs.doc_extractor -- OCR + structured-field extraction for\\ncarrier compliance documents (iter 145.1 EOD-10 stage).\\n\\nPipeline\\n--------\\n    db.carrier_documents row exists (uploaded by op"
@@ -10709,6 +10909,130 @@
       "module_name": "tests.test_iteration_79_compliance_armor"
     },
     {
+      "path": "C:/CHL/backend/tests/test_ops_console.py",
+      "rel_path": "backend/tests/test_ops_console.py",
+      "type": "python_module",
+      "subsystem": "Compliance",
+      "status": "DEV-TOOL",
+      "description": "test_ops_console.py -- Unit tests for backend/ops_console. Covers: - test_synth_load_create_happy_path - test_synth_load_create_writes_audit_row - test_synth_load_create_marks_synthetic_true - test_dr",
+      "exports": [
+        "db()",
+        "test_synth_load_create_happy_path()",
+        "test_synth_load_create_writes_audit_row()",
+        "test_dry_run_quote_no_db_writes()",
+        "test_dry_run_quote_returns_pricing_fields()",
+        "test_synth_carrier_accept_promotes_to_booked()",
+        "test_synth_carrier_accept_404_on_missing_load()",
+        "test_mark_delivered_flips_status()",
+        "test_mark_delivered_idempotent()",
+        "test_fire_invoice_noa_idempotent()",
+        "test_fire_rate_con_idempotent()",
+        "test_synth_cleanup_refuses_unsafe_prefix()",
+        "test_synth_cleanup_deletes_matching_synth_data()",
+        "test_bol_search_proxy_writes_audit()",
+        "test_auth_required_for_all_endpoints()",
+        "test_safe_prefixes_constant_intact()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "inspect",
+        "ops_console",
+        "ops_console.ops_console_router",
+        "ops_console.ops_console_router.DryRunQuoteBody",
+        "ops_console.ops_console_router.FireInvoiceNoaBody",
+        "ops_console.ops_console_router.FireRateConBody",
+        "ops_console.ops_console_router.MarkDeliveredBody",
+        "ops_console.ops_console_router.SAFE_SYNTH_PREFIXES",
+        "ops_console.ops_console_router.SynthCarrierAcceptBody",
+        "ops_console.ops_console_router.SynthCleanupBody",
+        "ops_console.ops_console_router.SynthLoadCreateBody",
+        "ops_console.ops_console_router.build_router",
+        "os",
+        "pytest",
+        "re",
+        "sys",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 557,
+      "last_modified": "2026-05-11T01:07:57.127501+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_ops_console.py -- Unit tests for backend/ops_console.\\n\\nCovers:\\n  - test_synth_load_create_happy_path\\n  - test_synth_load_create_writes_audit_row\\n  - test_synth_load_create_marks_synthetic_t",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_ops_console"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_ops_console.py",
+      "rel_path": "backend/tests/test_ops_console.py",
+      "type": "python_module",
+      "subsystem": "Compliance",
+      "status": "DEV-TOOL",
+      "description": "test_ops_console.py -- Unit tests for backend/ops_console. Covers: - test_synth_load_create_happy_path - test_synth_load_create_writes_audit_row - test_synth_load_create_marks_synthetic_true - test_dr",
+      "exports": [
+        "db()",
+        "test_synth_load_create_happy_path()",
+        "test_synth_load_create_writes_audit_row()",
+        "test_dry_run_quote_no_db_writes()",
+        "test_dry_run_quote_returns_pricing_fields()",
+        "test_synth_carrier_accept_promotes_to_booked()",
+        "test_synth_carrier_accept_404_on_missing_load()",
+        "test_mark_delivered_flips_status()",
+        "test_mark_delivered_idempotent()",
+        "test_fire_invoice_noa_idempotent()",
+        "test_fire_rate_con_idempotent()",
+        "test_synth_cleanup_refuses_unsafe_prefix()",
+        "test_synth_cleanup_deletes_matching_synth_data()",
+        "test_bol_search_proxy_writes_audit()",
+        "test_auth_required_for_all_endpoints()",
+        "test_safe_prefixes_constant_intact()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "inspect",
+        "ops_console",
+        "ops_console.ops_console_router",
+        "ops_console.ops_console_router.DryRunQuoteBody",
+        "ops_console.ops_console_router.FireInvoiceNoaBody",
+        "ops_console.ops_console_router.FireRateConBody",
+        "ops_console.ops_console_router.MarkDeliveredBody",
+        "ops_console.ops_console_router.SAFE_SYNTH_PREFIXES",
+        "ops_console.ops_console_router.SynthCarrierAcceptBody",
+        "ops_console.ops_console_router.SynthCleanupBody",
+        "ops_console.ops_console_router.SynthLoadCreateBody",
+        "ops_console.ops_console_router.build_router",
+        "os",
+        "pytest",
+        "re",
+        "sys",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 557,
+      "last_modified": "2026-05-11T01:07:57.127501+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_ops_console.py -- Unit tests for backend/ops_console.\\n\\nCovers:\\n  - test_synth_load_create_happy_path\\n  - test_synth_load_create_writes_audit_row\\n  - test_synth_load_create_marks_synthetic_t",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_ops_console"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_payments_compliance.py",
       "rel_path": "backend/tests/test_payments_compliance.py",
       "type": "python_module",
@@ -10865,106 +11189,6 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_renewals_scanner_boc3"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_stripe_webhook_hardening.py",
-      "rel_path": "backend/tests/test_stripe_webhook_hardening.py",
-      "type": "python_module",
-      "subsystem": "Compliance",
-      "status": "DEV-TOOL",
-      "description": "test_stripe_webhook_hardening.py -- Iter EOD-16 stream VV2. Hardening on top of the EOD-15 II1 fail-closed signature verification: 4. Body size cap (1 MiB) -- HTTP 413 on oversize, audit-logged. 5. Pe",
-      "exports": [
-        "fake_db()",
-        "patched_server()",
-        "test_valid_signature_recognized_event_writes_ledger()",
-        "test_invalid_signature_audit_logged_and_no_ledger_write()",
-        "test_missing_signature_header_rejected()",
-        "test_replayed_event_id_returns_deduped()",
-        "test_timestamp_outside_tolerance_rejected()",
-        "test_body_over_1_mib_rejected_with_413()",
-        "test_rate_limit_exceeded_returns_429()",
-        "test_audit_log_row_written_on_every_received_event()"
-      ],
-      "imports": [
-        "__future__",
-        "_stripe_webhook_rate_limiter",
-        "_stripe_webhook_rate_limiter.reset_for_tests",
-        "asyncio",
-        "fastapi",
-        "os",
-        "pytest",
-        "server",
-        "stripe",
-        "synthetic_load_walkthrough",
-        "synthetic_load_walkthrough._FakeDB",
-        "sys",
-        "typing"
-      ],
-      "imported_by": [],
-      "lines_of_code": 601,
-      "last_modified": "2026-05-09T03:47:03.515198+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"test_stripe_webhook_hardening.py -- Iter EOD-16 stream VV2.\\n\\nHardening on top of the EOD-15 II1 fail-closed signature verification:\\n\\n  4. Body size cap (1 MiB) -- HTTP 413 on oversize, audit-logg",
-        "pytest.fixture",
-        "pytest.fixture"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_stripe_webhook_hardening"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_stripe_webhook_hardening.py",
-      "rel_path": "backend/tests/test_stripe_webhook_hardening.py",
-      "type": "python_module",
-      "subsystem": "Compliance",
-      "status": "DEV-TOOL",
-      "description": "test_stripe_webhook_hardening.py -- Iter EOD-16 stream VV2. Hardening on top of the EOD-15 II1 fail-closed signature verification: 4. Body size cap (1 MiB) -- HTTP 413 on oversize, audit-logged. 5. Pe",
-      "exports": [
-        "fake_db()",
-        "patched_server()",
-        "test_valid_signature_recognized_event_writes_ledger()",
-        "test_invalid_signature_audit_logged_and_no_ledger_write()",
-        "test_missing_signature_header_rejected()",
-        "test_replayed_event_id_returns_deduped()",
-        "test_timestamp_outside_tolerance_rejected()",
-        "test_body_over_1_mib_rejected_with_413()",
-        "test_rate_limit_exceeded_returns_429()",
-        "test_audit_log_row_written_on_every_received_event()"
-      ],
-      "imports": [
-        "__future__",
-        "_stripe_webhook_rate_limiter",
-        "_stripe_webhook_rate_limiter.reset_for_tests",
-        "asyncio",
-        "fastapi",
-        "os",
-        "pytest",
-        "server",
-        "stripe",
-        "synthetic_load_walkthrough",
-        "synthetic_load_walkthrough._FakeDB",
-        "sys",
-        "typing"
-      ],
-      "imported_by": [
-        "backend/tests/test_stripe_dedup_first_seen_migration.py"
-      ],
-      "lines_of_code": 601,
-      "last_modified": "2026-05-09T03:47:03.515198+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"test_stripe_webhook_hardening.py -- Iter EOD-16 stream VV2.\\n\\nHardening on top of the EOD-15 II1 fail-closed signature verification:\\n\\n  4. Body size cap (1 MiB) -- HTTP 413 on oversize, audit-logg",
-        "pytest.fixture",
-        "pytest.fixture"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_stripe_webhook_hardening"
     },
     {
       "path": "C:/CHL/backend/weekend_reset_cron.py",
@@ -11358,6 +11582,11 @@
         "asyncio",
         "datetime",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.is_breaker_open",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "json",
         "logging",
         "motor",
@@ -11367,10 +11596,11 @@
         "typing"
       ],
       "imported_by": [
-        "backend/fmcsa_safer_cargo_cron.py"
+        "backend/fmcsa_safer_cargo_cron.py",
+        "backend/tests/test_circuit_breaker_coverage.py"
       ],
-      "lines_of_code": 628,
-      "last_modified": "2026-05-07T19:20:38.705064+00:00",
+      "lines_of_code": 649,
+      "last_modified": "2026-05-10T23:19:45.920530+00:00",
       "smoke_test": null,
       "decorators": [
         "'FMCSA SAFER Cargo Carried per-carrier scraper (iter 142.1 nationwide-vetted-carrier-DB Phase 5).\\n\\nFetches the SAFER Company Snapshot HTML page for any USDOT and parses the\\n\"Cargo Carried\" 27/29-ca"
@@ -11521,6 +11751,24 @@
         "Script imported by another asset (unusual)"
       ],
       "module_name": "cloud_backup_nightly"
+    },
+    {
+      "path": "C:/CHL/scripts/cloud_replica/setup_backblaze_b2_sync.ps1",
+      "rel_path": "scripts/cloud_replica/setup_backblaze_b2_sync.ps1",
+      "type": "powershell_script",
+      "subsystem": "Dev-Ops Scripts",
+      "status": "DEV-TOOL",
+      "description": "setup_backblaze_b2_sync.ps1 -- Windows-side nightly mongodump + B2 upload.  What it does: --Apply: creates Scheduled Task \"CHL_B2_NightlyBackup\" that runs nightly at 04:00 ET (local time on Windows; 0",
+      "exports": [],
+      "imports": [],
+      "imported_by": [],
+      "lines_of_code": 341,
+      "last_modified": "2026-05-10T23:20:38.717664+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
     },
     {
       "path": "C:/CHL/scripts/git_hooks/pre-commit.sh",
@@ -12019,6 +12267,7 @@
         "backend/carrier_outreach.py",
         "backend/multi_leg.py",
         "backend/operator_queues_router.py",
+        "backend/ops_console/ops_console_router.py",
         "backend/server.py",
         "backend/tests/test_rate_con_autofire.py",
         "scripts/fire_full_dryrun.py"
@@ -12422,42 +12671,6 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_rate_conf_tracker"
-    },
-    {
-      "path": "C:/CHL/backend/_stripe_webhook_rate_limiter.py",
-      "rel_path": "backend/_stripe_webhook_rate_limiter.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "LIVE",
-      "description": "In-memory per-IP token-bucket rate limiter for /api/webhook/stripe. VV2 (autonomous-continue): added 2026-05-08 alongside the Stripe webhook hardening pass. Stripe's own delivery rate is bounded; anyt",
-      "exports": [
-        "RATE_LIMIT_RPM",
-        "RATE_LIMIT_BURST",
-        "LRU_MAX_ENTRIES",
-        "check",
-        "reset_for_tests"
-      ],
-      "imports": [
-        "__future__",
-        "collections",
-        "threading",
-        "time",
-        "typing"
-      ],
-      "imported_by": [
-        "backend/server.py",
-        "backend/tests/test_stripe_dedup_first_seen_migration.py",
-        "backend/tests/test_stripe_webhook_hardening.py"
-      ],
-      "lines_of_code": 136,
-      "last_modified": "2026-05-09T03:44:14.635121+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"In-memory per-IP token-bucket rate limiter for /api/webhook/stripe.\\n\\nVV2 (autonomous-continue): added 2026-05-08 alongside the Stripe webhook\\nhardening pass. Stripe's own delivery rate is bounded;"
-      ],
-      "parse_error": null,
-      "notes": [],
-      "module_name": "_stripe_webhook_rate_limiter"
     },
     {
       "path": "C:/CHL/backend/cron_settlement_24h.py",
@@ -12881,16 +13094,21 @@
         "datetime",
         "fastapi",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_with_breaker",
         "logging",
         "os",
         "typing"
       ],
       "imported_by": [
         "backend/reconciliation.py",
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_circuit_breaker_coverage.py"
       ],
-      "lines_of_code": 227,
-      "last_modified": "2026-05-04T22:04:39.883816+00:00",
+      "lines_of_code": 243,
+      "last_modified": "2026-05-10T23:22:19.106800+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nMercury Bank Developer API integration\\n--------------------------------------\\nRead-only pull of account balances + recent transactions for Continental\\nHaul Logistics. Auto-fails-soft to 'placeho"
@@ -12917,6 +13135,10 @@
         "datetime",
         "fastapi",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_with_breaker",
         "logging",
         "os",
         "pydantic",
@@ -12929,8 +13151,8 @@
         "backend/payment_switchboard.py",
         "backend/server.py"
       ],
-      "lines_of_code": 281,
-      "last_modified": "2026-05-04T22:04:39.884814+00:00",
+      "lines_of_code": 303,
+      "last_modified": "2026-05-10T23:22:30.660639+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nMercury Auto-Payout Engine (Iteration 49)\\n=========================================\\nFires when a load flips to `status='delivered'` AND the carrier has uploaded a\\nBOL (proof-of-delivery). Schedu"
@@ -12960,6 +13182,9 @@
         "integrity.audit_trail.record_audit",
         "logging",
         "math",
+        "middleware",
+        "middleware.request_id",
+        "middleware.request_id.get_current_request_id",
         "typing",
         "uuid"
       ],
@@ -12970,8 +13195,8 @@
         "backend/tests/test_payments_status_migration.py",
         "backend/tests/test_state_lock_audit_domain_expansion.py"
       ],
-      "lines_of_code": 792,
-      "last_modified": "2026-05-10T21:43:33.172727+00:00",
+      "lines_of_code": 812,
+      "last_modified": "2026-05-10T23:23:00.583402+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nPayment Rails \u2014 Iteration 77.1.\\n\\nThree responsibilities:\\n\\n  1. Settlement queue  \u2014 GET /api/broker/settlements/pending\\n  2. Integrity-gated funding \u2014 POST /api/broker/settlements/{payment_id}/"
@@ -13134,143 +13359,6 @@
       "module_name": "shipper_credit_headroom"
     },
     {
-      "path": "C:/CHL/backend/stripe_connect.py",
-      "rel_path": "backend/stripe_connect.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "LIVE",
-      "description": "Stripe Connect for Continental Haul Logistics --------------------------------------------- Express account onboarding for carriers + next-day ACH payouts from the platform's Mercury-linked Stripe bal",
-      "exports": [
-        "class OnboardRequest",
-        "class PayCarrierRequest",
-        "build_router()"
-      ],
-      "imports": [
-        "__future__",
-        "datetime",
-        "fastapi",
-        "json",
-        "logging",
-        "os",
-        "pydantic",
-        "stripe",
-        "typing",
-        "uuid"
-      ],
-      "imported_by": [
-        "backend/server.py"
-      ],
-      "lines_of_code": 554,
-      "last_modified": "2026-05-04T22:04:39.908839+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'\\nStripe Connect for Continental Haul Logistics\\n---------------------------------------------\\nExpress account onboarding for carriers + next-day ACH payouts from the\\nplatform\\'s Mercury-linked Str"
-      ],
-      "parse_error": null,
-      "notes": [],
-      "module_name": "stripe_connect"
-    },
-    {
-      "path": "C:/CHL/backend/stripe_dedup_first_seen_migration.py",
-      "rel_path": "backend/stripe_dedup_first_seen_migration.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "LIVE",
-      "description": "stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up. ZZ2 (commit fd86989) provisioned a 7-day TTL index on db.stripe_event_dedup.first_seen_at, but flagged a caveat: The webhook handle",
-      "exports": [
-        "migrate_stripe_dedup_first_seen_to_date()"
-      ],
-      "imports": [
-        "__future__",
-        "datetime",
-        "logging",
-        "typing"
-      ],
-      "imported_by": [
-        "backend/server.py",
-        "backend/tests/test_stripe_dedup_first_seen_migration.py"
-      ],
-      "lines_of_code": 167,
-      "last_modified": "2026-05-09T04:24:19.942487+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up.\\n\\nZZ2 (commit fd86989) provisioned a 7-day TTL index on\\ndb.stripe_event_dedup.first_seen_at, but flagged a caveat:\\n\\n    The we"
-      ],
-      "parse_error": null,
-      "notes": [],
-      "module_name": "stripe_dedup_first_seen_migration"
-    },
-    {
-      "path": "C:/CHL/backend/stripe_dedup_ttl_provisioner.py",
-      "rel_path": "backend/stripe_dedup_ttl_provisioner.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "LIVE",
-      "description": "stripe_dedup_ttl_provisioner.py -- ZZ2 / closes YY3 follow-up #1. YY3 (commit a07e32d) shipped /healthz/stripe which checks (among other things) that db.stripe_event_dedup has a TTL index. The follow-",
-      "exports": [
-        "provision_stripe_dedup_ttl_index()"
-      ],
-      "imports": [
-        "__future__",
-        "logging",
-        "typing"
-      ],
-      "imported_by": [
-        "backend/server.py",
-        "backend/tests/test_stripe_dedup_first_seen_migration.py",
-        "backend/tests/test_stripe_dedup_ttl_provisioning.py"
-      ],
-      "lines_of_code": 192,
-      "last_modified": "2026-05-09T04:16:10.567684+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"stripe_dedup_ttl_provisioner.py -- ZZ2 / closes YY3 follow-up #1.\\n\\nYY3 (commit a07e32d) shipped /healthz/stripe which checks (among other\\nthings) that db.stripe_event_dedup has a TTL index. The fo"
-      ],
-      "parse_error": null,
-      "notes": [],
-      "module_name": "stripe_dedup_ttl_provisioner"
-    },
-    {
-      "path": "C:/CHL/backend/stripe_health_router.py",
-      "rel_path": "backend/stripe_health_router.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "LIVE",
-      "description": "stripe_health_router.py -- /healthz/stripe readiness probe (YY3, VV2 #1). VV2 (commit ce5cb40) hardened the Stripe webhook with signature verification, replay-dedup, body-size cap, per-IP rate limit, ",
-      "exports": [
-        "build_router()"
-      ],
-      "imports": [
-        "__future__",
-        "asyncio",
-        "backend",
-        "backend.security",
-        "backend.security.secret_reader",
-        "datetime",
-        "fastapi",
-        "logging",
-        "os",
-        "security",
-        "security.secret_reader",
-        "stripe",
-        "typing"
-      ],
-      "imported_by": [
-        "backend/healthz_all_router.py",
-        "backend/server.py",
-        "backend/tests/test_stripe_health_router.py"
-      ],
-      "lines_of_code": 338,
-      "last_modified": "2026-05-09T04:08:23.565924+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'stripe_health_router.py -- /healthz/stripe readiness probe (YY3, VV2 #1).\\n\\nVV2 (commit ce5cb40) hardened the Stripe webhook with signature\\nverification, replay-dedup, body-size cap, per-IP rate li"
-      ],
-      "parse_error": null,
-      "notes": [],
-      "module_name": "stripe_health_router"
-    },
-    {
       "path": "C:/CHL/backend/tests/test_auto_settlement_trigger.py",
       "rel_path": "backend/tests/test_auto_settlement_trigger.py",
       "type": "python_module",
@@ -13534,8 +13622,8 @@
         "uuid"
       ],
       "imported_by": [],
-      "lines_of_code": 520,
-      "last_modified": "2026-05-04T22:04:39.917010+00:00",
+      "lines_of_code": 513,
+      "last_modified": "2026-05-10T23:44:13.784461+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nIteration 15 Tests \u2014 Team Management, P&L Email, Stripe Connect, Business Settings Extensions\\n\\nFeatures tested:\\n1. GET /api/team - list broker team members\\n2. POST /api/team/invite - invite new"
@@ -13570,8 +13658,8 @@
         "uuid"
       ],
       "imported_by": [],
-      "lines_of_code": 520,
-      "last_modified": "2026-05-04T22:04:39.917010+00:00",
+      "lines_of_code": 513,
+      "last_modified": "2026-05-10T23:44:13.784461+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nIteration 15 Tests \u2014 Team Management, P&L Email, Stripe Connect, Business Settings Extensions\\n\\nFeatures tested:\\n1. GET /api/team - list broker team members\\n2. POST /api/team/invite - invite new"
@@ -13661,74 +13749,6 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_iteration25_mercury_banking"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_iteration30_stripe_connect_mercury.py",
-      "rel_path": "backend/tests/test_iteration30_stripe_connect_mercury.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "DEV-TOOL",
-      "description": "Iteration 30 - Stripe Connect + Mercury Developer API Integration Tests ------------------------------------------------------------------------ Tests for: 1. Mercury API endpoints (placeholder mode w",
-      "exports": [
-        "class TestMercuryAPIPlaceholderMode",
-        "class TestMercuryAuthEnforcement",
-        "class TestStripeConnectEmergentProxyMode",
-        "class TestStripeConnectAuthEnforcement",
-        "class TestStripeConnectWebhook",
-        "class TestCarrierStripeEndpoints",
-        "class TestRegressionEndpoints"
-      ],
-      "imports": [
-        "os",
-        "pytest",
-        "requests"
-      ],
-      "imported_by": [],
-      "lines_of_code": 423,
-      "last_modified": "2026-05-04T22:04:39.922795+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'\\nIteration 30 - Stripe Connect + Mercury Developer API Integration Tests\\n------------------------------------------------------------------------\\nTests for:\\n1. Mercury API endpoints (placeholder "
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_iteration30_stripe_connect_mercury"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_iteration30_stripe_connect_mercury.py",
-      "rel_path": "backend/tests/test_iteration30_stripe_connect_mercury.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "DEV-TOOL",
-      "description": "Iteration 30 - Stripe Connect + Mercury Developer API Integration Tests ------------------------------------------------------------------------ Tests for: 1. Mercury API endpoints (placeholder mode w",
-      "exports": [
-        "class TestMercuryAPIPlaceholderMode",
-        "class TestMercuryAuthEnforcement",
-        "class TestStripeConnectEmergentProxyMode",
-        "class TestStripeConnectAuthEnforcement",
-        "class TestStripeConnectWebhook",
-        "class TestCarrierStripeEndpoints",
-        "class TestRegressionEndpoints"
-      ],
-      "imports": [
-        "os",
-        "pytest",
-        "requests"
-      ],
-      "imported_by": [],
-      "lines_of_code": 423,
-      "last_modified": "2026-05-04T22:04:39.922795+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'\\nIteration 30 - Stripe Connect + Mercury Developer API Integration Tests\\n------------------------------------------------------------------------\\nTests for:\\n1. Mercury API endpoints (placeholder "
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_iteration30_stripe_connect_mercury"
     },
     {
       "path": "C:/CHL/backend/tests/test_iteration_102_factor_matrix.py",
@@ -14155,406 +14175,156 @@
       "module_name": "tests.test_payments_status_migration"
     },
     {
-      "path": "C:/CHL/backend/tests/test_stripe_dedup_first_seen_migration.py",
-      "rel_path": "backend/tests/test_stripe_dedup_first_seen_migration.py",
+      "path": "C:/CHL/backend/tests/test_stripe_residual_cleanup.py",
+      "rel_path": "backend/tests/test_stripe_residual_cleanup.py",
       "type": "python_module",
       "subsystem": "Financial",
       "status": "DEV-TOOL",
-      "description": "test_stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up. Boundary-only tests for the one-shot migration that upgrades legacy string-typed `first_seen_at` rows in db.stripe_event_dedup",
+      "description": "test_stripe_residual_cleanup.py -- Iter 2026-05-10 Stripe residual cleanup. Companion to test_stripe_webhook_410_gone.py. Verifies the 5 residual Stripe references flagged after Wave 4B3 are cleaned u",
       "exports": [
-        "test_migration_upgrades_legacy_string_rows()",
-        "test_migration_idempotent_on_rerun()",
-        "test_migration_skips_unparseable_string()",
-        "test_migration_no_op_on_empty_collection()",
-        "test_coerce_iso_variants()",
-        "test_webhook_insert_writes_datetime()",
-        "test_zz2_ttl_index_unchanged_by_aaa1_migration()"
+        "test_stripe_checkout_sdk_import_removed()",
+        "test_residual_stripe_stubs_wired()",
+        "test_stub_handlers_are_minimal()",
+        "test_no_dangling_stripe_connect_account_id()",
+        "test_residual_endpoints_return_410_via_testclient()"
       ],
       "imports": [
         "__future__",
-        "_stripe_webhook_rate_limiter",
-        "_stripe_webhook_rate_limiter.reset_for_tests",
-        "asyncio",
-        "datetime",
-        "os",
+        "ast",
+        "fastapi",
+        "pathlib",
         "pytest",
         "server",
-        "stripe_dedup_first_seen_migration",
-        "stripe_dedup_first_seen_migration._coerce_iso_to_datetime",
-        "stripe_dedup_first_seen_migration.migrate_stripe_dedup_first_seen_to_date",
-        "stripe_dedup_ttl_provisioner",
-        "stripe_dedup_ttl_provisioner.TTL_EXPIRE_SECONDS",
-        "stripe_dedup_ttl_provisioner.TTL_INDEX_NAME",
-        "stripe_dedup_ttl_provisioner.provision_stripe_dedup_ttl_index",
-        "synthetic_load_walkthrough",
-        "synthetic_load_walkthrough._AsyncCursor",
-        "synthetic_load_walkthrough._FakeDB",
-        "synthetic_load_walkthrough._apply_update",
-        "synthetic_load_walkthrough._matches",
-        "sys",
-        "test_stripe_dedup_ttl_provisioning",
-        "test_stripe_dedup_ttl_provisioning._FakeCollection",
-        "test_stripe_webhook_hardening",
-        "test_stripe_webhook_hardening._invoke_webhook",
-        "test_stripe_webhook_hardening._make_fake_stripe_module",
-        "test_stripe_webhook_hardening._patch_stripe_sdk",
-        "test_stripe_webhook_hardening._stub_stripe_checkout",
-        "typing"
+        "server.fastapi_app"
       ],
       "imported_by": [],
-      "lines_of_code": 517,
-      "last_modified": "2026-05-09T04:27:03.747159+00:00",
+      "lines_of_code": 256,
+      "last_modified": "2026-05-10T23:45:58.121076+00:00",
       "smoke_test": null,
       "decorators": [
-        "\"test_stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up.\\n\\nBoundary-only tests for the one-shot migration that upgrades legacy\\nstring-typed `first_seen_at` rows in db.stripe_event_"
+        "'test_stripe_residual_cleanup.py -- Iter 2026-05-10 Stripe residual cleanup.\\n\\nCompanion to test_stripe_webhook_410_gone.py. Verifies the 5 residual Stripe\\nreferences flagged after Wave 4B3 are clea",
+        "pytest.mark.parametrize('decorator,detail_marker', [('@api_router.post(\"/payments/checkout\")', 'driver_payments_checkout_removed_factoring_is_the_rail'), ('@api_router.get(\"/payments/checkout/status/{",
+        "pytest.mark.parametrize('func_name', ['payments_checkout_gone', 'payments_checkout_status_gone', 'stripe_connect_status_gone', 'stripe_connect_start_gone'])",
+        "pytest.mark.slow"
       ],
       "parse_error": null,
       "notes": [
         "Pytest test module"
       ],
-      "module_name": "tests.test_stripe_dedup_first_seen_migration"
+      "module_name": "tests.test_stripe_residual_cleanup"
     },
     {
-      "path": "C:/CHL/backend/tests/test_stripe_dedup_first_seen_migration.py",
-      "rel_path": "backend/tests/test_stripe_dedup_first_seen_migration.py",
+      "path": "C:/CHL/backend/tests/test_stripe_residual_cleanup.py",
+      "rel_path": "backend/tests/test_stripe_residual_cleanup.py",
       "type": "python_module",
       "subsystem": "Financial",
       "status": "DEV-TOOL",
-      "description": "test_stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up. Boundary-only tests for the one-shot migration that upgrades legacy string-typed `first_seen_at` rows in db.stripe_event_dedup",
+      "description": "test_stripe_residual_cleanup.py -- Iter 2026-05-10 Stripe residual cleanup. Companion to test_stripe_webhook_410_gone.py. Verifies the 5 residual Stripe references flagged after Wave 4B3 are cleaned u",
       "exports": [
-        "test_migration_upgrades_legacy_string_rows()",
-        "test_migration_idempotent_on_rerun()",
-        "test_migration_skips_unparseable_string()",
-        "test_migration_no_op_on_empty_collection()",
-        "test_coerce_iso_variants()",
-        "test_webhook_insert_writes_datetime()",
-        "test_zz2_ttl_index_unchanged_by_aaa1_migration()"
+        "test_stripe_checkout_sdk_import_removed()",
+        "test_residual_stripe_stubs_wired()",
+        "test_stub_handlers_are_minimal()",
+        "test_no_dangling_stripe_connect_account_id()",
+        "test_residual_endpoints_return_410_via_testclient()"
       ],
       "imports": [
         "__future__",
-        "_stripe_webhook_rate_limiter",
-        "_stripe_webhook_rate_limiter.reset_for_tests",
-        "asyncio",
-        "datetime",
-        "os",
+        "ast",
+        "fastapi",
+        "pathlib",
         "pytest",
         "server",
-        "stripe_dedup_first_seen_migration",
-        "stripe_dedup_first_seen_migration._coerce_iso_to_datetime",
-        "stripe_dedup_first_seen_migration.migrate_stripe_dedup_first_seen_to_date",
-        "stripe_dedup_ttl_provisioner",
-        "stripe_dedup_ttl_provisioner.TTL_EXPIRE_SECONDS",
-        "stripe_dedup_ttl_provisioner.TTL_INDEX_NAME",
-        "stripe_dedup_ttl_provisioner.provision_stripe_dedup_ttl_index",
-        "synthetic_load_walkthrough",
-        "synthetic_load_walkthrough._AsyncCursor",
-        "synthetic_load_walkthrough._FakeDB",
-        "synthetic_load_walkthrough._apply_update",
-        "synthetic_load_walkthrough._matches",
-        "sys",
-        "test_stripe_dedup_ttl_provisioning",
-        "test_stripe_dedup_ttl_provisioning._FakeCollection",
-        "test_stripe_webhook_hardening",
-        "test_stripe_webhook_hardening._invoke_webhook",
-        "test_stripe_webhook_hardening._make_fake_stripe_module",
-        "test_stripe_webhook_hardening._patch_stripe_sdk",
-        "test_stripe_webhook_hardening._stub_stripe_checkout",
-        "typing"
+        "server.fastapi_app"
       ],
       "imported_by": [],
-      "lines_of_code": 517,
-      "last_modified": "2026-05-09T04:27:03.747159+00:00",
+      "lines_of_code": 256,
+      "last_modified": "2026-05-10T23:45:58.121076+00:00",
       "smoke_test": null,
       "decorators": [
-        "\"test_stripe_dedup_first_seen_migration.py -- AAA1 / closes ZZ2 follow-up.\\n\\nBoundary-only tests for the one-shot migration that upgrades legacy\\nstring-typed `first_seen_at` rows in db.stripe_event_"
+        "'test_stripe_residual_cleanup.py -- Iter 2026-05-10 Stripe residual cleanup.\\n\\nCompanion to test_stripe_webhook_410_gone.py. Verifies the 5 residual Stripe\\nreferences flagged after Wave 4B3 are clea",
+        "pytest.mark.parametrize('decorator,detail_marker', [('@api_router.post(\"/payments/checkout\")', 'driver_payments_checkout_removed_factoring_is_the_rail'), ('@api_router.get(\"/payments/checkout/status/{",
+        "pytest.mark.parametrize('func_name', ['payments_checkout_gone', 'payments_checkout_status_gone', 'stripe_connect_status_gone', 'stripe_connect_start_gone'])",
+        "pytest.mark.slow"
       ],
       "parse_error": null,
       "notes": [
         "Pytest test module"
       ],
-      "module_name": "tests.test_stripe_dedup_first_seen_migration"
+      "module_name": "tests.test_stripe_residual_cleanup"
     },
     {
-      "path": "C:/CHL/backend/tests/test_stripe_dedup_ttl_provisioning.py",
-      "rel_path": "backend/tests/test_stripe_dedup_ttl_provisioning.py",
+      "path": "C:/CHL/backend/tests/test_stripe_webhook_410_gone.py",
+      "rel_path": "backend/tests/test_stripe_webhook_410_gone.py",
       "type": "python_module",
       "subsystem": "Financial",
       "status": "DEV-TOOL",
-      "description": "test_stripe_dedup_ttl_provisioning.py -- ZZ2 / closes YY3 follow-up #1. Boundary-only tests for the stripe_event_dedup TTL index provisioner. Covers: 1. After provision_stripe_dedup_ttl_index runs, th",
+      "description": "test_stripe_webhook_410_gone.py -- Iter 2026-05-10 Stripe cleanup. Verifies the Stripe cleanup landed cleanly: 1. `POST /api/webhook/stripe` returns 410 Gone (NOT 404). Stripe treats 410 as \"stop retr",
       "exports": [
-        "test_provision_creates_index_with_7d_ttl()",
-        "test_provision_is_idempotent_on_second_call()",
-        "test_provision_warns_on_options_conflict_via_precheck()",
-        "test_provision_warns_when_create_index_raises_options_conflict()",
-        "test_provision_swallows_unexpected_create_index_error()",
-        "test_ttl_field_name_matches_webhook_handler_insertion()",
-        "test_provision_three_times_simulating_restarts()"
+        "test_stripe_webhook_returns_410()",
+        "test_stripe_webhook_stub_is_minimal()",
+        "test_no_other_stripe_carrier_routes_remain()",
+        "test_deleted_stripe_files_are_absent()",
+        "test_webhook_returns_410_via_testclient()"
       ],
       "imports": [
         "__future__",
-        "asyncio",
-        "logging",
-        "os",
-        "pytest",
-        "stripe_dedup_ttl_provisioner",
-        "stripe_dedup_ttl_provisioner.TTL_EXPIRE_SECONDS",
-        "stripe_dedup_ttl_provisioner.TTL_FIELD_NAME",
-        "stripe_dedup_ttl_provisioner.TTL_INDEX_NAME",
-        "stripe_dedup_ttl_provisioner.provision_stripe_dedup_ttl_index",
-        "sys",
-        "typing"
-      ],
-      "imported_by": [],
-      "lines_of_code": 354,
-      "last_modified": "2026-05-09T04:17:29.560835+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'test_stripe_dedup_ttl_provisioning.py -- ZZ2 / closes YY3 follow-up #1.\\n\\nBoundary-only tests for the stripe_event_dedup TTL index provisioner.\\nCovers:\\n\\n    1. After provision_stripe_dedup_ttl_in"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_stripe_dedup_ttl_provisioning"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_stripe_dedup_ttl_provisioning.py",
-      "rel_path": "backend/tests/test_stripe_dedup_ttl_provisioning.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "DEV-TOOL",
-      "description": "test_stripe_dedup_ttl_provisioning.py -- ZZ2 / closes YY3 follow-up #1. Boundary-only tests for the stripe_event_dedup TTL index provisioner. Covers: 1. After provision_stripe_dedup_ttl_index runs, th",
-      "exports": [
-        "test_provision_creates_index_with_7d_ttl()",
-        "test_provision_is_idempotent_on_second_call()",
-        "test_provision_warns_on_options_conflict_via_precheck()",
-        "test_provision_warns_when_create_index_raises_options_conflict()",
-        "test_provision_swallows_unexpected_create_index_error()",
-        "test_ttl_field_name_matches_webhook_handler_insertion()",
-        "test_provision_three_times_simulating_restarts()"
-      ],
-      "imports": [
-        "__future__",
-        "asyncio",
-        "logging",
-        "os",
-        "pytest",
-        "stripe_dedup_ttl_provisioner",
-        "stripe_dedup_ttl_provisioner.TTL_EXPIRE_SECONDS",
-        "stripe_dedup_ttl_provisioner.TTL_FIELD_NAME",
-        "stripe_dedup_ttl_provisioner.TTL_INDEX_NAME",
-        "stripe_dedup_ttl_provisioner.provision_stripe_dedup_ttl_index",
-        "sys",
-        "typing"
-      ],
-      "imported_by": [
-        "backend/tests/test_stripe_dedup_first_seen_migration.py"
-      ],
-      "lines_of_code": 354,
-      "last_modified": "2026-05-09T04:17:29.560835+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'test_stripe_dedup_ttl_provisioning.py -- ZZ2 / closes YY3 follow-up #1.\\n\\nBoundary-only tests for the stripe_event_dedup TTL index provisioner.\\nCovers:\\n\\n    1. After provision_stripe_dedup_ttl_in"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_stripe_dedup_ttl_provisioning"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_stripe_health_router.py",
-      "rel_path": "backend/tests/test_stripe_health_router.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "DEV-TOOL",
-      "description": "test_stripe_health_router.py -- YY3 / VV2 follow-up #1. Boundary-only tests for the /healthz/stripe readiness probe. The probe checks five things: 1. STRIPE_WEBHOOK_SECRET resolves via vault or .env 2",
-      "exports": [
-        "test_happy_path_returns_green()",
-        "test_api_key_missing_returns_red()",
-        "test_webhook_secret_missing_returns_yellow()",
-        "test_stripe_api_timeout_returns_red()",
-        "test_dedup_ttl_index_missing_returns_yellow()",
-        "test_non_owner_user_403()",
-        "test_env_fallback_tags_source_correctly()",
-        "test_response_shape_contract()"
-      ],
-      "imports": [
-        "__future__",
-        "asyncio",
-        "backend",
-        "backend.security",
-        "backend.security.secret_reader",
-        "datetime",
+        "ast",
         "fastapi",
-        "os",
-        "pytest",
-        "security",
-        "security.secret_reader",
-        "stripe",
-        "stripe_health_router",
-        "stripe_health_router.build_router",
-        "sys",
-        "time",
-        "typing"
-      ],
-      "imported_by": [],
-      "lines_of_code": 446,
-      "last_modified": "2026-05-09T04:09:49.331331+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'test_stripe_health_router.py -- YY3 / VV2 follow-up #1.\\n\\nBoundary-only tests for the /healthz/stripe readiness probe. The probe\\nchecks five things:\\n\\n    1. STRIPE_WEBHOOK_SECRET resolves via vau"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_stripe_health_router"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_stripe_health_router.py",
-      "rel_path": "backend/tests/test_stripe_health_router.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "DEV-TOOL",
-      "description": "test_stripe_health_router.py -- YY3 / VV2 follow-up #1. Boundary-only tests for the /healthz/stripe readiness probe. The probe checks five things: 1. STRIPE_WEBHOOK_SECRET resolves via vault or .env 2",
-      "exports": [
-        "test_happy_path_returns_green()",
-        "test_api_key_missing_returns_red()",
-        "test_webhook_secret_missing_returns_yellow()",
-        "test_stripe_api_timeout_returns_red()",
-        "test_dedup_ttl_index_missing_returns_yellow()",
-        "test_non_owner_user_403()",
-        "test_env_fallback_tags_source_correctly()",
-        "test_response_shape_contract()"
-      ],
-      "imports": [
-        "__future__",
-        "asyncio",
-        "backend",
-        "backend.security",
-        "backend.security.secret_reader",
-        "datetime",
-        "fastapi",
-        "os",
-        "pytest",
-        "security",
-        "security.secret_reader",
-        "stripe",
-        "stripe_health_router",
-        "stripe_health_router.build_router",
-        "sys",
-        "time",
-        "typing"
-      ],
-      "imported_by": [],
-      "lines_of_code": 446,
-      "last_modified": "2026-05-09T04:09:49.331331+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "'test_stripe_health_router.py -- YY3 / VV2 follow-up #1.\\n\\nBoundary-only tests for the /healthz/stripe readiness probe. The probe\\nchecks five things:\\n\\n    1. STRIPE_WEBHOOK_SECRET resolves via vau"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_stripe_health_router"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_stripe_webhook_security.py",
-      "rel_path": "backend/tests/test_stripe_webhook_security.py",
-      "type": "python_module",
-      "subsystem": "Financial",
-      "status": "DEV-TOOL",
-      "description": "test_stripe_webhook_security.py -- Iter EOD-15 stream II1. Locks in three Stripe-layer security guarantees that HH1's payment-status scatter migration surfaced as follow-up findings: 1. /api/webhook/s",
-      "exports": [
-        "fake_db()",
-        "patched_server()",
-        "test_webhook_invalid_signature_returns_401()",
-        "test_webhook_missing_signature_header_returns_401()",
-        "test_webhook_valid_signature_processes_event()",
-        "test_webhook_dedup_prevents_double_process_on_replay()",
-        "test_webhook_dedup_returns_prior_result_on_duplicate_event_id()",
-        "test_payment_completion_handler_called_from_poll_paid_path()",
-        "test_payment_completion_handler_called_from_webhook_path()",
-        "test_payment_completion_handler_idempotent_when_called_twice()"
-      ],
-      "imports": [
-        "__future__",
-        "asyncio",
-        "fastapi",
-        "json",
-        "os",
+        "pathlib",
         "pytest",
         "server",
-        "stripe",
-        "synthetic_load_walkthrough",
-        "synthetic_load_walkthrough._FakeDB",
-        "sys",
-        "typing"
+        "server.fastapi_app"
       ],
       "imported_by": [],
-      "lines_of_code": 572,
-      "last_modified": "2026-05-08T22:06:41.233468+00:00",
+      "lines_of_code": 208,
+      "last_modified": "2026-05-10T23:23:46.720757+00:00",
       "smoke_test": null,
       "decorators": [
-        "\"\\ntest_stripe_webhook_security.py -- Iter EOD-15 stream II1.\\n\\nLocks in three Stripe-layer security guarantees that HH1's payment-status\\nscatter migration surfaced as follow-up findings:\\n\\n1. /api",
-        "pytest.fixture",
-        "pytest.fixture"
+        "'test_stripe_webhook_410_gone.py -- Iter 2026-05-10 Stripe cleanup.\\n\\nVerifies the Stripe cleanup landed cleanly:\\n\\n  1. `POST /api/webhook/stripe` returns 410 Gone (NOT 404). Stripe treats\\n     41",
+        "pytest.mark.slow"
       ],
       "parse_error": null,
       "notes": [
         "Pytest test module"
       ],
-      "module_name": "tests.test_stripe_webhook_security"
+      "module_name": "tests.test_stripe_webhook_410_gone"
     },
     {
-      "path": "C:/CHL/backend/tests/test_stripe_webhook_security.py",
-      "rel_path": "backend/tests/test_stripe_webhook_security.py",
+      "path": "C:/CHL/backend/tests/test_stripe_webhook_410_gone.py",
+      "rel_path": "backend/tests/test_stripe_webhook_410_gone.py",
       "type": "python_module",
       "subsystem": "Financial",
       "status": "DEV-TOOL",
-      "description": "test_stripe_webhook_security.py -- Iter EOD-15 stream II1. Locks in three Stripe-layer security guarantees that HH1's payment-status scatter migration surfaced as follow-up findings: 1. /api/webhook/s",
+      "description": "test_stripe_webhook_410_gone.py -- Iter 2026-05-10 Stripe cleanup. Verifies the Stripe cleanup landed cleanly: 1. `POST /api/webhook/stripe` returns 410 Gone (NOT 404). Stripe treats 410 as \"stop retr",
       "exports": [
-        "fake_db()",
-        "patched_server()",
-        "test_webhook_invalid_signature_returns_401()",
-        "test_webhook_missing_signature_header_returns_401()",
-        "test_webhook_valid_signature_processes_event()",
-        "test_webhook_dedup_prevents_double_process_on_replay()",
-        "test_webhook_dedup_returns_prior_result_on_duplicate_event_id()",
-        "test_payment_completion_handler_called_from_poll_paid_path()",
-        "test_payment_completion_handler_called_from_webhook_path()",
-        "test_payment_completion_handler_idempotent_when_called_twice()"
+        "test_stripe_webhook_returns_410()",
+        "test_stripe_webhook_stub_is_minimal()",
+        "test_no_other_stripe_carrier_routes_remain()",
+        "test_deleted_stripe_files_are_absent()",
+        "test_webhook_returns_410_via_testclient()"
       ],
       "imports": [
         "__future__",
-        "asyncio",
+        "ast",
         "fastapi",
-        "json",
-        "os",
+        "pathlib",
         "pytest",
         "server",
-        "stripe",
-        "synthetic_load_walkthrough",
-        "synthetic_load_walkthrough._FakeDB",
-        "sys",
-        "typing"
+        "server.fastapi_app"
       ],
       "imported_by": [],
-      "lines_of_code": 572,
-      "last_modified": "2026-05-08T22:06:41.233468+00:00",
+      "lines_of_code": 208,
+      "last_modified": "2026-05-10T23:23:46.720757+00:00",
       "smoke_test": null,
       "decorators": [
-        "\"\\ntest_stripe_webhook_security.py -- Iter EOD-15 stream II1.\\n\\nLocks in three Stripe-layer security guarantees that HH1's payment-status\\nscatter migration surfaced as follow-up findings:\\n\\n1. /api",
-        "pytest.fixture",
-        "pytest.fixture"
+        "'test_stripe_webhook_410_gone.py -- Iter 2026-05-10 Stripe cleanup.\\n\\nVerifies the Stripe cleanup landed cleanly:\\n\\n  1. `POST /api/webhook/stripe` returns 410 Gone (NOT 404). Stripe treats\\n     41",
+        "pytest.mark.slow"
       ],
       "parse_error": null,
       "notes": [
         "Pytest test module"
       ],
-      "module_name": "tests.test_stripe_webhook_security"
+      "module_name": "tests.test_stripe_webhook_410_gone"
     },
     {
       "path": "C:/CHL/frontend/src/views/SettlementsView.jsx",
@@ -14576,32 +14346,6 @@
       ],
       "lines_of_code": 389,
       "last_modified": "2026-05-10T21:45:04.331932+00:00",
-      "smoke_test": null,
-      "decorators": [],
-      "parse_error": null,
-      "notes": [],
-      "module_name": ""
-    },
-    {
-      "path": "C:/CHL/frontend/src/views/StripeConnectCard.jsx",
-      "rel_path": "frontend/src/views/StripeConnectCard.jsx",
-      "type": "jsx_component",
-      "subsystem": "Financial",
-      "status": "LIVE",
-      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
-      "exports": [
-        "StripeConnectCard"
-      ],
-      "imports": [
-        "../lib/api",
-        "@phosphor-icons/react",
-        "react"
-      ],
-      "imported_by": [
-        "frontend/src/App.js"
-      ],
-      "lines_of_code": 368,
-      "last_modified": "2026-05-04T22:04:40.060966+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -16262,6 +16006,31 @@
       "module_name": ""
     },
     {
+      "path": "C:/CHL/frontend/src/views/BolSearchView.jsx",
+      "rel_path": "frontend/src/views/BolSearchView.jsx",
+      "type": "jsx_component",
+      "subsystem": "Frontend UI",
+      "status": "LIVE",
+      "description": "* BolSearchView.jsx -- BOL Document Search (Operator-mandated 2026-05-10). * * Type a BOL number, see EVERY document associated with that load in one * chronological timeline: rate confirmations, BOLs",
+      "exports": [
+        "BolSearchView"
+      ],
+      "imports": [
+        "axios",
+        "react"
+      ],
+      "imported_by": [
+        "frontend/src/App.js"
+      ],
+      "lines_of_code": 278,
+      "last_modified": "2026-05-11T01:01:02.170754+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
+    },
+    {
       "path": "C:/CHL/frontend/src/views/BrowserPhoneView.jsx",
       "rel_path": "frontend/src/views/BrowserPhoneView.jsx",
       "type": "jsx_component",
@@ -16461,8 +16230,8 @@
       "imported_by": [
         "frontend/src/views/AutomationsDashboard.jsx"
       ],
-      "lines_of_code": 155,
-      "last_modified": "2026-05-04T22:04:40.016712+00:00",
+      "lines_of_code": 151,
+      "last_modified": "2026-05-10T23:44:46.607342+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -16514,8 +16283,8 @@
       "imported_by": [
         "frontend/src/App.js"
       ],
-      "lines_of_code": 415,
-      "last_modified": "2026-05-04T22:04:40.017709+00:00",
+      "lines_of_code": 409,
+      "last_modified": "2026-05-10T23:45:15.933172+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -18325,6 +18094,31 @@
       "module_name": ""
     },
     {
+      "path": "C:/CHL/frontend/src/views/OpsConsoleView.jsx",
+      "rel_path": "frontend/src/views/OpsConsoleView.jsx",
+      "type": "jsx_component",
+      "subsystem": "Frontend UI",
+      "status": "LIVE",
+      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved.",
+      "exports": [
+        "OpsConsoleView"
+      ],
+      "imports": [
+        "axios",
+        "react"
+      ],
+      "imported_by": [
+        "frontend/src/App.js"
+      ],
+      "lines_of_code": 617,
+      "last_modified": "2026-05-11T01:09:11.169985+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
+    },
+    {
       "path": "C:/CHL/frontend/src/views/OwnerDashboard.jsx",
       "rel_path": "frontend/src/views/OwnerDashboard.jsx",
       "type": "jsx_component",
@@ -18357,32 +18151,6 @@
       ],
       "lines_of_code": 544,
       "last_modified": "2026-05-04T22:04:40.045011+00:00",
-      "smoke_test": null,
-      "decorators": [],
-      "parse_error": null,
-      "notes": [],
-      "module_name": ""
-    },
-    {
-      "path": "C:/CHL/frontend/src/views/PendingCarrierPayouts.jsx",
-      "rel_path": "frontend/src/views/PendingCarrierPayouts.jsx",
-      "type": "jsx_component",
-      "subsystem": "Frontend UI",
-      "status": "LIVE",
-      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
-      "exports": [
-        "PendingCarrierPayouts"
-      ],
-      "imports": [
-        "../lib/api",
-        "@phosphor-icons/react",
-        "react"
-      ],
-      "imported_by": [
-        "frontend/src/App.js"
-      ],
-      "lines_of_code": 292,
-      "last_modified": "2026-05-04T22:04:40.046008+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -20002,6 +19770,7 @@
         "typing"
       ],
       "imported_by": [
+        "backend/ops_console/ops_console_router.py",
         "backend/server.py",
         "backend/tests/test_pnl_guard.py",
         "scripts/smoke_margin_config.py"
@@ -21051,6 +20820,9 @@
         "datetime",
         "enum",
         "fastapi",
+        "middleware",
+        "middleware.request_id",
+        "middleware.request_id.get_current_request_id",
         "pydantic",
         "typing",
         "uuid"
@@ -21064,8 +20836,8 @@
         "backend/tests/test_pnl_warning_resolution.py",
         "scripts/smoke_pnl_monitor.py"
       ],
-      "lines_of_code": 554,
-      "last_modified": "2026-05-10T22:22:02.078451+00:00",
+      "lines_of_code": 565,
+      "last_modified": "2026-05-10T23:22:18.328440+00:00",
       "smoke_test": "scripts/smoke_pnl_monitor.py",
       "decorators": [
         "'pnl_monitor.py -- Platform-wide P&L surveillance.\\n\\nOperator-mandated 2026-05-09 EOD-17:\\n> \"Our platform need to know when we are losing money overall. I don\\'t ever\\n>  want to book loads at a los",
@@ -21387,6 +21159,9 @@
         "factor_refusal_guard.calc_proof_required",
         "health_monitor",
         "health_monitor.register_health_check",
+        "integrity",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "io",
         "json",
         "logging",
@@ -21414,8 +21189,8 @@
         "backend/tests/test_noa_outbound.py",
         "backend/tests/test_pod_red_flag_escalation.py"
       ],
-      "lines_of_code": 1291,
-      "last_modified": "2026-05-09T20:48:08.940928+00:00",
+      "lines_of_code": 1310,
+      "last_modified": "2026-05-10T23:24:09.632878+00:00",
       "smoke_test": null,
       "decorators": [
         "'Load Completion Workflow \u2014 Digital POD ingestion + Billing Packet assembly.\\n\\nIter 109 \u2014 Implements the Director\\'s spec:\\n\\n  1. Multi-part document ingestion via driver Magic Link / public token:\\",
@@ -22513,6 +22288,120 @@
       "module_name": "manual_override_router"
     },
     {
+      "path": "C:/CHL/backend/.run_playwright_ui_sweep_with_vault_creds.py",
+      "rel_path": "backend/.run_playwright_ui_sweep_with_vault_creds.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "ORPHAN",
+      "description": "Decrypt operator owner creds from vault + run the UI-sweep test. Mirrors `.run_playwright_with_vault_creds.py` \u2014 same security model: - Decrypted password lives only in this process's memory + a subpr",
+      "exports": [
+        "get_creds()",
+        "run_pytest()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "cryptography",
+        "cryptography.fernet",
+        "cryptography.fernet.Fernet",
+        "dotenv",
+        "motor",
+        "os",
+        "subprocess",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 68,
+      "last_modified": "2026-05-11T00:51:04.692168+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Decrypt operator owner creds from vault + run the UI-sweep test.\\n\\nMirrors `.run_playwright_with_vault_creds.py` \u2014 same security model:\\n- Decrypted password lives only in this process's memory + a ",
+        "load_dotenv('C:/CHL/backend/.env')",
+        "sys.path.insert(0, 'C:/CHL/backend')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".run_playwright_ui_sweep_with_vault_creds"
+    },
+    {
+      "path": "C:/CHL/backend/.run_playwright_with_vault_creds.py",
+      "rel_path": "backend/.run_playwright_with_vault_creds.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "ORPHAN",
+      "description": "Decrypt operator owner creds from vault + run playwright authed E2E. The password never crosses the conversation log: - Decrypted via Fernet into a local variable - Passed to subprocess via env dict (",
+      "exports": [
+        "get_creds()",
+        "run_pytest()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "cryptography",
+        "cryptography.fernet",
+        "cryptography.fernet.Fernet",
+        "dotenv",
+        "motor",
+        "os",
+        "subprocess",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 72,
+      "last_modified": "2026-05-11T00:31:48.757053+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Decrypt operator owner creds from vault + run playwright authed E2E.\\n\\nThe password never crosses the conversation log:\\n- Decrypted via Fernet into a local variable\\n- Passed to subprocess via env ",
+        "load_dotenv('C:/CHL/backend/.env')",
+        "sys.path.insert(0, 'C:/CHL/backend')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".run_playwright_with_vault_creds"
+    },
+    {
+      "path": "C:/CHL/backend/.send_dat_api_inquiry.py",
+      "rel_path": "backend/.send_dat_api_inquiry.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "ORPHAN",
+      "description": "Send comprehensive API access inquiry to DAT developer support. Operator-mandated 2026-05-11. Comprehensive list of questions to answer BEFORE committing to a DAT subscription tier. Per feedback_outbo",
+      "exports": [
+        "send_via_zoho()",
+        "main()"
+      ],
+      "imports": [
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "email",
+        "motor",
+        "os",
+        "smtplib",
+        "sys",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 176,
+      "last_modified": "2026-05-11T05:37:50.054307+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"Send comprehensive API access inquiry to DAT developer support.\\n\\nOperator-mandated 2026-05-11. Comprehensive list of questions to answer\\nBEFORE committing to a DAT subscription tier. Per feedback_",
+        "load_dotenv('C:/CHL/backend/.env')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": ".send_dat_api_inquiry"
+    },
+    {
       "path": "C:/CHL/backend/aether_telemetry.py",
       "rel_path": "backend/aether_telemetry.py",
       "type": "python_module",
@@ -22716,6 +22605,7 @@
         "totp_2fa"
       ],
       "imported_by": [
+        "backend/middleware/public_endpoint_rate_limiter.py",
         "backend/server.py",
         "backend/tests/test_client_ip.py",
         "backend/tests/test_login_rate_limiter.py",
@@ -23018,8 +22908,8 @@
       "imported_by": [
         "backend/server.py"
       ],
-      "lines_of_code": 515,
-      "last_modified": "2026-05-06T15:21:45.436367+00:00",
+      "lines_of_code": 520,
+      "last_modified": "2026-05-10T23:44:28.407884+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nCHL Priority-1 Autopilot Extensions\\n-----------------------------------\\n  \u2022 AI Rate Optimizer \u2014 track accepted/rejected bids, learn optimal margins per lane\\n  \u2022 Resend inbound email webhook \u2014 pa"
@@ -24232,6 +24122,7 @@
         "renewals.renewals_scanner.scan_renewals",
         "self_healing",
         "self_healing.agentdm_push",
+        "self_healing.cron_supervisor",
         "synthetic_auto_wipe",
         "synthetic_auto_wipe.start",
         "sys",
@@ -24244,10 +24135,11 @@
         "backend/server.py",
         "backend/tests/test_dispatch_release_gate.py",
         "backend/tests/test_fmcsa_sms_wire.py",
-        "backend/tests/test_records_request.py"
+        "backend/tests/test_records_request.py",
+        "backend/tests/test_self_heal_phase1_monitoring.py"
       ],
-      "lines_of_code": 3953,
-      "last_modified": "2026-05-10T21:45:35.285965+00:00",
+      "lines_of_code": 3971,
+      "last_modified": "2026-05-10T23:17:31.749990+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\ncron_scheduler.py \u2014 Consolidated background cron loops.\\n\\n(Iter 135.11, 2026-05-03)\\n\\nCloses 5 silent failure paths from the Operating Manual Chapter 5.3:\\n  1. Pre-pickup re-verify (every 30min)"
@@ -24439,6 +24331,7 @@
         "uuid"
       ],
       "imported_by": [
+        "backend/ops_console/ops_console_router.py",
         "backend/server.py",
         "backend/tests/test_delivered_autofire_wire.py"
       ],
@@ -24663,6 +24556,74 @@
       "parse_error": null,
       "notes": [],
       "module_name": "dispatch.packet_renderer"
+    },
+    {
+      "path": "C:/CHL/backend/document_search/bol_search.py",
+      "rel_path": "backend/document_search/bol_search.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "bol_search -- Aggregate every document associated with a given BOL number. Operator-mandated 2026-05-10. Critical operational need: the operator must be able to type a BOL number and see EVERY documen",
+      "exports": [
+        "search_by_bol()"
+      ],
+      "imports": [
+        "__future__",
+        "datetime",
+        "logging",
+        "re",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/document_search/__init__.py",
+        "backend/document_search/search_router.py",
+        "backend/ops_console/ops_console_router.py",
+        "backend/tests/test_bol_document_search.py"
+      ],
+      "lines_of_code": 507,
+      "last_modified": "2026-05-11T00:59:57.897365+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"bol_search -- Aggregate every document associated with a given BOL number.\\n\\nOperator-mandated 2026-05-10. Critical operational need: the operator must be\\nable to type a BOL number and see EVERY do"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "document_search.bol_search"
+    },
+    {
+      "path": "C:/CHL/backend/document_search/search_router.py",
+      "rel_path": "backend/document_search/search_router.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "document_search.search_router -- FastAPI sub-router for BOL document search. Endpoints (all gated by require_broker): GET /api/documents/by_bol/{bol_number} -> Aggregate every document associated with",
+      "exports": [
+        "build_router()"
+      ],
+      "imports": [
+        "__future__",
+        "bol_search",
+        "bol_search.search_by_bol",
+        "datetime",
+        "fastapi",
+        "logging",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [
+        "backend/document_search/__init__.py",
+        "backend/server.py",
+        "backend/tests/test_bol_document_search.py"
+      ],
+      "lines_of_code": 114,
+      "last_modified": "2026-05-11T01:00:13.741657+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'document_search.search_router -- FastAPI sub-router for BOL document search.\\n\\nEndpoints (all gated by require_broker):\\n    GET /api/documents/by_bol/{bol_number}\\n        -> Aggregate every docume"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "document_search.search_router"
     },
     {
       "path": "C:/CHL/backend/driver_preferences.py",
@@ -25783,6 +25744,13 @@
         "asyncio",
         "datetime",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_with_breaker",
+        "integrity.breaker_http.is_breaker_open",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "json",
         "logging",
         "os",
@@ -25795,10 +25763,11 @@
         "backend/enrichment/adapters/fmcsa.py",
         "backend/fmcsa_qcmobile_refresh_cron.py",
         "backend/inbound_email/action_wrappers.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/tests/test_enrichment_adapters.py"
       ],
-      "lines_of_code": 449,
-      "last_modified": "2026-05-07T19:18:40.019770+00:00",
+      "lines_of_code": 483,
+      "last_modified": "2026-05-10T23:19:11.960983+00:00",
       "smoke_test": null,
       "decorators": [
         "'FMCSA QCMobile JSON API per-carrier insurance ingest (iter 142.1 nationwide-vetted-carrier-DB Phase 3 Tier 1).\\n\\nFetches carrier insurance status (BIPD / Cargo / Bond on-file flags + required\\namoun"
@@ -26178,12 +26147,6 @@
         "backend.health_monitor",
         "backend.health_monitor.get_system_health",
         "backend.health_monitor.list_registered_modules",
-        "backend.security",
-        "backend.security.secret_reader",
-        "backend.stripe_health_router",
-        "backend.stripe_health_router._check_dedup_ttl_index",
-        "backend.stripe_health_router._probe_stripe_account",
-        "backend.stripe_health_router._resolve_secret_with_source",
         "cost_monitor",
         "cost_monitor.cost_alerts",
         "datetime",
@@ -26192,20 +26155,14 @@
         "health_monitor.get_system_health",
         "health_monitor.list_registered_modules",
         "logging",
-        "security",
-        "security.secret_reader",
-        "stripe_health_router",
-        "stripe_health_router._check_dedup_ttl_index",
-        "stripe_health_router._probe_stripe_account",
-        "stripe_health_router._resolve_secret_with_source",
         "typing"
       ],
       "imported_by": [
         "backend/server.py",
         "backend/tests/test_healthz_all.py"
       ],
-      "lines_of_code": 412,
-      "last_modified": "2026-05-09T05:15:11.689178+00:00",
+      "lines_of_code": 384,
+      "last_modified": "2026-05-10T23:22:46.255547+00:00",
       "smoke_test": null,
       "decorators": [
         "'healthz_all_router.py -- /healthz/all aggregator (CCC2, May-14 readiness).\\n\\nThe operator wants ONE URL to verify pre-flip readiness on the May-14\\nplatform-readiness deadline. Existing health probe"
@@ -26827,6 +26784,210 @@
       "module_name": "match_dry_run"
     },
     {
+      "path": "C:/CHL/backend/middleware/__init__.py",
+      "rel_path": "backend/middleware/__init__.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "backend.middleware -- FastAPI middleware package. Houses per-concern Starlette BaseHTTPMiddleware classes that wrap the FastAPI app. Each module is self-contained (no cross-middleware imports) so they",
+      "exports": [],
+      "imports": [],
+      "imported_by": [
+        "backend/api_interceptor.py",
+        "backend/payment_rails.py",
+        "backend/pnl_monitor.py",
+        "backend/server.py",
+        "backend/tests/test_public_rate_limiter.py",
+        "backend/tests/test_request_id_middleware.py",
+        "backend/vault.py"
+      ],
+      "lines_of_code": 12,
+      "last_modified": "2026-05-10T23:17:31.009246+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'backend.middleware -- FastAPI middleware package.\\n\\nHouses per-concern Starlette BaseHTTPMiddleware classes that wrap the\\nFastAPI app. Each module is self-contained (no cross-middleware imports)\\ns"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "middleware.__init__"
+    },
+    {
+      "path": "C:/CHL/backend/middleware/public_endpoint_rate_limiter.py",
+      "rel_path": "backend/middleware/public_endpoint_rate_limiter.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "Per-IP + per-token rate limit middleware for /api/public/* surfaces. Context ------- The phase-1 input-surface inventory at `chl-memory/research/input_surface/endpoints.md` lists 21 public, token-gate",
+      "exports": [
+        "PublicEndpointRateLimiter",
+        "reset_for_tests",
+        "DEFAULT_IP_PER_MINUTE",
+        "DEFAULT_IP_PER_HOUR",
+        "DEFAULT_TOKEN_PER_MINUTE",
+        "WINDOW_MINUTE_SECONDS",
+        "WINDOW_HOUR_SECONDS",
+        "DISABLE_ENV_VAR",
+        "PUBLIC_PREFIX",
+        "CARRIER_OFFER_PREFIX",
+        "AUTH_COOKIE_NAME"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "auth",
+        "auth.client_ip",
+        "auth.client_ip.get_client_ip",
+        "collections",
+        "dataclasses",
+        "datetime",
+        "json",
+        "logging",
+        "os",
+        "starlette",
+        "threading",
+        "time",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/server.py",
+        "backend/tests/test_public_rate_limiter.py"
+      ],
+      "lines_of_code": 553,
+      "last_modified": "2026-05-10T23:18:41.894995+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Per-IP + per-token rate limit middleware for /api/public/* surfaces.\\n\\nContext\\n-------\\nThe phase-1 input-surface inventory at\\n`chl-memory/research/input_surface/endpoints.md` lists 21 public,\\nto",
+        "dataclass",
+        "dataclass"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "middleware.public_endpoint_rate_limiter"
+    },
+    {
+      "path": "C:/CHL/backend/middleware/request_id.py",
+      "rel_path": "backend/middleware/request_id.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "backend.middleware.request_id -- Iter 145.x request-ID middleware. Generates an 8-character hex request ID for every incoming HTTP request, stashes it in an async-safe contextvar so any code (route ha",
+      "exports": [
+        "RequestIdMiddleware",
+        "get_current_request_id",
+        "request_id_ctx",
+        "REQUEST_ID_HEADER",
+        "MISSING_REQUEST_ID",
+        "REQUEST_ID_LENGTH_HEX"
+      ],
+      "imports": [
+        "__future__",
+        "contextvars",
+        "secrets",
+        "starlette",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/api_interceptor.py",
+        "backend/middleware/structured_logger.py",
+        "backend/payment_rails.py",
+        "backend/pnl_monitor.py",
+        "backend/server.py",
+        "backend/tests/test_request_id_middleware.py",
+        "backend/vault.py"
+      ],
+      "lines_of_code": 179,
+      "last_modified": "2026-05-10T23:18:58.615897+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'backend.middleware.request_id -- Iter 145.x request-ID middleware.\\n\\nGenerates an 8-character hex request ID for every incoming HTTP request,\\nstashes it in an async-safe contextvar so any code (rou"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "middleware.request_id"
+    },
+    {
+      "path": "C:/CHL/backend/middleware/structured_logger.py",
+      "rel_path": "backend/middleware/structured_logger.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "backend.middleware.structured_logger -- Iter 145.x structured logging. Wraps stdlib `logging` so every emitted log record automatically carries the current request_id (sourced from the contextvar in `",
+      "exports": [
+        "setup_logging",
+        "RequestIdLogFilter",
+        "StructuredFormatter",
+        "STRUCTURED_FORMAT",
+        "LEGACY_FORMAT",
+        "DEFAULT_DATEFMT",
+        "ENV_LOG_FORMAT",
+        "ENV_LOG_LEVEL",
+        "FORMAT_STRUCTURED",
+        "FORMAT_LEGACY"
+      ],
+      "imports": [
+        "__future__",
+        "logging",
+        "os",
+        "request_id",
+        "request_id.get_current_request_id",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/server.py",
+        "backend/tests/test_request_id_middleware.py"
+      ],
+      "lines_of_code": 202,
+      "last_modified": "2026-05-10T23:19:30.266399+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'backend.middleware.structured_logger -- Iter 145.x structured logging.\\n\\nWraps stdlib `logging` so every emitted log record automatically\\ncarries the current request_id (sourced from the contextvar"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "middleware.structured_logger"
+    },
+    {
+      "path": "C:/CHL/backend/middleware/trace_router.py",
+      "rel_path": "backend/middleware/trace_router.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "backend.middleware.trace_router -- Iter 145.x request-trace endpoint. Owner-only endpoint that returns a unified timeline of every event associated with a given request_id: GET /api/internal/trace/{re",
+      "exports": [
+        "build_trace_router",
+        "AUDIT_COLLECTIONS",
+        "DEFAULT_LOG_DIR",
+        "ENV_LOG_DIR",
+        "ENV_LOG_GLOBS",
+        "MAX_MATCHES_PER_FILE",
+        "MAX_PER_COLLECTION"
+      ],
+      "imports": [
+        "__future__",
+        "datetime",
+        "fastapi",
+        "logging",
+        "os",
+        "pathlib",
+        "re",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/server.py",
+        "backend/tests/test_request_id_middleware.py"
+      ],
+      "lines_of_code": 371,
+      "last_modified": "2026-05-10T23:24:20.738512+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'backend.middleware.trace_router -- Iter 145.x request-trace endpoint.\\n\\nOwner-only endpoint that returns a unified timeline of every event\\nassociated with a given request_id:\\n\\n    GET /api/intern"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "middleware.trace_router"
+    },
+    {
       "path": "C:/CHL/backend/milestones.py",
       "rel_path": "backend/milestones.py",
       "type": "python_module",
@@ -27088,6 +27249,85 @@
       "parse_error": null,
       "notes": [],
       "module_name": "operator_queues_router"
+    },
+    {
+      "path": "C:/CHL/backend/ops_console/__init__.py",
+      "rel_path": "backend/ops_console/__init__.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "ops_console -- Manual Operations Console backend. A single owner-only API surface that lets a human (or Playwright) drive every common manual workflow (synth load create, dry-run quote, synth carrier ",
+      "exports": [],
+      "imports": [
+        "ops_console_router",
+        "ops_console_router.build_router"
+      ],
+      "imported_by": [
+        "backend/server.py",
+        "backend/tests/test_ops_console.py"
+      ],
+      "lines_of_code": 15,
+      "last_modified": "2026-05-11T01:05:13.927330+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'ops_console -- Manual Operations Console backend.\\n\\nA single owner-only API surface that lets a human (or Playwright) drive every\\ncommon manual workflow (synth load create, dry-run quote, synth car"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "ops_console.__init__"
+    },
+    {
+      "path": "C:/CHL/backend/ops_console/ops_console_router.py",
+      "rel_path": "backend/ops_console/ops_console_router.py",
+      "type": "python_module",
+      "subsystem": "Misc",
+      "status": "LIVE",
+      "description": "ops_console_router.py -- Manual Operations Console (owner-only). One API surface that lets the operator (or a Playwright agent) drive every common manual workflow from a single screen: POST /api/ops_c",
+      "exports": [
+        "class SynthLoadCreateBody",
+        "class DryRunQuoteBody",
+        "class SynthCarrierAcceptBody",
+        "class MarkDeliveredBody",
+        "class FireInvoiceNoaBody",
+        "class FireRateConBody",
+        "class SynthCleanupBody",
+        "build_router()"
+      ],
+      "imports": [
+        "__future__",
+        "base64",
+        "datetime",
+        "delivered_load_autofire",
+        "delivered_load_autofire.on_delivered",
+        "delivery_completion",
+        "delivery_completion._fire_delivered_autofire",
+        "document_search",
+        "document_search.bol_search",
+        "document_search.bol_search.search_by_bol",
+        "fastapi",
+        "logging",
+        "pydantic",
+        "rate_calc_engine",
+        "rate_calc_engine.calculate_with_config",
+        "rate_con",
+        "rate_con.create_rate_con",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [
+        "backend/ops_console/__init__.py",
+        "backend/server.py",
+        "backend/tests/test_ops_console.py"
+      ],
+      "lines_of_code": 770,
+      "last_modified": "2026-05-11T01:06:47.042540+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'ops_console_router.py -- Manual Operations Console (owner-only).\\n\\nOne API surface that lets the operator (or a Playwright agent) drive every\\ncommon manual workflow from a single screen:\\n\\n    POS"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "ops_console.ops_console_router"
     },
     {
       "path": "C:/CHL/backend/outbound_autobid.py",
@@ -27551,7 +27791,8 @@
         "backend/tests/test_renewals_notifier.py",
         "backend/tests/test_renewals_router.py",
         "backend/tests/test_renewals_scanner.py",
-        "backend/tests/test_renewals_scanner_boc3.py"
+        "backend/tests/test_renewals_scanner_boc3.py",
+        "backend/tests/test_renewals_seed_from_catalog.py"
       ],
       "lines_of_code": 50,
       "last_modified": "2026-05-09T14:34:04.768295+00:00",
@@ -27626,21 +27867,25 @@
         "__future__",
         "datetime",
         "fastapi",
+        "importlib",
         "logging",
+        "os",
         "pydantic",
         "renewals",
         "renewals.boc3_tracker",
         "renewals.renewals_calculator",
         "renewals.renewals_scanner",
+        "sys",
         "typing",
         "uuid"
       ],
       "imported_by": [
         "backend/server.py",
-        "backend/tests/test_renewals_router.py"
+        "backend/tests/test_renewals_router.py",
+        "backend/tests/test_renewals_seed_from_catalog.py"
       ],
-      "lines_of_code": 791,
-      "last_modified": "2026-05-09T14:34:52.754814+00:00",
+      "lines_of_code": 976,
+      "last_modified": "2026-05-11T00:06:42.931142+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nrenewals/renewals_router.py -- Operator-facing endpoints for the renewal\\ncalendar / expiration tracker (Iter 145.x Stream KK1, 2026-05-08).\\n\\nSurfaces\\n--------\\nGET    /api/_renewals/summary    "
@@ -27976,6 +28221,13 @@
         "bs4.Comment",
         "datetime",
         "hashlib",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_sync_with_breaker",
+        "integrity.breaker_http.is_breaker_open",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
         "json",
         "logging",
         "os",
@@ -27991,8 +28243,8 @@
         "backend/tests/test_llm_parser.py",
         "backend/tests/test_llm_parser_preproc.py"
       ],
-      "lines_of_code": 741,
-      "last_modified": "2026-05-10T22:16:25.647871+00:00",
+      "lines_of_code": 778,
+      "last_modified": "2026-05-10T23:23:00.295149+00:00",
       "smoke_test": null,
       "decorators": [
         "'llm_parser.py -- Layer C parsing fallback (Claude HTML->JSON extraction).\\n\\nPhase 10.1.4: when Layer A (RSS) and Layer B (per-source HTML selectors) miss\\nor break, this module asks Claude (claude-h"
@@ -28141,7 +28393,6 @@
         "backend/ci_intake/github_actions_router.py",
         "backend/enrichment/adapters/base.py",
         "backend/factor_autopair.py",
-        "backend/healthz_all_router.py",
         "backend/inbound_email/handled_folder_mover.py",
         "backend/inbound_email/imap_poller.py",
         "backend/noa_detector.py",
@@ -28149,14 +28400,12 @@
         "backend/security/secret_reader.py",
         "backend/self_healing/_llm_client_anthropic.py",
         "backend/server.py",
-        "backend/stripe_health_router.py",
         "backend/telnyx_webrtc.py",
         "backend/tests/test_enrichment_adapters.py",
         "backend/tests/test_env_prune.py",
         "backend/tests/test_master_key_rotation.py",
         "backend/tests/test_secret_reader.py",
         "backend/tests/test_secrets_store.py",
-        "backend/tests/test_stripe_health_router.py",
         "scripts/check_agentdm_recipient.py",
         "scripts/llm_client_smoke.py",
         "scripts/migrate_secrets_to_vault.py",
@@ -28203,17 +28452,14 @@
         "backend/ci_intake/github_actions_router.py",
         "backend/enrichment/adapters/base.py",
         "backend/factor_autopair.py",
-        "backend/healthz_all_router.py",
         "backend/inbound_email/handled_folder_mover.py",
         "backend/inbound_email/imap_poller.py",
         "backend/scrapers/llm_parser.py",
         "backend/self_healing/_llm_client_anthropic.py",
         "backend/server.py",
-        "backend/stripe_health_router.py",
         "backend/telnyx_webrtc.py",
         "backend/tests/test_enrichment_adapters.py",
         "backend/tests/test_secret_reader.py",
-        "backend/tests/test_stripe_health_router.py",
         "scripts/check_agentdm_recipient.py",
         "scripts/llm_client_smoke.py",
         "scripts/operator_push_consumer.py"
@@ -28342,8 +28588,6 @@
         "clock_in()"
       ],
       "imports": [
-        "_stripe_webhook_rate_limiter",
-        "_stripe_webhook_rate_limiter.check",
         "aether_governor",
         "aether_governor.build_router",
         "aether_governor.governor_loop",
@@ -28362,7 +28606,6 @@
         "auth",
         "auth.client_ip",
         "auth.client_ip.get_client_ip",
-        "auth.client_ip.get_client_ip_for_logging",
         "auth.login_rate_limiter",
         "auth.login_rate_limiter.check_login_allowed",
         "auth.login_rate_limiter.record_login_failure",
@@ -28534,6 +28777,9 @@
         "detention.detention_router.build_router",
         "dial_search",
         "dial_search.build_router",
+        "document_search",
+        "document_search.search_router",
+        "document_search.search_router.build_router",
         "dotenv",
         "driver_preferences",
         "driver_preferences.build_router",
@@ -28550,12 +28796,6 @@
         "email_ingestion",
         "email_ingestion.build_router",
         "email_ingestion.run_ingestion_cycle",
-        "emergentintegrations",
-        "emergentintegrations.payments.stripe.checkout",
-        "emergentintegrations.payments.stripe.checkout.CheckoutSessionRequest",
-        "emergentintegrations.payments.stripe.checkout.CheckoutSessionResponse",
-        "emergentintegrations.payments.stripe.checkout.CheckoutStatusResponse",
-        "emergentintegrations.payments.stripe.checkout.StripeCheckout",
         "enrichment",
         "enrichment.router",
         "enrichment.router.build_router",
@@ -28775,6 +29015,15 @@
         "mercury_payouts",
         "mercury_payouts.build_router",
         "mercury_payouts.trigger_payout_on_delivery",
+        "middleware",
+        "middleware.public_endpoint_rate_limiter",
+        "middleware.public_endpoint_rate_limiter.PublicEndpointRateLimiter",
+        "middleware.request_id",
+        "middleware.request_id.RequestIdMiddleware",
+        "middleware.structured_logger",
+        "middleware.structured_logger.setup_logging",
+        "middleware.trace_router",
+        "middleware.trace_router.build_trace_router",
         "milestones",
         "milestones.build_router",
         "morning_brief",
@@ -28804,6 +29053,9 @@
         "openai",
         "operator_queues_router",
         "operator_queues_router.build_router",
+        "ops_console",
+        "ops_console.ops_console_router",
+        "ops_console.ops_console_router.build_router",
         "ops_state",
         "ops_state.build_router",
         "ops_state.compose_state",
@@ -28819,7 +29071,6 @@
         "pathlib",
         "payment_rails",
         "payment_rails.build_router",
-        "payment_rails.transition_payment_status",
         "payment_switchboard",
         "payment_switchboard.build_router",
         "payment_switchboard.route_delivered_load",
@@ -28957,15 +29208,6 @@
         "stress_test",
         "stress_test.build_router",
         "string",
-        "stripe",
-        "stripe_connect",
-        "stripe_connect.build_router",
-        "stripe_dedup_first_seen_migration",
-        "stripe_dedup_first_seen_migration.migrate_stripe_dedup_first_seen_to_date",
-        "stripe_dedup_ttl_provisioner",
-        "stripe_dedup_ttl_provisioner.provision_stripe_dedup_ttl_index",
-        "stripe_health_router",
-        "stripe_health_router.build_router",
         "synthetic_audit",
         "synthetic_audit.build_router",
         "synthetic_auto_wipe",
@@ -29040,19 +29282,20 @@
         "backend/renewals/renewals_notifier.py",
         "backend/shipper_magic.py",
         "backend/tcr_status.py",
-        "backend/tests/test_stripe_dedup_first_seen_migration.py",
-        "backend/tests/test_stripe_webhook_hardening.py",
-        "backend/tests/test_stripe_webhook_security.py",
+        "backend/tests/test_stripe_residual_cleanup.py",
+        "backend/tests/test_stripe_webhook_410_gone.py",
         "scripts/dispatch_live_test_load.py",
         "scripts/dispatch_test_load_bellavista.py",
         "scripts/fire_full_dryrun.py"
       ],
-      "lines_of_code": 13557,
-      "last_modified": "2026-05-10T22:51:07.826398+00:00",
+      "lines_of_code": 13163,
+      "last_modified": "2026-05-11T06:52:00.755700+00:00",
       "smoke_test": null,
       "decorators": [
         "load_dotenv(ROOT_DIR / '.env')",
-        "logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')",
+        "logging.basicConfig(level=logging.INFO)",
+        "logging.getLogger(__name__).info('CHL boot: env=%s db=%s mongo=%s', _CHL_ENV, _ACTIVE_DB_NAME, re.sub('://[^@/]+@', '://***@', mongo_url) if '@' in mongo_url else mongo_url)",
+        "_setup_chl_logging(level=logging.INFO)",
         "auth_router.get('/health-check')",
         "auth_router.post('/owner-reset')",
         "auth_router.post('/register')",
@@ -29068,9 +29311,7 @@
         "carrier_router.post('/loads/{load_id}/interest')",
         "carrier_router.get('/my-interests')",
         "carrier_router.get('/my-bookings')",
-        "carrier_router.get('/my-payments')",
-        "carrier_router.post('/gps/ping')",
-        "carrier_router.post('/gps/burst')"
+        "carrier_router.get('/my-payments')"
       ],
       "parse_error": null,
       "notes": [
@@ -29887,6 +30128,9 @@
         "io",
         "json",
         "logging",
+        "middleware",
+        "middleware.request_id",
+        "middleware.request_id.get_current_request_id",
         "mimetypes",
         "os",
         "pathlib",
@@ -29900,8 +30144,8 @@
         "backend/vault_config.py",
         "scripts/.migrate_llc_folder_to_vault.py"
       ],
-      "lines_of_code": 562,
-      "last_modified": "2026-05-10T20:06:39.336441+00:00",
+      "lines_of_code": 573,
+      "last_modified": "2026-05-10T23:22:07.776182+00:00",
       "smoke_test": null,
       "decorators": [
         "\"\\nSecure Credential Vault \u2014 Continental Haul Logistics\\n\\nOwner-only password manager. Every password/token is AES-256 encrypted at rest\\nusing a symmetric key stored in `VAULT_ENCRYPTION_KEY` env va",
@@ -30000,6 +30244,7 @@
         "./views/AutoRepostPanel",
         "./views/AutomationCandidatesView",
         "./views/AutomationsDashboard",
+        "./views/BolSearchView",
         "./views/BrowserPhoneView",
         "./views/BulkCarrierHunter",
         "./views/CargoClaimsView",
@@ -30056,8 +30301,8 @@
         "./views/NotificationLogView",
         "./views/OperatorConsoleView",
         "./views/OperatorQueuesView",
+        "./views/OpsConsoleView",
         "./views/OwnerDashboard",
-        "./views/PendingCarrierPayouts",
         "./views/PendingCarrierRequests",
         "./views/PendingDocsView",
         "./views/PlatformCalendarView",
@@ -30077,7 +30322,6 @@
         "./views/ShipperScorecardView",
         "./views/SopFlowView",
         "./views/SovereignPulseMonitor",
-        "./views/StripeConnectCard",
         "./views/TaxEstimator",
         "./views/TollFreeCompliancePage",
         "./views/VaultView",
@@ -30093,8 +30337,8 @@
       "imported_by": [
         "frontend/src/index.js"
       ],
-      "lines_of_code": 18228,
-      "last_modified": "2026-05-10T22:41:16.391043+00:00",
+      "lines_of_code": 18383,
+      "last_modified": "2026-05-11T05:04:39.988984+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -31320,7 +31564,7 @@
         "frontend/src/App.js"
       ],
       "lines_of_code": 170,
-      "last_modified": "2026-05-04T22:04:40.018846+00:00",
+      "last_modified": "2026-05-10T23:44:54.230504+00:00",
       "smoke_test": null,
       "decorators": [],
       "parse_error": null,
@@ -31766,6 +32010,44 @@
       "module_name": "check_tokens"
     },
     {
+      "path": "C:/CHL/scripts/cloud_replica/init_replica_set.js",
+      "rel_path": "scripts/cloud_replica/init_replica_set.js",
+      "type": "js_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "ORPHAN",
+      "description": "init_replica_set.js -- Initialize CHL mongo replica set from the primary.",
+      "exports": [],
+      "imports": [],
+      "imported_by": [],
+      "lines_of_code": 174,
+      "last_modified": "2026-05-10T23:19:49.855063+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [
+        "Not reachable from frontend/src/App.js"
+      ],
+      "module_name": ""
+    },
+    {
+      "path": "C:/CHL/scripts/cloud_replica/setup_hetzner_replica.sh",
+      "rel_path": "scripts/cloud_replica/setup_hetzner_replica.sh",
+      "type": "shell_script",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "!/usr/bin/env bash setup_hetzner_replica.sh -- Hetzner CX22 side of CHL cloud replica plan.  Runs ON the Hetzner CX22, SSH'd in as root.  What it does (in order): 1. apt update + install MongoDB 7.x (",
+      "exports": [],
+      "imports": [],
+      "imported_by": [],
+      "lines_of_code": 233,
+      "last_modified": "2026-05-10T23:19:29.061810+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
+    },
+    {
       "path": "C:/CHL/scripts/collect_5min_run_telemetry.py",
       "rel_path": "scripts/collect_5min_run_telemetry.py",
       "type": "python_module",
@@ -31942,6 +32224,46 @@
         "Script \u2014 assumed operator-run; investigate if name unfamiliar"
       ],
       "module_name": "compile_overnight_report"
+    },
+    {
+      "path": "C:/CHL/scripts/create_hot_path_indexes.py",
+      "rel_path": "scripts/create_hot_path_indexes.py",
+      "type": "python_module",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "create_hot_path_indexes.py -- Day-1 dashboard hot-path index provisioner. Background ---------- backend/dashboard_router.py + backend/operator_queues_router.py drive the operator's Day-1 single-page c",
+      "exports": [
+        "run_plan()",
+        "verify_indexes_in_use()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "argparse",
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "inspect",
+        "logging",
+        "os",
+        "pathlib",
+        "pymongo",
+        "sys",
+        "time",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 625,
+      "last_modified": "2026-05-10T23:18:31.419135+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"create_hot_path_indexes.py -- Day-1 dashboard hot-path index provisioner.\\n\\nBackground\\n----------\\nbackend/dashboard_router.py + backend/operator_queues_router.py drive the\\noperator's Day-1 single"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "create_hot_path_indexes"
     },
     {
       "path": "C:/CHL/scripts/dump_one_bounce.py",
@@ -32820,8 +33142,8 @@
         "uuid"
       ],
       "imported_by": [],
-      "lines_of_code": 578,
-      "last_modified": "2026-05-09T02:21:21.503267+00:00",
+      "lines_of_code": 782,
+      "last_modified": "2026-05-11T00:04:28.357465+00:00",
       "smoke_test": null,
       "decorators": [
         "'seed_renewals.py -- One-shot bulk-seeder for db.renewals.\\n\\nIter 145.x Stream NN3 follow-up to KK1 (renewals platform feature). The\\noperator-mandated renewal calendar (backend/renewals/) is live bu"
@@ -32879,6 +33201,24 @@
         "Script \u2014 assumed operator-run; investigate if name unfamiliar"
       ],
       "module_name": "vault_store_login_gov"
+    },
+    {
+      "path": "C:/CHL/scripts/verify_5_copy_floor.ps1",
+      "rel_path": "scripts/verify_5_copy_floor.ps1",
+      "type": "powershell_script",
+      "subsystem": "Scripts / Tooling",
+      "status": "DEV-TOOL",
+      "description": "verify_5_copy_floor.ps1 -- Operator-mandated 2026-05-10.  Verifies the 4 D-drive copies of the 5-copy floor are current and complete (within the rotation window). Reports ages, sizes, completeness, an",
+      "exports": [],
+      "imports": [],
+      "imported_by": [],
+      "lines_of_code": 286,
+      "last_modified": "2026-05-10T23:19:37.549445+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
     },
     {
       "path": "C:/CHL/scripts/verify_synth_docs_fix.py",
@@ -33268,6 +33608,7 @@
         "backend/carrier_contacts/contact_router.py",
         "backend/carrier_contacts/enricher.py",
         "backend/carrier_contacts/enrichment_cron.py",
+        "backend/carrier_docs/doc_extractor.py",
         "backend/carrier_docs/expiry_cron.py",
         "backend/carrier_docs/extraction_router.py",
         "backend/carrier_docs/router.py",
@@ -33292,10 +33633,14 @@
         "backend/factors/reconciler_router.py",
         "backend/failover/hot_spare.py",
         "backend/failure_detectors_part2.py",
+        "backend/fmcsa_census.py",
         "backend/fmcsa_census_refresh_cron.py",
+        "backend/fmcsa_qcmobile.py",
         "backend/fmcsa_qcmobile_refresh_cron.py",
+        "backend/fmcsa_safer_cargo.py",
         "backend/fmcsa_safer_cargo_cron.py",
         "backend/fmcsa_sms_refresh_cron.py",
+        "backend/fmcsa_sms_scores.py",
         "backend/hauler_types/list_metrics_cron.py",
         "backend/inbound_email/action_dispatcher_cron.py",
         "backend/inbound_email/classifier_cron.py",
@@ -33304,19 +33649,28 @@
         "backend/inbound_email/sender_classifier.py",
         "backend/inbound_email/sender_classifier_cron.py",
         "backend/inbound_email/sender_router.py",
+        "backend/inbound_email/tier2_classifier.py",
         "backend/inbound_email/tier2_cron.py",
         "backend/inbox_triage/triage_scanner.py",
         "backend/integrity/audit_trail.py",
+        "backend/integrity/breaker_http.py",
         "backend/integrity/integrity_router.py",
         "backend/lane_evaluator_eta_accuracy.py",
         "backend/lane_scoring_cron.py",
+        "backend/load_completion_workflow.py",
         "backend/manual_override_router.py",
         "backend/margin_floor_router.py",
+        "backend/mercury_client.py",
+        "backend/mercury_payouts.py",
+        "backend/notification_service.py",
         "backend/operator_alerts.py",
         "backend/payment_rails.py",
+        "backend/plivo_client.py",
         "backend/renewals/renewals_notifier.py",
         "backend/renewals/renewals_scanner.py",
+        "backend/scrapers/llm_parser.py",
         "backend/scrapers/loadboard_scraper.py",
+        "backend/self_healing/_llm_client_anthropic.py",
         "backend/self_healing/anomaly_dispatcher.py",
         "backend/self_healing/auto_merge_harness.py",
         "backend/self_healing/context_bundler_cron.py",
@@ -33332,9 +33686,11 @@
         "backend/sla_monitor.py",
         "backend/state_lock.py",
         "backend/system_health_monitor.py",
+        "backend/telnyx_webrtc.py",
         "backend/tests/synthetic_load_walkthrough.py",
         "backend/tests/test_carrier_contact_enricher.py",
         "backend/tests/test_carrier_tier_promoter.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/tests/test_credit_override_revoker.py",
         "backend/tests/test_detention_calculator.py",
         "backend/tests/test_hauler_types.py",
@@ -33346,11 +33702,13 @@
         "backend/tests/test_renewals_scanner.py",
         "backend/tests/test_state_lock_audit_completeness.py",
         "backend/tests/test_state_lock_audit_domain_expansion.py",
+        "backend/text_operator.py",
         "backend/tracking/checkin_cron.py",
         "backend/tracking/checkin_router.py",
         "backend/tracking/exception_detector_cron.py",
         "backend/tracking/exception_router.py",
-        "backend/tracking/router.py"
+        "backend/tracking/router.py",
+        "backend/voice_operator.py"
       ],
       "lines_of_code": 33,
       "last_modified": "2026-05-08T15:19:09.456815+00:00",
@@ -33361,6 +33719,55 @@
       "parse_error": null,
       "notes": [],
       "module_name": "integrity.__init__"
+    },
+    {
+      "path": "C:/CHL/backend/integrity/breaker_http.py",
+      "rel_path": "backend/integrity/breaker_http.py",
+      "type": "python_module",
+      "subsystem": "Self-Healing",
+      "status": "LIVE",
+      "description": "integrity/breaker_http.py -- Tiny helper wrappers around the existing `integrity.circuit_breakers` module so call sites can wrap an outbound HTTP / SDK call in 2-3 lines instead of 8. Usage ----- from",
+      "exports": [
+        "BreakerOpenError",
+        "call_with_breaker",
+        "call_sync_with_breaker",
+        "is_breaker_open"
+      ],
+      "imports": [
+        "__future__",
+        "circuit_breakers",
+        "circuit_breakers.get_breaker",
+        "integrity",
+        "integrity.circuit_breakers",
+        "integrity.circuit_breakers.get_breaker",
+        "logging",
+        "typing"
+      ],
+      "imported_by": [
+        "backend/fmcsa_census.py",
+        "backend/fmcsa_qcmobile.py",
+        "backend/fmcsa_safer_cargo.py",
+        "backend/fmcsa_sms_scores.py",
+        "backend/mercury_client.py",
+        "backend/mercury_payouts.py",
+        "backend/notification_service.py",
+        "backend/plivo_client.py",
+        "backend/scrapers/llm_parser.py",
+        "backend/self_healing/_llm_client_anthropic.py",
+        "backend/telnyx_webrtc.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
+        "backend/text_operator.py",
+        "backend/voice_operator.py"
+      ],
+      "lines_of_code": 148,
+      "last_modified": "2026-05-10T23:18:33.046305+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nintegrity/breaker_http.py -- Tiny helper wrappers around the existing\\n`integrity.circuit_breakers` module so call sites can wrap an outbound\\nHTTP / SDK call in 2-3 lines instead of 8.\\n\\nUsage\\n-"
+      ],
+      "parse_error": null,
+      "notes": [],
+      "module_name": "integrity.breaker_http"
     },
     {
       "path": "C:/CHL/backend/integrity/budget_caps.py",
@@ -33706,6 +34113,7 @@
         "backend/tests/test_anomaly_dispatcher.py",
         "backend/tests/test_auto_merge_harness.py",
         "backend/tests/test_ci_intake.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/tests/test_context_bundler.py",
         "backend/tests/test_cron_supervisor.py",
         "backend/tests/test_dev_review_and_alerts_router.py",
@@ -33720,6 +34128,7 @@
         "backend/tests/test_revert_mode.py",
         "backend/tests/test_rollback_watcher.py",
         "backend/tests/test_self_heal_log.py",
+        "backend/tests/test_self_heal_phase1_monitoring.py",
         "backend/tests/test_self_heal_router.py",
         "backend/tests/test_sub_agent_dispatcher.py",
         "backend/tests/test_weight_tuning_proposer.py",
@@ -33773,6 +34182,10 @@
         "cost_monitor",
         "cost_monitor.spend_recorder",
         "httpx",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_with_breaker",
         "json",
         "logging",
         "os",
@@ -33784,12 +34197,13 @@
       ],
       "imported_by": [
         "backend/self_healing/llm_reasoning_loop.py",
+        "backend/tests/test_circuit_breaker_coverage.py",
         "backend/tests/test_llm_client_anthropic.py",
         "backend/tests/test_llm_client_smoke.py",
         "scripts/llm_client_smoke.py"
       ],
-      "lines_of_code": 647,
-      "last_modified": "2026-05-09T04:02:24.044409+00:00",
+      "lines_of_code": 661,
+      "last_modified": "2026-05-10T23:22:43.035123+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\n_llm_client_anthropic.py -- Real Anthropic client wrapper for Phase 3\\nself-healing LLM reasoning loop (TT1, 2026-05-08 EOD-14, RR3 follow-up).\\n\\nRR3\\'s `llm_reasoning_loop.py` ships a stub `facto"
@@ -34116,9 +34530,11 @@
         "uuid"
       ],
       "imported_by": [
+        "backend/cron_scheduler.py",
         "backend/self_healing/rollback_watcher.py",
         "backend/server.py",
-        "backend/tests/test_cron_supervisor.py"
+        "backend/tests/test_cron_supervisor.py",
+        "backend/tests/test_self_heal_phase1_monitoring.py"
       ],
       "lines_of_code": 577,
       "last_modified": "2026-05-09T02:33:31.402394+00:00",
@@ -35130,6 +35546,146 @@
       "module_name": "tests.test_anomaly_dispatcher"
     },
     {
+      "path": "C:/CHL/backend/tests/test_circuit_breaker_coverage.py",
+      "rel_path": "backend/tests/test_circuit_breaker_coverage.py",
+      "type": "python_module",
+      "subsystem": "Self-Healing",
+      "status": "DEV-TOOL",
+      "description": "test_circuit_breaker_coverage.py -- Verifies that each priority external-API call site is wrapped in the per-vendor circuit breaker from `integrity.circuit_breakers`. For each wrapped vendor we exerci",
+      "exports": [
+        "test_async_helper_records_success()",
+        "test_async_helper_records_failure_and_reraises()",
+        "test_async_helper_raises_breaker_open_after_5_failures()",
+        "test_half_open_after_cooldown()",
+        "test_sync_helper_records_success()",
+        "test_sync_helper_raises_breaker_open()",
+        "test_qcmobile_breaker_opens_after_5_failures()",
+        "test_sms_scores_breaker_short_circuits()",
+        "test_safer_cargo_breaker_short_circuits()",
+        "test_text_operator_returns_skipped_on_open_breaker()",
+        "test_voice_operator_returns_skipped_on_open_breaker()",
+        "test_plivo_skipped_when_breaker_open()",
+        "test_mercury_get_raises_503_when_breaker_open()",
+        "test_anthropic_safe_fallback_when_breaker_open()",
+        "test_openai_tier2_returns_none_when_breaker_open()",
+        "test_open_breaker_surfaces_as_degraded()",
+        "test_all_closed_is_healthy()",
+        "test_all_priority_vendors_registered()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "fmcsa_qcmobile",
+        "fmcsa_safer_cargo",
+        "fmcsa_sms_scores",
+        "inbound_email",
+        "inbound_email.tier2_classifier",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_sync_with_breaker",
+        "integrity.breaker_http.call_with_breaker",
+        "integrity.breaker_http.is_breaker_open",
+        "integrity.circuit_breakers",
+        "mercury_client",
+        "os",
+        "plivo_client",
+        "pytest",
+        "self_healing",
+        "self_healing._llm_client_anthropic",
+        "sys",
+        "text_operator",
+        "time",
+        "types",
+        "typing",
+        "voice_operator"
+      ],
+      "imported_by": [],
+      "lines_of_code": 515,
+      "last_modified": "2026-05-10T23:27:51.251593+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_circuit_breaker_coverage.py -- Verifies that each priority external-API\\ncall site is wrapped in the per-vendor circuit breaker from\\n`integrity.circuit_breakers`.\\n\\nFor each wrapped vendor w",
+        "pytest.fixture(autouse=True)"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_circuit_breaker_coverage"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_circuit_breaker_coverage.py",
+      "rel_path": "backend/tests/test_circuit_breaker_coverage.py",
+      "type": "python_module",
+      "subsystem": "Self-Healing",
+      "status": "DEV-TOOL",
+      "description": "test_circuit_breaker_coverage.py -- Verifies that each priority external-API call site is wrapped in the per-vendor circuit breaker from `integrity.circuit_breakers`. For each wrapped vendor we exerci",
+      "exports": [
+        "test_async_helper_records_success()",
+        "test_async_helper_records_failure_and_reraises()",
+        "test_async_helper_raises_breaker_open_after_5_failures()",
+        "test_half_open_after_cooldown()",
+        "test_sync_helper_records_success()",
+        "test_sync_helper_raises_breaker_open()",
+        "test_qcmobile_breaker_opens_after_5_failures()",
+        "test_sms_scores_breaker_short_circuits()",
+        "test_safer_cargo_breaker_short_circuits()",
+        "test_text_operator_returns_skipped_on_open_breaker()",
+        "test_voice_operator_returns_skipped_on_open_breaker()",
+        "test_plivo_skipped_when_breaker_open()",
+        "test_mercury_get_raises_503_when_breaker_open()",
+        "test_anthropic_safe_fallback_when_breaker_open()",
+        "test_openai_tier2_returns_none_when_breaker_open()",
+        "test_open_breaker_surfaces_as_degraded()",
+        "test_all_closed_is_healthy()",
+        "test_all_priority_vendors_registered()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "fmcsa_qcmobile",
+        "fmcsa_safer_cargo",
+        "fmcsa_sms_scores",
+        "inbound_email",
+        "inbound_email.tier2_classifier",
+        "integrity",
+        "integrity.breaker_http",
+        "integrity.breaker_http.BreakerOpenError",
+        "integrity.breaker_http.call_sync_with_breaker",
+        "integrity.breaker_http.call_with_breaker",
+        "integrity.breaker_http.is_breaker_open",
+        "integrity.circuit_breakers",
+        "mercury_client",
+        "os",
+        "plivo_client",
+        "pytest",
+        "self_healing",
+        "self_healing._llm_client_anthropic",
+        "sys",
+        "text_operator",
+        "time",
+        "types",
+        "typing",
+        "voice_operator"
+      ],
+      "imported_by": [],
+      "lines_of_code": 515,
+      "last_modified": "2026-05-10T23:27:51.251593+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_circuit_breaker_coverage.py -- Verifies that each priority external-API\\ncall site is wrapped in the per-vendor circuit breaker from\\n`integrity.circuit_breakers`.\\n\\nFor each wrapped vendor w",
+        "pytest.fixture(autouse=True)"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_circuit_breaker_coverage"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_dev_review_and_alerts_router.py",
       "rel_path": "backend/tests/test_dev_review_and_alerts_router.py",
       "type": "python_module",
@@ -35942,6 +36498,88 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_self_heal_log"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_self_heal_phase1_monitoring.py",
+      "rel_path": "backend/tests/test_self_heal_phase1_monitoring.py",
+      "type": "python_module",
+      "subsystem": "Self-Healing",
+      "status": "DEV-TOOL",
+      "description": "test_self_heal_phase1_monitoring.py -- Verifies Phase 1 MONITORING-ONLY mode arms cleanly in cron_scheduler.start_all without: * making LLM calls * mutating code * writing to db.self_heal_actions when",
+      "exports": [
+        "test_phase1_imports_cleanly()",
+        "test_phase1_default_flag_is_off()",
+        "test_phase1_flag_off_short_circuits()",
+        "test_phase1_no_llm_imports()",
+        "test_phase1_flag_on_polls_sources()",
+        "test_phase1_cron_scheduler_registers_supervisor()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "cron_scheduler",
+        "importlib",
+        "os",
+        "pytest",
+        "self_healing",
+        "self_healing.cron_supervisor",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 346,
+      "last_modified": "2026-05-10T23:18:17.515267+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\ntest_self_heal_phase1_monitoring.py -- Verifies Phase 1 MONITORING-ONLY mode\\narms cleanly in cron_scheduler.start_all without:\\n  * making LLM calls\\n  * mutating code\\n  * writing to db.self_heal",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-phase1-monitoring')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_self_heal_phase1_monitoring"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_self_heal_phase1_monitoring.py",
+      "rel_path": "backend/tests/test_self_heal_phase1_monitoring.py",
+      "type": "python_module",
+      "subsystem": "Self-Healing",
+      "status": "DEV-TOOL",
+      "description": "test_self_heal_phase1_monitoring.py -- Verifies Phase 1 MONITORING-ONLY mode arms cleanly in cron_scheduler.start_all without: * making LLM calls * mutating code * writing to db.self_heal_actions when",
+      "exports": [
+        "test_phase1_imports_cleanly()",
+        "test_phase1_default_flag_is_off()",
+        "test_phase1_flag_off_short_circuits()",
+        "test_phase1_no_llm_imports()",
+        "test_phase1_flag_on_polls_sources()",
+        "test_phase1_cron_scheduler_registers_supervisor()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "cron_scheduler",
+        "importlib",
+        "os",
+        "pytest",
+        "self_healing",
+        "self_healing.cron_supervisor",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 346,
+      "last_modified": "2026-05-10T23:18:17.515267+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\ntest_self_heal_phase1_monitoring.py -- Verifies Phase 1 MONITORING-ONLY mode\\narms cleanly in cron_scheduler.start_all without:\\n  * making LLM calls\\n  * mutating code\\n  * writing to db.self_heal",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-phase1-monitoring')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_self_heal_phase1_monitoring"
     },
     {
       "path": "C:/CHL/backend/tests/test_self_heal_router.py",
@@ -36680,6 +37318,37 @@
       "module_name": ".smoke_vault_files"
     },
     {
+      "path": "C:/CHL/backend/conftest.py",
+      "rel_path": "backend/conftest.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "ORPHAN",
+      "description": "Pytest conftest \u2014 Iter 145.x test environment isolation ======================================================== Operator-mandated 2026-05-10: synthetic load tests + smoke tests must NEVER write to th",
+      "exports": [
+        "chl_env_info()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pathlib",
+        "pytest",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 94,
+      "last_modified": "2026-05-10T23:19:48.589821+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nPytest conftest \u2014 Iter 145.x test environment isolation\\n========================================================\\n\\nOperator-mandated 2026-05-10: synthetic load tests + smoke tests must NEVER\\nwri",
+        "pytest.fixture(scope='session')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "No imports, no smoke test, not in LIVE chain"
+      ],
+      "module_name": "conftest"
+    },
+    {
       "path": "C:/CHL/backend/credit_override_revoker/__init__.py",
       "rel_path": "backend/credit_override_revoker/__init__.py",
       "type": "python_module",
@@ -36819,6 +37488,7 @@
         "class StageJumpBody",
         "class Lane",
         "class SyntheticLoadCreate",
+        "class SyntheticLoadCreateProd",
         "build_router()"
       ],
       "imports": [
@@ -36839,10 +37509,11 @@
         "uuid"
       ],
       "imported_by": [
-        "backend/server.py"
+        "backend/server.py",
+        "backend/tests/test_env_isolation.py"
       ],
-      "lines_of_code": 737,
-      "last_modified": "2026-05-05T17:52:57.009624+00:00",
+      "lines_of_code": 768,
+      "last_modified": "2026-05-10T23:19:24.839809+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nSynthetic Load Replay \u2014 Iter 139.36\\n====================================\\n\\nOperator superpower: instantly spawn a complete fake load + quote + carrier\\npre-populated to any SOP stage so downstrea"
@@ -37077,10 +37748,7 @@
         "backend/tests/test_funding_gate.py",
         "backend/tests/test_payments_status_migration.py",
         "backend/tests/test_state_lock_audit_completeness.py",
-        "backend/tests/test_state_lock_audit_domain_expansion.py",
-        "backend/tests/test_stripe_dedup_first_seen_migration.py",
-        "backend/tests/test_stripe_webhook_hardening.py",
-        "backend/tests/test_stripe_webhook_security.py"
+        "backend/tests/test_state_lock_audit_domain_expansion.py"
       ],
       "lines_of_code": 2340,
       "last_modified": "2026-05-09T04:24:44.223292+00:00",
@@ -37732,6 +38400,110 @@
       "module_name": "tests.test_auto_submitter"
     },
     {
+      "path": "C:/CHL/backend/tests/test_bol_document_search.py",
+      "rel_path": "backend/tests/test_bol_document_search.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_bol_document_search.py -- Unit tests for backend/document_search. Covers: - test_bol_found_returns_all_documents - test_bol_not_found_returns_ok_false - test_bol_found_via_alias_field (bol_ref / ",
+      "exports": [
+        "db()",
+        "test_bol_found_returns_all_documents()",
+        "test_bol_not_found_returns_ok_false()",
+        "test_empty_bol_returns_ok_false()",
+        "test_bol_found_via_alias_field()",
+        "test_bol_found_via_reference_number()",
+        "test_documents_sorted_chronologically()",
+        "test_invoices_matched_by_bol_when_no_load_id()",
+        "test_carrier_docs_only_included_when_load_has_carrier()",
+        "test_vault_substring_match_case_insensitive()",
+        "test_router_writes_audit_row()",
+        "test_router_audit_row_on_not_found()",
+        "test_router_empty_bol_raises_400()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "document_search",
+        "document_search.bol_search",
+        "document_search.bol_search.search_by_bol",
+        "document_search.search_router",
+        "document_search.search_router.build_router",
+        "fastapi",
+        "os",
+        "pytest",
+        "re",
+        "sys",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 409,
+      "last_modified": "2026-05-11T01:02:05.948804+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_bol_document_search.py -- Unit tests for backend/document_search.\\n\\nCovers:\\n  - test_bol_found_returns_all_documents\\n  - test_bol_not_found_returns_ok_false\\n  - test_bol_found_via_alias_fiel",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_bol_document_search"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_bol_document_search.py",
+      "rel_path": "backend/tests/test_bol_document_search.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_bol_document_search.py -- Unit tests for backend/document_search. Covers: - test_bol_found_returns_all_documents - test_bol_not_found_returns_ok_false - test_bol_found_via_alias_field (bol_ref / ",
+      "exports": [
+        "db()",
+        "test_bol_found_returns_all_documents()",
+        "test_bol_not_found_returns_ok_false()",
+        "test_empty_bol_returns_ok_false()",
+        "test_bol_found_via_alias_field()",
+        "test_bol_found_via_reference_number()",
+        "test_documents_sorted_chronologically()",
+        "test_invoices_matched_by_bol_when_no_load_id()",
+        "test_carrier_docs_only_included_when_load_has_carrier()",
+        "test_vault_substring_match_case_insensitive()",
+        "test_router_writes_audit_row()",
+        "test_router_audit_row_on_not_found()",
+        "test_router_empty_bol_raises_400()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "document_search",
+        "document_search.bol_search",
+        "document_search.bol_search.search_by_bol",
+        "document_search.search_router",
+        "document_search.search_router.build_router",
+        "fastapi",
+        "os",
+        "pytest",
+        "re",
+        "sys",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 409,
+      "last_modified": "2026-05-11T01:02:05.948804+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_bol_document_search.py -- Unit tests for backend/document_search.\\n\\nCovers:\\n  - test_bol_found_returns_all_documents\\n  - test_bol_not_found_returns_ok_false\\n  - test_bol_found_via_alias_fiel",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_bol_document_search"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_carrier_continuous_monitor.py",
       "rel_path": "backend/tests/test_carrier_continuous_monitor.py",
       "type": "python_module",
@@ -39520,6 +40292,104 @@
       "module_name": "tests.test_enrichment_resolver"
     },
     {
+      "path": "C:/CHL/backend/tests/test_env_isolation.py",
+      "rel_path": "backend/tests/test_env_isolation.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_env_isolation.py \u2014 Iter 145.x test environment isolation ============================================================= Verifies the four guards added 2026-05-10: 1. conftest.py auto-sets CHL_ENV=",
+      "exports": [
+        "test_conftest_forces_chl_env_test()",
+        "test_conftest_sets_db_test_name()",
+        "test_conftest_test_db_differs_from_prod_db()",
+        "test_boot_guard_both_dbs_missing_refuses()",
+        "test_boot_guard_test_mode_no_test_db_refuses()",
+        "test_boot_guard_test_db_equals_prod_db_refuses()",
+        "test_boot_guard_test_mode_selects_test_db()",
+        "test_boot_guard_prod_mode_selects_prod_db()",
+        "test_synthetic_load_refuses_in_prod_without_allow_prod()",
+        "test_synthetic_load_allows_in_test_env()",
+        "test_synthetic_load_allows_in_prod_with_allow_prod_true()",
+        "test_env_info_endpoint_shape_via_imports()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "os",
+        "pathlib",
+        "pytest",
+        "re",
+        "subprocess",
+        "synthetic_load_replay",
+        "synthetic_load_replay.Lane",
+        "synthetic_load_replay.SyntheticLoadCreateProd",
+        "synthetic_load_replay.build_router",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 296,
+      "last_modified": "2026-05-10T23:24:23.644781+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_env_isolation.py \u2014 Iter 145.x test environment isolation\\n=============================================================\\n\\nVerifies the four guards added 2026-05-10:\\n\\n  1. conftest.py auto-s"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_env_isolation"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_env_isolation.py",
+      "rel_path": "backend/tests/test_env_isolation.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_env_isolation.py \u2014 Iter 145.x test environment isolation ============================================================= Verifies the four guards added 2026-05-10: 1. conftest.py auto-sets CHL_ENV=",
+      "exports": [
+        "test_conftest_forces_chl_env_test()",
+        "test_conftest_sets_db_test_name()",
+        "test_conftest_test_db_differs_from_prod_db()",
+        "test_boot_guard_both_dbs_missing_refuses()",
+        "test_boot_guard_test_mode_no_test_db_refuses()",
+        "test_boot_guard_test_db_equals_prod_db_refuses()",
+        "test_boot_guard_test_mode_selects_test_db()",
+        "test_boot_guard_prod_mode_selects_prod_db()",
+        "test_synthetic_load_refuses_in_prod_without_allow_prod()",
+        "test_synthetic_load_allows_in_test_env()",
+        "test_synthetic_load_allows_in_prod_with_allow_prod_true()",
+        "test_env_info_endpoint_shape_via_imports()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "os",
+        "pathlib",
+        "pytest",
+        "re",
+        "subprocess",
+        "synthetic_load_replay",
+        "synthetic_load_replay.Lane",
+        "synthetic_load_replay.SyntheticLoadCreateProd",
+        "synthetic_load_replay.build_router",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 296,
+      "last_modified": "2026-05-10T23:24:23.644781+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_env_isolation.py \u2014 Iter 145.x test environment isolation\\n=============================================================\\n\\nVerifies the four guards added 2026-05-10:\\n\\n  1. conftest.py auto-s"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_env_isolation"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_env_prune.py",
       "rel_path": "backend/tests/test_env_prune.py",
       "type": "python_module",
@@ -40370,6 +41240,90 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_healthz_all"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_hot_path_indexes.py",
+      "rel_path": "backend/tests/test_hot_path_indexes.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_hot_path_indexes.py -- tests for scripts/create_hot_path_indexes.py. Covers the load-bearing behaviors of the index provisioner: 1. Dry-run mode does NOT call create_index on any collection. 2. A",
+      "exports": [
+        "chpi()",
+        "test_dry_run_does_not_call_create_index()",
+        "test_apply_creates_every_planned_index()",
+        "test_idempotency_second_apply_run_is_all_already_present()",
+        "test_audit_row_shape_dry_run()",
+        "test_audit_row_shape_apply()",
+        "test_one_collection_failure_does_not_abort_the_run()",
+        "test_kwargs_pass_through_to_create_index()",
+        "test_plan_covers_required_collections()",
+        "test_plan_order_small_collections_before_large()",
+        "test_no_id_index_in_plan()"
+      ],
+      "imports": [
+        "__future__",
+        "importlib",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 362,
+      "last_modified": "2026-05-10T23:19:17.429451+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_hot_path_indexes.py -- tests for scripts/create_hot_path_indexes.py.\\n\\nCovers the load-bearing behaviors of the index provisioner:\\n\\n    1. Dry-run mode does NOT call create_index on any colle",
+        "pytest.fixture(scope='module')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_hot_path_indexes"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_hot_path_indexes.py",
+      "rel_path": "backend/tests/test_hot_path_indexes.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_hot_path_indexes.py -- tests for scripts/create_hot_path_indexes.py. Covers the load-bearing behaviors of the index provisioner: 1. Dry-run mode does NOT call create_index on any collection. 2. A",
+      "exports": [
+        "chpi()",
+        "test_dry_run_does_not_call_create_index()",
+        "test_apply_creates_every_planned_index()",
+        "test_idempotency_second_apply_run_is_all_already_present()",
+        "test_audit_row_shape_dry_run()",
+        "test_audit_row_shape_apply()",
+        "test_one_collection_failure_does_not_abort_the_run()",
+        "test_kwargs_pass_through_to_create_index()",
+        "test_plan_covers_required_collections()",
+        "test_plan_order_small_collections_before_large()",
+        "test_no_id_index_in_plan()"
+      ],
+      "imports": [
+        "__future__",
+        "importlib",
+        "os",
+        "pytest",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 362,
+      "last_modified": "2026-05-10T23:19:17.429451+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_hot_path_indexes.py -- tests for scripts/create_hot_path_indexes.py.\\n\\nCovers the load-bearing behaviors of the index provisioner:\\n\\n    1. Dry-run mode does NOT call create_index on any colle",
+        "pytest.fixture(scope='module')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_hot_path_indexes"
     },
     {
       "path": "C:/CHL/backend/tests/test_html_parser.py",
@@ -41722,66 +42676,6 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_iteration29_tax_estimator"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_iteration31_instant_carrier_pay.py",
-      "rel_path": "backend/tests/test_iteration31_instant_carrier_pay.py",
-      "type": "python_module",
-      "subsystem": "Synthetic Test",
-      "status": "DEV-TOOL",
-      "description": "Iteration 31 - Instant Carrier Pay on Delivery Tests ===================================================== Tests for automatic pending carrier payouts when loads hit 'delivered' status, with optional ",
-      "exports": [
-        "class TestInstantCarrierPayBackend"
-      ],
-      "imports": [
-        "datetime",
-        "os",
-        "pytest",
-        "requests",
-        "uuid"
-      ],
-      "imported_by": [],
-      "lines_of_code": 561,
-      "last_modified": "2026-05-04T22:04:39.923792+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"\\nIteration 31 - Instant Carrier Pay on Delivery Tests\\n=====================================================\\nTests for automatic pending carrier payouts when loads hit 'delivered' status,\\nwith opt"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_iteration31_instant_carrier_pay"
-    },
-    {
-      "path": "C:/CHL/backend/tests/test_iteration31_instant_carrier_pay.py",
-      "rel_path": "backend/tests/test_iteration31_instant_carrier_pay.py",
-      "type": "python_module",
-      "subsystem": "Synthetic Test",
-      "status": "DEV-TOOL",
-      "description": "Iteration 31 - Instant Carrier Pay on Delivery Tests ===================================================== Tests for automatic pending carrier payouts when loads hit 'delivered' status, with optional ",
-      "exports": [
-        "class TestInstantCarrierPayBackend"
-      ],
-      "imports": [
-        "datetime",
-        "os",
-        "pytest",
-        "requests",
-        "uuid"
-      ],
-      "imported_by": [],
-      "lines_of_code": 561,
-      "last_modified": "2026-05-04T22:04:39.923792+00:00",
-      "smoke_test": null,
-      "decorators": [
-        "\"\\nIteration 31 - Instant Carrier Pay on Delivery Tests\\n=====================================================\\nTests for automatic pending carrier payouts when loads hit 'delivered' status,\\nwith opt"
-      ],
-      "parse_error": null,
-      "notes": [
-        "Pytest test module"
-      ],
-      "module_name": "tests.test_iteration31_instant_carrier_pay"
     },
     {
       "path": "C:/CHL/backend/tests/test_iteration32_autopilot_phase1.py",
@@ -44980,8 +45874,8 @@
         "requests"
       ],
       "imported_by": [],
-      "lines_of_code": 430,
-      "last_modified": "2026-05-04T22:04:39.953024+00:00",
+      "lines_of_code": 436,
+      "last_modified": "2026-05-11T06:41:13.050131+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nTest Load Board Manager Feature - Iteration 4\\nTests for:\\n- GET /api/load-board-sources (returns 6 pre-seeded default sources)\\n- POST /api/load-board-sources (create new load board source)\\n- PUT"
@@ -45011,8 +45905,8 @@
         "requests"
       ],
       "imported_by": [],
-      "lines_of_code": 430,
-      "last_modified": "2026-05-04T22:04:39.953024+00:00",
+      "lines_of_code": 436,
+      "last_modified": "2026-05-11T06:41:13.050131+00:00",
       "smoke_test": null,
       "decorators": [
         "'\\nTest Load Board Manager Feature - Iteration 4\\nTests for:\\n- GET /api/load-board-sources (returns 6 pre-seeded default sources)\\n- POST /api/load-board-sources (create new load board source)\\n- PUT"
@@ -46054,6 +46948,322 @@
       "module_name": "tests.test_pipeline_walkthrough_router"
     },
     {
+      "path": "C:/CHL/backend/tests/test_playwright_drive_ops_console.py",
+      "rel_path": "backend/tests/test_playwright_drive_ops_console.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "End-to-end Playwright test that DRIVES the platform from the Ops Console UI. Demonstrates that an automated agent (or operator) can perform the full load lifecycle from a single screen using nothing b",
+      "exports": [
+        "authed_page()",
+        "test_drive_ops_console_full_lifecycle()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pathlib",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.sync_playwright",
+        "pytest",
+        "requests",
+        "time"
+      ],
+      "imported_by": [],
+      "lines_of_code": 234,
+      "last_modified": "2026-05-11T01:15:38.782113+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'End-to-end Playwright test that DRIVES the platform from the Ops Console UI.\\n\\nDemonstrates that an automated agent (or operator) can perform the full\\nload lifecycle from a single screen using noth",
+        "ARTIFACTS.mkdir(exist_ok=True)",
+        "pytest.fixture(scope='module')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_drive_ops_console"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_playwright_drive_ops_console.py",
+      "rel_path": "backend/tests/test_playwright_drive_ops_console.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "End-to-end Playwright test that DRIVES the platform from the Ops Console UI. Demonstrates that an automated agent (or operator) can perform the full load lifecycle from a single screen using nothing b",
+      "exports": [
+        "authed_page()",
+        "test_drive_ops_console_full_lifecycle()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pathlib",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.sync_playwright",
+        "pytest",
+        "requests",
+        "time"
+      ],
+      "imported_by": [],
+      "lines_of_code": 234,
+      "last_modified": "2026-05-11T01:15:38.782113+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'End-to-end Playwright test that DRIVES the platform from the Ops Console UI.\\n\\nDemonstrates that an automated agent (or operator) can perform the full\\nload lifecycle from a single screen using noth",
+        "ARTIFACTS.mkdir(exist_ok=True)",
+        "pytest.fixture(scope='module')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_drive_ops_console"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_playwright_hello_world.py",
+      "rel_path": "backend/tests/test_playwright_hello_world.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Hello-world Playwright test \u2014 confirms browser automation works against the live CHL frontend at http://127.0.0.1:3000. Run: cd /c/CHL && /c/CHL/.venv-local/Scripts/python.exe -m pytest backend/tests/",
+      "exports": [
+        "test_frontend_responds_with_chl_branding()",
+        "test_backend_health_via_playwright_fetch()"
+      ],
+      "imports": [
+        "__future__",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.expect",
+        "playwright.sync_api.sync_playwright",
+        "pytest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 57,
+      "last_modified": "2026-05-11T00:26:33.194004+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Hello-world Playwright test \u2014 confirms browser automation works against\\nthe live CHL frontend at http://127.0.0.1:3000.\\n\\nRun:\\n    cd /c/CHL && /c/CHL/.venv-local/Scripts/python.exe -m pytest back"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_hello_world"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_playwright_hello_world.py",
+      "rel_path": "backend/tests/test_playwright_hello_world.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Hello-world Playwright test \u2014 confirms browser automation works against the live CHL frontend at http://127.0.0.1:3000. Run: cd /c/CHL && /c/CHL/.venv-local/Scripts/python.exe -m pytest backend/tests/",
+      "exports": [
+        "test_frontend_responds_with_chl_branding()",
+        "test_backend_health_via_playwright_fetch()"
+      ],
+      "imports": [
+        "__future__",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.expect",
+        "playwright.sync_api.sync_playwright",
+        "pytest"
+      ],
+      "imported_by": [],
+      "lines_of_code": 57,
+      "last_modified": "2026-05-11T00:26:33.194004+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Hello-world Playwright test \u2014 confirms browser automation works against\\nthe live CHL frontend at http://127.0.0.1:3000.\\n\\nRun:\\n    cd /c/CHL && /c/CHL/.venv-local/Scripts/python.exe -m pytest back"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_hello_world"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_playwright_smoke_e2e.py",
+      "rel_path": "backend/tests/test_playwright_smoke_e2e.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "End-to-end UI smoke test using Playwright. Replicates the 12-step manual walkthrough at `chl-memory/operations/smoke_test_walkthrough_2026_05_10.md` as automated browser-driven assertions. Auth strate",
+      "exports": [
+        "authed_page()",
+        "test_step0_frontend_reachable()",
+        "test_step0_backend_health()",
+        "test_step1_dashboard_renders()",
+        "test_step2_day1_monitor_renders()",
+        "test_step3_operator_queues_renders()",
+        "test_step4_renewals_shows_bmc84()",
+        "test_step5_vault_documents_renders()",
+        "test_step6_carrier_174_contact_populated()",
+        "test_step11_no_javascript_console_errors()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pathlib",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.Page",
+        "playwright.sync_api.expect",
+        "playwright.sync_api.sync_playwright",
+        "pytest",
+        "requests"
+      ],
+      "imported_by": [],
+      "lines_of_code": 301,
+      "last_modified": "2026-05-11T00:41:55.954339+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'End-to-end UI smoke test using Playwright.\\n\\nReplicates the 12-step manual walkthrough at\\n`chl-memory/operations/smoke_test_walkthrough_2026_05_10.md` as\\nautomated browser-driven assertions.\\n\\nAu",
+        "ARTIFACTS.mkdir(exist_ok=True)",
+        "pytest.fixture(scope='module')",
+        "pytest.mark.skipif(bool(os.environ.get('PYTEST_CURRENT_TEST', '').strip()) and 'authed_page' in os.environ.get('PYTEST_CURRENT_TEST_FIXTURES', ''), reason='Skip when fixtures left asyncio loop state; "
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_smoke_e2e"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_playwright_smoke_e2e.py",
+      "rel_path": "backend/tests/test_playwright_smoke_e2e.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "End-to-end UI smoke test using Playwright. Replicates the 12-step manual walkthrough at `chl-memory/operations/smoke_test_walkthrough_2026_05_10.md` as automated browser-driven assertions. Auth strate",
+      "exports": [
+        "authed_page()",
+        "test_step0_frontend_reachable()",
+        "test_step0_backend_health()",
+        "test_step1_dashboard_renders()",
+        "test_step2_day1_monitor_renders()",
+        "test_step3_operator_queues_renders()",
+        "test_step4_renewals_shows_bmc84()",
+        "test_step5_vault_documents_renders()",
+        "test_step6_carrier_174_contact_populated()",
+        "test_step11_no_javascript_console_errors()"
+      ],
+      "imports": [
+        "__future__",
+        "os",
+        "pathlib",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.Page",
+        "playwright.sync_api.expect",
+        "playwright.sync_api.sync_playwright",
+        "pytest",
+        "requests"
+      ],
+      "imported_by": [],
+      "lines_of_code": 301,
+      "last_modified": "2026-05-11T00:41:55.954339+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'End-to-end UI smoke test using Playwright.\\n\\nReplicates the 12-step manual walkthrough at\\n`chl-memory/operations/smoke_test_walkthrough_2026_05_10.md` as\\nautomated browser-driven assertions.\\n\\nAu",
+        "ARTIFACTS.mkdir(exist_ok=True)",
+        "pytest.fixture(scope='module')",
+        "pytest.mark.skipif(bool(os.environ.get('PYTEST_CURRENT_TEST', '').strip()) and 'authed_page' in os.environ.get('PYTEST_CURRENT_TEST_FIXTURES', ''), reason='Skip when fixtures left asyncio loop state; "
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_smoke_e2e"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_playwright_ui_sweep.py",
+      "rel_path": "backend/tests/test_playwright_ui_sweep.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Playwright UI sweep: visit every operator nav tab + report errors. For each tab in the operator's main nav (`App.js` ~line 2906 nav list): - Click the tab (via `data-testid=\"nav-<id>\"`) - Wait for `ne",
+      "exports": [
+        "authed_context()",
+        "test_ui_sweep_all_tabs()"
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "os",
+        "pathlib",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.BrowserContext",
+        "playwright.sync_api.Page",
+        "playwright.sync_api.sync_playwright",
+        "pytest",
+        "re",
+        "requests",
+        "time",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 455,
+      "last_modified": "2026-05-11T00:50:53.408227+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Playwright UI sweep: visit every operator nav tab + report errors.\\n\\nFor each tab in the operator\\'s main nav (`App.js` ~line 2906 nav list):\\n  - Click the tab (via `data-testid=\"nav-<id>\"`)\\n  - W",
+        "ARTIFACTS.mkdir(exist_ok=True)",
+        "pytest.fixture(scope='module')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_ui_sweep"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_playwright_ui_sweep.py",
+      "rel_path": "backend/tests/test_playwright_ui_sweep.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Playwright UI sweep: visit every operator nav tab + report errors. For each tab in the operator's main nav (`App.js` ~line 2906 nav list): - Click the tab (via `data-testid=\"nav-<id>\"`) - Wait for `ne",
+      "exports": [
+        "authed_context()",
+        "test_ui_sweep_all_tabs()"
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "os",
+        "pathlib",
+        "playwright",
+        "playwright.sync_api",
+        "playwright.sync_api.BrowserContext",
+        "playwright.sync_api.Page",
+        "playwright.sync_api.sync_playwright",
+        "pytest",
+        "re",
+        "requests",
+        "time",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 455,
+      "last_modified": "2026-05-11T00:50:53.408227+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Playwright UI sweep: visit every operator nav tab + report errors.\\n\\nFor each tab in the operator\\'s main nav (`App.js` ~line 2906 nav list):\\n  - Click the tab (via `data-testid=\"nav-<id>\"`)\\n  - W",
+        "ARTIFACTS.mkdir(exist_ok=True)",
+        "pytest.fixture(scope='module')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_playwright_ui_sweep"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_pnl_warning_resolution.py",
       "rel_path": "backend/tests/test_pnl_warning_resolution.py",
       "type": "python_module",
@@ -46406,6 +47616,128 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_privacy_consent_logger"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_public_rate_limiter.py",
+      "rel_path": "backend/tests/test_public_rate_limiter.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Tests for backend/middleware/public_endpoint_rate_limiter.py. Covers: * 60 requests/minute per-IP burst cap on /api/public/* -> 60th OK, 61st 429 with Retry-After. * Different IPs counted in separate ",
+      "exports": [
+        "clock()",
+        "test_60_requests_in_minute_pass_61st_blocks()",
+        "test_different_ips_have_separate_buckets()",
+        "test_token_limit_fires_on_burst()",
+        "test_token_limit_is_per_token_not_global()",
+        "test_localhost_bypassed()",
+        "test_ipv6_localhost_bypassed()",
+        "test_owner_authenticated_bypassed()",
+        "test_window_resets_after_60_seconds()",
+        "test_retry_after_decreases_within_window()",
+        "test_throttled_request_is_logged_to_mongo()",
+        "test_business_settings_overrides_apply()",
+        "test_non_public_path_not_gated()",
+        "test_hot_disable_env_var()",
+        "test_429_response_shape()",
+        "test_post_endpoint_also_gated()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "middleware",
+        "middleware.public_endpoint_rate_limiter",
+        "middleware.public_endpoint_rate_limiter.DEFAULT_IP_PER_HOUR",
+        "middleware.public_endpoint_rate_limiter.DEFAULT_IP_PER_MINUTE",
+        "middleware.public_endpoint_rate_limiter.DEFAULT_TOKEN_PER_MINUTE",
+        "middleware.public_endpoint_rate_limiter.PublicEndpointRateLimiter",
+        "middleware.public_endpoint_rate_limiter.WINDOW_HOUR_SECONDS",
+        "middleware.public_endpoint_rate_limiter.WINDOW_MINUTE_SECONDS",
+        "os",
+        "pathlib",
+        "pytest",
+        "starlette",
+        "sys",
+        "time",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 420,
+      "last_modified": "2026-05-10T23:39:20.618372+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Tests for backend/middleware/public_endpoint_rate_limiter.py.\\n\\nCovers:\\n  * 60 requests/minute per-IP burst cap on /api/public/* -> 60th OK,\\n    61st 429 with Retry-After.\\n  * Different IPs count",
+        "pytest.fixture(autouse=True)",
+        "pytest.fixture(autouse=True)",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_public_rate_limiter"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_public_rate_limiter.py",
+      "rel_path": "backend/tests/test_public_rate_limiter.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Tests for backend/middleware/public_endpoint_rate_limiter.py. Covers: * 60 requests/minute per-IP burst cap on /api/public/* -> 60th OK, 61st 429 with Retry-After. * Different IPs counted in separate ",
+      "exports": [
+        "clock()",
+        "test_60_requests_in_minute_pass_61st_blocks()",
+        "test_different_ips_have_separate_buckets()",
+        "test_token_limit_fires_on_burst()",
+        "test_token_limit_is_per_token_not_global()",
+        "test_localhost_bypassed()",
+        "test_ipv6_localhost_bypassed()",
+        "test_owner_authenticated_bypassed()",
+        "test_window_resets_after_60_seconds()",
+        "test_retry_after_decreases_within_window()",
+        "test_throttled_request_is_logged_to_mongo()",
+        "test_business_settings_overrides_apply()",
+        "test_non_public_path_not_gated()",
+        "test_hot_disable_env_var()",
+        "test_429_response_shape()",
+        "test_post_endpoint_also_gated()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "middleware",
+        "middleware.public_endpoint_rate_limiter",
+        "middleware.public_endpoint_rate_limiter.DEFAULT_IP_PER_HOUR",
+        "middleware.public_endpoint_rate_limiter.DEFAULT_IP_PER_MINUTE",
+        "middleware.public_endpoint_rate_limiter.DEFAULT_TOKEN_PER_MINUTE",
+        "middleware.public_endpoint_rate_limiter.PublicEndpointRateLimiter",
+        "middleware.public_endpoint_rate_limiter.WINDOW_HOUR_SECONDS",
+        "middleware.public_endpoint_rate_limiter.WINDOW_MINUTE_SECONDS",
+        "os",
+        "pathlib",
+        "pytest",
+        "starlette",
+        "sys",
+        "time",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 420,
+      "last_modified": "2026-05-10T23:39:20.618372+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'Tests for backend/middleware/public_endpoint_rate_limiter.py.\\n\\nCovers:\\n  * 60 requests/minute per-IP burst cap on /api/public/* -> 60th OK,\\n    61st 429 with Retry-After.\\n  * Different IPs count",
+        "pytest.fixture(autouse=True)",
+        "pytest.fixture(autouse=True)",
+        "pytest.fixture"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_public_rate_limiter"
     },
     {
       "path": "C:/CHL/backend/tests/test_real_samplers.py",
@@ -46899,7 +48231,9 @@
         "typing",
         "uuid"
       ],
-      "imported_by": [],
+      "imported_by": [
+        "backend/tests/test_renewals_seed_from_catalog.py"
+      ],
       "lines_of_code": 746,
       "last_modified": "2026-05-09T02:20:45.718621+00:00",
       "smoke_test": null,
@@ -46996,6 +48330,212 @@
       "module_name": "tests.test_renewals_scanner"
     },
     {
+      "path": "C:/CHL/backend/tests/test_renewals_seed_from_catalog.py",
+      "rel_path": "backend/tests/test_renewals_seed_from_catalog.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_renewals_seed_from_catalog.py -- Tests for the 2026-05-10 catalog-expansion endpoints (GET /api/_renewals/catalog + POST /api/_renewals/seed-from-catalog). Operator-flagged 2026-05-10 that the re",
+      "exports": [
+        "test_catalog_preview_returns_entries_and_categories()",
+        "test_catalog_preview_marks_existing_entries()",
+        "test_seed_from_catalog_dry_run_does_not_insert()",
+        "test_seed_from_catalog_apply_inserts_correct_count()",
+        "test_seed_from_catalog_is_idempotent()",
+        "test_seed_from_catalog_filters_by_category()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "os",
+        "pytest",
+        "renewals",
+        "renewals.renewals_router",
+        "renewals.renewals_router.build_router",
+        "starlette",
+        "sys",
+        "test_renewals_router",
+        "test_renewals_router._FakeDB",
+        "test_renewals_router._ok_broker_dep",
+        "test_renewals_router._ok_owner_dep",
+        "test_renewals_router._refuse_owner_dep"
+      ],
+      "imported_by": [],
+      "lines_of_code": 228,
+      "last_modified": "2026-05-11T00:05:54.249393+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_renewals_seed_from_catalog.py -- Tests for the 2026-05-10\\ncatalog-expansion endpoints (GET /api/_renewals/catalog +\\nPOST /api/_renewals/seed-from-catalog).\\n\\nOperator-flagged 2026-05-10 that ",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-renewals-seed-catalog')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_renewals_seed_from_catalog"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_renewals_seed_from_catalog.py",
+      "rel_path": "backend/tests/test_renewals_seed_from_catalog.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_renewals_seed_from_catalog.py -- Tests for the 2026-05-10 catalog-expansion endpoints (GET /api/_renewals/catalog + POST /api/_renewals/seed-from-catalog). Operator-flagged 2026-05-10 that the re",
+      "exports": [
+        "test_catalog_preview_returns_entries_and_categories()",
+        "test_catalog_preview_marks_existing_entries()",
+        "test_seed_from_catalog_dry_run_does_not_insert()",
+        "test_seed_from_catalog_apply_inserts_correct_count()",
+        "test_seed_from_catalog_is_idempotent()",
+        "test_seed_from_catalog_filters_by_category()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "fastapi",
+        "os",
+        "pytest",
+        "renewals",
+        "renewals.renewals_router",
+        "renewals.renewals_router.build_router",
+        "starlette",
+        "sys",
+        "test_renewals_router",
+        "test_renewals_router._FakeDB",
+        "test_renewals_router._ok_broker_dep",
+        "test_renewals_router._ok_owner_dep",
+        "test_renewals_router._refuse_owner_dep"
+      ],
+      "imported_by": [],
+      "lines_of_code": 228,
+      "last_modified": "2026-05-11T00:05:54.249393+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"test_renewals_seed_from_catalog.py -- Tests for the 2026-05-10\\ncatalog-expansion endpoints (GET /api/_renewals/catalog +\\nPOST /api/_renewals/seed-from-catalog).\\n\\nOperator-flagged 2026-05-10 that ",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-renewals-seed-catalog')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_renewals_seed_from_catalog"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_request_id_middleware.py",
+      "rel_path": "backend/tests/test_request_id_middleware.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_request_id_middleware.py -- Iter 145.x request-trace stream tests. Coverage (12 tests, all stdlib + FastAPI TestClient): request_id middleware (5): test_each_request_gets_unique_id test_x_request",
+      "exports": [
+        "test_each_request_gets_unique_id()",
+        "test_x_request_id_header_set_on_response()",
+        "test_upstream_x_request_id_preserved()",
+        "test_malformed_upstream_header_rejected_and_minted_fresh()",
+        "test_contextvar_accessible_from_route_handler()",
+        "test_structured_format_includes_request_id()",
+        "test_format_default_is_structured_when_env_unset()",
+        "test_legacy_format_used_when_env_says_so()",
+        "test_log_outside_request_context_gets_dash()",
+        "test_trace_endpoint_returns_audit_rows()",
+        "test_trace_endpoint_returns_log_lines()",
+        "test_trace_endpoint_rejects_invalid_id()"
+      ],
+      "imports": [
+        "__future__",
+        "fastapi",
+        "io",
+        "logging",
+        "middleware",
+        "middleware.request_id",
+        "middleware.request_id.MISSING_REQUEST_ID",
+        "middleware.request_id.REQUEST_ID_HEADER",
+        "middleware.request_id.RequestIdMiddleware",
+        "middleware.request_id.get_current_request_id",
+        "middleware.request_id.request_id_ctx",
+        "middleware.structured_logger",
+        "middleware.trace_router",
+        "middleware.trace_router.build_trace_router",
+        "os",
+        "pytest",
+        "re",
+        "starlette",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 374,
+      "last_modified": "2026-05-10T23:24:01.804089+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_request_id_middleware.py -- Iter 145.x request-trace stream tests.\\n\\nCoverage (12 tests, all stdlib + FastAPI TestClient):\\n\\n  request_id middleware (5):\\n    test_each_request_gets_unique_id\\",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-request-id-middleware')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_request_id_middleware"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_request_id_middleware.py",
+      "rel_path": "backend/tests/test_request_id_middleware.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_request_id_middleware.py -- Iter 145.x request-trace stream tests. Coverage (12 tests, all stdlib + FastAPI TestClient): request_id middleware (5): test_each_request_gets_unique_id test_x_request",
+      "exports": [
+        "test_each_request_gets_unique_id()",
+        "test_x_request_id_header_set_on_response()",
+        "test_upstream_x_request_id_preserved()",
+        "test_malformed_upstream_header_rejected_and_minted_fresh()",
+        "test_contextvar_accessible_from_route_handler()",
+        "test_structured_format_includes_request_id()",
+        "test_format_default_is_structured_when_env_unset()",
+        "test_legacy_format_used_when_env_says_so()",
+        "test_log_outside_request_context_gets_dash()",
+        "test_trace_endpoint_returns_audit_rows()",
+        "test_trace_endpoint_returns_log_lines()",
+        "test_trace_endpoint_rejects_invalid_id()"
+      ],
+      "imports": [
+        "__future__",
+        "fastapi",
+        "io",
+        "logging",
+        "middleware",
+        "middleware.request_id",
+        "middleware.request_id.MISSING_REQUEST_ID",
+        "middleware.request_id.REQUEST_ID_HEADER",
+        "middleware.request_id.RequestIdMiddleware",
+        "middleware.request_id.get_current_request_id",
+        "middleware.request_id.request_id_ctx",
+        "middleware.structured_logger",
+        "middleware.trace_router",
+        "middleware.trace_router.build_trace_router",
+        "os",
+        "pytest",
+        "re",
+        "starlette",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 374,
+      "last_modified": "2026-05-10T23:24:01.804089+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'test_request_id_middleware.py -- Iter 145.x request-trace stream tests.\\n\\nCoverage (12 tests, all stdlib + FastAPI TestClient):\\n\\n  request_id middleware (5):\\n    test_each_request_gets_unique_id\\",
+        "os.environ.setdefault('JWT_SECRET', 'test-secret-request-id-middleware')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_request_id_middleware"
+    },
+    {
       "path": "C:/CHL/backend/tests/test_restore_validators.py",
       "rel_path": "backend/tests/test_restore_validators.py",
       "type": "python_module",
@@ -47848,6 +49388,102 @@
         "Pytest test module"
       ],
       "module_name": "tests.test_seed_renewals"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_seed_synthetic_data.py",
+      "rel_path": "backend/tests/test_seed_synthetic_data.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_seed_synthetic_data.py - tests for scripts/seed_synthetic_test_data.py ============================================================================ What we test: 1. Pure builders produce the righ",
+      "exports": [
+        "stub_db()",
+        "test_build_payload_counts_match_spec()",
+        "test_all_docs_tagged_synthetic_true_and_batch()",
+        "test_carriers_have_required_fields()",
+        "test_load_lifecycle_distribution()",
+        "test_every_load_has_bol_number()",
+        "test_delivered_loads_have_carrier_and_pod()",
+        "test_rate_and_weight_in_required_ranges()",
+        "test_drivers_assigned_to_first_three_carriers()",
+        "test_dry_run_default_writes_nothing()",
+        "test_apply_creates_expected_counts()",
+        "test_apply_twice_refuses_with_exit_2()",
+        "test_clean_removes_all_batch_rows()",
+        "test_clean_then_apply_works()",
+        "test_clean_does_not_touch_unrelated_rows()",
+        "test_apply_and_clean_mutually_exclusive()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "pathlib",
+        "pytest",
+        "seed_synthetic_test_data",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 306,
+      "last_modified": "2026-05-11T01:06:19.897567+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_seed_synthetic_data.py - tests for scripts/seed_synthetic_test_data.py\\n============================================================================\\n\\nWhat we test:\\n    1. Pure builders prod",
+        "pytest.fixture()"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_seed_synthetic_data"
+    },
+    {
+      "path": "C:/CHL/backend/tests/test_seed_synthetic_data.py",
+      "rel_path": "backend/tests/test_seed_synthetic_data.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "test_seed_synthetic_data.py - tests for scripts/seed_synthetic_test_data.py ============================================================================ What we test: 1. Pure builders produce the righ",
+      "exports": [
+        "stub_db()",
+        "test_build_payload_counts_match_spec()",
+        "test_all_docs_tagged_synthetic_true_and_batch()",
+        "test_carriers_have_required_fields()",
+        "test_load_lifecycle_distribution()",
+        "test_every_load_has_bol_number()",
+        "test_delivered_loads_have_carrier_and_pod()",
+        "test_rate_and_weight_in_required_ranges()",
+        "test_drivers_assigned_to_first_three_carriers()",
+        "test_dry_run_default_writes_nothing()",
+        "test_apply_creates_expected_counts()",
+        "test_apply_twice_refuses_with_exit_2()",
+        "test_clean_removes_all_batch_rows()",
+        "test_clean_then_apply_works()",
+        "test_clean_does_not_touch_unrelated_rows()",
+        "test_apply_and_clean_mutually_exclusive()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "pathlib",
+        "pytest",
+        "seed_synthetic_test_data",
+        "sys",
+        "typing"
+      ],
+      "imported_by": [],
+      "lines_of_code": 306,
+      "last_modified": "2026-05-11T01:06:19.897567+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\ntest_seed_synthetic_data.py - tests for scripts/seed_synthetic_test_data.py\\n============================================================================\\n\\nWhat we test:\\n    1. Pure builders prod",
+        "pytest.fixture()"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Pytest test module"
+      ],
+      "module_name": "tests.test_seed_synthetic_data"
     },
     {
       "path": "C:/CHL/backend/tests/test_sender_classifier.py",
@@ -48961,6 +50597,40 @@
       "module_name": "check_synthetic_state"
     },
     {
+      "path": "C:/CHL/scripts/cloud_replica/validate_replica_health.py",
+      "rel_path": "scripts/cloud_replica/validate_replica_health.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "validate_replica_health.py -- CHL replica-set smoke test. Writes a sentinel doc to the PRIMARY, reads it from the SECONDARY after a short wait, and reports replication lag + PASS/FAIL. Designed to run",
+      "exports": [
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "datetime",
+        "os",
+        "pathlib",
+        "pymongo",
+        "sys",
+        "time",
+        "urllib",
+        "uuid"
+      ],
+      "imported_by": [],
+      "lines_of_code": 224,
+      "last_modified": "2026-05-10T23:21:36.166952+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "\"\\nvalidate_replica_health.py -- CHL replica-set smoke test.\\n\\nWrites a sentinel doc to the PRIMARY, reads it from the SECONDARY after a\\nshort wait, and reports replication lag + PASS/FAIL. Designed"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "cloud_replica.validate_replica_health"
+    },
+    {
       "path": "C:/CHL/scripts/dispatch_live_test_load.py",
       "rel_path": "scripts/dispatch_live_test_load.py",
       "type": "python_module",
@@ -49182,6 +50852,88 @@
       "module_name": ""
     },
     {
+      "path": "C:/CHL/scripts/seed_synthetic_test_data.py",
+      "rel_path": "scripts/seed_synthetic_test_data.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "LIBRARY",
+      "description": "seed_synthetic_test_data.py - Iter 145.x synthetic-data generator ================================================================== Operator-mandated 2026-05-10. Seeds the platform with realistic-but",
+      "exports": [
+        "build_carriers()",
+        "build_drivers()",
+        "build_loads()",
+        "build_rate_confirmations()",
+        "build_broker_invoice_and_noa()",
+        "do_clean()",
+        "do_seed()",
+        "build_payload()",
+        "main_async()",
+        "parse_args()",
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "argparse",
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "motor",
+        "os",
+        "pathlib",
+        "sys",
+        "typing",
+        "uuid"
+      ],
+      "imported_by": [
+        "backend/tests/test_seed_synthetic_data.py"
+      ],
+      "lines_of_code": 569,
+      "last_modified": "2026-05-11T01:05:37.636813+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nseed_synthetic_test_data.py - Iter 145.x synthetic-data generator\\n==================================================================\\n\\nOperator-mandated 2026-05-10. Seeds the platform with realis"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script imported by another asset (unusual)"
+      ],
+      "module_name": "seed_synthetic_test_data"
+    },
+    {
+      "path": "C:/CHL/scripts/seed_test_db.py",
+      "rel_path": "scripts/seed_test_db.py",
+      "type": "python_module",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "seed_test_db.py \u2014 Iter 145.x test environment isolation ======================================================== Operator-mandated 2026-05-10. Populates the isolated test DB with a baseline of obvious",
+      "exports": [
+        "main()"
+      ],
+      "imports": [
+        "__future__",
+        "asyncio",
+        "datetime",
+        "dotenv",
+        "motor",
+        "os",
+        "pathlib",
+        "sys"
+      ],
+      "imported_by": [],
+      "lines_of_code": 227,
+      "last_modified": "2026-05-10T23:21:01.974896+00:00",
+      "smoke_test": null,
+      "decorators": [
+        "'\\nseed_test_db.py \u2014 Iter 145.x test environment isolation\\n========================================================\\n\\nOperator-mandated 2026-05-10. Populates the isolated test DB with a baseline\\nof",
+        "load_dotenv('C:/CHL/backend/.env')"
+      ],
+      "parse_error": null,
+      "notes": [
+        "Script \u2014 assumed operator-run; investigate if name unfamiliar"
+      ],
+      "module_name": "seed_test_db"
+    },
+    {
       "path": "C:/CHL/scripts/send_synthetic_bol.py",
       "rel_path": "scripts/send_synthetic_bol.py",
       "type": "python_module",
@@ -49248,6 +51000,24 @@
         "Script \u2014 assumed operator-run; investigate if name unfamiliar"
       ],
       "module_name": "send_test_ref_email"
+    },
+    {
+      "path": "C:/CHL/scripts/setup_test_mongo.ps1",
+      "rel_path": "scripts/setup_test_mongo.ps1",
+      "type": "powershell_script",
+      "subsystem": "Synthetic Test",
+      "status": "DEV-TOOL",
+      "description": "Copyright (c) 2026 Continental Haul Logistics LLC. All Rights Reserved. Proprietary and Confidential.",
+      "exports": [],
+      "imports": [],
+      "imported_by": [],
+      "lines_of_code": 221,
+      "last_modified": "2026-05-10T23:20:29.213043+00:00",
+      "smoke_test": null,
+      "decorators": [],
+      "parse_error": null,
+      "notes": [],
+      "module_name": ""
     },
     {
       "path": "C:/CHL/scripts/smoke_driver_experience.py",

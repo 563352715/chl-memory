@@ -54,6 +54,9 @@ These BLOCK other work until decided.
 | O15 | **Telnyx 10DLC TFV (Toll-Free Verification) follow-up** | $0 | per portal | SMS sending depends on this |
 | O16 | **Insurance: workers comp / commercial auto / E&O / general liability — verify current policies** | varies | varies | Required for broker operations |
 | O17 | **Operator email signature standardized** ("Dispatch Team / Continental Haul Logistics LLC / MC 1817555 · USDOT 4569843") | $0 | 5 min | Per `feedback_outbound_email_policy.md` |
+| O18 | **Real cellular line for partner SMS-verify** — (417) 219-3856 is VoIP (Twilio→Telnyx). Email-to-SMS verifications fail on most platforms (DirectFreight confirmed 2026-05-11). Mint Mobile prepaid ~$15/mo is the cheap option; or test whether Telnyx-after-migration passes carrier checks. | $15/mo | 1 hr | Unblocks SMS-verify-required signups: most banks, factoring portals, some load boards. |
+| O18b | **Swap DirectFreight mobile-notify number from personal cell → Telnyx (417) 219-3856** (or whichever number is the production dispatch line post-FOC) | $0 | 2 min | Personal cell is bridge-only until Telnyx local 10DLC FOC 2026-05-14. Don't leave personal cell on partner platforms long-term. Re-test SMS verify on the new number. |
+| O19 | **Update FMCSA SAFER public contact info** — add phone + email to public record. DirectFreight verify showed `missing phone number` / `missing email address` for DOT 4569843 (2026-05-11). SAFER lags new authorities; manually pushing contact info via FMCSA Portal eliminates auto-verify failures on every future partner platform. | $0 | 30 min | Unblocks self-serve verify on every load board / factor / TMS. |
 
 ---
 
@@ -62,6 +65,8 @@ These BLOCK other work until decided.
 | # | Item | Effort | Why |
 |---|---|---|---|
 | B1 | **Remove PRE-AUTHORITY MODE banner from dashboard** | 15 min | Authority is now ACTIVE per FMCSA; banner is stale. Update authority-detection logic. |
+| ~~B1b~~ | **DONE 2026-05-11 — SAM.gov adapter switched from NAICS to PSC filter + title-keyword belt-and-suspenders + US-only default.** Replaced unreliable `naics=` filter with PSC codes V111/V112/V114/V119/V121/V122/V125/V302/V303 (federal-procurement service codes — verified reliable). Added title-regex filter (`transport\|freight\|cargo\|shipping\|hauling\|trucking\|drayage\|intermodal\|tanker\|flatbed\|truckload\|cartage\|stevedor\|household goods\|barge\|movement of\|van transport`). Default `us_only=True` to skip overseas RFPs. Manual smoke test 2026-05-11 showed 22 actual freight RFPs across V112/V114/V119 in 30d. Code at `loadboards.py:145-260` (SamGovAdapter). Live verification gated until rate-limit reset 2026-05-12 00:00 UTC. |
+| B1c | **SAM.gov rate-limit upgrade to non-federal 1k/day tier** | varies | Current API key appears throttled to "general 10/day" tier — burned through quota on initial smoke tests 2026-05-11. To unlock 1k/day non-federal tier, complete SAM.gov entity registration (UEI + CAGE code — same as backlog O5 / blocked on UEI). Federal-user 10k/day tier requires GovCloud-attached account, not applicable to us. |
 | B2 | **Shipper credit check ("Pre-clear with factor")** — Phase 2 of canonical workflow | 1-2 days | Operator's "Step 2"; requires factor company selection (see D2) |
 | B3 | **Submit-to-factor post-POD flow** — Phase 6 | 1 day | Email template or factor API integration |
 | B4 | **Manual "Pay Carrier" trigger on Accounting tab** | 4 hours | Currently view-only; needs button per audit |

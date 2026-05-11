@@ -1,6 +1,6 @@
 # CHL Asset Inventory -- Orphans + Broken
 
-_Generated: 2026-05-10T23:03:28.335431+00:00_
+_Generated: 2026-05-11T06:59:52.849183+00:00_
 
 > **Triage focus.** These files are present in the codebase but
 > are NOT reachable from `backend/server.py` or `frontend/src/App.js`,
@@ -16,7 +16,7 @@ _Generated: 2026-05-10T23:03:28.335431+00:00_
 
 _None — no parse errors or unresolved internal imports detected._
 
-## ORPHAN (53)
+## ORPHAN (61)
 
 ### `frontend/src/lib/manualOverrideFields.js` (211 LOC)
 
@@ -39,6 +39,32 @@ _None — no parse errors or unresolved internal imports detected._
 - **Subsystem:** Frontend UI
 - **Type:** jsx_component
 - **Last modified:** 2026-05-04T22:04:39.994428+00:00
+- **Note:** Not reachable from frontend/src/App.js
+
+### `backend/.send_truckstop_api_inquiry.py` (180 LOC)
+
+- **Subsystem:** Communications
+- **Type:** python_module
+- **Last modified:** 2026-05-11T05:45:45.203714+00:00
+- **Docstring:** Send comprehensive API access inquiry to Truckstop.com. Operator-mandated 2026-05-11. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC' (no AI/tech-company r
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `send_via_zoho(), main()`
+
+### `backend/.send_dat_api_inquiry.py` (176 LOC)
+
+- **Subsystem:** Misc
+- **Type:** python_module
+- **Last modified:** 2026-05-11T05:37:50.054307+00:00
+- **Docstring:** Send comprehensive API access inquiry to DAT developer support. Operator-mandated 2026-05-11. Comprehensive list of questions to answer BEFORE committing to a DAT subscription tier. Per feedback_outbo
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `send_via_zoho(), main()`
+
+### `scripts/cloud_replica/init_replica_set.js` (174 LOC)
+
+- **Subsystem:** Scripts / Tooling
+- **Type:** js_module
+- **Last modified:** 2026-05-10T23:19:49.855063+00:00
+- **Docstring:** init_replica_set.js -- Initialize CHL mongo replica set from the primary.
 - **Note:** Not reachable from frontend/src/App.js
 
 ### `frontend/src/components/ui/context-menu.jsx` (156 LOC)
@@ -73,6 +99,15 @@ _None — no parse errors or unresolved internal imports detected._
 - **Note:** No imports, no smoke test, not in LIVE chain
 - **Exports:** `test_layer_b(), test_layer_c(), main()`
 
+### `backend/.send_123loadboard_api_request.py` (141 LOC)
+
+- **Subsystem:** Communications
+- **Type:** python_module
+- **Last modified:** 2026-05-11T05:29:33.928497+00:00
+- **Docstring:** Send API integration request to 123Loadboard partner-integrations team. Operator-mandated 2026-05-11. Per feedback_outbound_email_policy.md: signed as 'Dispatch / Continental Haul Logistics LLC' (no A
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `send_via_zoho(), main()`
+
 ### `backend/.smoke_vault_files.py` (135 LOC)
 
 - **Subsystem:** Synthetic Test
@@ -88,6 +123,15 @@ _None — no parse errors or unresolved internal imports detected._
 - **Type:** jsx_component
 - **Last modified:** 2026-05-04T22:04:39.996423+00:00
 - **Note:** Not reachable from frontend/src/App.js
+
+### `backend/.send_comfreight_followup.py` (132 LOC)
+
+- **Subsystem:** Communications
+- **Type:** python_module
+- **Last modified:** 2026-05-11T05:19:22.014748+00:00
+- **Docstring:** Send factoring application follow-up email to ComFreight Haul Pay. Operator-mandated 2026-05-11. Constraints: - Signed as 'Dispatch' (no AI-reveal, no platform-reveal, matches feedback_outbound_email_
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `send_via_zoho(), log_outbound(), main()`
 
 ### `frontend/src/components/A2PStatusBanner.jsx` (126 LOC)
 
@@ -158,6 +202,15 @@ _None — no parse errors or unresolved internal imports detected._
 - **Last modified:** 2026-05-04T22:04:39.991209+00:00
 - **Note:** Not reachable from frontend/src/App.js
 
+### `backend/conftest.py` (94 LOC)
+
+- **Subsystem:** Synthetic Test
+- **Type:** python_module
+- **Last modified:** 2026-05-10T23:19:48.589821+00:00
+- **Docstring:** Pytest conftest — Iter 145.x test environment isolation ======================================================== Operator-mandated 2026-05-10: synthetic load tests + smoke tests must NEVER write to th
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `chl_env_info()`
+
 ### `frontend/src/components/ui/breadcrumb.jsx` (92 LOC)
 
 - **Subsystem:** Frontend UI
@@ -195,12 +248,30 @@ _None — no parse errors or unresolved internal imports detected._
 - **Last modified:** 2026-05-04T22:04:40.003899+00:00
 - **Note:** Not reachable from frontend/src/App.js
 
+### `backend/.run_playwright_with_vault_creds.py` (72 LOC)
+
+- **Subsystem:** Misc
+- **Type:** python_module
+- **Last modified:** 2026-05-11T00:31:48.757053+00:00
+- **Docstring:** Decrypt operator owner creds from vault + run playwright authed E2E. The password never crosses the conversation log: - Decrypted via Fernet into a local variable - Passed to subprocess via env dict (
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `get_creds(), run_pytest(), main()`
+
 ### `frontend/src/components/ui/calendar.jsx` (71 LOC)
 
 - **Subsystem:** Frontend UI
 - **Type:** jsx_component
 - **Last modified:** 2026-05-04T22:04:39.993431+00:00
 - **Note:** Not reachable from frontend/src/App.js
+
+### `backend/.run_playwright_ui_sweep_with_vault_creds.py` (68 LOC)
+
+- **Subsystem:** Misc
+- **Type:** python_module
+- **Last modified:** 2026-05-11T00:51:04.692168+00:00
+- **Docstring:** Decrypt operator owner creds from vault + run the UI-sweep test. Mirrors `.run_playwright_with_vault_creds.py` — same security model: - Decrypted password lives only in this process's memory + a subpr
+- **Note:** No imports, no smoke test, not in LIVE chain
+- **Exports:** `get_creds(), run_pytest(), main()`
 
 ### `frontend/src/components/ui/input-otp.jsx` (53 LOC)
 

@@ -7291,3 +7291,61 @@ _(none this window)_
 _(none this window)_
 
 ---
+
+## Triage run -- 2026-05-11T01:16:47.088773+00:00
+**Window**: last 75 min (since 2026-05-11T00:01:47.004903+00:00). **Seen**: 1. **Classified**: 1. **Urgent**: 0. **Skipped (dup)**: 0.
+**By category**: UNKNOWN=1
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (1)
+- [UNKNOWN] conf=0.25 from=dispatch@continentalhaul.com subject='🚨 CHL Anomaly Sniffer · 5xx_spike · HIGH' message_id=<19e149800ef.26fc06e-1388320044.-5008143208259128787@zoho.com>
+    - no_category_signal:unknown
+    - default_no_urgent_signal:operator_review
+    - confidence_below_floor:0.25<0.5_downgrade_to_operator_review
+
+### AUTO_ACK_OK (0)
+(none)
+
+### INFORMATIONAL (0)
+(none)
+
+## Triage run -- 2026-05-11T02:16:48.183460+00:00
+**Window**: last 75 min (since 2026-05-11T01:01:48.174863+00:00). **Seen**: 1. **Classified**: 0. **Urgent**: 0. **Skipped (dup)**: 1.
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (1)
+- [UNKNOWN] conf=0.25 from=dispatch@continentalhaul.com subject='🚨 CHL Anomaly Sniffer · 5xx_spike · HIGH' message_id=<19e149800ef.26fc06e-1388320044.-5008143208259128787@zoho.com>
+    - no_category_signal:unknown
+    - default_no_urgent_signal:operator_review
+    - confidence_below_floor:0.25<0.5_downgrade_to_operator_review
+
+### AUTO_ACK_OK (0)
+(none)
+
+### INFORMATIONAL (0)
+(none)
+
+## Triage run -- 2026-05-11T06:16:48.259185+00:00
+**Window**: last 75 min (since 2026-05-11T05:01:48.233749+00:00). **Seen**: 2. **Classified**: 2. **Urgent**: 0. **Skipped (dup)**: 0.
+**By category**: VENDOR=2
+
+### URGENT (0)
+(none)
+
+### OPERATOR_REVIEW (2)
+- [VENDOR] conf=0.85 from=postmaster@truckstop.com subject='Undeliverable: API Access + Service Account Inquiry — Continental Haul Logistics LLC (Broker MC-1817555)' message_id=<7bf2495d-c163-495a-90aa-a078a7d127df@DM6PR12MB4217.namprd12.prod.outlook.com>
+    - sender_domain_match:vendor=truckstop.com
+    - default_no_urgent_signal:operator_review
+- [VENDOR] conf=0.85 from=support@truckstop.com subject='Truckstop.com \x96 We are working on your case 43247889 ' message_id=<pz3uqCwKTVagltXQGNFAXg.bGeXaeW2e9CetKdnMyqwDAo@sfdc.net>
+    - sender_domain_match:vendor=truckstop.com
+    - default_no_urgent_signal:operator_review
+
+### AUTO_ACK_OK (0)
+(none)
+
+### INFORMATIONAL (0)
+(none)
