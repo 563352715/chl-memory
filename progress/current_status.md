@@ -1,6 +1,28 @@
 # Current status
 
-**Last updated:** 2026-05-10 EOD — VAULT-DOCS shipped + Phase 1 input-surface inventory. Vault tab now stores documents AND credentials. Backend: 10 new endpoints in `backend/vault.py` (folder + file CRUD, AES-256 Fernet at-rest, 7-category taxonomy, 50MB cap, audit-logged). Frontend: VaultView.jsx tab-bar Credentials | Documents with breadcrumb folder tree + drag-drop upload + download/rename/move/delete. Persistence: encrypted blobs at `C:\CHL\vault_files\<uuid>.enc`, mirrored to `D:\CHL_backups\rolling\vault_files\` on every snapshot, metadata JSON-dumped via `scripts/vault_metadata_dump.py`. Continental Logistics LLC folder migrated (1 root + 5 subfolders + 14 files). 9/9 smoke tests pass.
+**Last updated:** 2026-05-10 EOD CLOSE. Massive pre-May-14 hardening day shipped via parallel sub-agent dispatch. 11 CHL commits + 7 chl-memory commits, ~400 new tests, ~10,000 LOC net platform improvement. Full handoff doc at `C:\CHL\memory\handoff_session_2026_05_10_eod_close.md`. Headline ships:
+
+- **Vault Documents** feature (encrypted file storage in Vault tab; 14 LLC docs migrated)
+- **Phase 1 input-surface inventory** (839 endpoints / 249 Pydantic models / 1,500+ inputs)
+- **3-layer parsing stack** (Layer A JSON normalizer + Layer B BS4 + Layer C Claude LLM fallback)
+- **SYSTEM_MATRIX** execution blueprint at `chl-memory/architecture/`
+- **CLAUDE.md rewrite** (103 → 60 lines, points at SYSTEM_MATRIX)
+- **Wave 1 hardening** (P&L guard + funding gate + operator alerts + FMCSA SMS + auto-fire invoice/NOA + auto-fire rate-con)
+- **Wave 2 canonicalization** (equipment_types + payment_terms + hazmat_types + safety_rating_types)
+- **Wave 3A** (HTML preproc + Next.js extractor + redaction + Twilio cap + Phase 1 #2 fix + INCIDENT_RUNBOOK 647 lines + rate-con race fix + P&L resolver)
+- **Wave 3B** (operator queue dashboard + day-1 monitoring dashboard + carrier-contacts UI bug fix + contact_name backfill 484,700 rows + Stripe auto-pay disabled)
+- **Wave 3C** (backup restore test, isolated env, defense-in-depth)
+- **Wave 4** (25 Mongo hot-path indexes + 19 circuit breakers + self-heal Phase 1 monitoring + public rate limiter + request-ID structured logging + Stripe full cleanup 5,597 LOC removed + test env isolation + cloud-replica scripts staged)
+- **Stripe residual cleanup** (driver-payment endpoints → 410 Gone + broker connect stubs + 3 frontend views, total ~5,805 LOC removed)
+- **Renewals expansion** (catalog 34 → 54 entries incl. BMC-84 bond, BMC-91, BMC-32, UCR, IFTA, HVUT, MC biennial)
+- **Hardware audit + load test** (i7-8700K + 16GB → 64GB RAM kit arrives 5/16; UPS purchase recommended ~$200)
+- **Cloud-replica plan** persisted (~$7/mo Hetzner CX22 + Backblaze B2 + CloudFlare; scripts staged at `scripts/cloud_replica/`)
+
+**Bridge cumulative: ~12 iters / ~95+ stages / ~1,000+ smoke tests / 0 STOP CONDITIONS.**
+
+Operator pending actions: relaunch VS Code as admin (lost elevation on reboot), buy UPS, enable BIOS XMP, FMCSA broker authority ~5/13.
+
+**Prior:** 2026-05-10 EOD — VAULT-DOCS shipped + Phase 1 input-surface inventory. Vault tab now stores documents AND credentials. Backend: 10 new endpoints in `backend/vault.py` (folder + file CRUD, AES-256 Fernet at-rest, 7-category taxonomy, 50MB cap, audit-logged). Frontend: VaultView.jsx tab-bar Credentials | Documents with breadcrumb folder tree + drag-drop upload + download/rename/move/delete. Persistence: encrypted blobs at `C:\CHL\vault_files\<uuid>.enc`, mirrored to `D:\CHL_backups\rolling\vault_files\` on every snapshot, metadata JSON-dumped via `scripts/vault_metadata_dump.py`. Continental Logistics LLC folder migrated (1 root + 5 subfolders + 14 files). 9/9 smoke tests pass.
 
 Phase 1 input-surface inventory also shipped today: 839 endpoints, 249 Pydantic models, 12 forms, 42 business_settings + 65+ env vars + 150+ module constants, ~1,500+ selectable inputs total. Output at `chl-memory/research/input_surface/`. 5 critical findings flagged (equipment-enum drift, VettingGatesBlock string-None bug, payment_terms gaps, hazmat case inconsistency, unbounded rate-per-mile).
 
