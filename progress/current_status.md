@@ -1,6 +1,20 @@
 # Current status
 
-**Last updated:** 2026-05-10 EOD CLOSE. Massive pre-May-14 hardening day shipped via parallel sub-agent dispatch. 11 CHL commits + 7 chl-memory commits, ~400 new tests, ~10,000 LOC net platform improvement. Full handoff doc at `C:\CHL\memory\handoff_session_2026_05_10_eod_close.md`. Headline ships:
+**Last updated:** 2026-05-15 EOD (operator-active build session, ~14:00–21:10 CDT). Detail in `chl-memory/progress/build_progress_2026_05_15_pm.md`. **Most important things for the next agent to know:**
+
+1. **SHIPPER PIVOT IS LIVE.** `carrier_researcher` is HALTED (473 paused, 0 running). `shipper_extractor` is producing at **~55% yield** (real role-mailbox extractions like `logistics@citgo.com`). Queue ~150 deep, ~30 running concurrently. Operator wants shipper data, not more carriers — DO NOT resume carriers without operator authorization.
+2. **OLLAMA SINGLE-MODEL CONSTRAINT.** Ollama 0.24 on this hardware can hold exactly ONE model at a time. `llama3.1:8b` is the always-warm fleet model. Loading anything else hangs. CPU offload (`num_gpu=0`) also hangs. ALL duties + extractors + email_validator route through llama3.1:8b. Full diagnosis: personal memory `feedback_ollama_model_swap_bug_2026_05_15.md`. Use Claude API if you need a stronger model.
+3. **PATH A QUOTE-FORM LIVE on continentalhaul.com.** H2 now "market-rate estimate in under a minute"; inline range panel renders on submit; firm quote follows by email. Operator to test live.
+4. **NEW UI: Shippers tab + Outbox tab + Sent Log modal** (Email button → Sent Log). All live in frontend. The Outbox / Sent Log is the operator's visibility into every email the platform sends (Zoho BCC was unreliable — was stripped on same-domain sends).
+5. **SFF banking-update email SENT to Megan** (Resend 8785d2fa, Mercury checking). **Telnyx ticket #2889538 keep-open reply SENT** (Resend e0e7992a). **6 non-SFF factors closed** + `.no_new_factor_outreach` stop file.
+6. **urgent_alerts: 1,310 → 8 actionable** after bulk-ack of cost_watcher noise + inbox-engine duplicates + fleet-stale-duty heartbeats. cost_watcher.py now has 24h dedup.
+7. **email_validator gate fixed**: was 0/17 approved (validator model couldn't load → silent timeout). Now uses llama3.1:8b + lowered threshold + provisional band. Will reflect on next carrier-resume.
+8. **BOOT_BIOS.md + BOOT_DASHBOARD.html + BOOT_VALIDATION.md cron-refreshed at C:\CHL\\.** READ THESE FIRST per CLAUDE.md boot sequence.
+9. **Operator-pending actions:** test Path A live · create jason@ Zoho alias (then I wire `CHL_OPERATOR_BCC`) · Telnyx FOC Mon 5/18 09:00 CDT · 123Loadboard parser awaits operator codegen demo.
+
+---
+
+**2026-05-10 EOD CLOSE archive.** Massive pre-May-14 hardening day shipped via parallel sub-agent dispatch. 11 CHL commits + 7 chl-memory commits, ~400 new tests, ~10,000 LOC net platform improvement. Full handoff doc at `C:\CHL\memory\handoff_session_2026_05_10_eod_close.md`. Headline ships:
 
 - **Vault Documents** feature (encrypted file storage in Vault tab; 14 LLC docs migrated)
 - **Phase 1 input-surface inventory** (839 endpoints / 249 Pydantic models / 1,500+ inputs)
