@@ -443,7 +443,49 @@ Before modifying brain, future-Claude MUST:
 ## 15. Operator approval log
 
 - 2026-05-20 — Jason Meyer approved the design + said "Do it. Get it done please" — burn-mode build authorized.
+- 2026-05-20 (later) — Amendment §7-A applied (see §16). Soak-validation requirement dropped because there are zero real loads to soak against.
 
 ---
 
-End of spec. Status: **ready to build.**
+## 16. Amendment 2026-05-20 §7-A — "Calculator, not cache"
+
+**Trigger:** Operator confirmed during Phase 1b build that **CHL has not yet brokered a single real load.** The 1,824 historical loads in `db.load_events` are synthetic test data from earlier QA / driver-app smoke testing (uploader tokens like `driver_public:TUWq4vGEx` give it away). Only 7 bookings have `rate > 0` in the entire DB.
+
+**Operator framing:** *"A calculator does not need to have 1+1 equals on the screen, it needs to be able to calculate it when you input the problem."* — i.e., brain must be CORRECT, not pre-validated against synthetic inputs.
+
+**Changes to §7 (dry-run + soak):**
+
+| Original spec | Amended |
+|---|---|
+| 30-day dry-run soak before going live | Skip the time-based soak. No real data to soak against. |
+| "> 90% agreement with operator decisions" validation | Skip. Operator hasn't made any real decisions yet. |
+| Phase 1g backfill replay as confidence gate | **Re-purposed as transition-table audit only.** Confirms state machine logic is sound; does NOT claim real-world calibration. |
+| `db.brain_config.global.mode in {dry_run, shadow, live}` flips on day-count | Now flips on **load count**: `dry_run` until load #1; `shadow` for loads #1-10 (brain runs but executes no autonomous actions); `live` after operator approves on observed behavior across those first 10 real loads. |
+
+**Changes to event_mapping.py:**
+
+The existing CHL system's `"booked"` status means "a carrier accepted the load" (commit point), not "shipper accepted our quote." Mapping was corrected:
+- `EXISTING_STATUS_TO_STATE["booked"]` → `CARRIER_VETTED` (was incorrectly `BOOKED`)
+- `("available", "booked")` trigger → `"carrier_accepted_load"` (was incorrectly `"shipper_accepted_quote"`)
+- `fallback_by_to["available"]` → `"carrier_outreach_started"` (new)
+- New transition row added: `CARRIER_SEARCHING → CARRIER_VETTED via "carrier_accepted_load"`
+
+**Changes to load_brain.py replay_events():**
+
+Added **warm-start** logic — when state is `QUOTE_REQUESTED` and the first mapped event arrives, accept its target as the boot state without enforcing the strict transition table. This handles existing loads in `db.load_events` that skip the quoting phase entirely (system jumps straight to `"available"` on load creation). From event #2 onward, strict `can_transition()` rules apply.
+
+**Changes to can_transition() universal-allow set:**
+
+`shipper_cancelled_load` joined `operator_force_state` as a universal escape-hatch trigger (targeting `CANCELLED` only). Reasoning: shippers can kill a load at any state; brain doesn't need to enumerate that transition from every parent state.
+
+**What this means going forward:**
+
+1. Brain can be built in full (Phases 1a-1f) **before** load #1 arrives. That's the calculator being ready.
+2. Phase 1g re-validates **logic** (no transition crashes against 1,824 synthetic loads) not **accuracy** (no real ground truth exists yet).
+3. The day load #1 arrives, brain is alive watching it. Operator sees brain's opinion next to every event. After ~10 real loads, decide if `live` autonomous mode is justified.
+
+This amendment supersedes §7 as the operative dry-run/soak policy until further amendment.
+
+---
+
+End of spec. Status: **Phases 1a + 1b core SHIPPED 2026-05-20 (commit-id TBD). Phases 1c-1f pending.**
